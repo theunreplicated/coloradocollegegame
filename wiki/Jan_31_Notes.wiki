@@ -1,14 +1,10 @@
-#summary One-sentence summary of this page.
+#Notes from the January 31st meeting
 
-= Introduction =
-Dan presented Google Code
-He recommended that windows users use Tortoise SVN
+= Presentations =
+
+  * Dan presented Google Code, with SVN browsing, integrated wiki, and issue tracking.
+  * He recommended that windows users use Tortoise SVN.  Others can use CLI svn, or the graphical SVN client of their choice.
+  * Guillermo presented a wiki, using pbwiki
 
 
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
 
