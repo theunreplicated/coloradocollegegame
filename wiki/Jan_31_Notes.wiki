@@ -36,8 +36,8 @@ Possible Projects
    * Compartmentalize World - Adam C. & Guillermo 
    * Multiple Servers - Omer & Benji
    * Resolver (simple) - Adam L. & Leon & Benji
-   * Performance Issues (scripts) - Dan
-   * JavaDoc (scripts) - 
+   * Performance Issues & Testing (scripts) - Dan & Guillermo
+   * JavaDoc (scripts) - Dan
    * Serializable - 
    * User Representation - Joel & Benji
          * Sounds - Leon (later)
