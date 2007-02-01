@@ -1,0 +1,43 @@
+#labels Phase-Deploy
+Here is how to get it to work:
+
+Checkout the code.
+
+http://code.google.com/p/coloradocollegegame/source
+
+Compile the code.
+
+{{{
+javac *.java
+}}}
+
+Run the Server on matheserver.
+
+{{{
+java Server
+}}}
+
+Run the Client(s)!
+
+{{{
+java Client
+}}}
+
+Move around!
+
+
+Note: To make either the Server or the Client display testing messages (i.e. make it verbose)  add a -v:
+
+{{{
+java Client -v
+}}}
+
+or
+
+{{{
+java Server -v
+}}}
+
+And have fun!
+
+
