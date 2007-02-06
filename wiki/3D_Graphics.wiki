@@ -41,6 +41,8 @@ As of this writing, I don't know how easy it would be to implement Java3D on top
 
 [http://java.sun.com/products/java-media/3D/index.jsp The Java3D Homepage]
 
+[http://download.java.net/media/java3d/javadoc/1.5.0/index.html The Java3D API]
+
 [http://java.sun.com/developer/onlineTraining/java3d/index.html The Java3D Tutorial]
 
 
@@ -84,7 +86,6 @@ Given the choice between Java3D and OpenGL, I believe that Java3D would be easie
 All "facts" in this page are as I understand them from my brief (1-2 week) exploration of web resources. I do not know everything about graphics, Java3D or OpenGL. It is quite possible I understood something wrong, and as such reported false information. But if necessary, the page can be updated to include better information--that's the wonder of a wiki!
 
 Oh, I also didn't cite my sources. So sue me.
-
 
 
 
