@@ -1,4 +1,4 @@
-#summary A brief introduction to 3D graphics, and examples of potential APIs.
+#summary A brief introduction to 3D graphics, and descriptions of potential APIs.
 
 3D Graphics can, obviously, greatly enhance the appearance and feel of a game. 3D environments can be more interactive, and generally look more impressive than their 2D counterparts.
 
@@ -84,7 +84,6 @@ Given the choice between Java3D and OpenGL, I believe that Java3D would be easie
 All "facts" in this page are as I understand them from my brief (1-2 week) exploration of web resources. I do not know everything about graphics, Java3D or OpenGL. It is quite possible I understood something wrong, and as such reported false information. But if necessary, the page can be updated to include better information--that's the wonder of a wiki!
 
 Oh, I also didn't cite my sources. So sue me.
-
 
 
 
