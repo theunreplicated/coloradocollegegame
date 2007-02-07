@@ -13,6 +13,7 @@ public class Constants
 	public static final int MESSAGE_SIZE = 128;
 
 	// communication between server(s) and client(s)
+	public static final String DEF_SERVER = "";
 	public static final short LOGIN = 1;
 	public static final short LOGOUT = 2;
 	public static final short ADD_PLAYER = 3;

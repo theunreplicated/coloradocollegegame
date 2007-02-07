@@ -22,7 +22,7 @@ public class ClientIO implements IO, MouseListener, KeyListener
 	private World myWorld;
 	private Logger myLogger;
 
-	public ClientIO(Client _myClient, World _myWorld, Logger _logger )
+	public ClientIO(Client _myClient, World _myWorld, String _server, int _port, Logger _logger )
 	{
 		myClient = _myClient;
 		myWorld = _myWorld;
@@ -31,7 +31,7 @@ public class ClientIO implements IO, MouseListener, KeyListener
 		try
 		{
 			myLogger.message("Connecting...\n", false);
-			servConnection = new Socket(InetAddress.getByName("mathserver"), 5600);
+			servConnection = new Socket(InetAddress.getByName(_server), _port);
 			servOut = servConnection.getOutputStream();
 			id = servConnection.getInputStream().read();
 			myClient.id = id;

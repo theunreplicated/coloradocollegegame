@@ -5,18 +5,48 @@ public class Client
 	public static void main(String args[])
 	{
 		boolean verbose = false;
-		if(args.length > 0 && args[0].substring(0,2).equalsIgnoreCase("-v"))
+		int port = Constants.DEF_PORT;
+		String server = Constants.DEF_SERVER;
+		int i;
+		for(i = 0; i < args.length; i++)
 		{
-			verbose = true;
+			if(args[i].equalsIgnoreCase("-v"))
+			{
+				verbose = true;
+			}
+			else if(args[i].equalsIgnoreCase("-s"))
+			{
+				server = args[++i];
+			}
+			else if(args[i].equalsIgnoreCase("-p"))
+			{
+				port = Integer.parseInt(args[++i]);
+			}
+			else if(args[i].equalsIgnoreCase("-h"))
+			{
+				System.out.println("Syntax: java Client [options]");
+				System.out.println("Options:");
+				System.out.println(" -h\t\tPrint this help screen");
+				System.out.println(" -v\t\tRun in verbose mode");
+				System.out.println(" -s <domain>\tRun on server at domain <domain>");
+				System.out.println(" -p <port>\tRun on port # <port>");
+				System.exit(0);
+			}
 		}
 
-		Client myClient = new Client( verbose );
+		if(server.equals(""))
+		{
+			System.out.println("Missing: server.\nPlease see: java Client -h");
+			System.exit(0);
+		}
+
+		Client myClient = new Client( server, port, verbose );
 	}
 
 	public Logger logger;
 	public int id;
 
-	public Client( boolean _verbose )
+	public Client( String _server, int _port, boolean _verbose )
 	{
 		logger = new Logger( _verbose );
 
@@ -26,7 +56,7 @@ public class Client
 
 		w.setRepresentation( canvas );
 
-		ClientIO myIO = new ClientIO( this , w , logger );
+		ClientIO myIO = new ClientIO( this , w , _server, _port, logger );
 
 		w.setIO( myIO );
 
