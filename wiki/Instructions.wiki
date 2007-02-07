@@ -1,5 +1,5 @@
 #labels Phase-Deploy
-Here is how to get it to work *(updated to work on any server Jan 06, 2007)*:
+Here is how to get it to work *(updated to work on any server Feb 06, 2007)*:
 
 Checkout the code.
 
@@ -40,7 +40,6 @@ java Server -v
 }}}
 
 And have fun!
-
 
 
 
