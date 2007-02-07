@@ -57,11 +57,15 @@ So again, integration with our game engine may or may not be a problem. It seems
 
 I'll also add that I'm biased: I think programming in OpenGL is a lot more fun that programming in Java3D.
 
+Edit: While OpenGL is awesome, JOGL is kind of a bitch. Pick a standard and stick with it you fools!
+
 *OpenGL/JOGL Links*
 
 [https://jogl.dev.java.net/ JOGL Homepage]
 
-[http://javagaming.org/forums/index.php?topic=1474.0 JOGL "Getting Started" Instructions]
+[http://download.java.net/media/jogl/builds/nightly/javadoc_public/index.html JOGL API]
+
+[http://javagaming.org/forums/index.php?topic=1474.0 JOGL "Getting Started" Instructions - NOTE: The original post is out of date. The 4th page of the thread has an example using the new standard]
 
 [http://nehe.gamedev.net/ NeHe's OpenGL Tutorials (very good!)]
 
