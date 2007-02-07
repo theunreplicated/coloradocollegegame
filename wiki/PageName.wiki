@@ -1,7 +1,7 @@
 #February 7th notes
 
-= Introduction =
-GAME PROGRAMMING WED FEB 07
+
+= Game Programming Wed Feb 07 =
 
 
 Discussions:
