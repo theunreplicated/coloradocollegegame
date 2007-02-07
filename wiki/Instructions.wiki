@@ -1,5 +1,5 @@
 #labels Phase-Deploy
-Here is how to get it to work:
+Here is how to get it to work *(updated to work on any server Jan 06, 2007)*:
 
 Checkout the code.
 
@@ -11,16 +11,17 @@ Compile the code.
 javac *.java
 }}}
 
-Run the Server on matheserver.
+~~Run the Server on matheserver.~~
+Run the Server anywhere you like.
 
 {{{
 java Server
 }}}
 
-Run the Client(s)!
+Run the Client(s) *connecting to domain-name <domain> (e.g., localhost)*!
 
 {{{
-java Client
+java Client -s <domain>
 }}}
 
 Move around!
@@ -29,7 +30,7 @@ Move around!
 Note: To make either the Server or the Client display testing messages (i.e. make it verbose)  add a -v:
 
 {{{
-java Client -v
+java Client -v -s <domain>
 }}}
 
 or
@@ -39,5 +40,7 @@ java Server -v
 }}}
 
 And have fun!
+
+
 
 
