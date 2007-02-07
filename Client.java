@@ -20,7 +20,20 @@ public class Client
 			}
 			else if(args[i].equalsIgnoreCase("-p"))
 			{
-				port = Integer.parseInt(args[++i]);
+				try
+				{
+					port = Integer.parseInt(args[++i]);
+				}
+				catch(NumberFormatException nfe)
+				{
+					System.err.println("Bad input on port option (-p). Port must be a positive integer.");
+					port = Constants.DEF_PORT;
+				}
+				catch(ArrayIndexOutOfBoundsException aioobe)
+				{
+					System.err.println("No port given with -p command");
+					port = Constants.DEF_PORT;
+				}
 			}
 			else if(args[i].equalsIgnoreCase("-h"))
 			{

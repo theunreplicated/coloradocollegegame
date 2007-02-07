@@ -159,9 +159,9 @@ public class Server implements IO
 		//  -verbose
 		int port = Constants.DEF_PORT;
 		boolean verbose = false;
-		for(int i=0; args.length > i; i++)
+		for(int i=0; i < args.length; i++)
 		{
-			if(args[i].substring(0,2).equalsIgnoreCase("-v"))
+			if(args[i].equalsIgnoreCase("-v"))
 			{
 				verbose = true;
 				continue;

@@ -7,6 +7,7 @@ public class Constants
 	public static final int DEF_PORT = 5600;
 	public static final int MAX_PORT = 10000;
 	public static final int MIN_PORT = 1500;
+	public static final int DEF_SERVER_PORT = 5700;
 	
 	// number of connections and max message size
 	public static final int MAX_CONNECTIONS = 8;
