@@ -18,10 +18,10 @@ Run the Server anywhere you like.
 java Server
 }}}
 
-Run the Client(s) *connecting to domain-name <domain> (e.g., localhost)*!
+Run the Client User Interface(s) [such as Canvas2D] *connecting to domain-name <domain> (e.g., localhost)*!
 
 {{{
-java Client -s <domain>
+java Canvas2D -s <domain>
 }}}
 
 Move around!
@@ -40,6 +40,5 @@ java Server -v
 }}}
 
 And have fun!
-
 
 
