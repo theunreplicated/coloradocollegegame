@@ -18,7 +18,7 @@ Run the Server anywhere you like.
 java Server
 }}}
 
-Run the Client User Interface(s) [such as Canvas2D] *connecting to domain-name <domain> (e.g., localhost)*!
+Run the Client User Interface(s) ((such as Canvas2D)) *connecting to domain-name <domain> (e.g., localhost)*!
 
 {{{
 java Canvas2D -s <domain>
@@ -30,7 +30,7 @@ Move around!
 Note: To make either the Server or the Client display testing messages (i.e. make it verbose)  add a -v:
 
 {{{
-java Client -v -s <domain>
+java Canvas2D -v -s <domain>
 }}}
 
 or
@@ -40,5 +40,4 @@ java Server -v
 }}}
 
 And have fun!
-
 
