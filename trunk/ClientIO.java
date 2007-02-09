@@ -8,13 +8,11 @@ import java.io.*;
  * viewable area and world. 
  */
 
-public class ClientIO implements IO, MouseListener, KeyListener
+public class ClientIO implements IO
 {
 	//global variables
     public int id;
 	private Client myClient;
-    private boolean[] modifiers = { false, false, false }; //indicate whether or not the shift,
-													       //ctrl and alt modifier keys are currently
 														   //pressed
 	private Socket servConnection;
 	private ServerListenerThread serverListener;
@@ -65,84 +63,6 @@ public class ClientIO implements IO, MouseListener, KeyListener
 	{
 		myWorld.nudgeElement(myClient.id, ((direction-1)/2) * ( (direction%2)*2-1),
 						  ((4-direction)/2) * ( (direction%2)*2-1), 0); // add Z direction
-	}
-
-	public void keyPressed(KeyEvent ke)
-	{
-		
-		switch(ke.getKeyCode())
-		{
-			case KeyEvent.VK_C:
-				if(modifiers[Constants.CTRL_KEY])
-					System.exit(0);
-				break;
-			case KeyEvent.VK_SHIFT:
-				modifiers[Constants.SHIFT_KEY] = true;
-				break;
-			case KeyEvent.VK_ALT:
-				modifiers[Constants.ALT_KEY] = true;
-				break;
-			case KeyEvent.VK_CONTROL:
-				modifiers[Constants.CTRL_KEY] = true;
-				break;	
-			case KeyEvent.VK_UP:
-				moveSelf(Constants.MOVE_UP);
-				break;
-			case KeyEvent.VK_DOWN:
-				moveSelf(Constants.MOVE_DOWN);
-				break;
-			case KeyEvent.VK_LEFT:
-				moveSelf(Constants.MOVE_LEFT);
-				break;
-			case KeyEvent.VK_RIGHT:
-				moveSelf(Constants.MOVE_RIGHT);
-				break;
-			default:
-				myLogger.message("You typed: " + ke.getKeyChar() + " (" + ke.getKeyCode() + ")" + "\n", false);
-
-		}
-	}
-
-	public void keyReleased(KeyEvent ke)
-	{
-		switch(ke.getKeyCode())
-		{
-			case KeyEvent.VK_SHIFT:
-				modifiers[Constants.SHIFT_KEY] = true;
-				break;
-			case KeyEvent.VK_ALT:
-				modifiers[Constants.ALT_KEY] = true;
-				break;
-			case KeyEvent.VK_CONTROL:
-				modifiers[Constants.CTRL_KEY] = true;
-				break;
-			default:
-		}
-	}
-
-	public void keyTyped(KeyEvent ke)
-	{
-	}
-
-	public void mouseClicked(MouseEvent me)
-	{
-		myLogger.message("Mouse Clicked!\n", false);
-	}
-
-	public void mouseEntered(MouseEvent me)
-	{
-	}
-
-	public void mouseExited(MouseEvent me)
-	{
-	}
-
-	public void mousePressed(MouseEvent me)
-	{
-	}
-
-	public void mouseReleased(MouseEvent me)
-	{
 	}
 
 	private class ServerListenerThread extends Thread
