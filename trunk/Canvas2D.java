@@ -99,7 +99,7 @@ public class Canvas2D extends JPanel implements Representation, MouseListener, K
 		}
 	}
 
-	public Element createPerson(int _x, int _y, int _z, int _width, int _height, int _status)
+	public GameElement createPerson(int _x, int _y, int _z, int _width, int _height, int _status)
 	{
 		return(new GraphicalElement(_x, _y, _z, _width, _height, _status));
 	}

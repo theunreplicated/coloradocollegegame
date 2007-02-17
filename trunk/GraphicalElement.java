@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class GraphicalElement extends Element
+public class GraphicalElement extends GameElement
 {
 	public GraphicalElement(int _x, int _y, int _z, int _width, int _length)
 	{

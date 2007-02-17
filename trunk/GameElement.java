@@ -1,19 +1,35 @@
-public class Element
+import java.util.*;
+public class GameElement
 { 
 	int status;
 	boolean isClient;
 
 	int[] position = new int[3]; // Absolute postition of the element
-	int[][] dimensions = new int[3][4]; // dimensions of the element
-	float viscosity; // between 0-1 with 0=air and 1=cannot pass through
-	int weight; // the weight of the element
+	VirtualShape[] shapes = null;
+	HashMap attributes = null;
+	String type = null;
+	int[] scale = new int[3];
 
-	public Element( int _x , int _y , int _z , int _width, int _length )
+	// Remove these once we have Element and ElementGenerator working
+	public int[][] dimensions = new int[3][4]; 
+
+	public GameElement( String _type, int[] _position, int[] _scale, VirtualShape[] _shapes, HashMap _attributes)
+	{
+		type = _type;
+		position = _position;
+		shapes = _shapes;
+		scale = _scale;
+		attributes = _attributes;
+
+		System.out.println("New element: " + type + ", has: " + shapes.length + " shapes");
+	}
+
+	public GameElement( int _x , int _y , int _z , int _width, int _length )
 	{
 		initialize( _x , _y , _z , _width , _length );
 	}
 
-	public Element(  int _x , int _y , int _z , int _width, int _length , int _status )
+	public GameElement(  int _x , int _y , int _z , int _width, int _length , int _status )
 	{
 		initialize( _x , _y , _z , _width , _length );
 
@@ -105,4 +121,4 @@ public class Element
 	int[][] absDimensions = new int[3][4];
 
 	public final static int X=0, Y=1, Z=2;
-} // class Element
+} // class GameElement

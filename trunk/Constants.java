@@ -19,6 +19,13 @@ public class Constants
 	public static final short LOGOUT = 2;
 	public static final short ADD_PLAYER = 3;
 	public static final short REMOVE_PLAYER = 4;
+	public static final short CHANGE_CONNECTION = -1;
+
+	// Startup
+	public static final String DEFAULT_DATA_DIR = ".";
+	public static final String ELEMENT_LIST_EXTENSION = "ccel";
+	public static final int[] DEFAULT_POSITION = {0,0,0};
+	public static final int[] DEFAULT_SCALE = {0,0,0};
 
 	// IDs for actions that the World understands
 	public static final int MOVE_TO = 101;
@@ -34,7 +41,7 @@ public class Constants
 	public static final int CTRL_KEY = 1;
 	public static final int ALT_KEY = 2;
 
-	// Element stuff
+	// GameElement stuff
 	public static final short STATUS_DEFAULT = 0;
 	public static final short STATUS_FROZEN = 1;
 	public static final short STATUS_IT = 2;
