@@ -24,7 +24,7 @@ class ClientThread extends Thread {
 	//		out = new BufferedOutputStream(client.getOutputStream());
 			InputStream in = client.getInputStream();
 			out = client.getOutputStream();
-			out.write(row);
+			out.write( row );
 
 			serve.sendWorld(row);
 

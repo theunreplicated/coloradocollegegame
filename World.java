@@ -2,10 +2,10 @@ public class World
 {
 	private IO myIO;
 	private Representation myRepresentation = null;
-	public Element[] elements;	
+	public GameElement[] elements;	
 	public Logger myLogger;
 
-	public World(Element[] _elements, Logger _logger)
+	public World(GameElement[] _elements, Logger _logger)
 	{
 		myLogger = _logger;
 		elements = _elements;
@@ -26,17 +26,23 @@ public class World
 		return elements[_row].getInfoArray();
 	}
 
-	public void removePlayer(int _id)
+	public void removePlayer(int[] _message, int _start)
 	{
-		elements[_id] = null;
+		elements[_message[_start]] = null;
 	}
 
-	public Element addPlayer(int _id, int _x, int _y , int _z , int _status)
+	public GameElement addPlayer(int[] _message, int _start)
 	{
+		int _id = _message[_start];
+		int _x = _message[_start+1];
+		int _y = _message[_start+2];
+		int _z = _message[_start+3];
+		int _status = _message[_start+4];
+		
 		if( myRepresentation != null )
 			elements[_id] = myRepresentation.createPerson(_x,_y,_z,Constants.PERSON_WIDTH,Constants.PERSON_HEIGHT,_status);
 		else
-			elements[_id] = new Element(_x,_y,_z,Constants.PERSON_WIDTH,Constants.PERSON_HEIGHT,_status);
+			elements[_id] = new GameElement(_x,_y,_z,Constants.PERSON_WIDTH,Constants.PERSON_HEIGHT,_status);
 
 		return elements[_id];
 	}
@@ -48,9 +54,13 @@ public class World
 		myIO.send(new int[] {Constants.MOVE_TO, _row, elements[_row].getPosition(Constants.X), elements[_row].getPosition(Constants.Y), elements[_row].getPosition(Constants.Z)});
 	}
 
-	public void setPosition( int _row, int _x, int _y , int _z )
+	public void setPosition( int[] _message, int _start)
 	{
-		elements[_row].setPosition( _x , _y , _z);
+			int _row = _message[_start];
+			int _x = _message[_start+1];
+			int _y = _message[_start+2];
+			int _z = _message[_start+3];
+			elements[_row].setPosition( _x, _y, _z);
 	}
 	
 	public int parse(int[] message)
@@ -58,15 +68,15 @@ public class World
 			switch(message[0])
 			{
 				case Constants.MOVE_TO:
-					setPosition( message[1],  message[2],  message[3], message[4]);
+					setPosition( message, 1);
 					myLogger.message("Recieved move command for person " + message[1] + "\n", false);
 					break;
 				case Constants.ADD_PLAYER:
-					addPlayer( message[1],  message[2],  message[3],  message[4], message[5]);
+					addPlayer( message, 1);
 					myLogger.message("Recieved add command for person " + message[1] + "\n", false);
 					break;
 				case Constants.REMOVE_PLAYER:
-					removePlayer( message[1] );
+					removePlayer( message, 1 );
 					myLogger.message("Removing player: " + message[1] + "\n", false);
 					break;
 				default:

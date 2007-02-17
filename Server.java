@@ -18,7 +18,7 @@ public class Server implements IO
 	public Server( Logger _logger ,int _port)
 	{
 		myLogger = _logger;
-		myWorld = new World( new Element[Constants.MAX_CONNECTIONS] , myLogger );
+		myWorld = new World( new GameElement[Constants.MAX_CONNECTIONS] , myLogger );
 
 		for( int i = ids.length - 1; i >= 0; i-- )
 			ids[i] = -1;

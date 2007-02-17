@@ -6,7 +6,7 @@ public class Client
 	public int id;
 	ClientIO myIO;
 
-	public Client(Representation rep, Element[] repElements, String _server, int _port, boolean _verbose )
+	public Client(Representation rep, GameElement[] repElements, String _server, int _port, boolean _verbose )
 	{
 		logger = new Logger( _verbose );
 

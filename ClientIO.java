@@ -34,7 +34,7 @@ public class ClientIO implements IO
 			id = servConnection.getInputStream().read();
 			myClient.id = id;
 
-			myWorld.addPlayer(id, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z, Constants.STATUS_DEFAULT).toggleIsClient();
+			myWorld.addPlayer(new int[] {id, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z, Constants.STATUS_DEFAULT}, 0).toggleIsClient();
 
 			myLogger.message("Connected as id: " + id + "\n", false);
 			serverListener = new ServerListenerThread(servConnection, myClient, myWorld);
