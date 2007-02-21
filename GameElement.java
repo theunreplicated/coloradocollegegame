@@ -118,6 +118,17 @@ public class GameElement
 		return new int[] { position[X], position[Y] , position[Z] , status };
 	}
 
+	public GameElement clone()
+	{
+		try {
+			return (GameElement) super.clone();
+		}
+		catch(CloneNotSupportedException cnse)
+		{
+				return null;
+		}
+	}
+
 	int[][] absDimensions = new int[3][4];
 
 	public final static int X=0, Y=1, Z=2;
