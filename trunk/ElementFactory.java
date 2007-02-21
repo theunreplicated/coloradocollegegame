@@ -6,7 +6,7 @@ import org.w3c.dom.*;
 
 public class ElementFactory
 {
-	HashMap<String, Object> defaultElements = new HashMap<String, Object>();
+	private HashMap<String, GameElement> defaultElements = new HashMap<String, GameElement>();
 
 	public ElementFactory(File folder, String ext)
 	{
@@ -96,6 +96,11 @@ public class ElementFactory
 		{
 			System.err.println("Failed to read input files! : " + e.getMessage());
 		}
+	}
+
+	public GameElement createElement(String _elementType)
+	{
+		return(((GameElement) defaultElements.get(_elementType)).clone());
 	}
 
 	private class EGFileFilter implements FileFilter
