@@ -19,12 +19,14 @@ public class ClientIO implements IO
 	private OutputStream servOut;
 	private World myWorld;
 	private Logger myLogger;
+	private ClientInput input;
 
 	public ClientIO(Client _myClient, World _myWorld, String _server, int _port, Logger _logger )
 	{
 		myClient = _myClient;
 		myWorld = _myWorld;
 		myLogger = _logger;
+		input = new ClientInput(this,myLogger);
 		id = 0;
 		try
 		{
@@ -34,11 +36,13 @@ public class ClientIO implements IO
 			id = servConnection.getInputStream().read();
 			myClient.id = id;
 
-			myWorld.addPlayer(new int[] {id, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z, Constants.STATUS_DEFAULT}, 0).toggleIsClient();
-
 			myLogger.message("Connected as id: " + id + "\n", false);
 			serverListener = new ServerListenerThread(servConnection, myClient, myWorld);
 			serverListener.start();
+			myWorld.setIO(this);
+
+			myWorld.addElement(new int[] {id, 1, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z, Constants.STATUS_DEFAULT , 1}, 0).toggleIsClient();
+			this.send(new int[] {Constants.ADD_PLAYER,id, 1, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z, Constants.STATUS_DEFAULT});
 		}
 		catch(IOException ioe)
 		{
@@ -63,6 +67,11 @@ public class ClientIO implements IO
 	{
 		myWorld.nudgeElement(myClient.id, ((direction-1)/2) * ( (direction%2)*2-1),
 						  ((4-direction)/2) * ( (direction%2)*2-1), 0); // add Z direction
+	}
+
+	public ClientInput getClientInput()
+	{
+		return input;
 	}
 
 	private class ServerListenerThread extends Thread

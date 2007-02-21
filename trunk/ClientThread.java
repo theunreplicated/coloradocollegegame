@@ -20,11 +20,9 @@ class ClientThread extends Thread {
 	{
 		try
 		{
-		//	BufferedInputStream in = new BufferedInputStream(client.getInputStream());
-	//		out = new BufferedOutputStream(client.getOutputStream());
 			InputStream in = client.getInputStream();
 			out = client.getOutputStream();
-			out.write( row );
+			out.write( id );
 
 			serve.sendWorld(row);
 
@@ -74,7 +72,7 @@ class ClientThread extends Thread {
 		{
 			serve.myLogger.message("Connection error on row " + row + ": " + ioe.getMessage() + "\n", true);
 		}
-		serve.propagate( new int[]{ Constants.REMOVE_PLAYER , row } , row );
+		serve.propagate( new int[]{ Constants.REMOVE_PLAYER , id } , row );
 		serve.removeThread( row );
 	}
 
