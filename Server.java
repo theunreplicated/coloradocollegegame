@@ -11,14 +11,14 @@ public class Server implements IO
 	*/
 	private ClientThread[] threads = new ClientThread[Constants.MAX_CONNECTIONS];
 	private int[] ids = new int[Constants.MAX_CONNECTIONS];
-	private int nextId = 0;
 	private World myWorld;
 	public Logger myLogger;
 
 	public Server( Logger _logger ,int _port)
 	{
+
 		myLogger = _logger;
-		myWorld = new World( new GameElement[Constants.MAX_CONNECTIONS] , myLogger );
+		myWorld = new World(new ElementFactory() , myLogger);
 
 		for( int i = ids.length - 1; i >= 0; i-- )
 			ids[i] = -1;
@@ -64,13 +64,12 @@ public class Server implements IO
 				if( ids[i] < 0 )
 				{
 					myLogger.message( "Creating client connection thread in row " + i + "\n", false );
-					threads[i] = new ClientThread(this, _conn, nextId, i);
-					threads[i].start();
-					ids[i] = nextId;
-					nextId++;
-					
-					propagate( new int[] {	Constants.ADD_PLAYER , i , Constants.INITIAL_X , Constants.INITIAL_Y , Constants.INITIAL_Z, Constants.STATUS_DEFAULT } , i );
 
+					ids[i] = i + (int)Math.pow(10,(Constants.MAX_CONNECTIONS+"").length());
+					System.out.println( ids[i] + "" );
+					threads[i] = new ClientThread(this, _conn, ids[i], i);
+					threads[i].start();
+					
 					return;
 				}
 				
@@ -135,8 +134,8 @@ public class Server implements IO
 				if( ids[i] >= 0 && _row != i )
 				{
 					message[0] = Constants.ADD_PLAYER;
-					message[1] = i;
-					System.arraycopy(myWorld.getElementInfo(i),0,message,2,Constants.ELEMENT_INFO_SIZE);
+					message[1] = ids[i];
+					System.arraycopy(myWorld.getElementInfo(ids[i]),0,message,2,Constants.ELEMENT_INFO_SIZE);
 					threads[_row].send(message);
 				try {
 					// Thread.sleep(20);

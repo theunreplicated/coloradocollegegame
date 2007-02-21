@@ -7,6 +7,7 @@ import org.w3c.dom.*;
 public class ElementFactory
 {
 	private HashMap<String, GameElement> defaultElements = new HashMap<String, GameElement>();
+	private String[] defaultElementKeys;
 
 	public ElementFactory(File folder, String ext)
 	{
@@ -91,18 +92,42 @@ public class ElementFactory
 						new GameElement(name.getTextContent(), position, scale, shapes, attributes));
 				}
 			}
+			
+			// iterate through hashmap to create our array...
+			defaultElementKeys = new String[] {""};
+			defaultElementKeys = defaultElements.keySet().toArray(defaultElementKeys);
+			for(i = 0; i < defaultElementKeys.length; i++)
+			{
+				defaultElements.get(defaultElementKeys[i]).setTypeId(i);
+			}
 		}
 		catch(Exception e) // better error reporting!
 		{
-			System.err.println("Failed to read input files! : " + e.getMessage());
+			System.err.println("Failed to read input files! : " + e.getMessage() + " :\n");
+			e.printStackTrace();
 		}
 	}
 
-	public GameElement createElement(String _elementType)
+	public GameElement getGameElement(String _elementType)
 	{
-		return(((GameElement) defaultElements.get(_elementType)).clone());
+		return(new GameElement((GameElement) defaultElements.get(_elementType)));
 	}
 
+	public GameElement getGameElement(int _elementTypeId)
+	{
+		return(getGameElement(defaultElementKeys[_elementTypeId]));
+	}
+
+	public int getType(String _type)
+	{
+		return(defaultElements.get(_type).getTypeId());
+	}
+
+	public String getType(int _type)
+	{
+		return(defaultElementKeys[_type]);
+	}
+	
 	private class EGFileFilter implements FileFilter
 	{
 		private String ext;

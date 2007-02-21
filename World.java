@@ -1,19 +1,18 @@
+import java.util.*;
+
 public class World
 {
 	private IO myIO;
-	private Representation myRepresentation = null;
-	public GameElement[] elements;	
+	private GameElement[] elements =  new GameElement[Constants.GAME_ELEMENT_INCREMENT];	
+	public int nextElement = 0;
+	private ElementFactory ef;
 	public Logger myLogger;
+	private HashMap<Integer,Integer> elementIDs = new HashMap<Integer,Integer>();
 
-	public World(GameElement[] _elements, Logger _logger)
+	public World(ElementFactory _ef,Logger _logger)
 	{
 		myLogger = _logger;
-		elements = _elements;
-	}
-
-	public void setRepresentation( Representation _representation )
-	{
-		myRepresentation = _representation;
+		ef = _ef;
 	}
 
 	public void setIO( IO _io )
@@ -21,46 +20,61 @@ public class World
 		myIO = _io;
 	}
 	
+	public GameElement[] getElements()
+	{
+		return elements;
+	}
+
 	public int[] getElementInfo( int _row )
 	{
-		return elements[_row].getInfoArray();
+		System.out.println( _row );
+		return elements[elementIDs.get(_row)].getInfoArray();
 	}
 
-	public void removePlayer(int[] _message, int _start)
+	public void removeElement(int[] _message, int _start)
 	{
-		elements[_message[_start]] = null;
+		elements[elementIDs.get(_message[_start])] = null;
 	}
 
-	public GameElement addPlayer(int[] _message, int _start)
+	public GameElement addElement(int[] _message, int _start)
 	{
-		int _id = _message[_start];
-		int _x = _message[_start+1];
-		int _y = _message[_start+2];
-		int _z = _message[_start+3];
-		int _status = _message[_start+4];
+		int _id = _message[_start++];
+		int _type = _message[_start++];
+		int _x = _message[_start++];
+		int _y = _message[_start++];
+		int _z = _message[_start++];
+		int _status = _message[_start++];
 		
-		if( myRepresentation != null )
-			elements[_id] = myRepresentation.createPerson(_x,_y,_z,Constants.PERSON_WIDTH,Constants.PERSON_HEIGHT,_status);
-		else
-			elements[_id] = new GameElement(_x,_y,_z,Constants.PERSON_WIDTH,Constants.PERSON_HEIGHT,_status);
+		if(nextElement == elements.length)
+		{
+			GameElement[] tmp = new GameElement[elements.length+Constants.GAME_ELEMENT_INCREMENT];
+			System.arraycopy(elements,0,tmp,0,elements.length);
+			elements = tmp;
+		}
 
-		return elements[_id];
+		elements[nextElement] = ef.getGameElement(_type);
+		elementIDs.put(_id,nextElement);
+
+
+		return elements[nextElement++];
 	}
 	
 	public void nudgeElement( int _row, int _dx, int _dy, int _dz )
 	{
-		myLogger.message( "attempting to nudge element at " + _row + "(" + _dx + "," + _dy + "," + _dz + ")\n" , false );
-		elements[_row].nudge( _dx , _dy , _dz );
-		myIO.send(new int[] {Constants.MOVE_TO, _row, elements[_row].getPosition(Constants.X), elements[_row].getPosition(Constants.Y), elements[_row].getPosition(Constants.Z)});
+		int id = elementIDs.get(_row);
+		elements[id].nudge( _dx , _dy , _dz );
+		myIO.send(new int[] {Constants.MOVE_TO, _row, elements[id].getPosition(Constants.X), elements[id].getPosition(Constants.Y), elements[id].getPosition(Constants.Z)});
+		myLogger.message( "nudge position: " + _row + " (" + elements[id].getPosition(0) + "," + elements[id].getPosition(1) + "," + elements[id].getPosition(2) + ")\n" , false );
 	}
 
 	public void setPosition( int[] _message, int _start)
 	{
-			int _row = _message[_start];
+			int id = elementIDs.get(_message[_start]);
 			int _x = _message[_start+1];
 			int _y = _message[_start+2];
 			int _z = _message[_start+3];
-			elements[_row].setPosition( _x, _y, _z);
+			elements[id].setPosition( _x, _y, _z);
+			myLogger.message( "move position: " + _message[_start] + " (" + elements[id].getPosition(0) + "," + elements[id].getPosition(1) + "," + elements[id].getPosition(2) + ")\n" , false );
 	}
 	
 	public int parse(int[] message)
@@ -69,14 +83,12 @@ public class World
 			{
 				case Constants.MOVE_TO:
 					setPosition( message, 1);
-					myLogger.message("Recieved move command for person " + message[1] + "\n", false);
 					break;
 				case Constants.ADD_PLAYER:
-					addPlayer( message, 1);
-					myLogger.message("Recieved add command for person " + message[1] + "\n", false);
+					addElement( message, 1);
 					break;
 				case Constants.REMOVE_PLAYER:
-					removePlayer( message, 1 );
+					removeElement( message, 1 );
 					myLogger.message("Removing player: " + message[1] + "\n", false);
 					break;
 				default:

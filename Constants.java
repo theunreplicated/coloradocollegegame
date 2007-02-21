@@ -42,6 +42,7 @@ public class Constants
 	public static final int ALT_KEY = 2;
 
 	// GameElement stuff
+	public static final short GAME_ELEMENT_INCREMENT = 30;
 	public static final short STATUS_DEFAULT = 0;
 	public static final short STATUS_FROZEN = 1;
 	public static final short STATUS_IT = 2;
@@ -53,7 +54,7 @@ public class Constants
 	public static final short INITIAL_X = 150;
 	public static final short INITIAL_Y = 150;
 	public static final short INITIAL_Z = 0;
-	public static final short ELEMENT_INFO_SIZE = 4;
+	public static final short ELEMENT_INFO_SIZE = 5;
 
 	// graphics
 	public static final short UPDATE_PERIOD = 10;

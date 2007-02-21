@@ -1,6 +1,8 @@
 import java.util.*;
 public class GameElement
 { 
+	private int id;
+	int typeId;
 	int status;
 	boolean isClient;
 
@@ -20,26 +22,31 @@ public class GameElement
 		shapes = _shapes;
 		scale = _scale;
 		attributes = _attributes;
-
+		initialize(position, 10, 10);
 		System.out.println("New element: " + type + ", has: " + shapes.length + " shapes");
 	}
 
-	public GameElement( int _x , int _y , int _z , int _width, int _length )
+	public GameElement( GameElement original )
 	{
-		initialize( _x , _y , _z , _width , _length );
+		type = new String(original.type);
+		shapes = new VirtualShape[original.shapes.length];
+		scale = new int[original.scale.length];
+		System.arraycopy(original.position,0,position,0,original.position.length);
+		System.arraycopy(original.shapes,0,shapes,0,original.shapes.length);
+		System.arraycopy(original.scale,0,scale,0,original.scale.length);
+		if(original.attributes != null)
+			attributes = (HashMap) original.attributes.clone();
+		typeId = original.typeId;
+		initialize(position, 10, 10);
 	}
 
-	public GameElement(  int _x , int _y , int _z , int _width, int _length , int _status )
-	{
-		initialize( _x , _y , _z , _width , _length );
-
-		status = _status;
-	}
-
-	public void initialize( int _x , int _y , int _z , int _width, int _length )
+	public void initialize( int[] _position , int _width, int _length )
 	{
 		isClient = false;
 
+		int _x = _position[0];
+		int _y = _position[1];
+		int _z = _position[2];
 		position[X] = _x;
 		position[Y] = _y;
 		position[Z] = _z;
@@ -66,6 +73,21 @@ public class GameElement
 		isClient = !isClient;
 	}
 
+	public boolean isClient()
+	{
+		return isClient;
+	}
+
+	public void setTypeId(int _id)
+	{
+		typeId = _id;
+	}
+
+	public int getTypeId()
+	{
+		return(typeId);
+	}
+	
 	public void nudge(int _dx, int _dy, int _dz)
 	{
 		position[X] += _dx;
@@ -115,18 +137,7 @@ public class GameElement
 	
 	public int[] getInfoArray()
 	{
-		return new int[] { position[X], position[Y] , position[Z] , status };
-	}
-
-	public GameElement clone()
-	{
-		try {
-			return (GameElement) super.clone();
-		}
-		catch(CloneNotSupportedException cnse)
-		{
-				return null;
-		}
+		return new int[] { typeId, position[X], position[Y] , position[Z] , status };
 	}
 
 	int[][] absDimensions = new int[3][4];
