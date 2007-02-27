@@ -30,4 +30,24 @@ public class VirtualCylinder implements VirtualShape
 		height = _height;
 		center = _center;
 	}
+
+	public float[][] getMinMax()
+	{
+		float[][] tmp = new float[center.length][2];
+		
+		tmp[Constants.X][Constants.MIN] = center[Constants.X]-radius;
+		tmp[Constants.X][Constants.MAX] = center[Constants.X]+radius;
+		tmp[Constants.Y][Constants.MIN] = center[Constants.Y]-radius;
+		tmp[Constants.Y][Constants.MIN] = center[Constants.Y]+radius;
+		tmp[Constants.Z][Constants.MAX] = center[Constants.Z]-height/2;
+		tmp[Constants.Z][Constants.MAX] = center[Constants.Z]+height/2;
+
+		return( tmp );
+	}
+
+	public void scale( double[] factors )
+	{
+		radius *= factors[Constants.RADIUS];
+		height *= factors[Constants.HEIGHT];
+	}
 }

@@ -16,6 +16,7 @@
 		<plural>pairs of glasses</plural>
 		<shapes>
 			<cylinder>
+				<name>lens</name>
 				<center>-8</center>
 				<center>0</center>
 				<center>0</center>
@@ -25,6 +26,7 @@
 				<phi>PI/2</phi>
 			</cylinder>
 			<cylinder>
+				<name>lens</name>
 				<center>8</center>
 				<center>0</center>
 				<center>0</center>
@@ -34,6 +36,7 @@
 				<phi>PI/2</phi>
 			</cylinder>
 			<cylinder>
+				<name>bridge</name>
 				<center>0</center>
 				<center>0</center>
 				<center>0</center>

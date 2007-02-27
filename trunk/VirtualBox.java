@@ -29,4 +29,23 @@ public class VirtualBox implements VirtualShape
 		dimensions = _dimensions;
 		center = _center;
 	}
+
+	public float[][] getMinMax()
+	{
+		float[][] tmp = new float[center.length][2];
+		
+		for( int i = 0; i < tmp.length; i++)
+		{
+			tmp[i][Constants.MIN] = center[i]-dimensions[i]/2;
+			tmp[i][Constants.MAX] = center[i]+dimensions[i]/2;
+		}
+
+		return( tmp );
+	}
+
+	public void scale( double[] factors )
+	{
+		for( int i = 0; i < factors.length; i++ )
+			dimensions[i] *= factors[i];
+	}
 }

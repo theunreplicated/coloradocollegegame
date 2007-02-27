@@ -24,4 +24,22 @@ public class VirtualSphere implements VirtualShape
 		radius = _radius;
 		center = _center;
 	}
+
+	public float[][] getMinMax()
+	{
+		float[][] tmp = new float[center.length][2];
+		
+		for( int i = 0; i < tmp.length; i++)
+		{
+			tmp[i][Constants.MIN] = center[i]-radius;
+			tmp[i][Constants.MAX] = center[i]+radius;
+		}
+
+		return( tmp );
+	}
+
+	public void scale( double[] factors )
+	{
+		radius *= factors[Constants.RADIUS];
+	}
 }

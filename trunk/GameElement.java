@@ -6,22 +6,24 @@ public class GameElement
 	int status;
 	boolean isClient;
 
-	int[] position = new int[3]; // Absolute postition of the element
+	float[] position = new float[3]; // Absolute postition of the element
+	float[][] boundingBox = null;
 	VirtualShape[] shapes = null;
 	HashMap attributes = null;
 	String type = null;
-	int[] scale = new int[3];
 
 	// Remove these once we have Element and ElementGenerator working
 	public int[][] dimensions = new int[3][4]; 
 
-	public GameElement( String _type, int[] _position, int[] _scale, VirtualShape[] _shapes, HashMap _attributes)
+	public GameElement( String _type, float[] _position, float[][] _boundingBox, VirtualShape[] _shapes, HashMap _attributes)
 	{
 		type = _type;
 		position = _position;
 		shapes = _shapes;
-		scale = _scale;
+		boundingBox = _boundingBox;
+		
 		attributes = _attributes;
+		/*initialize is depracated */
 		initialize(position, 10, 10);
 		System.out.println("New element: " + type + ", has: " + shapes.length + " shapes");
 	}
@@ -30,42 +32,15 @@ public class GameElement
 	{
 		type = new String(original.type);
 		shapes = new VirtualShape[original.shapes.length];
-		scale = new int[original.scale.length];
+		boundingBox = new float[original.boundingBox.length][original.boundingBox[0].length];
 		System.arraycopy(original.position,0,position,0,original.position.length);
 		System.arraycopy(original.shapes,0,shapes,0,original.shapes.length);
-		System.arraycopy(original.scale,0,scale,0,original.scale.length);
+		System.arraycopy(original.boundingBox,0,boundingBox,0,original.boundingBox.length);
 		if(original.attributes != null)
 			attributes = (HashMap) original.attributes.clone();
 		typeId = original.typeId;
+		/*initialize is depracated */
 		initialize(position, 10, 10);
-	}
-
-	public void initialize( int[] _position , int _width, int _length )
-	{
-		isClient = false;
-
-		int _x = _position[0];
-		int _y = _position[1];
-		int _z = _position[2];
-		position[X] = _x;
-		position[Y] = _y;
-		position[Z] = _z;
-		
-		dimensions[X][0] = -(int)(_width/2);
-		dimensions[X][1] = (int)(_width/2);
-		dimensions[X][2] = (int)(_width/2);
-		dimensions[X][3] = -(int)(_width/2);
-
-		dimensions[Y][0] = -(int)(_length/2);
-		dimensions[Y][1] = -(int)(_length/2);
-		dimensions[Y][2] = (int)(_length/2);
-		dimensions[Y][3] = (int)(_length/2);
-
-		//am not worring about third dimension yet
-		dimensions[Z][0] = 0;
-		dimensions[Z][1] = 0;
-		dimensions[Z][2] = 0;
-		dimensions[Z][3] = 0;
 	}
 
 	public void toggleIsClient()
@@ -88,59 +63,145 @@ public class GameElement
 		return(typeId);
 	}
 	
-	public void nudge(int _dx, int _dy, int _dz)
+	public Object attribute(String _key)
 	{
-		position[X] += _dx;
-		position[Y] += _dy;
-		position[Z] += _dz;
+		return attributes.get(_key);
+	}
+
+	public void attribute(String _key , Object _value)
+	{
+		attributes.put(_key,_value);
+	}
+
+	/* this takes in the index of the dimension you 
+	 * want to change in the position array and the value you want to 
+	 * nudge it to */
+	public void nudge(int _dim, int _value)
+	{
+		position[_dim] += (float)_value;
 	} // nudge
 
 	public void nudge( int[] delta )
 	{
+		/* eventually these should come in as floats.  messaging system needs
+		 * to be updated */
 		for( int i = 0 ; i < delta.length; i++ )
-			position[i] += delta[i];
+			position[i] += (float)delta[i];
 	}
 
-	public void setPosition(int _x, int _y, int _z)
+	public void setPosition(int[] _position)
 	{
-		position[X] = _x;
-		position[Y] = _y;
-		position[Z] = _z;
-	} // setPosition
+		/* eventually these should come in as floats.  messaging system needs
+		 * to be updated */
+		for( int i = _position.length-1 ; i >= 0; i--)
+			position[i] = (float)_position[i];
+	} // setposition
+
+	/* this takes in the index of the dimension you 
+	 * want to change in the position array and the value you want to 
+	 * change it to */
+	public void setPosition(int _dim, int _value)
+	{
+		/* eventually these should come in as floats.  messaging system needs
+		 * to be updated */
+		position[_dim] = (float)_value;
+	}
 	
 	public int[] getPosition()
 	{
-		return position;
+		/* eventually this should return floats.  messaging system needs
+		 * to be updated */
+		int[] tmp = new int[position.length];
+		for(int i=0;i<position.length;i++)
+			tmp[i] = (int) position[i];
+		return tmp;
 	}
 
+	/* this takes in the index of the dimension you 
+	 * want */
 	public int getPosition(int dim)
 	{
-		return position[dim];
+		/* eventually this should return a float.  messaging system needs
+		 * to be updated */
+		return (int)position[dim];
 	}
 
-	public void rotate(double _theta)
+	public void rotate(float[] _angles)
 	{
 		// So far emtpy... fill me please
 	}
 
+	public int[] getInfoArray()
+	{
+		/*  Should not be casting those floats as ints, better messagering system
+		 *  needs to be devised! */
+		return new int[] { typeId, (int)position[X], (int)position[Y] , (int)position[Z] };
+	}
+
+	public boolean isColliding(GameElement _element)
+	{
+		/* Joel, do you want to write this function? */
+		return false; //you can never collide!  mwuahahaha!
+	}
+
+	public String isCollidingShape(GameElement _element)
+	{
+		/* And this one? */
+		return null; //nope! Not colliding!
+	}
+
+	/*
+	public boolean isRelevant(float[] _position, float _radius)
+	{
+		float sum = (float)Math.pow(_position[0]-position[0],2);
+		for( int i = position.length-1;i > 0; i--)
+			sum += (float)Math.pow(_position[i]-position[i],2);
+
+		return ((float)Math.sqrt( sum ) - _radius - relevantRadius) < 0;
+	} */
+
+	/* For convienence */
+	public final static int X=Constants.X, Y=Constants.Y, Z=Constants.Z;
+
+	/*  Deprecated stuff*/
 	public int[][] getAbsoluteCoordinates()
 	{
 		for( int i = 0; i < dimensions[X].length ; i++ )
 		{
-			absDimensions[X][i] = position[X]+dimensions[X][i];
-			absDimensions[Y][i] = position[Y]+dimensions[Y][i];
-			absDimensions[Z][i] = position[Z]+dimensions[Z][i];
+			absDimensions[X][i] = (int)position[X]+dimensions[X][i];
+			absDimensions[Y][i] = (int)position[Y]+dimensions[Y][i];
+			absDimensions[Z][i] = (int)position[Z]+dimensions[Z][i];
 		}
 		
 		return absDimensions;
 	}
-	
-	public int[] getInfoArray()
+	int[][] absDimensions = new int[3][4];
+	public void initialize( float[] _position , int _width, int _length )
 	{
-		return new int[] { typeId, position[X], position[Y] , position[Z] , status };
+		isClient = false;
+
+		float _x = _position[0];
+		float _y = _position[1];
+		float _z = _position[2];
+		position[X] = _x;
+		position[Y] = _y;
+		position[Z] = _z;
+		
+		dimensions[X][0] = -(int)(_width/2);
+		dimensions[X][1] = (int)(_width/2);
+		dimensions[X][2] = (int)(_width/2);
+		dimensions[X][3] = -(int)(_width/2);
+
+		dimensions[Y][0] = -(int)(_length/2);
+		dimensions[Y][1] = -(int)(_length/2);
+		dimensions[Y][2] = (int)(_length/2);
+		dimensions[Y][3] = (int)(_length/2);
+
+		//am not worring about third dimension yet
+		dimensions[Z][0] = 0;
+		dimensions[Z][1] = 0;
+		dimensions[Z][2] = 0;
+		dimensions[Z][3] = 0;
 	}
 
-	int[][] absDimensions = new int[3][4];
-
-	public final static int X=0, Y=1, Z=2;
 } // class GameElement

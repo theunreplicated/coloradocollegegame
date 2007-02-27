@@ -39,9 +39,10 @@ public class ElementFactory
 			NodeList elements, spheres, cylinders, boxes, cones;
 			VirtualShape[] shapes;
 			int i, j, k;
-			int[] position;
-			int[] scale;
+			float[] position;
 			HashMap attributes;
+			float[][] minMax;
+			float[][] tempMinMax = null;
 			
 			for(File file : files)
 			{
@@ -50,8 +51,7 @@ public class ElementFactory
 				for(i = elements.getLength()-1;i>=0; i--)
 				{
 					position = Constants.DEFAULT_POSITION;
-					scale = Constants.DEFAULT_SCALE;
-					attributes = null;
+					attributes = new HashMap<String, Object>();
 
 					element = (Element) elements.item(i);
 					name = (Element) element.getElementsByTagName("name").item(0);
@@ -88,8 +88,24 @@ public class ElementFactory
 						shapes[j] = new VirtualSphere(spheres.item(k));
 					}
 
+					minMax = shapes[shapes.length-1].getMinMax();
+					for(j = shapes.length-2; j >= 0; j--)
+					{
+						tempMinMax = shapes[j].getMinMax();
+						for(k = tempMinMax.length-1; k >= 0; k--)
+						{
+							if(minMax[k][Constants.MIN] < tempMinMax[k][Constants.MIN])
+							{
+								minMax[k][Constants.MIN] = tempMinMax[k][Constants.MIN];
+							}
+							if(minMax[k][Constants.MAX] > tempMinMax[k][Constants.MAX])
+							{
+								minMax[k][Constants.MAX] = tempMinMax[k][Constants.MAX];
+							}
+						}
+					}
 					defaultElements.put(name.getTextContent(),
-						new GameElement(name.getTextContent(), position, scale, shapes, attributes));
+						new GameElement(name.getTextContent(), position, minMax, shapes, attributes));
 				}
 			}
 			
