@@ -41,8 +41,8 @@ public class ClientIO implements IO
 			serverListener.start();
 			myWorld.setIO(this);
 
-			myWorld.addElement(new int[] {id, 1, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z, Constants.STATUS_DEFAULT , 1}, 0).toggleIsClient();
-			this.send(new int[] {Constants.ADD_PLAYER,id, 1, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z, Constants.STATUS_DEFAULT});
+			myWorld.addElement(new int[] {id, 1, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z}, 0).toggleIsClient();
+			this.send(new int[] {Constants.ADD_PLAYER,id, 1, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z});
 		}
 		catch(IOException ioe)
 		{
@@ -65,8 +65,8 @@ public class ClientIO implements IO
 
 	public void moveSelf(int direction)
 	{
-		myWorld.nudgeElement(myClient.id, ((direction-1)/2) * ( (direction%2)*2-1),
-						  ((4-direction)/2) * ( (direction%2)*2-1), 0); // add Z direction
+		myWorld.nudgeElement(myClient.id, new int[] {((direction-1)/2) * ( (direction%2)*2-1),
+						  ((4-direction)/2) * ( (direction%2)*2-1)}); // add Z direction
 	}
 
 	public ClientInput getClientInput()

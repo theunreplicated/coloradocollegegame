@@ -40,10 +40,8 @@ public class World
 	{
 		int _id = _message[_start++];
 		int _type = _message[_start++];
-		int _x = _message[_start++];
-		int _y = _message[_start++];
-		int _z = _message[_start++];
-		int _status = _message[_start++];
+		int[] _pos = new int[_message.length-_start];
+		System.arraycopy(_message,_start,_pos,0,_pos.length);
 		
 		if(nextElement == elements.length)
 		{
@@ -54,26 +52,30 @@ public class World
 
 		elements[nextElement] = ef.getGameElement(_type);
 		elementIDs.put(_id,nextElement);
-
+		elements[nextElement].setPosition(_pos);
 
 		return elements[nextElement++];
 	}
 	
-	public void nudgeElement( int _row, int _dx, int _dy, int _dz )
+	public void nudgeElement( int _row, int[] _dpos )
 	{
 		int id = elementIDs.get(_row);
-		elements[id].nudge( _dx , _dy , _dz );
-		myIO.send(new int[] {Constants.MOVE_TO, _row, elements[id].getPosition(Constants.X), elements[id].getPosition(Constants.Y), elements[id].getPosition(Constants.Z)});
+		elements[id].nudge( _dpos );
+		int[] position = elements[id].getPosition();
+		int[] message = new int[position.length+2];
+		message[0] = Constants.MOVE_TO;
+		message[1] = _row;
+		System.arraycopy(position, 0, message, 2, position.length);
+		myIO.send(message);
 		myLogger.message( "nudge position: " + _row + " (" + elements[id].getPosition(0) + "," + elements[id].getPosition(1) + "," + elements[id].getPosition(2) + ")\n" , false );
 	}
 
 	public void setPosition( int[] _message, int _start)
 	{
-			int id = elementIDs.get(_message[_start]);
-			int _x = _message[_start+1];
-			int _y = _message[_start+2];
-			int _z = _message[_start+3];
-			elements[id].setPosition( _x, _y, _z);
+			int id = elementIDs.get(_message[_start++]);
+			int[] _pos = new int[_message.length-_start];
+			System.arraycopy(_message,_start,_pos,0,_pos.length);
+			elements[id].setPosition( _pos );
 			myLogger.message( "move position: " + _message[_start] + " (" + elements[id].getPosition(0) + "," + elements[id].getPosition(1) + "," + elements[id].getPosition(2) + ")\n" , false );
 	}
 	
