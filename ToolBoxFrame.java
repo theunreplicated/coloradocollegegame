@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class ToolBox extends JFrame
+public class ToolBoxFrame extends JFrame
 {
 	/*
 	Vars
@@ -29,7 +29,7 @@ public class ToolBox extends JFrame
 	/*
 	constructor
 	*/
-	public ToolBox(SpaceCanvas _canvas, ElementFactory _ef)
+	public ToolBoxFrame(SpaceCanvas _canvas, ElementFactory _ef)
 	{
 		SpaceCanvas canvas = _canvas;
 		ef = _ef;
