@@ -3,9 +3,9 @@ import javax.xml.parsers.*;
 
 public class VirtualCylinder implements VirtualShape
 {
-	private float radius;
-	private float[] center;
-	private float height;
+	float radius;
+	float[] center;
+	float height;
 
 	public VirtualCylinder(Node _info)
 	{

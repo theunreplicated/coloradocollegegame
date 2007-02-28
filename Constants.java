@@ -57,8 +57,8 @@ public class Constants
 
 	// graphics
 	public static final short UPDATE_PERIOD = 10;
-	public static final short CANVAS_WIDTH = 300;
-	public static final short CANVAS_HEIGHT = 300;
+	public static final short CANVAS_WIDTH = 600;
+	public static final short CANVAS_HEIGHT = 600;
 
 	// resolver messages
 	public static final short SUCCESS = 0;

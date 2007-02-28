@@ -3,8 +3,8 @@ import javax.xml.parsers.*;
 
 public class VirtualSphere implements VirtualShape
 {
-	private float radius;
-	private float[] center;
+	float radius;
+	float[] center;
 
 	public VirtualSphere(Node _info)
 	{

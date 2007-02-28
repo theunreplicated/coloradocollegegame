@@ -126,6 +126,11 @@ public class GameElement
 		return (int)position[dim];
 	}
 
+	public VirtualShape[] getShapes()
+	{
+		return shapes;
+	}
+
 	public void rotate(float[] _angles)
 	{
 		// So far emtpy... fill me please
