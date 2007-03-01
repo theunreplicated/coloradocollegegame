@@ -68,6 +68,10 @@ public class World
 		System.arraycopy(position, 0, message, 2, position.length);
 		myIO.send(message);
 		myLogger.message( "nudge position: " + _row + " (" + elements[id].getPosition(0) + "," + elements[id].getPosition(1) + "," + elements[id].getPosition(2) + ")\n" , false );
+		synchronized(elements)
+		{
+			elements.notifyAll();
+		}
 	}
 
 	public void setPosition( int[] _message, int _start)
@@ -97,6 +101,10 @@ public class World
 					myLogger.message("Received unparsable message: " + message[0] + "\n", true);
 		}
 
+		synchronized(elements)
+		{
+			elements.notifyAll();
+		}
 		return Constants.SUCCESS; //eventually every action in the world will return an int for whether or not it was a valid action
 	}
 }
