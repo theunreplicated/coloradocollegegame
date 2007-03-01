@@ -31,6 +31,21 @@ public class VirtualCylinder implements VirtualShape
 		center = _center;
 	}
 
+	public float getRadius()
+	{
+		return radius;
+	}
+	
+	public float getHeight()
+	{
+		return height;
+	}
+	
+	public float[] getCenter()
+	{
+		return center;
+	}
+
 	public float[][] getMinMax()
 	{
 		float[][] tmp = new float[center.length][2];

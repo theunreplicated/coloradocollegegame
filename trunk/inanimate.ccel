@@ -4,10 +4,10 @@
 		<plural>balls</plural>
 		<shapes>
 			<sphere>
-				<center>20</center>
 				<center>0</center>
 				<center>0</center>
-				<radius>20</radius>
+				<center>0</center>
+				<radius>.2</radius>
 			</sphere>
 		</shapes>
 	</element>
