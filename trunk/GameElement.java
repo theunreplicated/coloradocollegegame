@@ -129,6 +129,9 @@ public class GameElement
 	public void rotate(float[] _angles)
 	{
 		// So far emtpy... fill me please
+		
+		//If you want to be filled in, you should have an orientation variable or something
+		//  that we can set when we rotate you.
 	}
 
 	public int[] getInfoArray()
