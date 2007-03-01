@@ -46,8 +46,8 @@ public class Constants
 	public static final short X = 0;
 	public static final short Y = 1;
 	public static final short Z = 2;
-	public static final short INITIAL_X = 150;
-	public static final short INITIAL_Y = 150;
+	public static final short INITIAL_X = 0;
+	public static final short INITIAL_Y = 0;
 	public static final short INITIAL_Z = 0;
 	public static final short ELEMENT_INFO_SIZE = 4;
 	public static final short MIN = 0;

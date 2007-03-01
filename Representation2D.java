@@ -45,8 +45,10 @@ public class Representation2D extends JPanel implements Representation
 			{
 				int[][] tmpPoints = e.getAbsoluteCoordinates();
 				g.setColor(Color.BLACK);
-				if( e.isClient() ) g.fillPolygon( tmpPoints[Constants.X], tmpPoints[Constants.Y] , 4 );
-				else g.drawPolygon( tmpPoints[Constants.X], tmpPoints[Constants.Y] , 4 );
+				if( e.isClient() ) 
+					g.fillPolygon( tmpPoints[Constants.X], tmpPoints[Constants.Y] , 4 );
+				else 
+					g.drawPolygon( tmpPoints[Constants.X], tmpPoints[Constants.Y] , 4 );
 			}
 		}
 	}
@@ -93,6 +95,10 @@ public class Representation2D extends JPanel implements Representation
 			running = false;
 		}
 	}
+
+	//an update method (not in use)
+	public void update()
+	{}
 
 	public static void main(String args[])
 	{

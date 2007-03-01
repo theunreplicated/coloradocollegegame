@@ -89,4 +89,9 @@ public class Client
 	{
 		return myIO.getClientInput();
 	}
+
+	public Logger getLogger()
+	{
+		return logger;
+	}
 }

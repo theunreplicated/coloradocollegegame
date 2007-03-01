@@ -25,6 +25,16 @@ public class VirtualSphere implements VirtualShape
 		center = _center;
 	}
 
+	public float getRadius()
+	{
+		return radius;
+	}
+
+	public float[] getCenter()
+	{
+		return center;
+	}
+
 	public float[][] getMinMax()
 	{
 		float[][] tmp = new float[center.length][2];

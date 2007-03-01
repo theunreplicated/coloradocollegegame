@@ -30,6 +30,26 @@ public class VirtualBox implements VirtualShape
 		center = _center;
 	}
 
+	public float getDimX()
+	{
+		return dimensions[0];
+	}
+
+	public float getDimY()
+	{
+		return dimensions[1];
+	}
+
+	public float getDimZ()
+	{
+		return dimensions[2];
+	}
+
+	public float[] getCenter()
+	{
+		return center;
+	}
+
 	public float[][] getMinMax()
 	{
 		float[][] tmp = new float[center.length][2];
