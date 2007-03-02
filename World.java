@@ -90,6 +90,10 @@ public class World
 		elementIDs.put(_id,nextElement);
 		elements[nextElement].setPosition(_pos);
 
+		synchronized(elements)
+		{
+			elements.notifyAll();
+		}
 		return elements[nextElement++];
 	} */
 	
@@ -137,6 +141,7 @@ public class World
 		myLogger.message( "nudge position: " + _row + " (" + elements[id].getPosition(0) + "," + elements[id].getPosition(1) + "," + elements[id].getPosition(2) + ")\n" , false );
 		synchronized(elements)
 		{
+			elements[id].changed = true;
 			elements.notifyAll();
 		}
 	}
@@ -163,11 +168,16 @@ public class World
 	/* Depricated ( from when GameElements were stored in an array )
 	public void setPosition( int[] _message, int _start)
 	{
-			int id = elementIDs.get(_message[_start++]);
-			int[] _pos = new int[_message.length-_start];
-			System.arraycopy(_message,_start,_pos,0,_pos.length);
-			elements[id].setPosition( _pos );
-			myLogger.message( "move position: " + _message[_start] + " (" + elements[id].getPosition(0) + "," + elements[id].getPosition(1) + "," + elements[id].getPosition(2) + ")\n" , false );
+		int id = elementIDs.get(_message[_start++]);
+		int[] _pos = new int[_message.length-_start];
+		System.arraycopy(_message,_start,_pos,0,_pos.length);
+		elements[id].setPosition( _pos );
+		myLogger.message( "move position: " + _message[_start] + " (" + elements[id].getPosition(0) + "," + elements[id].getPosition(1) + "," + elements[id].getPosition(2) + ")\n" , false );
+		synchronized(elements)
+		{
+			elements[id].changed = true;
+			elements.notifyAll();
+		}
 	} */
 
 	public void setPosition( int[] _message, int _start)
@@ -186,20 +196,20 @@ public class World
 	
 	public int parse(int[] message)
 	{
-			switch(message[0])
-			{
-				case Constants.MOVE_TO:
-					setPosition( message, 1);
-					break;
-				case Constants.ADD_PLAYER:
-					addElement( message, 1);
-					break;
-				case Constants.REMOVE_PLAYER:
-					removeElement( message, 1 );
-					myLogger.message("Removing player: " + message[1] + "\n", false);
-					break;
-				default:
-					myLogger.message("Received unparsable message: " + message[0] + "\n", true);
+		switch(message[0])
+		{
+			case Constants.MOVE_TO:
+				setPosition( message, 1);
+				break;
+			case Constants.ADD_PLAYER:
+				addElement( message, 1);
+				break;
+			case Constants.REMOVE_PLAYER:
+				removeElement( message, 1 );
+				myLogger.message("Removing player: " + message[1] + "\n", false);
+				break;
+			default:
+				myLogger.message("Received unparsable message: " + message[0] + "\n", true);
 		}
 
 		return Constants.SUCCESS; //eventually every action in the world will return an int for whether or not it was a valid action
