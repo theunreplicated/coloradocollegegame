@@ -21,6 +21,9 @@ public class Representation3D extends Applet implements Representation
 	//a hashmap for converting between the World and the Java3D tree.
 	HashMap<GameElement,ElementBranch> elementsToNodes = new HashMap<GameElement,ElementBranch>();
 	
+	GameElement elementStart; //for checking the list
+	BranchGroup scene; //the root of the scene--lets us add more elements
+	
 	//constructor
 	public Representation3D(Client _client)
 	{
@@ -35,10 +38,11 @@ public class Representation3D extends Applet implements Representation
 		this.addMouseListener(ci);
 		this.addKeyListener(ci);
 		
-		GameElement elementStart = _client.getWorldElements(); //get the Elements to start building the tree
+		elementStart = _client.getWorldElements(); //get the Elements to start building the tree
 		
 		BranchGroup superRoot = new BranchGroup(); //the ultimate root of the entire scene. Created here so we can add stuff later	
-		BranchGroup scene = createSceneGraph(elementStart); //initialize the scene based on the Client's world
+		scene = createSceneGraph(elementStart); //initialize the scene based on the Client's world
+		scene.setCapability(Group.ALLOW_CHILDREN_EXTEND); //allow us to add more Elements to the scene during runtime
 		addDefaultLights(superRoot); //add default lighting to the world
 		superRoot.addChild(scene); //add the scene to the tree
 		
@@ -100,19 +104,43 @@ public class Representation3D extends Applet implements Representation
 		bg.addChild(dirLight1); //add light to scene
 	}
 
-	//temp change method
-	public void changeElement(GameElement e)
-	{
-		ElementBranch eb = elementsToNodes.get(e);
-		//Change eb. For example:
-		eb.setTranslation(e.position);
-	}
-
 	//an update method
 	public void update()
 	{
-		System.out.println("update method called!");
-		//now we need to figure out how to update the world based on the new element
+		System.out.println("update method called");
+		
+		GameElement e = elementStart; //for looping the list
+		do
+		{
+			if(e.changed)
+			{
+				ElementBranch bg = elementsToNodes.get(e); //fetch the branch
+				
+				if(bg == null) //if doesn't have a Branch yet
+				{
+					//add Branch
+					ElementBranch nbg = new ElementBranch(e); //make a new branch for the element
+					elementsToNodes.put(e,nbg); //make a conversion entry so we can find the branch later
+					scene.addChild(nbg.getBranchScene()); //add the branch to the scene
+				}
+				else if(e.next == null && e.prev == null) //if isn't in World's list
+				{
+					//delete Branch
+					bg.detach(); //remove the branch from the tree
+					elementsToNodes.remove(e); //remove from the hashmap
+				}
+				else //otherwise
+				{
+					//change branch
+					bg.setTranslation(e.position); //currently the only changes are position based			
+				} 
+				
+				e.changed = false;
+				
+			}
+			
+			e = e.next; //loop
+		} while(e != elementStart);
 	}
 
 	//this looks familiar...
