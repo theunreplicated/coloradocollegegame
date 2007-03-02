@@ -35,11 +35,11 @@ public class Representation3D extends Applet implements Representation
 		this.addMouseListener(ci);
 		this.addKeyListener(ci);
 		
-		GameElement[] elements = _client.getWorldElements(); //get the Elements to start building the tree
+		GameElement elementStart = _client.getWorldElements(); //get the Elements to start building the tree
 		
 		BranchGroup superRoot = new BranchGroup(); //the ultimate root of the entire scene. Created here so we can add stuff later	
-		BranchGroup scene = createSceneGraph(elements); //initialize the scene based on the Client's world
-		addDefaultLights(superRoot); //add (default)lighting to the world
+		BranchGroup scene = createSceneGraph(elementStart); //initialize the scene based on the Client's world
+		addDefaultLights(superRoot); //add default lighting to the world
 		superRoot.addChild(scene); //add the scene to the tree
 		
 		SimpleUniverse simpleU = new SimpleUniverse(canvas3D); //make a new SimpleUniverse object
@@ -50,25 +50,25 @@ public class Representation3D extends Applet implements Representation
 		simpleU.addBranchGraph(superRoot); //add the scene to the tree. THIS ALSO TELLS IT TO BEGIN RENDERING!
 
 		//a thread to notify us when something has changed
-		RepresentationListener rl = new RepresentationListener(this, elements, _client.getLogger());
+		RepresentationListener rl = new RepresentationListener(this, elementStart, _client.getLogger());
 		rl.start();
 	}
 
 	//create the bulk of the Java3D tree
-	public BranchGroup createSceneGraph(GameElement[] _elements)
+	public BranchGroup createSceneGraph(GameElement e)
 	{
 		BranchGroup root = new BranchGroup(); //A root node for this set of objects
-		
-		for(GameElement e : _elements)
-		{
-			if(e != null)
-			{
-				ElementBranch bg = new ElementBranch(e); //make a new branch for the element
-				elementsToNodes.put(e,bg); //make a conversion entry so we can find the branch later
 				
-				root.addChild(bg.getBranchScene()); //add the branch to the root.
-			}
-		}
+		GameElement first = e; //for looping
+		do
+		{
+			ElementBranch bg = new ElementBranch(e); //make a new branch for the element
+			elementsToNodes.put(e,bg); //make a conversion entry so we can find the branch later
+				
+			root.addChild(bg.getBranchScene()); //add the branch to the root.
+			
+			e = e.next; //loop
+		} while(e != first);
 	
 		return root; //return the branch
 	}
@@ -104,7 +104,8 @@ public class Representation3D extends Applet implements Representation
 	public void changeElement(GameElement e)
 	{
 		ElementBranch eb = elementsToNodes.get(e);
-		//change eb
+		//Change eb. For example:
+		eb.setTranslation(e.position);
 	}
 
 	//an update method

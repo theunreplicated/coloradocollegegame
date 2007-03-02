@@ -1,13 +1,13 @@
 public class RepresentationListener extends Thread
 {
 	private Representation rep;
-	private GameElement[] ge;
+	private GameElement sync;
 	private Logger myLogger;
 
-	public RepresentationListener(Representation _rep, GameElement[] _ge, Logger _myLogger)
+	public RepresentationListener(Representation _rep, GameElement _sync, Logger _myLogger)
 	{
 		rep = _rep;
-		ge = _ge;
+		sync = _sync;
 		myLogger = _myLogger;
 	}
 
@@ -17,11 +17,10 @@ public class RepresentationListener extends Thread
 		{
 			try
 			{
-				synchronized(ge)
+				synchronized(sync)
 				{
-  					ge.wait();
+					sync.wait();
 				}
-
 				rep.update();
 			}
 			catch(IllegalMonitorStateException imse)

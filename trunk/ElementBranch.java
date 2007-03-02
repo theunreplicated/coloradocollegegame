@@ -14,18 +14,16 @@ import javax.vecmath.*;
 public class ElementBranch //it doesn't like if we extend BranchGroup, so just make that a member variable and fetch it later
 {
 	//member variables - anything we'd want to change later (Element level)
-	TransformGroup coord; //transformed coordinates for this branch
-	Appearance appear; //an appearance node reference
-	BranchGroup broot; //the root of the branch.
-	//constructor
+	private TransformGroup coord; //transformed coordinates for this branch
+	private Appearance appear; //an appearance node reference
+	private BranchGroup broot; //the root of the branch.
 	
-
+	//constructor
 	public ElementBranch(GameElement e)
 	{
 		broot = new BranchGroup(); //the root of this branch
 
 		Transform3D posi = new Transform3D(); //make the new coordinate system
-	
 	System.out.println("Element at={"+e.position[0]+","+e.position[1]+","+e.position[2]+"}");
 		posi.setTranslation(new Vector3f(e.position)); //move to the element's position
 		//posi.setRotation(); //set to something for orientation??
@@ -49,7 +47,6 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 		
 		for(VirtualShape s : e.shapes) //run through the shapes!
 		{
-
 			//now see what kind of shapes we're using. 
 			//instanceof allows us to deal with extensions of the virtual primitives,
 			//but do we want that? If not, then change to be a getClassName (or whatever)
@@ -167,6 +164,14 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 		return new Vector3f(v.x/s, v.y/s, v.z/s);	
 	}
 
+	public void setTranslation(float[] p)
+	{
+		Transform3D t = new Transform3D();
+		//coord.getTransform(t); //fetch our old state. Don't need this since we're only storing translation
+		t.setTranslation(new Vector3f(p)); //reset our translation
+		coord.setTransform(t); //set our new state
+	}
+		
 	//member functions
 		//gets/sets??
 			//If we make public, then Representation takes care of moving stuff. If we make private, then calls methods that move stuff.
