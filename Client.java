@@ -80,9 +80,15 @@ public class Client
 
 	}
 
+	/* Depricated ( from when GameElements were stored in an array )
 	public GameElement[] getWorldElements()
 	{
 		return w.getElements();
+	} */
+
+	public GameElement getWorldElements()
+	{
+		return w.getFirstElement();
 	}
 
 	public ClientInput getClientInput()

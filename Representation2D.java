@@ -13,13 +13,13 @@ public class Representation2D extends JPanel implements Representation
     /**
      * Creates the panel to view in game objects, elements, knicknacks, players, etc. 
      */
-	GameElement[] elements;
+	GameElement first;
 	BufferedImage virtualImage;
 	Graphics g;
 
-	public Representation2D(GameElement[] _elements, ClientInput _ci)
+	public Representation2D(GameElement _first, ClientInput _ci)
 	{
-		elements = _elements;
+		first = _first;
 
 		this.setFocusable( true );
 		this.setPreferredSize(new Dimension(Constants.CANVAS_WIDTH, Constants.CANVAS_HEIGHT));
@@ -39,11 +39,20 @@ public class Representation2D extends JPanel implements Representation
 		g.setColor(Color.WHITE);
 		g.fillRect(0,0,this.getWidth(),this.getHeight());
 
-		for(GameElement e : elements)
+		
+		GameElement e=first;
+		int[][] tmpPoints = e.getAbsoluteCoordinates();
+		g.setColor(Color.BLACK);
+		if( e.isClient() ) 
+			g.fillPolygon( tmpPoints[Constants.X], tmpPoints[Constants.Y] , 4 );
+		else 
+			g.drawPolygon( tmpPoints[Constants.X], tmpPoints[Constants.Y] , 4 );
+
+		for(e = e.next; e != first; e = e.next)
 		{
 			if(e != null)
 			{
-				int[][] tmpPoints = e.getAbsoluteCoordinates();
+				tmpPoints = e.getAbsoluteCoordinates();
 				g.setColor(Color.BLACK);
 				if( e.isClient() ) 
 					g.fillPolygon( tmpPoints[Constants.X], tmpPoints[Constants.Y] , 4 );
