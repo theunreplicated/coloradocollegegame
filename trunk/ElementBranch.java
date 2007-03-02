@@ -22,6 +22,7 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 	public ElementBranch(GameElement e)
 	{
 		broot = new BranchGroup(); //the root of this branch
+		broot.setCapability(BranchGroup.ALLOW_DETACH); //let us remove the branch
 
 		Transform3D posi = new Transform3D(); //make the new coordinate system
 	System.out.println("Element at={"+e.position[0]+","+e.position[1]+","+e.position[2]+"}");
@@ -37,7 +38,10 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 		//Or adjust the appearance based on Shape inside the loop
 		appear = new Appearance(); //will need to specify how to get this appearance from the Element
 		Material mat = new Material();
-		mat.setDiffuseColor(1.0f,0.0f,0.0f);
+		if(e.isClient()) //make client a different color!
+			mat.setDiffuseColor(1.0f,0.0f,0.0f);
+		else
+			mat.setDiffuseColor(0.0f,0.0f,1.0f);
 		mat.setSpecularColor(1.0f,1.0f,1.0f);
 		mat.setShininess(64.0f); //I swear to god: "shininess - the material's shininess in the range [1.0, 128.0] with 1.0 being not shiny and 128.0 being very shiny."
 		appear.setMaterial(mat);
@@ -162,6 +166,11 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 	public Vector3f scale(Vector3f v, float s)
 	{
 		return new Vector3f(v.x/s, v.y/s, v.z/s);	
+	}
+
+	public void detach()
+	{
+		broot.detach();
 	}
 
 	public void setTranslation(float[] p)

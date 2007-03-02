@@ -67,6 +67,7 @@ public class World
 
 		synchronized( first )
 		{
+			toRemove.changed = true;
 			first.notifyAll();
 		}
 	}
