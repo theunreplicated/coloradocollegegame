@@ -1,5 +1,5 @@
 import java.util.*;
-public class GameElement extends LinkedElement
+public class GameElement extends LinkedElement<GameElement>
 { 
 	public boolean changed = true;
 	private int id;
