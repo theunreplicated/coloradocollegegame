@@ -1,7 +1,7 @@
-public class LinkedElement
+public class LinkedElement<T extends LinkedElement>
 {
-	public LinkedElement next = null;
-	public LinkedElement prev = null;
+	public T next = null;
+	public T prev = null;
 
 	public void removeFromList()
 	{
@@ -10,7 +10,7 @@ public class LinkedElement
 		this.next = this.prev = null;
 	}
 
-	public void insertBefore(LinkedElement _newElement )
+	public void insertBefore(T _newElement )
 	{
 		this.prev.next = _newElement;
 		_newElement.prev = this.prev;
@@ -18,7 +18,7 @@ public class LinkedElement
 		_newElement.next = this;
 	}
 
-	public void insertAfter(LinkedElement _newElement )
+	public void insertAfter(T _newElement )
 	{
 		this.next.prev = _newElement;
 		_newElement.next = this.next;
