@@ -4,12 +4,10 @@ public class World
 {
 	private IO myIO;
 	private GameElement first = null;
-	//private GameElement[] elements =  new GameElement[Constants.GAME_ELEMENT_INCREMENT];	
 	public int nextElement = 0;
 	private ElementFactory ef;
 	public Logger myLogger;
 	private HashMap<Integer, GameElement> elements = new HashMap<Integer, GameElement>();
-	//private HashMap<Integer,Integer> elementIDs = new HashMap<Integer,Integer>();
 
 	public World(ElementFactory _ef,Logger _logger)
 	{
@@ -22,24 +20,10 @@ public class World
 		myIO = _io;
 	}
 	
-	/* Depricated ( from when GameElements were stored in an array )
-	public GameElement[] getElements()
-	{
-		return elements;
-	} */
-
 	public GameElement getFirstElement()
 	{
 			return first;
 	}
-
-	/* Depricated ( from when GameElements were stored in an array )
-	public int[] getElementInfo( int _row )
-	{
-		System.out.println( _row );
-		return elements[elementIDs.get(_row)].getInfoArray();
-	}
-	*/
 
 	public int[] getElementInfo( int _row )
 	{
@@ -53,6 +37,19 @@ public class World
 		{
 			myLogger.message("removeElement tried to remove null Element with id: " + _start + "...\n", true);
 			return;
+		}
+		if(first == toRemove)
+		{
+			if(first == first.next)
+			{
+				first = null;
+				elements.remove(_message[_start]);
+				return;
+			}
+			else
+			{
+				first = first.next;
+			}
 		}
 		toRemove.removeFromList();
 		elements.remove(_message[_start]);

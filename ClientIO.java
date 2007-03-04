@@ -37,11 +37,12 @@ public class ClientIO implements IO
 			myClient.id = id;
 
 			myLogger.message("Connected as id: " + id + "\n", false);
+			myWorld.setIO(this);
+			myWorld.addElement(new int[] {id, 1, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z}, 0).toggleIsClient();
+
 			serverListener = new ServerListenerThread(servConnection, myClient, myWorld);
 			serverListener.start();
-			myWorld.setIO(this);
 
-			myWorld.addElement(new int[] {id, 1, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z}, 0).toggleIsClient();
 			this.send(new int[] {Constants.ADD_PLAYER,id, 1, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z});
 		}
 		catch(IOException ioe)
