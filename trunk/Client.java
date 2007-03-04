@@ -18,12 +18,6 @@ public class Client
 		myIO = new ClientIO( this , w , _server, _port, logger );
 	}
 
-	public void moveSelf(int direction)
-	{
-		myIO.moveSelf(direction);
-	}
-
-
 	public static Client initialize(String args[])
 	{
 		boolean verbose = false;

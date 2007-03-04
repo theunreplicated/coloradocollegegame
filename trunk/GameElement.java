@@ -1,8 +1,6 @@
 import java.util.*;
-public class GameElement 
+public class GameElement extends LinkedElement
 { 
-	public GameElement next = null;
-	public GameElement prev = null;
 	public boolean changed = true;
 	private int id;
 	int typeId;

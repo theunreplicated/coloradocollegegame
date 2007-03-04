@@ -46,12 +46,6 @@ public class World
 		return elements.get(_row).getInfoArray();
 	}
 
-	/* Depricated ( from when GameElements were stored in an array )
-	public void removeElement(int[] _message, int _start)
-	{
-		elements[elementIDs.get(_message[_start])] = null;
-	} */
-
 	public void removeElement(int[] _message, int _start)
 	{
 		GameElement toRemove = elements.get(_message[_start]);
@@ -60,9 +54,7 @@ public class World
 			myLogger.message("removeElement tried to remove null Element with id: " + _start + "...\n", true);
 			return;
 		}
-		toRemove.prev.next = toRemove.next;
-		toRemove.next.prev = toRemove.prev;
-		toRemove.next = toRemove.prev = null;
+		toRemove.removeFromList();
 		elements.remove(_message[_start]);
 
 		synchronized( first )
@@ -72,32 +64,6 @@ public class World
 		}
 	}
 
-	/* Depricated ( from when GameElements were stored in an array )
-	public GameElement addElement(int[] _message, int _start)
-	{
-		int _id = _message[_start++];
-		int _type = _message[_start++];
-		int[] _pos = new int[_message.length-_start];
-		System.arraycopy(_message,_start,_pos,0,_pos.length);
-		
-		if(nextElement == elements.length)
-		{
-			GameElement[] tmp = new GameElement[elements.length+Constants.GAME_ELEMENT_INCREMENT];
-			System.arraycopy(elements,0,tmp,0,elements.length);
-			elements = tmp;
-		}
-
-		elements[nextElement] = ef.getGameElement(_type);
-		elementIDs.put(_id,nextElement);
-		elements[nextElement].setPosition(_pos);
-
-		synchronized(elements)
-		{
-			elements.notifyAll();
-		}
-		return elements[nextElement++];
-	} */
-	
 	public GameElement addElement(int[] _message, int _start)
 	{
 		int _id = _message[_start++];
@@ -108,15 +74,12 @@ public class World
 		GameElement newElement = ef.getGameElement(_type);
 		if(first == null)
 		{
-				first = newElement;
-				first.next = first.prev = first;
+			first = newElement;
+			first.next = first.prev = first;
 		}
 		else
 		{
-			first.prev.next = newElement;
-			newElement.prev = first.prev;
-			first.prev = newElement;
-			newElement.next = first;
+			first.insertBefore(newElement);
 		}
 		elements.put(_id,newElement);
 		newElement.setPosition(_pos);
@@ -127,26 +90,6 @@ public class World
 		}
 		return newElement;
 	}
-
-	/* Depricated ( from when GameElements were stored in an array )
-	public void nudgeElement( int _row, int[] _dpos )
-	{
-		int id = elementIDs.get(_row);
-		elements[id].nudge( _dpos );
-		int[] position = elements[id].getPosition();
-		int[] message = new int[position.length+2];
-		message[0] = Constants.MOVE_TO;
-		message[1] = _row;
-		System.arraycopy(position, 0, message, 2, position.length);
-		myIO.send(message);
-		myLogger.message( "nudge position: " + _row + " (" + elements[id].getPosition(0) + "," + elements[id].getPosition(1) + "," + elements[id].getPosition(2) + ")\n" , false );
-		synchronized(elements)
-		{
-			elements[id].changed = true;
-			elements.notifyAll();
-		}
-	}
-	*/
 
 	public void nudgeElement( int _row, int[] _dpos )
 	{
@@ -165,21 +108,6 @@ public class World
 			first.notifyAll();
 		}
 	}
-
-	/* Depricated ( from when GameElements were stored in an array )
-	public void setPosition( int[] _message, int _start)
-	{
-		int id = elementIDs.get(_message[_start++]);
-		int[] _pos = new int[_message.length-_start];
-		System.arraycopy(_message,_start,_pos,0,_pos.length);
-		elements[id].setPosition( _pos );
-		myLogger.message( "move position: " + _message[_start] + " (" + elements[id].getPosition(0) + "," + elements[id].getPosition(1) + "," + elements[id].getPosition(2) + ")\n" , false );
-		synchronized(elements)
-		{
-			elements[id].changed = true;
-			elements.notifyAll();
-		}
-	} */
 
 	public void setPosition( int[] _message, int _start)
 	{
