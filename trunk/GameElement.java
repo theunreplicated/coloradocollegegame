@@ -5,12 +5,11 @@ public class GameElement extends LinkedElement<GameElement>
 	private int id;
 	int typeId;
 	int status;
-	boolean isClient;
 
 	float[] position = new float[3]; // Absolute postition of the element
 	float[][] boundingBox = null;
 	VirtualShape[] shapes = null;
-	HashMap attributes = null;
+	private HashMap attributes = null;
 	String type = null;
 
 	// Remove these once we have Element and ElementGenerator working
@@ -42,16 +41,6 @@ public class GameElement extends LinkedElement<GameElement>
 		typeId = original.typeId;
 		/*initialize is depracated */
 		initialize(position, 10, 10);
-	}
-
-	public void toggleIsClient()
-	{
-		isClient = !isClient;
-	}
-
-	public boolean isClient()
-	{
-		return isClient;
 	}
 
 	public void setTypeId(int _id)
@@ -182,8 +171,6 @@ public class GameElement extends LinkedElement<GameElement>
 	int[][] absDimensions = new int[3][4];
 	public void initialize( float[] _position , int _width, int _length )
 	{
-		isClient = false;
-
 		float _x = _position[0];
 		float _y = _position[1];
 		float _z = _position[2];

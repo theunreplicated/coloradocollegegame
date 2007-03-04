@@ -38,7 +38,7 @@ public class ClientIO implements IO
 
 			myLogger.message("Connected as id: " + id + "\n", false);
 			myWorld.setIO(this);
-			myWorld.addElement(new int[] {id, 1, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z}, 0).toggleIsClient();
+			myWorld.addElement(new int[] {id, 1, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z}, 0);
 
 			serverListener = new ServerListenerThread(servConnection, myClient, myWorld);
 			serverListener.start();
