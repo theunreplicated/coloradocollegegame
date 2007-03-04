@@ -43,10 +43,7 @@ public class Representation2D extends JPanel implements Representation
 		GameElement e=first;
 		int[][] tmpPoints = e.getAbsoluteCoordinates();
 		g.setColor(Color.BLACK);
-		if( e.isClient() ) 
-			g.fillPolygon( tmpPoints[Constants.X], tmpPoints[Constants.Y] , 4 );
-		else 
-			g.drawPolygon( tmpPoints[Constants.X], tmpPoints[Constants.Y] , 4 );
+		g.fillPolygon( tmpPoints[Constants.X], tmpPoints[Constants.Y] , 4 );
 
 		for(e = e.next; e != first; e = e.next)
 		{
@@ -54,10 +51,7 @@ public class Representation2D extends JPanel implements Representation
 			{
 				tmpPoints = e.getAbsoluteCoordinates();
 				g.setColor(Color.BLACK);
-				if( e.isClient() ) 
-					g.fillPolygon( tmpPoints[Constants.X], tmpPoints[Constants.Y] , 4 );
-				else 
-					g.drawPolygon( tmpPoints[Constants.X], tmpPoints[Constants.Y] , 4 );
+				g.drawPolygon( tmpPoints[Constants.X], tmpPoints[Constants.Y] , 4 );
 			}
 		}
 	}

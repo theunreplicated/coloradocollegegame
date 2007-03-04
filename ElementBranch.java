@@ -38,7 +38,7 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 		//Or adjust the appearance based on Shape inside the loop
 		appear = new Appearance(); //will need to specify how to get this appearance from the Element
 		Material mat = new Material();
-		if(e.isClient()) //make client a different color!
+		if(e.attribute("isClient") != null) //make client a different color!
 			mat.setDiffuseColor(1.0f,0.0f,0.0f);
 		else
 			mat.setDiffuseColor(0.0f,0.0f,1.0f);

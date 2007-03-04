@@ -51,11 +51,11 @@ public class World
 				first = first.next;
 			}
 		}
-		toRemove.removeFromList();
 		elements.remove(_message[_start]);
 
 		synchronized( first )
 		{
+			toRemove.removeFromList();
 			toRemove.changed = true;
 			first.notifyAll();
 		}
@@ -69,6 +69,7 @@ public class World
 		System.arraycopy(_message,_start,_pos,0,_pos.length);
 		
 		GameElement newElement = ef.getGameElement(_type);
+		newElement.setPosition(_pos);
 		if(first == null)
 		{
 			first = newElement;
@@ -76,10 +77,12 @@ public class World
 		}
 		else
 		{
-			first.insertBefore(newElement);
+			synchronized(first)
+			{
+				first.insertBefore(newElement);
+			}
 		}
 		elements.put(_id,newElement);
-		newElement.setPosition(_pos);
 
 		synchronized( first )
 		{
@@ -91,7 +94,10 @@ public class World
 	public void nudgeElement( int _row, int[] _dpos )
 	{
 		GameElement element = elements.get(_row);
-		element.nudge( _dpos );
+		synchronized(element)
+		{
+			element.nudge( _dpos );
+		}
 		int[] position = element.getPosition();
 		int[] message = new int[position.length+2];
 		message[0] = Constants.MOVE_TO;
@@ -111,7 +117,10 @@ public class World
 		GameElement element = elements.get(_message[_start++]);
 		int[] _pos = new int[_message.length-_start];
 		System.arraycopy(_message,_start,_pos,0,_pos.length);
-		element.setPosition( _pos );
+		synchronized(element)
+		{
+			element.setPosition( _pos );
+		}
 		myLogger.message( "move position: " + _message[_start] + " (" + element.getPosition(0) + "," + element.getPosition(1) + "," + element.getPosition(2) + ")\n" , false );
 		synchronized(first)
 		{

@@ -64,6 +64,7 @@ public class Representation3D extends Applet implements Representation
 		BranchGroup root = new BranchGroup(); //A root node for this set of objects
 				
 		GameElement first = e; //for looping
+		e.attribute("isClient", true);
 		do
 		{
 			ElementBranch bg = new ElementBranch(e); //make a new branch for the element
