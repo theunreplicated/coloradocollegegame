@@ -1,4 +1,4 @@
 public interface IO
 {
-	public void send( int[] _message );
+	public void send( Object _message );
 }

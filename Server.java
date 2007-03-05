@@ -88,7 +88,7 @@ public class Server implements IO
 		}
 	}
 
-	public void send( int[] _message)
+	public void send( Object _message)
 	{
 
 		synchronized(threads)
@@ -104,13 +104,13 @@ public class Server implements IO
 		}
 	}
 
-	public void propagate( int[] _message , int _row )
+	public void propagate( Object _message , int _row )
 	{
 
 		synchronized(threads)
 		{
 			int i;
-			myWorld.parse(_message);
+			myWorld.parse((Object[]) _message);
 			for( i = ids.length - 1; i >= 0; i-- ) 
 			{
 				if( ids[i] >= 0 && _row != i )
@@ -127,7 +127,7 @@ public class Server implements IO
 		synchronized(threads)
 		{
 			int i;
-			int[] message = new int[2+Constants.ELEMENT_INFO_SIZE];
+			Object[] message = new Object[2+Constants.ELEMENT_INFO_SIZE];
 			
 			for( i = ids.length - 1; i >= 0; i-- ) 
 			{
@@ -138,7 +138,7 @@ public class Server implements IO
 					System.arraycopy(myWorld.getElementInfo(ids[i]),0,message,2,Constants.ELEMENT_INFO_SIZE);
 					threads[_row].send(message);
 				try {
-					// Thread.sleep(20);
+					 Thread.sleep(200);
 				}
 				catch(Exception e)
 				{

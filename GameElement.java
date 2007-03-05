@@ -53,6 +53,11 @@ public class GameElement extends LinkedElement<GameElement>
 		return(typeId);
 	}
 	
+	public int id()
+	{
+		return id;
+	}
+
 	public Object attribute(String _key)
 	{
 		return attributes.get(_key);
@@ -66,54 +71,40 @@ public class GameElement extends LinkedElement<GameElement>
 	/* this takes in the index of the dimension you 
 	 * want to change in the position array and the value you want to 
 	 * nudge it to */
-	public void nudge(int _dim, int _value)
+	public void nudge(int _dim, float _value)
 	{
-		position[_dim] += (float)_value;
+		position[_dim] += _value;
 	} // nudge
 
-	public void nudge( int[] delta )
+	public void nudge( float[] delta )
 	{
-		/* eventually these should come in as floats.  messaging system needs
-		 * to be updated */
 		for( int i = 0 ; i < delta.length; i++ )
-			position[i] += (float)delta[i];
+			position[i] += delta[i];
 	}
 
-	public void setPosition(int[] _position)
+	public void setPosition(float[] _position)
 	{
-		/* eventually these should come in as floats.  messaging system needs
-		 * to be updated */
 		for( int i = _position.length-1 ; i >= 0; i--)
-			position[i] = (float)_position[i];
+			position[i] = _position[i];
 	} // setposition
 
 	/* this takes in the index of the dimension you 
 	 * want to change in the position array and the value you want to 
 	 * change it to */
-	public void setPosition(int _dim, int _value)
+	public void setPosition(int _dim, float _value)
 	{
-		/* eventually these should come in as floats.  messaging system needs
-		 * to be updated */
-		position[_dim] = (float)_value;
+		position[_dim] = _value;
 	}
 	
-	public int[] getPosition()
+	public float[] getPosition()
 	{
-		/* eventually this should return floats.  messaging system needs
-		 * to be updated */
-		int[] tmp = new int[position.length];
-		for(int i=0;i<position.length;i++)
-			tmp[i] = (int) position[i];
-		return tmp;
+		return position;
 	}
-
 	/* this takes in the index of the dimension you 
 	 * want */
-	public int getPosition(int dim)
+	public float getPosition(int dim)
 	{
-		/* eventually this should return a float.  messaging system needs
-		 * to be updated */
-		return (int)position[dim];
+		return position[dim];
 	}
 
 	public void rotate(float[] _angles)
@@ -124,11 +115,9 @@ public class GameElement extends LinkedElement<GameElement>
 		//  that we can set when we rotate you.
 	}
 
-	public int[] getInfoArray()
+	public Object[] getInfoArray()
 	{
-		/*  Should not be casting those floats as ints, better messagering system
-		 *  needs to be devised! */
-		return new int[] { typeId, (int)position[X], (int)position[Y] , (int)position[Z] };
+		return new Object[] { typeId, position[X], position[Y], position[Z] };
 	}
 
 	public boolean isColliding(GameElement _element)
@@ -178,15 +167,15 @@ public class GameElement extends LinkedElement<GameElement>
 		position[Y] = _y;
 		position[Z] = _z;
 		
-		dimensions[X][0] = -(int)(_width/2);
-		dimensions[X][1] = (int)(_width/2);
-		dimensions[X][2] = (int)(_width/2);
-		dimensions[X][3] = -(int)(_width/2);
+		dimensions[X][0] = -(_width/2);
+		dimensions[X][1] = (_width/2);
+		dimensions[X][2] = (_width/2);
+		dimensions[X][3] = -(_width/2);
 
-		dimensions[Y][0] = -(int)(_length/2);
-		dimensions[Y][1] = -(int)(_length/2);
-		dimensions[Y][2] = (int)(_length/2);
-		dimensions[Y][3] = (int)(_length/2);
+		dimensions[Y][0] = -(_length/2);
+		dimensions[Y][1] = -(_length/2);
+		dimensions[Y][2] = (_length/2);
+		dimensions[Y][3] = (_length/2);
 
 		//am not worring about third dimension yet
 		dimensions[Z][0] = 0;

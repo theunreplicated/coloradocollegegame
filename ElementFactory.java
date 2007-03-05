@@ -126,7 +126,7 @@ public class ElementFactory
 
 	public GameElement getGameElement(String _elementType)
 	{
-		return(new GameElement((GameElement) defaultElements.get(_elementType)));
+		return(new GameElement(defaultElements.get(_elementType)));
 	}
 
 	public GameElement getGameElement(int _elementTypeId)
