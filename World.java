@@ -22,7 +22,7 @@ public class World
 	
 	public GameElement getFirstElement()
 	{
-			return first;
+		return first;
 	}
 
 	public Object[] getElementInfo( int _row )

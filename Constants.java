@@ -28,8 +28,8 @@ public class Constants
 	public static final int MOVE_TO = 101;
 
 	// IDs for directions to move
-	public static final short MOVE_DOWN = 1;
-	public static final short MOVE_UP = 2;
+	public static final short MOVE_UP = 1; //changed by Joel so that hitting the up arrow moves us in the positive Y direction (in world coordinates)
+	public static final short MOVE_DOWN = 2;
 	public static final short MOVE_RIGHT = 3;
 	public static final short MOVE_LEFT = 4;
 

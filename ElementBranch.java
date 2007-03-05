@@ -22,7 +22,8 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 	public ElementBranch(GameElement e)
 	{
 		broot = new BranchGroup(); //the root of this branch
-		broot.setCapability(BranchGroup.ALLOW_DETACH); //let us remove the branch
+		broot.setCapability(BranchGroup.ALLOW_DETACH); //let us remove the branch at runtime
+		//broot.setCapability(Group.ALLOW_CHILDREN_WRITE); //let us modify the branch at runtime
 
 		Transform3D posi = new Transform3D(); //make the new coordinate system
 	System.out.println("Element at={"+e.position[0]+","+e.position[1]+","+e.position[2]+"}");
@@ -57,29 +58,27 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 			if(s instanceof VirtualBox)
 			{
 				Transform3D local = new Transform3D(); //the local coordinates for the shape
-				local.setTranslation(new Vector3f(((VirtualBox)s).getCenter())); //move to the shape's center
+				local.setTranslation(new Vector3f(s.getCenter())); //move to the shape's center
 				//add any rotation stuff here
 				TransformGroup localg = new TransformGroup(local);
 				
 				//make the primitive
-				//Box p = new Box(((VirtualBox)s).getDimX(), ((VirtualBox)s).getDimY(), ((VirtualBox)s).getDimZ(), Primitive.GENERATE_NORMALS, appear);
-				TransformGroup rot = createSpinningBehavior(localg);
-				rot.addChild(new ColorCube(0.2));
+				Box p = new Box(((VirtualBox)s).getDimX(), ((VirtualBox)s).getDimY(), ((VirtualBox)s).getDimZ(), Primitive.GENERATE_NORMALS, appear);
+					//TransformGroup rot = createSpinningBehavior(localg);
+					//rot.addChild(new ColorCube(0.2));
 				
-				//localg.addChild(p); //add the primitive to the TransformGroup
+				localg.addChild(p); //add the primitive to the TransformGroup
 				sroot.addChild(localg); //add the TransformGroup to the shape root node			
 			}
 			else if(s instanceof VirtualSphere)
 			{
 				Transform3D local = new Transform3D(); //the local coordinates for the shape
-				local.setTranslation(new Vector3f(((VirtualSphere)s).getCenter())); //move to the shape's center
+				local.setTranslation(new Vector3f(s.getCenter())); //move to the shape's center
 				//add any rotation stuff here
 				TransformGroup localg = new TransformGroup(local);
 				
 				//make the primitive
 				Sphere p = new Sphere(((VirtualSphere)s).getRadius(), Primitive.GENERATE_NORMALS, appear);
-				//TransformGroup rot = createSpinningBehavior(localg);
-				//rot.addChild(new ColorCube(0.2));
 				
 				localg.addChild(p); //add the primitive to the TransformGroup
 				sroot.addChild(localg); //add the TransformGroup to the shape root node			
@@ -87,31 +86,27 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 			else if(s instanceof VirtualCylinder)
 			{
 				Transform3D local = new Transform3D(); //the local coordinates for the shape
-				//local.setTranslation(new Vector3f(((VirtualCylinder)s).getCenter())); //move to the shape's center
+				local.setTranslation(new Vector3f(s.getCenter())); //move to the shape's center
 				//add any rotation stuff here
 				TransformGroup localg = new TransformGroup(local);
 				
 				//make the primitive
-				//Cylinder p = new Cylinder(((VirtualCylinder)s).getRadius(), ((VirtualCylinder)s).getHeight(), Primitive.GENERATE_NORMALS, appear);
-				TransformGroup rot = createSpinningBehavior(localg);
-				rot.addChild(new ColorCube(0.2));
+				Cylinder p = new Cylinder(((VirtualCylinder)s).getRadius(), ((VirtualCylinder)s).getHeight(), Primitive.GENERATE_NORMALS, appear);
 				
-				//localg.addChild(p); //add the primitive to the TransformGroup
+				localg.addChild(p); //add the primitive to the TransformGroup
 				sroot.addChild(localg); //add the TransformGroup to the shape root node			
 			}
 			else if(s instanceof VirtualCone)
 			{
 				Transform3D local = new Transform3D(); //the local coordinates for the shape
-				//local.setTranslation(new Vector3f(((VirtualCone)s).getCenter())); //move to the shape's center
+				local.setTranslation(new Vector3f(s.getCenter())); //move to the shape's center
 				//add any rotation stuff here
 				TransformGroup localg = new TransformGroup(local);
 				
 				//make the primitive
-				//Cone p = new Cone(((VirtualCone)s).getRadius(), ((VirtualCone)s).getHeight(), Primitive.GENERATE_NORMALS, appear);
-				TransformGroup rot = createSpinningBehavior(localg);
-				rot.addChild(new ColorCube(0.2));
+				Cone p = new Cone(((VirtualCone)s).getRadius(), ((VirtualCone)s).getHeight(), Primitive.GENERATE_NORMALS, appear);
 				
-				//localg.addChild(p); //add the primitive to the TransformGroup
+				localg.addChild(p); //add the primitive to the TransformGroup
 				sroot.addChild(localg); //add the TransformGroup to the shape root node			
 			}
 			else
@@ -123,7 +118,7 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 			//we could probably break up the code some, but will deal with that later.
 		}
 		
-	}
+	}//constructor
 
 	public BranchGroup getBranchScene()
 	{

@@ -7,7 +7,7 @@
 				<center>0</center>
 				<center>0</center>
 				<center>0</center>
-				<radius>.2</radius>
+				<radius>1</radius>
 			</sphere>
 		</shapes>
 	</element>
