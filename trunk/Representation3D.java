@@ -33,11 +33,12 @@ public class Representation3D extends Applet implements Representation
 		add("Center",canvas3D); //add the canvas to the Applet
 
 		//ClientInput stuff
-		this.setFocusable(true);
 		ClientInput ci = _client.getClientInput();
-		this.addMouseListener(ci);
-		this.addKeyListener(ci);
-		
+		canvas3D.setFocusable(true);
+		canvas3D.addMouseListener(ci);
+		canvas3D.addKeyListener(ci);
+	
+			
 		elementStart = _client.getWorldElements(); //get the Elements to start building the tree
 		elementStart.attribute("isClient", true); //mark the first element as the Client
 			
@@ -163,7 +164,7 @@ public class Representation3D extends Applet implements Representation
 				scene.addChild(nbg.getBranchScene()); //add the branch to the scene
 			}
 			
-			e = ge.next;
+			e = e.next;
 		} while(e!=elementStart);
 	} //update
 
@@ -171,6 +172,7 @@ public class Representation3D extends Applet implements Representation
 	public static void main(String[] args)
 	{
 		Client myClient = Client.initialize(args); //create a Client for the game
+
 
 		Frame f = new MainFrame(new Representation3D(myClient),300,300); //run the applet inside a Frame
 	} 
