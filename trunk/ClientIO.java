@@ -38,12 +38,12 @@ public class ClientIO implements IO
 
 			myLogger.message("Connected as id: " + id + "\n", false);
 			myWorld.setIO(this);
-			myWorld.addElement(new int[] {id, 1, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z}, 0);
+			myWorld.addElement(new Object[] {id, 1, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z}, 0);
 
 			serverListener = new ServerListenerThread(servConnection, myClient, myWorld);
 			serverListener.start();
 
-			this.send(new int[] {Constants.ADD_PLAYER,id, 1, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z});
+			this.send(new Object[] {Constants.ADD_PLAYER,id, 1, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z});
 		}
 		catch(IOException ioe)
 		{
@@ -51,12 +51,11 @@ public class ClientIO implements IO
 		}
 	}
 
-	public void send( int[] _message )
+	public void send( Object _message )
 	{
 		try
 		{
 			servOut.write( Constants.toByteArray(_message) );
-			servOut.write( Constants.toByteArray(new int[] { Integer.MAX_VALUE }) );
 		}
 		catch( IOException ioe )
 		{
@@ -66,7 +65,7 @@ public class ClientIO implements IO
 
 	public void moveSelf(int direction)
 	{
-		myWorld.nudgeElement(myClient.id, new int[] {((direction-1)/2) * ( (direction%2)*2-1),
+		myWorld.nudgeElement(myClient.id, new float[] {((direction-1)/2) * ( (direction%2)*2-1),
 						  ((4-direction)/2) * ( (direction%2)*2-1)}); // add Z direction
 	}
 
@@ -96,40 +95,13 @@ public class ClientIO implements IO
 				servIn = server.getInputStream();
 				byte[] message = new byte[Constants.MESSAGE_SIZE];
 
-				int i,messageLength,start,startRead;
-				int[] intMessage;
-				int[] subMessage;
-				start = 0;
-				startRead = 0;
+				int i;
+				Object[] objectMessage;
 
-				while( (messageLength=servIn.read(message,startRead,Constants.MESSAGE_SIZE - startRead)) != -1 )
+				while( (servIn.read(message)) != -1 )
 				{
-			/*		subMessage = Constants.fromByteArray( message );
-							System.out.print("message! => start: " + startRead + "  message: " );
-							for(int x = 0; x < subMessage.length; x++)
-								System.out.print( subMessage[x] + " " );
-							System.out.println();*/
-
-					intMessage = Constants.fromByteArray(message);
-					messageLength = (messageLength+startRead)/4;
-
-					for(i=0; i< messageLength; i++)
-					{
-						if( intMessage[i] == Integer.MAX_VALUE )
-						{
-							subMessage = new int[i-start];
-							System.arraycopy(intMessage,start,subMessage,0,i-start);
-							myWorld.parse( subMessage );
-							start = i+1;
-						}
-					}
-					if( start < messageLength )
-					{
-						System.arraycopy(Constants.toByteArray(intMessage),start*4,message,0,(messageLength-start)*4);
-						startRead = (messageLength-start)*4;
-					}
-					else startRead = 0;
-					start = 0;
+					objectMessage = Constants.fromByteArray(message);
+					myWorld.parse(objectMessage);
 				}
 			}
 			catch(IOException ioe)

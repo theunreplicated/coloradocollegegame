@@ -25,14 +25,14 @@ public class World
 			return first;
 	}
 
-	public int[] getElementInfo( int _row )
+	public Object[] getElementInfo( int _row )
 	{
 		return elements.get(_row).getInfoArray();
 	}
 
-	public void removeElement(int[] _message, int _start)
+	public void removeElement(Object[] _message, int _start)
 	{
-		GameElement toRemove = elements.get(_message[_start]);
+		GameElement toRemove = elements.get((Integer) _message[_start]);
 		if(toRemove == null)
 		{
 			myLogger.message("removeElement tried to remove null Element with id: " + _start + "...\n", true);
@@ -61,12 +61,15 @@ public class World
 		}
 	}
 
-	public GameElement addElement(int[] _message, int _start)
+	public GameElement addElement(Object[] _message, int _start)
 	{
-		int _id = _message[_start++];
-		int _type = _message[_start++];
-		int[] _pos = new int[_message.length-_start];
-		System.arraycopy(_message,_start,_pos,0,_pos.length);
+		int _id = ((Integer) _message[_start++]).intValue();
+		int _type = ((Integer) _message[_start++]).intValue();
+		float[] _pos = new float[_message.length-_start];
+		for(int i = 0; i < _pos.length; i++)
+		{
+			_pos[i] = ((Float) _message[_start+i]).floatValue();
+		}
 		
 		GameElement newElement = ef.getGameElement(_type);
 		newElement.setPosition(_pos);
@@ -91,18 +94,22 @@ public class World
 		return newElement;
 	}
 
-	public void nudgeElement( int _row, int[] _dpos )
+	public void nudgeElement( int _row, float[] _dpos )
 	{
 		GameElement element = elements.get(_row);
 		synchronized(element)
 		{
 			element.nudge( _dpos );
 		}
-		int[] position = element.getPosition();
-		int[] message = new int[position.length+2];
+		float[] position = element.getPosition();
+		Object[] message = new Object[position.length+2];
 		message[0] = Constants.MOVE_TO;
 		message[1] = _row;
-		System.arraycopy(position, 0, message, 2, position.length);
+
+		for(int i = 0; i < position.length; i++)
+		{
+			message[i+2] = position[i];
+		}
 		myIO.send(message);
 		myLogger.message( "nudge position: " + _row + " (" + element.getPosition(0) + "," + element.getPosition(1) + "," + element.getPosition(2) + ")\n" , false );
 		synchronized(first)
@@ -112,16 +119,20 @@ public class World
 		}
 	}
 
-	public void setPosition( int[] _message, int _start)
+	public void setPosition( Object[] _message, int _start)
 	{
-		GameElement element = elements.get(_message[_start++]);
-		int[] _pos = new int[_message.length-_start];
-		System.arraycopy(_message,_start,_pos,0,_pos.length);
+		GameElement element = elements.get((Integer) _message[_start++]);
+		float[] _pos = new float[_message.length-_start];
+		for(int i = 0; i < _pos.length; i++)
+		{
+			_pos[i] = ((Float) _message[_start+i]).floatValue();
+		}
+
 		synchronized(element)
 		{
 			element.setPosition( _pos );
 		}
-		myLogger.message( "move position: " + _message[_start] + " (" + element.getPosition(0) + "," + element.getPosition(1) + "," + element.getPosition(2) + ")\n" , false );
+		myLogger.message( "move position: " + element.id() + " (" + element.getPosition(0) + "," + element.getPosition(1) + "," + element.getPosition(2) + ")\n" , false );
 		synchronized(first)
 		{
 			element.changed = true;
@@ -129,9 +140,9 @@ public class World
 		}
 	}
 	
-	public int parse(int[] message)
+	public int parse(Object[] message)
 	{
-		switch(message[0])
+		switch(((Integer) message[0]).intValue())
 		{
 			case Constants.MOVE_TO:
 				setPosition( message, 1);

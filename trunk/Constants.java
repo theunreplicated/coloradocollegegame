@@ -12,12 +12,11 @@ public class Constants
 	public static final int MAX_PORT = 10000;
 	public static final int MIN_PORT = 1500;
 	public static final int DEF_SERVER_PORT = 5700;
-	public static final short LOGIN = 1;
-	public static final short LOGOUT = 2;
-	public static final short ADD_PLAYER = 3;
-	public static final short REMOVE_PLAYER = 4;
-	public static final short CHANGE_CONNECTION = -1;
-	public static final int MESSAGE_SIZE = 128;
+	public static final int LOGIN = 1;
+	public static final int LOGOUT = 2;
+	public static final int ADD_PLAYER = 3;
+	public static final int REMOVE_PLAYER = 4;
+	public static final int MESSAGE_SIZE = 90000;
 
 	// Startup
 	public static final String DEFAULT_DATA_DIR = ".";
@@ -40,15 +39,14 @@ public class Constants
 	public static final int ALT_KEY = 2;
 
 	// GameElement stuff
-	public static final short GAME_ELEMENT_INCREMENT = 30;
 	public static final short PERSON_WIDTH = 10;
 	public static final short PERSON_HEIGHT = 10;
 	public static final short X = 0;
 	public static final short Y = 1;
 	public static final short Z = 2;
-	public static final short INITIAL_X = 0;
-	public static final short INITIAL_Y = 0;
-	public static final short INITIAL_Z = 0;
+	public static final float INITIAL_X = 0;
+	public static final float INITIAL_Y = 0;
+	public static final float INITIAL_Z = 0;
 	public static final short ELEMENT_INFO_SIZE = 4;
 	public static final short MIN = 0;
 	public static final short MAX = 1;
@@ -62,20 +60,16 @@ public class Constants
 
 	// resolver messages
 	public static final short SUCCESS = 0;
-
-	public static byte[] toByteArray(int[] _message)
+	
+	public static byte[] toByteArray(Object _message)
 	{
 		byte[] a = null;
 		try {
-			a = new byte[_message.length*4];
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			DataOutputStream dos = new DataOutputStream(bos);
-			for(int i = 0; i < _message.length; i++)
-			{
-				dos.writeInt(_message[i]);
-			}
-			dos.flush();
-			return bos.toByteArray();
+			ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+			ObjectOutput out = new ObjectOutputStream(outStream);
+			out.writeObject(_message);
+			out.close();
+			return outStream.toByteArray();
 		}
 		catch(IOException ioe)
 		{
@@ -85,23 +79,35 @@ public class Constants
 		return a;
 	}
 
-	public static int[] fromByteArray(byte[] _message)
+	public static Object[] fromByteArray(byte[] _message)
 	{
-		int[] a = null;
+		Object[] a = null;
 		try {
-			a = new int[_message.length/4];
 			ByteArrayInputStream bos = new ByteArrayInputStream(_message);
-			DataInputStream dos = new DataInputStream(bos);
-			for(int i = 0; i < a.length; i++)
-			{
-				a[i] = dos.readInt();
-			}
+			ObjectInput dis = new ObjectInputStream(bos);
+			a = (Object[]) dis.readObject();
+			dis.close();
 			return a;
 		}
 		catch(IOException ioe)
 		{
 			System.err.println("Died on fromByteArray: " + ioe.getMessage());
 			System.exit(1);
+		}
+		catch(ClassNotFoundException cnfe)
+		{
+				System.err.println("Bad class on fromByteArray: " + cnfe.getMessage());
+				System.exit(1);
+		}
+		return a;
+	}
+
+	public static String toString(int[] _data)
+	{
+		String a = "";
+		for(int i : _data)
+		{
+			a += i + " ";
 		}
 		return a;
 	}

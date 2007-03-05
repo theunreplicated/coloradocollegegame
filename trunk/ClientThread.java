@@ -28,40 +28,14 @@ class ClientThread extends Thread {
 
 			byte[] message = new byte[Constants.MESSAGE_SIZE];
 
-			int i,messageLength,start,startRead;
-			int[] intMessage;
-			int[] subMessage;
-			start = 0;
-			startRead = 0;
+			int i;
+			Object[] objectMessage;
 
-			while( (messageLength=in.read(message,startRead,Constants.MESSAGE_SIZE - startRead)) != -1 )
+
+			while( (in.read(message)) != -1 )
 			{
-		/*		subMessage = Constants.fromByteArray( message );
-						System.out.print("message! => start: " + startRead + "  message: " );
-						for(int x = 0; x < subMessage.length; x++)
-							System.out.print( subMessage[x] + " " );
-						System.out.println();*/
-
-				intMessage = Constants.fromByteArray(message);
-				messageLength = (messageLength+startRead)/4;
-
-				for(i=0; i< messageLength; i++)
-				{
-					if( intMessage[i] == Integer.MAX_VALUE )
-					{
-						subMessage = new int[i-start];
-						System.arraycopy(intMessage,start,subMessage,0,i-start);
-						serve.propagate( subMessage , row );
-						start = i+1;
-					}
-				}
-				if( start < messageLength )
-				{
-					System.arraycopy(Constants.toByteArray(intMessage),start*4,message,0,(messageLength-start)*4);
-					startRead = (messageLength-start)*4;
-				}
-				else startRead = 0;
-				start = 0;
+				objectMessage = Constants.fromByteArray(message);
+				serve.propagate(objectMessage, row);
 			}
 
 			serve.myLogger.message( "connection closed: " + row + "\n", false );
@@ -72,16 +46,16 @@ class ClientThread extends Thread {
 		{
 			serve.myLogger.message("Connection error on row " + row + ": " + ioe.getMessage() + "\n", true);
 		}
-		serve.propagate( new int[]{ Constants.REMOVE_PLAYER , id } , row );
+		serve.propagate( new Object[]{ Constants.REMOVE_PLAYER, id } , row );
 		serve.removeThread( row );
 	}
 
-	public void send( int[] _message )
+	public void send( Object _message )
 	{
 		try
 		{
 			out.write( Constants.toByteArray(_message) );
-			out.write( Constants.toByteArray(new int[] { Integer.MAX_VALUE }) );
+			out.flush();
 		}
 		catch( IOException ioe )
 		{
