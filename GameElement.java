@@ -78,7 +78,7 @@ public class GameElement extends LinkedElement<GameElement>
 
 	public void nudge( float[] delta )
 	{
-		for( int i = 0 ; i < delta.length; i++ )
+		for( int i = 0 ; i < position.length; i++ )
 			position[i] += delta[i];
 	}
 

@@ -33,28 +33,28 @@ public class ClientInput implements MouseListener, KeyListener
 				modifiers[Constants.CTRL_KEY] = true;
 				break;	
 			case KeyEvent.VK_RIGHT:
-				myIO.moveSelf(new float[] {1.0f, 0.0f, 0.0f});
-				//myIO.moveSelf(Constants.MOVE_POSX);
+				myIO.moveSelf(Constants.VEC_POSX);
+				//myIO.moveSelf(new float[] {1.0f, 0.0f, 0.0f});
 				break;
 			case KeyEvent.VK_LEFT:
-				myIO.moveSelf(new float[] {-1.0f, 0.0f, 0.0f});
-				//myIO.moveSelf(Constants.MOVE_NEGX);
+				myIO.moveSelf(Constants.VEC_NEGX);
+				//myIO.moveSelf(new float[] {-1.0f, 0.0f, 0.0f});
 				break;
 			case KeyEvent.VK_UP:
-				myIO.moveSelf(new float[] {0.0f, 1.0f, 0.0f});
-				//myIO.moveSelf(Constants.MOVE_POSY);
+				myIO.moveSelf(Constants.VEC_POSY);
+				//myIO.moveSelf(new float[] {0.0f, 1.0f, 0.0f});
 				break;
 			case KeyEvent.VK_DOWN:
-				myIO.moveSelf(new float[] {0.0f, -1.0f, 0.0f});
-				//myIO.moveSelf(Constants.MOVE_NEGY);
+				myIO.moveSelf(Constants.VEC_NEGY);
+				//myIO.moveSelf(new float[] {0.0f, -1.0f, 0.0f});
 				break;
 			case KeyEvent.VK_PAGE_UP:
-				myIO.moveSelf(new float[] {0.0f, 0.0f, 1.0f});
-				//myIO.moveSelf(Constants.MOVE_POSZ);
+				myIO.moveSelf(Constants.VEC_POSZ);
+				//myIO.moveSelf(new float[] {0.0f, 0.0f, 1.0f});
 				break;
 			case KeyEvent.VK_PAGE_DOWN:
-				myIO.moveSelf(new float[] {0.0f, 0.0f, -1.0f});
-				//myIO.moveSelf(Constants.MOVE_NEGZ);
+				myIO.moveSelf(Constants.VEC_NEGZ);
+				//myIO.moveSelf(new float[] {0.0f, 0.0f, -1.0f});
 				break;
 			default:
 				myLogger.message("You typed: " + ke.getKeyChar() + " (" + ke.getKeyCode() + ")" + "\n", false);
