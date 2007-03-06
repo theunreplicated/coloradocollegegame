@@ -100,6 +100,7 @@ public class GameElement extends LinkedElement<GameElement>
 	{
 		return position;
 	}
+	
 	/* this takes in the index of the dimension you 
 	 * want */
 	public float getPosition(int dim)

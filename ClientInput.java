@@ -32,17 +32,29 @@ public class ClientInput implements MouseListener, KeyListener
 			case KeyEvent.VK_CONTROL:
 				modifiers[Constants.CTRL_KEY] = true;
 				break;	
-			case KeyEvent.VK_UP:
-				myIO.moveSelf(Constants.MOVE_UP);
-				break;
-			case KeyEvent.VK_DOWN:
-				myIO.moveSelf(Constants.MOVE_DOWN);
+			case KeyEvent.VK_RIGHT:
+				myIO.moveSelf(new float[] {1.0f, 0.0f, 0.0f});
+				//myIO.moveSelf(Constants.MOVE_POSX);
 				break;
 			case KeyEvent.VK_LEFT:
-				myIO.moveSelf(Constants.MOVE_LEFT);
+				myIO.moveSelf(new float[] {-1.0f, 0.0f, 0.0f});
+				//myIO.moveSelf(Constants.MOVE_NEGX);
 				break;
-			case KeyEvent.VK_RIGHT:
-				myIO.moveSelf(Constants.MOVE_RIGHT);
+			case KeyEvent.VK_UP:
+				myIO.moveSelf(new float[] {0.0f, 1.0f, 0.0f});
+				//myIO.moveSelf(Constants.MOVE_POSY);
+				break;
+			case KeyEvent.VK_DOWN:
+				myIO.moveSelf(new float[] {0.0f, -1.0f, 0.0f});
+				//myIO.moveSelf(Constants.MOVE_NEGY);
+				break;
+			case KeyEvent.VK_PAGE_UP:
+				myIO.moveSelf(new float[] {0.0f, 0.0f, 1.0f});
+				//myIO.moveSelf(Constants.MOVE_POSZ);
+				break;
+			case KeyEvent.VK_PAGE_DOWN:
+				myIO.moveSelf(new float[] {0.0f, 0.0f, -1.0f});
+				//myIO.moveSelf(Constants.MOVE_NEGZ);
 				break;
 			default:
 				myLogger.message("You typed: " + ke.getKeyChar() + " (" + ke.getKeyCode() + ")" + "\n", false);

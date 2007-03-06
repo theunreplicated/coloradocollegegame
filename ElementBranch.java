@@ -23,10 +23,8 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 	{
 		broot = new BranchGroup(); //the root of this branch
 		broot.setCapability(BranchGroup.ALLOW_DETACH); //let us remove the branch at runtime
-		//broot.setCapability(Group.ALLOW_CHILDREN_WRITE); //let us modify the branch at runtime
 
 		Transform3D posi = new Transform3D(); //make the new coordinate system
-	System.out.println("Element at={"+e.position[0]+","+e.position[1]+","+e.position[2]+"}");
 		posi.setTranslation(new Vector3f(e.position)); //move to the element's position
 		//posi.setRotation(); //set to something for orientation??
 		coord = new TransformGroup(posi); //create the coordinate node
@@ -117,7 +115,7 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 			
 			//we could probably break up the code some, but will deal with that later.
 		}
-		
+		broot.compile(); //let J3D optimize the branch
 	}//constructor
 
 	public BranchGroup getBranchScene()
@@ -156,13 +154,7 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 		return spiny;
 	}
 
-	//a method to scale measurements of Elements into J3D measurements.
-	//We decided that I shouldn't need this, but I'll leave it here anyway
-	public Vector3f scale(Vector3f v, float s)
-	{
-		return new Vector3f(v.x/s, v.y/s, v.z/s);	
-	}
-
+	//an accessor for detaching (and thereby deleting) the branch
 	public void detach()
 	{
 		broot.detach();
@@ -170,10 +162,9 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 
 	public void setTranslation(float[] p)
 	{
-		Transform3D t = new Transform3D();
-		//coord.getTransform(t); //fetch our old state. Don't need this since we're only storing translation
-		t.setTranslation(new Vector3f(p)); //reset our translation
-		coord.setTransform(t); //set our new state
+		Transform3D t = new Transform3D(); //a new Transform
+		t.setTranslation(new Vector3f(p)); //set our current translation
+		coord.setTransform(t); //set as our new state
 	}
 		
 	//member functions

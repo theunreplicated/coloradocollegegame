@@ -13,7 +13,6 @@ import javax.vecmath.*;
 
 /***
  A 3D Representation of the game using the Java3D API
- Interaction is currently being implemented
 ***/
 
 public class Representation3D extends Applet implements Representation
@@ -37,22 +36,21 @@ public class Representation3D extends Applet implements Representation
 		canvas3D.setFocusable(true);
 		canvas3D.addMouseListener(ci);
 		canvas3D.addKeyListener(ci);
-	
-			
-		elementStart = _client.getWorldElements(); //get the Elements to start building the tree
-		elementStart.attribute("isClient", true); //mark the first element as the Client
-			
+				
 		BranchGroup superRoot = new BranchGroup(); //the ultimate root of the entire scene. Created here so we can add stuff later	
 
 		addDefaultLights(superRoot); //add default lighting to the entire world
 
-		//some world-level transformations (moving the camera through transforms).
+		//some world-level transformations (moving the camera through transforms)
 		//for testing
 		Transform3D trans = new Transform3D();
+		//trans.rotX(Math.PI/2.0);
 		trans.setTranslation(new Vector3f(0.0f, 0.0f, -20.0f));
 		TransformGroup transGroup = new TransformGroup(trans);
 		superRoot.addChild(transGroup);
 
+		elementStart = _client.getWorldElements(); //get the Elements to start building the tree
+		elementStart.attribute("isClient", true); //mark the first element as the Client (Representation-dependent attribute)
 		scene = createSceneGraph(elementStart); //initialize the scene based on the Client's world
 		scene.setCapability(Group.ALLOW_CHILDREN_EXTEND); //allow us to add more Elements to the scene during runtime
 		//superRoot.addChild(scene); //add the scene to the tree
@@ -73,8 +71,8 @@ public class Representation3D extends Applet implements Representation
 	//create the bulk of the Java3D tree
 	public BranchGroup createSceneGraph(GameElement e)
 	{
-		BranchGroup root = new BranchGroup(); //A root node for the bulk of the scene
-		root.setCapability(Group.ALLOW_CHILDREN_WRITE); //let us modify the children at runtime
+		BranchGroup scene = new BranchGroup(); //A root node for the bulk of the scene
+		scene.setCapability(Group.ALLOW_CHILDREN_WRITE); //let us modify the children at runtime
 
 		GameElement first = e; //for looping
 		do
@@ -82,12 +80,12 @@ public class Representation3D extends Applet implements Representation
 			ElementBranch bg = new ElementBranch(e); //make a new branch for the element
 			elementsToNodes.put(e,bg); //make a conversion entry so we can find the branch later
 				
-			root.addChild(bg.getBranchScene()); //add the branch to the root.
+			scene.addChild(bg.getBranchScene()); //add the branch to the root.
 			
 			e = e.next; //loop
 		} while(e != first);
 	
-		return root; //return the branch
+		return scene; //return the branch
 	}
 	
 	//create and return a background for the world
@@ -115,55 +113,57 @@ public class Representation3D extends Applet implements Representation
 		DirectionalLight dirLight1 = new DirectionalLight(); //directional light
 		dirLight1.setInfluencingBounds(new BoundingSphere(new Point3d(0.0,0.0,0.0), 200.0));
 		dirLight1.setColor(new Color3f(1.0f, 1.0f, 1.0f)); //color of the light
-		dirLight1.setDirection(new Vector3f(-1.0f, -0.5f, -1.0f)); //direction of the light
+		//dirLight1.setDirection(new Vector3f(-1.0f, -0.5f, -1.0f)); //direction of the light
+		dirLight1.setDirection(new Vector3f(0.0f, 0.0f, -1.0f)); //direction of the light
 		bg.addChild(dirLight1); //add light to scene
 	}
 
 	//an update method
 	public void update()
 	{
-		//System.out.println("in update method:");
+		//System.out.println("In update method:");
 		
-		//Run through the HashMap to check if any of the current elements have changed	
+		//Run through the HashMap to check if we need to trim the tree	
 		Iterator<GameElement> i = elementsToNodes.keySet().iterator(); //for looping the list
 		GameElement e;
 		while(i.hasNext())
 		{
 			e = i.next(); //get the next element
 			
+			if(e.next == null && e.prev == null) //if isn't attached to World's list
+			{
+				//delete Branch
+				ElementBranch bg = elementsToNodes.get(e); //fetch the branch
+				bg.detach(); //remove the branch from the tree
+				i.remove(); //remove the current element from the hashmap via the iterator
+			}
+		}	 
+		
+		//run through the World's list of elements to see if anything needs changing
+		ElementBranch bg;
+		e = elementStart;
+		do
+		{
 			if(e.changed)
 			{
-				ElementBranch bg = elementsToNodes.get(e); //fetch the branch
+				bg = elementsToNodes.get(e); //get the corresponding ElementBranch
 				
-				if(e.next == null && e.prev == null) //if isn't attached to World's list
+				if(bg == null) //if element wasn't in the list
 				{
-					//delete Branch
-					bg.detach(); //remove the branch from the tree
-					i.remove(); //remove the current element from the hashmap via the iterator
+					//add Branch
+					ElementBranch nbg = new ElementBranch(e); //make a new branch for the element
+					elementsToNodes.put(e,nbg); //make a conversion entry so we can find the branch later
+					scene.addChild(nbg.getBranchScene()); //add the branch to the scene
 				}
 				else //otherwise
 				{
 					//change branch
 					bg.setTranslation(e.position); //currently the only changes are position based			
-				} 
+				}
 				
-				e.changed = false; //mark as changed
+				e.changed = false; //mark as unchanged
 			}
-		}	 
-		
-		//run through the World's list of elements to see there are any we don't have in the HashMap
-		e = elementStart;
-		do
-		{
-			if(!elementsToNodes.containsKey(e))
-			{		
-				System.out.println("in add");
-				//add Branch
-				ElementBranch nbg = new ElementBranch(e); //make a new branch for the element
-				elementsToNodes.put(e,nbg); //make a conversion entry so we can find the branch later
-				scene.addChild(nbg.getBranchScene()); //add the branch to the scene
-			}
-			
+						
 			e = e.next;
 		} while(e!=elementStart);
 	} //update
@@ -172,7 +172,6 @@ public class Representation3D extends Applet implements Representation
 	public static void main(String[] args)
 	{
 		Client myClient = Client.initialize(args); //create a Client for the game
-
 
 		Frame f = new MainFrame(new Representation3D(myClient),300,300); //run the applet inside a Frame
 	} 
