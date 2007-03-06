@@ -100,7 +100,7 @@ public class ClientIO implements IO
 
 				while( (servIn.read(message)) != -1 )
 				{
-					objectMessage = Constants.fromByteArray(message);
+					objectMessage = (Object[]) Constants.fromByteArray(message);
 					myWorld.parse(objectMessage);
 				}
 			}
