@@ -27,14 +27,14 @@ public class Constants
 	// IDs for actions that the World understands
 	public static final int MOVE_TO = 101;
 
-	// IDs for directions to move
-	public static final short MOVE_NEGX = 1;
-	public static final short MOVE_NEGY = 2;
-	public static final short MOVE_NEGZ = 3;
-	public static final short MOVE_POSX = 4;
-	public static final short MOVE_POSY = 5;
-	public static final short MOVE_POSZ = 6;
-
+	// Vectors for cardinal movement (in 3D)
+	public static final float[] VEC_POSX = {1.0f, 0.0f, 0.0f};
+	public static final float[] VEC_NEGX = {-1.0f, 0.0f, 0.0f};
+	public static final float[] VEC_POSY = {0.0f, 1.0f, 0.0f};
+	public static final float[] VEC_NEGY = {0.0f, -1.0f, 0.0f};
+	public static final float[] VEC_POSZ = {0.0f, 0.0f, 1.0f};
+	public static final float[] VEC_NEGZ = {0.0f, 0.0f, -1.0f};
+	
 	// Keyboard stuff
 	public static final int SHIFT_KEY = 0;
 	public static final int CTRL_KEY = 1;
