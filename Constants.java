@@ -79,13 +79,13 @@ public class Constants
 		return a;
 	}
 
-	public static Object[] fromByteArray(byte[] _message)
+	public static Object fromByteArray(byte[] _message)
 	{
-		Object[] a = null;
+		Object a = null;
 		try {
 			ByteArrayInputStream bos = new ByteArrayInputStream(_message);
 			ObjectInput dis = new ObjectInputStream(bos);
-			a = (Object[]) dis.readObject();
+			a = dis.readObject();
 			dis.close();
 			return a;
 		}

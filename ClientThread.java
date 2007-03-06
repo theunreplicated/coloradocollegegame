@@ -34,7 +34,7 @@ class ClientThread extends Thread {
 
 			while( (in.read(message)) != -1 )
 			{
-				objectMessage = Constants.fromByteArray(message);
+				objectMessage = (Object[]) Constants.fromByteArray(message);
 				serve.propagate(objectMessage, row);
 			}
 
