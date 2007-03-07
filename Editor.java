@@ -23,6 +23,6 @@ public class Editor
 		frame.pack();
 		frame.setVisible( true );
 
-		ToolBox toolBox = new ToolBox(canvas,ef);
+		ToolBoxFrame toolBox = new ToolBoxFrame(canvas,ef);
 	}
 }
