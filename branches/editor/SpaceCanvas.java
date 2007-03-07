@@ -25,7 +25,7 @@ public class SpaceCanvas extends JPanel implements ActionListener
 
 		if( button.equals( "Add Element" ) )
 		{
-			world.addElement( new int[] { nextId++ , 1 , nextId, nextId, 0 } , 0 );
+			world.addElement( new int[] { nextId++ , 0 , nextId, nextId, 0 } , 0 );
 			this.repaint();
 		}
 	}
