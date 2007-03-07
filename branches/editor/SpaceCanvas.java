@@ -42,6 +42,8 @@ public class SpaceCanvas extends JPanel implements ActionListener
 		int[] position;
 		VirtualShape[] shapes;
 		VirtualSphere sphere;
+		VirtualCylinder cylinder;
+
 		for( GameElement e : elements )
 		{
 			if( e != null )
@@ -63,8 +65,8 @@ public class SpaceCanvas extends JPanel implements ActionListener
 					}
 					if( shape.getClass().getName().equals("VirtualCylinder") )
 					{
-						sphere = (VirtualSphere)shape;
-						g.drawOval( (int)(position[Constants.X] + sphere.center[Constants.X]) , (int)(position[Constants.Y]+sphere.center[Constants.Y]) , (int)(sphere.radius), (int)(sphere.radius) );
+						cylinder = (VirtualCylinder)shape;
+						g.drawOval( (int)(position[Constants.X] + cylinder.center[Constants.X]) , (int)(position[Constants.Y]+cylinder.center[Constants.Y]) , (int)(cylinder.radius), (int)(cylinder.radius) );
 					}
 					else
 						g.drawRect( position[Constants.X] , position[Constants.Y] , 20 , 20 );
