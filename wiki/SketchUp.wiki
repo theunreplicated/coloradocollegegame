@@ -1,13 +1,13 @@
-#summary Explain the benefits of using Google SketchUp to model our world.
+#summary Explain the benefits of using Google !SketchUp to model our world.
 
 = Introduction =
 
-Explain the benefits of using Google SketchUp to model our world. 
+Explain the benefits of using Google !SketchUp to model our world. 
 
 
 = Details =
 
-Google Sketchup has many design features that will allow for us to create models quickly, and anyone can create these models from their own home. The best way to possibly import said files will be using an xml type language. 
+Google !Sketchup has many design features that will allow for us to create models quickly, and anyone can create these models from their own home. The best way to possibly import said files will be using an xml type language. 
 
 The Free Version of [http://sketchup.google.com/index.html Google Sketchup] has an option to export the 3D model into many different file types. The one to use will be the .dae extension. 
 
@@ -16,7 +16,7 @@ Here is what [http://download.sketchup.com/sketchuphelp/gsu6_win/gsuwin.html Goo
 
 = 3D Model (DAE) Export =
 
- SketchUp allows you to export your models as DAE (Collada) files. Export a DAE file using  the Export > 3D Model menu item in the File menu.
+ !SketchUp allows you to export your models as DAE (Collada) files. Export a DAE file using  the Export > 3D Model menu item in the File menu.
 == Exporting a DAE File ==
 
 === To export a DAE file: ===
@@ -37,11 +37,11 @@ Here is what [http://download.sketchup.com/sketchuphelp/gsu6_win/gsuwin.html Goo
 
  The Geometry section of the DAE Export Options Dialog box is used to identify the geometry that will be exported.
 
-* Export only current selection:* The Export only current selection only checkbox is used to export the currently selected geometry. The entire SketchUp model is exported when there is no selection. Additionally, the entire model is exported when this checkbox is not checked.
+* Export only current selection:* The Export only current selection only checkbox is used to export the currently selected geometry. The entire !SketchUp model is exported when there is no selection. Additionally, the entire model is exported when this checkbox is not checked.
 
 * Triangulate all faces:* The Triangulate all faces checkbox is used to break the output into triangles instead of multi-sided faces.
 
-* Export two-sided faces:* The Export two-sided faces checkbox is used to export faces twice, once for the front and once for the back. This option doubles the number of polygons in the resulting DAE file and can slow down rendering. However, this option ensures that your model will appear more like it appears in SketchUp. Both faces will always render, and materials applied to front and back faces are preserved.
+* Export two-sided faces:* The Export two-sided faces checkbox is used to export faces twice, once for the front and once for the back. This option doubles the number of polygons in the resulting DAE file and can slow down rendering. However, this option ensures that your model will appear more like it appears in !SketchUp. Both faces will always render, and materials applied to front and back faces are preserved.
 
 === Materials ===
 
@@ -53,7 +53,7 @@ Here is what [http://download.sketchup.com/sketchuphelp/gsu6_win/gsuwin.html Goo
 
  The Cameras section of the DAE Export Options Dialog box is used to identify how cameras will be exported.
 
- Generate cameras from scenes: Check the Generate cameras from scenes checkbox to create a camera object in the DAE file for each default camera position from each scene in your SketchUp file.
+ Generate cameras from scenes: Check the Generate cameras from scenes checkbox to create a camera object in the DAE file for each default camera position from each scene in your !SketchUp file.
 
 === Scale ===
 
@@ -61,4 +61,4 @@ Here is what [http://download.sketchup.com/sketchuphelp/gsu6_win/gsuwin.html Goo
 
 * Units:* The units drop-down list is used to determine the unit size in the DAE output.
 
- || _SketchUp User Guide (Microsoft Windows): 3D Model (DAE) Export_ || _© Google Inc. 2007 sketchup.google.com_ ||
+ || _!SketchUp User Guide (Microsoft Windows): 3D Model (DAE) Export_ || _© Google Inc. 2007 !sketchup.google.com_ ||
