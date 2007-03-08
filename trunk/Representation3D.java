@@ -45,7 +45,7 @@ public class Representation3D extends Applet implements Representation
 		//for testing
 		Transform3D trans = new Transform3D();
 		//trans.rotX(Math.PI/2.0);
-		trans.setTranslation(new Vector3f(0.0f, 0.0f, -20.0f));
+		trans.setTranslation(new Vector3f(0.0f, 0.0f, -3.0f));
 		TransformGroup transGroup = new TransformGroup(trans);
 		superRoot.addChild(transGroup);
 
@@ -158,7 +158,7 @@ public class Representation3D extends Applet implements Representation
 				else //otherwise
 				{
 					//change branch
-					bg.setTranslation(e.position); //currently the only changes are position based			
+					bg.setTranslation(e.getPosition()); //currently the only changes are position based			
 				}
 				
 				e.changed = false; //mark as unchanged
