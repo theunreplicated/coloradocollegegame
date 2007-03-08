@@ -25,7 +25,7 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 		broot.setCapability(BranchGroup.ALLOW_DETACH); //let us remove the branch at runtime
 
 		Transform3D posi = new Transform3D(); //make the new coordinate system
-		posi.setTranslation(new Vector3f(e.position)); //move to the element's position
+		posi.setTranslation(new Vector3f(e.getPosition())); //move to the element's position
 		//posi.setRotation(); //set to something for orientation??
 		coord = new TransformGroup(posi); //create the coordinate node
 		coord.setCapability(TransformGroup.ALLOW_TRANSFORM_READ); //allow us to read the transformation at runtime
@@ -41,7 +41,7 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 			mat.setDiffuseColor(1.0f,0.0f,0.0f);
 		else
 			mat.setDiffuseColor(0.0f,0.0f,1.0f);
-		mat.setSpecularColor(1.0f,1.0f,1.0f);
+		mat.setSpecularColor(1.0f,1.0f,0.0f);
 		mat.setShininess(64.0f); //I swear to god: "shininess - the material's shininess in the range [1.0, 128.0] with 1.0 being not shiny and 128.0 being very shiny."
 		appear.setMaterial(mat);
 
@@ -55,9 +55,7 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 			//but do we want that? If not, then change to be a getClassName (or whatever)
 			if(s instanceof VirtualBox)
 			{
-				Transform3D local = new Transform3D(); //the local coordinates for the shape
-				local.setTranslation(new Vector3f(s.getCenter())); //move to the shape's center
-				//add any rotation stuff here
+				Transform3D local = new Transform3D(new Quat4f(s.getRotation()), new Vector3f(s.getCenter()),1); //the local coordinates for the shape
 				TransformGroup localg = new TransformGroup(local);
 				
 				//make the primitive
@@ -70,9 +68,7 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 			}
 			else if(s instanceof VirtualSphere)
 			{
-				Transform3D local = new Transform3D(); //the local coordinates for the shape
-				local.setTranslation(new Vector3f(s.getCenter())); //move to the shape's center
-				//add any rotation stuff here
+				Transform3D local = new Transform3D(new Quat4f(s.getRotation()), new Vector3f(s.getCenter()),1); //the local coordinates for the shape
 				TransformGroup localg = new TransformGroup(local);
 				
 				//make the primitive
@@ -83,9 +79,7 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 			}
 			else if(s instanceof VirtualCylinder)
 			{
-				Transform3D local = new Transform3D(); //the local coordinates for the shape
-				local.setTranslation(new Vector3f(s.getCenter())); //move to the shape's center
-				//add any rotation stuff here
+				Transform3D local = new Transform3D(new Quat4f(s.getRotation()), new Vector3f(s.getCenter()),1); //the local coordinates for the shape
 				TransformGroup localg = new TransformGroup(local);
 				
 				//make the primitive
@@ -96,9 +90,7 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 			}
 			else if(s instanceof VirtualCone)
 			{
-				Transform3D local = new Transform3D(); //the local coordinates for the shape
-				local.setTranslation(new Vector3f(s.getCenter())); //move to the shape's center
-				//add any rotation stuff here
+				Transform3D local = new Transform3D(new Quat4f(s.getRotation()), new Vector3f(s.getCenter()),1); //the local coordinates for the shape
 				TransformGroup localg = new TransformGroup(local);
 				
 				//make the primitive

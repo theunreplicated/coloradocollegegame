@@ -5,6 +5,8 @@ public class VirtualBox implements VirtualShape
 {
 	private float[] dimensions;
 	private float[] center;
+	private float[] rotation; //in quaternions
+
 
 	public VirtualBox(Node _info)
 	{
@@ -22,7 +24,21 @@ public class VirtualBox implements VirtualShape
 			dimensions[i] = Float.parseFloat(dimNodes.item(i).getTextContent());
 		}
 
+		NodeList rotationNodes = info.getElementsByTagName("rotation");
+		float[] rotEuler = new float[rotationNodes.getLength()]; //construct an array of Euler rotations
+		for(int i = rotEuler.length-1; i>=0; i--)
+		{
+			rotEuler[i] = Float.parseFloat(rotationNodes.item(i).getTextContent());
+			rotEuler[i] = (float)Math.toRadians(rotEuler[i]); //change to Radians. We like radians.
+		}
+		if(rotEuler.length != 0)
+		{
+			rotation = Quaternions.getQuatFromEuler(rotEuler); //set the rotation to be in Quaternions
+		}
+		else
+			rotation = new float[] {0,0,0,1}; //set to a unit
 	}
+
 
 	public VirtualBox(float[] _dimensions, float[] _center)
 	{
@@ -48,6 +64,11 @@ public class VirtualBox implements VirtualShape
 	public float[] getCenter()
 	{
 		return center;
+	}
+
+	public float[] getRotation()
+	{
+		return rotation;
 	}
 
 	public float[][] getMinMax()

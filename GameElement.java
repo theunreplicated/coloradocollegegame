@@ -6,7 +6,8 @@ public class GameElement extends LinkedElement<GameElement>
 	int typeId;
 	int status;
 
-	float[] position = new float[3]; // Absolute postition of the element
+	private float[] position = new float[3]; //World-level postition of the element
+	private float[] facing = new float[4]; //The element's orientation
 	float[][] boundingBox = null;
 	VirtualShape[] shapes = null;
 	private HashMap attributes = null;
@@ -114,6 +115,11 @@ public class GameElement extends LinkedElement<GameElement>
 		
 		//If you want to be filled in, you should have an orientation variable or something
 		//  that we can set when we rotate you.
+	}
+
+	public float[] getFacing()
+	{
+		return facing;
 	}
 
 	public Object[] getInfoArray()

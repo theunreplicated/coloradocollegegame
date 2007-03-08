@@ -27,7 +27,7 @@ public class Constants
 	// IDs for actions that the World understands
 	public static final int MOVE_TO = 101;
 
-	// Vectors for cardinal movement (in 3D)
+	// UNIT vectors for cardinal movement (in 3D)
 	public static final float[] VEC_POSX = {1.0f, 0.0f, 0.0f};
 	public static final float[] VEC_NEGX = {-1.0f, 0.0f, 0.0f};
 	public static final float[] VEC_POSY = {0.0f, 1.0f, 0.0f};

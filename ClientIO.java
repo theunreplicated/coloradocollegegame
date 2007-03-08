@@ -38,12 +38,12 @@ public class ClientIO implements IO
 
 			myLogger.message("Connected as id: " + id + "\n", false);
 			myWorld.setIO(this);
-			myWorld.addElement(new Object[] {id, 1, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z}, 0);
+			myWorld.addElement(new Object[] {id, 2, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z}, 0);
 
 			serverListener = new ServerListenerThread(servConnection, myClient, myWorld);
 			serverListener.start();
 
-			this.send(new Object[] {Constants.ADD_PLAYER,id, 1, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z});
+			this.send(new Object[] {Constants.ADD_PLAYER,id, 2, Constants.INITIAL_X, Constants.INITIAL_Y, Constants.INITIAL_Z});
 		}
 		catch(IOException ioe)
 		{
@@ -63,7 +63,8 @@ public class ClientIO implements IO
 		}
 	}
 
-	public void moveSelf(float[] v) //move along the specified vector
+	//move along the specified vector
+	public void moveSelf(float[] v)
 	{
 		myWorld.nudgeElement(myClient.id, v);
 	}

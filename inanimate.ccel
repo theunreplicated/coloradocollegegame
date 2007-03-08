@@ -12,6 +12,60 @@
 		</shapes>
 	</element>
 	<element>
+		<name>face</name>
+		<plural>faces</plural>
+		<shapes>
+			<sphere>
+				<name>head</name>
+				<center>0</center>
+				<center>0</center>
+				<center>0</center>
+				<radius>1</radius>
+			</sphere>
+			<cylinder>
+				<name>eye</name>
+				<center>-.425</center>
+				<center>.3</center>
+				<center>.8</center>
+				<radius>.24</radius>
+				<height>0.37</height>
+				<!-- 	I think we should specify rotations in here using Euler
+					notation. Then we can just have the Elements themselves 
+					use Quaternions to do their rotation. You can't really
+					specify a Quaternion by hand
+				-->
+				<!-- 	Rotations will be specified in degrees
+					Rotation order is XYZ
+				-->
+				<rotation>90</rotation>
+				<rotation>0</rotation>
+				<rotation>0</rotation>
+			</cylinder>
+			<cylinder>
+				<name>eye</name>
+				<center>.425</center>
+				<center>.3</center>
+				<center>.8</center>
+				<radius>.24</radius>
+				<height>0.37</height>
+				<rotation>90</rotation>
+				<rotation>0</rotation>
+				<rotation>0</rotation>
+			</cylinder>
+			<cone>
+				<name>nose</name>
+				<center>0</center>
+				<center>0</center>
+				<center>1.2</center>
+				<radius>.2</radius>
+				<height>0.7</height>
+				<rotation>90</rotation>
+				<rotation>0</rotation>
+				<rotation>0</rotation>
+			</cone>
+		</shapes>
+	</element>
+	<element>
 		<name>glasses</name>
 		<plural>pairs of glasses</plural>
 		<shapes>
@@ -22,8 +76,9 @@
 				<center>0</center>
 				<radius>5</radius>
 				<height>0.5</height>
-				<theta>0</theta>
-				<phi>PI/2</phi>
+				<rotation>90</rotation>
+				<rotation>0</rotation>
+				<rotation>0</rotation>
 			</cylinder>
 			<cylinder>
 				<name>lens</name>
@@ -32,8 +87,9 @@
 				<center>0</center>
 				<radius>5</radius>
 				<height>0.5</height>
-				<theta>0</theta>
-				<phi>PI/2</phi>
+				<rotation>90</rotation>
+				<rotation>0</rotation>
+				<rotation>0</rotation>
 			</cylinder>
 			<cylinder>
 				<name>bridge</name>
@@ -42,8 +98,9 @@
 				<center>0</center>
 				<radius>1</radius>
 				<height>6</height>
-				<theta>PI/2</theta>
-				<phi>PI/2</phi>
+				<rotation>0</rotation>
+				<rotation>0</rotation>
+				<rotation>90</rotation>
 			</cylinder>
 		</shapes>
 	</element>
