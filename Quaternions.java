@@ -35,6 +35,54 @@ public class Quaternions
 		q[W] = (float)(q[W]/len);
 	}
 
+	//rotates the given point by the given UNIT Quaternion, and returns the new point
+	//  require q to be a unit because it should be anyway (based on the game)
+	public static float[] rotatePoint(float[] p, float[] q)
+	{
+		/*There are three different implementations for this class. Will need to test for which is fastest*/
+	
+		//explicit formula
+		//float[] qc = new float[] {-q[X],-q[Y],-q[Z],q[W]}; //make the conjugate
+		//float[] vq = new float[] {v[X],v[Y],v[Z],0}; //make vector into a Quaternion
+		//return mul(mul(q,vq),qc); //multiply
+
+		float x2 = q[X]*q[X];
+		float y2 = q[Y]*q[Y];
+		float z2 = q[Z]*q[Z];
+		float xy = q[X]*q[Y];
+		float yz = q[Y]*q[Z];
+		float xz = q[X]*q[Z];
+		float wx = q[W]*q[X];
+		float wy = q[W]*q[Y];
+		float wz = q[W]*q[Z];
+
+		//direct assignment
+		return new float[] {	
+			p[X]*(1-2*(y2 + z2)) + 2*(p[Y]*(xy - wz) + p[Z]*(xz + wy)),
+			p[Y]*(1-2*(x2 + z2)) + 2*(p[X]*(xy + wz) + p[Z]*(yz - wx)),
+			p[Z]*(1-2*(x2 + y2)) + 2*(p[X]*(xz - wy) + p[Y]*(yz + wx))};	
+
+		/*
+		//create matrix
+		float[] m = new float[] {
+			1-2*(y2 + z2), 2*(xy - wz), 2*(xz + wy),
+			2*(xy + wz), 1-2*(y2 + z2), 2*(yz - wx),
+			2*(xz - wy), 2*(yz + wx), 1-2*(x2 + y2)};
+		return new float[] {
+			m[0]*p[X] + m[1]*p[Y] + m[2]*p[Z],
+			m[3]*p[X] + m[4]*p[Y] + m[5]*p[Z],
+			m[6]*p[X] + m[7]*p[Y] + m[8]*p[Z]};
+		*/		
+		
+	}
+	
+	//batch rotating method
+	public static void rotatePoints(float[][] ps, float[] q)
+	{
+		//will be faster to do all the assignments at once for a batch of points
+	}
+
+
 	//returns a Quaternion from an array of Euler angles (XYZ order)
 	public static float[] getQuatFromEuler(float[] e)
 	{

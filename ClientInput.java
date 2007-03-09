@@ -32,6 +32,7 @@ public class ClientInput implements MouseListener, KeyListener
 			case KeyEvent.VK_CONTROL:
 				modifiers[Constants.CTRL_KEY] = true;
 				break;	
+			
 			/*Position movement*/
 			case KeyEvent.VK_RIGHT:
 				myIO.moveSelf(Constants.VEC_POSX);
@@ -57,12 +58,17 @@ public class ClientInput implements MouseListener, KeyListener
 				myIO.moveSelf(Constants.VEC_NEGZ);
 				//myIO.moveSelf(new float[] {0.0f, 0.0f, -1.0f});
 				break;
+			
 			/*Rotation movement*/
 			case KeyEvent.VK_NUMPAD2: //spin counterclockwise around x
 				myIO.rotateSelf(Constants.QUAT_CCLX);
 				break;
 			case KeyEvent.VK_NUMPAD4: //spin clockwise around y
 				myIO.rotateSelf(Constants.QUAT_CLOY);
+				break;
+			case KeyEvent.VK_NUMPAD5: //return to center
+				//WRITE THIS METHOD!!!
+				//Is there anyway for ClientInput to set stuff back to default?
 				break;
 			case KeyEvent.VK_NUMPAD6: //spin counterclockwise around y
 				myIO.rotateSelf(Constants.QUAT_CCLY);

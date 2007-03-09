@@ -38,7 +38,7 @@ public class Constants
 	public static final float[] VEC_NEGZ = {0.0f, 0.0f, -1.0f};
 	
 	//Quaternion rotations for "cardinal rotation" (in 3D)--a rotation of 
-	// 15degrees either clockwise or counterclockwise around a particular axis (look down)
+	// 15 degrees either clockwise or counterclockwise around a particular axis (looking down)
 	public static final float[] QUAT_CLOX = {-0.13052619f, 0.0f, 0.0f, 0.9914449f};
 	public static final float[] QUAT_CCLX = {0.13052619f, 0.0f ,0.0f, 0.9914449f};
 	public static final float[] QUAT_CLOY = {0.0f, -0.13052619f, 0.0f, 0.9914449f};
