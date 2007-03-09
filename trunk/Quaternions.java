@@ -14,7 +14,7 @@ public class Quaternions
 	public static final int Z = 2;
 	public static final int W = 3;
 
-	//multiply (compose) two specified quaternions and return the result 
+	//multiply (compose) two specified Quaternions and return the result 
 	public static float[] mul(float[] q1, float[] q2)
 	{
 		//simplified quaternion multiplication
@@ -23,6 +23,16 @@ public class Quaternions
 			q1[W]*q2[Y] + q1[Y]*q2[W] + q1[Z]*q2[X] - q1[X]*q2[Z],
 			q1[W]*q2[Z] + q1[Z]*q2[W] + q1[X]*q2[Y] - q1[Y]*q2[X],
 			q1[W]*q2[W] - q1[X]*q2[X] - q1[Y]*q2[Y] - q1[Z]*q2[Z]};
+	}
+
+	//normalizes the given Quaternion (sets its length to 1)
+	public static void normalize(float[] q)
+	{
+		double len = Math.sqrt(q[X]*q[X] + q[Y]*q[Y] + q[Z]*q[Z] + q[W]*q[W]);
+		q[X] = (float)(q[X]/len); 
+		q[Y] = (float)(q[Y]/len); 
+		q[Z] = (float)(q[Z]/len); 
+		q[W] = (float)(q[W]/len);
 	}
 
 	//returns a Quaternion from an array of Euler angles (XYZ order)
@@ -41,5 +51,4 @@ public class Quaternions
  			(float)(cx*cy*sz - sx*sy*cz),
 			(float)(cx*cy*cz + sx*sy*sz)};
 	}
-
 }

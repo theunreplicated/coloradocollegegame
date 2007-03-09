@@ -40,6 +40,7 @@ public class ElementFactory
 			VirtualShape[] shapes;
 			int i, j, k;
 			float[] position;
+			float[] facing;
 			HashMap attributes;
 			float[][] minMax;
 			float[][] tempMinMax = null;
@@ -51,6 +52,7 @@ public class ElementFactory
 				for(i = elements.getLength()-1;i>=0; i--)
 				{
 					position = Constants.DEFAULT_POSITION;
+					facing = Constants.DEFAULT_FACING;
 					attributes = new HashMap<String, Object>();
 
 					element = (Element) elements.item(i);
@@ -105,7 +107,7 @@ public class ElementFactory
 						}
 					}
 					defaultElements.put(name.getTextContent(),
-						new GameElement(name.getTextContent(), position, minMax, shapes, attributes));
+						new GameElement(name.getTextContent(), position, facing, minMax, shapes, attributes));
 				}
 			}
 			

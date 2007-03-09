@@ -119,6 +119,31 @@ public class World
 		}
 	}
 
+	public void rotateElement( int _row, float[] _dpos )
+	{
+		GameElement element = elements.get(_row);
+		synchronized(element)
+		{
+			element.rotate( _dpos );
+		}
+		float[] facing = element.getFacing();
+		Object[] message = new Object[facing.length+2];
+		message[0] = Constants.ROTATE_TO;
+		message[1] = _row;
+
+		for(int i = 0; i < facing.length; i++)
+		{
+			message[i+2] = facing[i];
+		}
+		myIO.send(message);
+		myLogger.message( "rotate facing: " + _row + " (" + facing[0] + "," + facing[1] + "," + facing[2] + "," + facing[3] + ")\n" , false );
+		synchronized(first)
+		{
+			element.changed = true;
+			first.notifyAll();
+		}
+	}
+
 	public void setPosition( Object[] _message, int _start)
 	{
 		GameElement element = elements.get((Integer) _message[_start++]);
@@ -139,6 +164,27 @@ public class World
 			first.notifyAll();
 		}
 	}
+
+	public void setFacing( Object[] _message, int _start)
+	{
+		GameElement element = elements.get((Integer) _message[_start++]);
+		float[] _fac = new float[_message.length-_start];
+		for(int i = 0; i < _fac.length; i++)
+		{
+			_fac[i] = ((Float) _message[_start+i]).floatValue();
+		}
+
+		synchronized(element)
+		{
+			element.setFacing( _fac );
+		}
+		myLogger.message( "rotate facing: " + element.id() + " (" + _fac[0] + "," + _fac[1] + "," + _fac[2] + "," + _fac[3] + ")\n" , false );
+		synchronized(first)
+		{
+			element.changed = true;
+			first.notifyAll();
+		}
+	}
 	
 	public int parse(Object[] message)
 	{
@@ -146,6 +192,9 @@ public class World
 		{
 			case Constants.MOVE_TO:
 				setPosition( message, 1);
+				break;
+			case Constants.ROTATE_TO:
+				setFacing( message, 1);
 				break;
 			case Constants.ADD_PLAYER:
 				addElement( message, 1);

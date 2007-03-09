@@ -32,6 +32,7 @@ public class ClientInput implements MouseListener, KeyListener
 			case KeyEvent.VK_CONTROL:
 				modifiers[Constants.CTRL_KEY] = true;
 				break;	
+			/*Position movement*/
 			case KeyEvent.VK_RIGHT:
 				myIO.moveSelf(Constants.VEC_POSX);
 				//myIO.moveSelf(new float[] {1.0f, 0.0f, 0.0f});
@@ -56,6 +57,26 @@ public class ClientInput implements MouseListener, KeyListener
 				myIO.moveSelf(Constants.VEC_NEGZ);
 				//myIO.moveSelf(new float[] {0.0f, 0.0f, -1.0f});
 				break;
+			/*Rotation movement*/
+			case KeyEvent.VK_NUMPAD2: //spin counterclockwise around x
+				myIO.rotateSelf(Constants.QUAT_CCLX);
+				break;
+			case KeyEvent.VK_NUMPAD4: //spin clockwise around y
+				myIO.rotateSelf(Constants.QUAT_CLOY);
+				break;
+			case KeyEvent.VK_NUMPAD6: //spin counterclockwise around y
+				myIO.rotateSelf(Constants.QUAT_CCLY);
+				break;
+			case KeyEvent.VK_NUMPAD7: //spin counterclockwise around z
+				myIO.rotateSelf(Constants.QUAT_CCLZ);
+				break;
+			case KeyEvent.VK_NUMPAD8: //spin clockwise around x
+				myIO.rotateSelf(Constants.QUAT_CLOX);
+				break;
+			case KeyEvent.VK_NUMPAD9: //spin clockwise around z
+				myIO.rotateSelf(Constants.QUAT_CLOZ);
+				break;
+		
 			default:
 				myLogger.message("You typed: " + ke.getKeyChar() + " (" + ke.getKeyCode() + ")" + "\n", false);
 

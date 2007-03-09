@@ -7,7 +7,7 @@ public class GameElement extends LinkedElement<GameElement>
 	int status;
 
 	private float[] position = new float[3]; //World-level postition of the element
-	private float[] facing = new float[4]; //The element's orientation
+	private float[] facing = new float[4]; //The element's orientation (in Quaternions!)
 	float[][] boundingBox = null;
 	VirtualShape[] shapes = null;
 	private HashMap attributes = null;
@@ -16,10 +16,11 @@ public class GameElement extends LinkedElement<GameElement>
 	// Remove these once we have Element and ElementGenerator working
 	public int[][] dimensions = new int[3][4]; 
 
-	public GameElement( String _type, float[] _position, float[][] _boundingBox, VirtualShape[] _shapes, HashMap _attributes)
+	public GameElement( String _type, float[] _position, float[] _facing, float[][] _boundingBox, VirtualShape[] _shapes, HashMap _attributes)
 	{
 		type = _type;
 		position = _position;
+		facing = _facing;
 		shapes = _shapes;
 		boundingBox = _boundingBox;
 		
@@ -35,6 +36,7 @@ public class GameElement extends LinkedElement<GameElement>
 		shapes = new VirtualShape[original.shapes.length];
 		boundingBox = new float[original.boundingBox.length][original.boundingBox[0].length];
 		System.arraycopy(original.position,0,position,0,original.position.length);
+		System.arraycopy(original.facing,0,facing,0,original.facing.length);
 		System.arraycopy(original.shapes,0,shapes,0,original.shapes.length);
 		System.arraycopy(original.boundingBox,0,boundingBox,0,original.boundingBox.length);
 		if(original.attributes != null)
@@ -109,13 +111,25 @@ public class GameElement extends LinkedElement<GameElement>
 		return position[dim];
 	}
 
-	public void rotate(float[] _angles)
+	//rotate by the specified quaternion
+	public void rotate(float[] q)
 	{
+		if(q.length != 4)
+			System.out.println("Bad Quaternion length. Bad!");
+		else
+			facing = Quaternions.mul(facing,q);
+
 		// So far emtpy... fill me please
 		
 		//If you want to be filled in, you should have an orientation variable or something
 		//  that we can set when we rotate you.
 	}
+
+	public void setFacing(float[] _facing)
+	{
+		for( int i = _facing.length-1 ; i >= 0; i--)
+			facing[i] = _facing[i];
+	} // setFacing		
 
 	public float[] getFacing()
 	{
