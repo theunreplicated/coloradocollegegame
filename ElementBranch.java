@@ -24,8 +24,8 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 		broot = new BranchGroup(); //the root of this branch
 		broot.setCapability(BranchGroup.ALLOW_DETACH); //let us remove the branch at runtime
 
-		Transform3D posi = new Transform3D(); //make the new coordinate system
-		posi.setTranslation(new Vector3f(e.getPosition())); //move to the element's position
+		Transform3D posi = new Transform3D(new Quat4f(e.getFacing()),new Vector3f(e.getPosition()),1); //make the new coordinate system
+		//posi.setTranslation(new Vector3f(e.getPosition())); //move to the element's position
 		//posi.setRotation(); //set to something for orientation??
 		coord = new TransformGroup(posi); //create the coordinate node
 		coord.setCapability(TransformGroup.ALLOW_TRANSFORM_READ); //allow us to read the transformation at runtime
@@ -41,7 +41,7 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 			mat.setDiffuseColor(1.0f,0.0f,0.0f);
 		else
 			mat.setDiffuseColor(0.0f,0.0f,1.0f);
-		mat.setSpecularColor(1.0f,1.0f,0.0f);
+		mat.setSpecularColor(1.0f,1.0f,1.0f);
 		mat.setShininess(64.0f); //I swear to god: "shininess - the material's shininess in the range [1.0, 128.0] with 1.0 being not shiny and 128.0 being very shiny."
 		appear.setMaterial(mat);
 
@@ -155,10 +155,26 @@ public class ElementBranch //it doesn't like if we extend BranchGroup, so just m
 	public void setTranslation(float[] p)
 	{
 		Transform3D t = new Transform3D(); //a new Transform
-		t.setTranslation(new Vector3f(p)); //set our current translation
+		coord.getTransform(t); //fill the transform with our current settings
+		t.setTranslation(new Vector3f(p)); //set the new translation
 		coord.setTransform(t); //set as our new state
 	}
 		
+	public void setRotation(float[] f)
+	{
+		Transform3D t = new Transform3D(); //a new Transform
+		coord.getTransform(t); //fill the transform with our current settings
+		t.setRotation(new Quat4f(f)); //set our current rotation
+		coord.setTransform(t);
+	}
+	
+	public void setTransform(float[] p, float[] f)
+	{
+		Transform3D t = new Transform3D(new Quat4f(f), new Vector3f(p), 1);
+		coord.setTransform(t);
+	}
+	
+	
 	//member functions
 		//gets/sets??
 			//If we make public, then Representation takes care of moving stuff. If we make private, then calls methods that move stuff.

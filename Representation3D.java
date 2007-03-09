@@ -158,7 +158,8 @@ public class Representation3D extends Applet implements Representation
 				else //otherwise
 				{
 					//change branch
-					bg.setTranslation(e.getPosition()); //currently the only changes are position based			
+					//bg.setTranslation(e.getPosition()); //currently the only changes are position based			
+					bg.setTransform(e.getPosition(),e.getFacing());
 				}
 				
 				e.changed = false; //mark as unchanged

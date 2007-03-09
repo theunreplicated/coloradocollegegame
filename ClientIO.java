@@ -68,6 +68,11 @@ public class ClientIO implements IO
 	{
 		myWorld.nudgeElement(myClient.id, v);
 	}
+	
+	public void rotateSelf(float[] q)
+	{
+		myWorld.rotateElement(myClient.id, q);
+	}
 
 	public ClientInput getClientInput()
 	{

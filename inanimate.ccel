@@ -1,3 +1,8 @@
+<!-- 	Rotations are specified in degrees using Euler rotations
+	Rotation order is XYZ
+	Note that Rotations are handled in Quaternions within the Game
+-->
+
 <element_types>
 	<element>
 		<name>ball</name>
@@ -29,14 +34,6 @@
 				<center>.8</center>
 				<radius>.24</radius>
 				<height>0.37</height>
-				<!-- 	I think we should specify rotations in here using Euler
-					notation. Then we can just have the Elements themselves 
-					use Quaternions to do their rotation. You can't really
-					specify a Quaternion by hand
-				-->
-				<!-- 	Rotations will be specified in degrees
-					Rotation order is XYZ
-				-->
 				<rotation>90</rotation>
 				<rotation>0</rotation>
 				<rotation>0</rotation>

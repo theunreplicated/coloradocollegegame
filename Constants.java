@@ -22,18 +22,29 @@ public class Constants
 	public static final String DEFAULT_DATA_DIR = ".";
 	public static final String ELEMENT_LIST_EXTENSION = "ccel";
 	public static final float[] DEFAULT_POSITION = {0,0,0};
+	public static final float[] DEFAULT_FACING = {0,0,0,1}; //in Quaternions!
 	public static final float[] DEFAULT_SCALE = {0,0,0};
 
 	// IDs for actions that the World understands
 	public static final int MOVE_TO = 101;
+	public static final int ROTATE_TO = 202;
 
-	// UNIT vectors for cardinal movement (in 3D)
+	// Unit vectors for cardinal movement (in 3D)
 	public static final float[] VEC_POSX = {1.0f, 0.0f, 0.0f};
 	public static final float[] VEC_NEGX = {-1.0f, 0.0f, 0.0f};
 	public static final float[] VEC_POSY = {0.0f, 1.0f, 0.0f};
 	public static final float[] VEC_NEGY = {0.0f, -1.0f, 0.0f};
 	public static final float[] VEC_POSZ = {0.0f, 0.0f, 1.0f};
 	public static final float[] VEC_NEGZ = {0.0f, 0.0f, -1.0f};
+	
+	//Quaternion rotations for "cardinal rotation" (in 3D)--a rotation of 
+	// 15degrees either clockwise or counterclockwise around a particular axis (look down)
+	public static final float[] QUAT_CLOX = {-0.13052619f, 0.0f, 0.0f, 0.9914449f};
+	public static final float[] QUAT_CCLX = {0.13052619f, 0.0f ,0.0f, 0.9914449f};
+	public static final float[] QUAT_CLOY = {0.0f, -0.13052619f, 0.0f, 0.9914449f};
+	public static final float[] QUAT_CCLY = {0.0f, 0.13052619f, 0.0f, 0.9914449f};
+	public static final float[] QUAT_CLOZ = {0.0f, 0.0f, -0.13052619f, 0.9914449f};
+	public static final float[] QUAT_CCLZ = {0.0f, 0.0f, 0.13052619f, 0.9914449f};
 	
 	// Keyboard stuff
 	public static final int SHIFT_KEY = 0;
