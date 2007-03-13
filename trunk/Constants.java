@@ -3,6 +3,8 @@ import java.io.*;
 
 public class Constants
 {
+	public static final int SUCCESS = 1; //won't compile without this guys... Remove it when you've removed the reference in World
+
 	// server information
 	public static final int MAX_CONNECTIONS = 8;
 
