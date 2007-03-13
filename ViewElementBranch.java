@@ -31,7 +31,7 @@ public class ViewElementBranch implements ElementBranch
 		Transform3D posi = new Transform3D(new Quat4f(e.getFacing()),new Vector3f(e.getPosition()),1); //make the new coordinate system
 		coord.setTransform(posi); //set our transform group to the default position
 	
-		avatar = new GameElementBranch(e);
+		//avatar = new GameElementBranch(e);
 	}
 
 	//a method to fetch the ViewingPlatform in order to construct the view branch

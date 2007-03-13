@@ -61,23 +61,23 @@ public class ClientInput implements MouseListener, KeyListener
 			
 			/*Rotation movement*/
 			case KeyEvent.VK_NUMPAD2: //spin counterclockwise around x
-				myIO.rotateSelf(Constants.QUAT_CCLX);
+				myIO.rotateSelf(Constants.QUAT_CLOX);
 				break;
-			case KeyEvent.VK_NUMPAD4: //spin clockwise around y
-				myIO.rotateSelf(Constants.QUAT_CLOY);
+			case KeyEvent.VK_NUMPAD4: //spin counterclockwise around y
+				myIO.rotateSelf(Constants.QUAT_CCLY);
 				break;
 			case KeyEvent.VK_NUMPAD5: //return to center
 				//WRITE THIS METHOD!!!
 				//Is there anyway for ClientInput to set stuff back to default?
 				break;
-			case KeyEvent.VK_NUMPAD6: //spin counterclockwise around y
-				myIO.rotateSelf(Constants.QUAT_CCLY);
+			case KeyEvent.VK_NUMPAD6: //spin clockwise around y
+				myIO.rotateSelf(Constants.QUAT_CLOY);
 				break;
 			case KeyEvent.VK_NUMPAD7: //spin counterclockwise around z
 				myIO.rotateSelf(Constants.QUAT_CCLZ);
 				break;
 			case KeyEvent.VK_NUMPAD8: //spin clockwise around x
-				myIO.rotateSelf(Constants.QUAT_CLOX);
+				myIO.rotateSelf(Constants.QUAT_CCLX);
 				break;
 			case KeyEvent.VK_NUMPAD9: //spin clockwise around z
 				myIO.rotateSelf(Constants.QUAT_CLOZ);
