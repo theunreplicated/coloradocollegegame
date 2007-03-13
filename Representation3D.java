@@ -30,34 +30,35 @@ public class Representation3D extends Applet implements Representation
 		GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration(); //how does SimpleUniverse want to draw stuff?
 		Canvas3D canvas3D = new Canvas3D(config); //make a new canvas, as SimpleUniverse likes it
 		add("Center",canvas3D); //add the canvas to the Applet
+		Viewer viewer = new Viewer(canvas3D); //a Viewer to go with the canvas
 
 		//ClientInput stuff
 		ClientInput ci = _client.getClientInput();
 		canvas3D.setFocusable(true);
 		canvas3D.addMouseListener(ci);
 		canvas3D.addKeyListener(ci);
-				
+
 		BranchGroup superRoot = new BranchGroup(); //the ultimate root of the entire scene. Created here so we can add stuff later	
 
-		addDefaultLights(superRoot); //add default lighting to the entire world
-
-		//some world-level transformations (moving the camera through transforms)
-		//for testing
-		Transform3D trans = new Transform3D();
-		//trans.rotX(Math.PI/2.0);
-		trans.setTranslation(new Vector3f(0.0f, 0.0f, -3.0f));
-		TransformGroup transGroup = new TransformGroup(trans);
-		superRoot.addChild(transGroup);
+		//addDefaultLights(superRoot); //add default lighting to the entire world
 
 		elementStart = _client.getWorldElements(); //get the Elements to start building the tree
 		elementStart.attribute("isClient", true); //mark the first element as the Client (Representation-dependent attribute)
+		ViewingPlatform vp = createCamera(elementStart, superRoot); //build the camera FIRST
+
+		TransformGroup vpt = vp.getMultiTransformGroup().getTransformGroup(0);
+		BranchGroup candleStick = new BranchGroup();
+		addDefaultLights(candleStick);
+		vpt.addChild(candleStick);
+
 		scene = createSceneGraph(elementStart); //initialize the scene based on the Client's world
+		scene.setCapability(Group.ALLOW_CHILDREN_WRITE); //let us modify the children at runtime
 		scene.setCapability(Group.ALLOW_CHILDREN_EXTEND); //allow us to add more Elements to the scene during runtime
-		//superRoot.addChild(scene); //add the scene to the tree
-		transGroup.addChild(scene); //add the scene to the tree
-		
-		SimpleUniverse simpleU = new SimpleUniverse(canvas3D); //make a new SimpleUniverse object
-		simpleU.getViewingPlatform().setNominalViewingTransform(); //set the Eye's location
+		superRoot.addChild(scene); //add the scene to the tree
+
+
+		SimpleUniverse simpleU = new SimpleUniverse(vp, viewer);
+		//simpleU.getViewingPlatform().setNominalViewingTransform(); //set default eye's locathe Eye's location
 		simpleU.addBranchGraph(createBackground()); //set the background
 		
 		superRoot.compile(); //let Java3D optimize the tree
@@ -67,25 +68,89 @@ public class Representation3D extends Applet implements Representation
 		RepresentationListener rl = new RepresentationListener(this, elementStart, _client.getLogger());
 		rl.start();
 	}
+	
+	//creates a "view" or camera based on the given element
+	//this will probably need to be argument based depending on what kind of camera we want
+	//Also, this MUST be called BEFORE createSceneGraph() (I could probably make it explicit, but it doesn't seem as nice)
+	public ViewingPlatform createCamera(GameElement e, BranchGroup vscene)
+	{
+		//now create a ViewGameElementBranch version
+		ViewElementBranch veb = new ViewElementBranch(e);
+		elementsToNodes.put(e,veb); //add it to the hashmap!
+		GameElementBranch avatar = veb.getAvatar();
+		if(avatar != null)
+			vscene.addChild(avatar.getBranchScene()); //add the branch to the root.
+		
+		return veb.getViewingPlatform();	
+	}
 
 	//create the bulk of the Java3D tree
 	public BranchGroup createSceneGraph(GameElement e)
 	{
-		BranchGroup scene = new BranchGroup(); //A root node for the bulk of the scene
-		scene.setCapability(Group.ALLOW_CHILDREN_WRITE); //let us modify the children at runtime
+		BranchGroup gscene = new BranchGroup(); //A root node for the bulk of the scene
 
 		GameElement first = e; //for looping
 		do
 		{
-			ElementBranch bg = new ElementBranch(e); //make a new branch for the element
-			elementsToNodes.put(e,bg); //make a conversion entry so we can find the branch later
+			if(!elementsToNodes.containsKey(e)) //check that we haven't already added the element
+			{			
+				GameElementBranch bg = new GameElementBranch(e); //make a new branch for the element
+				elementsToNodes.put(e,bg); //make a conversion entry so we can find the branch later
 				
-			scene.addChild(bg.getBranchScene()); //add the branch to the root.
-			
+				gscene.addChild(bg.getBranchScene()); //add the branch to the root.
+			}
 			e = e.next; //loop
 		} while(e != first);
 	
-		return scene; //return the branch
+		gscene.addChild(createGrid());
+
+		//for pillars
+		TransformGroup bt1 = new TransformGroup(new Transform3D(new Quat4f(0,0,0,1),new Vector3f(2,0,2),1));
+		bt1.addChild(new ColorCube(.5));
+		gscene.addChild(bt1);
+		TransformGroup bt2 = new TransformGroup(new Transform3D(new Quat4f(0,0,0,1),new Vector3f(-2,0,2),1));
+		bt2.addChild(new ColorCube(.5));
+		gscene.addChild(bt2);
+		TransformGroup bt3 = new TransformGroup(new Transform3D(new Quat4f(0,0,0,1),new Vector3f(2,0,-2),1));
+		bt3.addChild(new ColorCube(.5));
+		gscene.addChild(bt3);
+		TransformGroup bt4 = new TransformGroup(new Transform3D(new Quat4f(0,0,0,1),new Vector3f(-2,0,-2),1));
+		bt4.addChild(new ColorCube(.5));
+		gscene.addChild(bt4);
+		
+		return gscene; //return the branch
+	}
+	
+	//creates a Representation-level grid to display as the ground. For testing mostly
+	public Shape3D createGrid()
+	{
+		LineArray grid = new LineArray(88, LineArray.COORDINATES | LineArray.COLOR_3);
+		
+		int index = 0;
+		for(int i=-10; i<=10; i++)
+		{
+			grid.setCoordinate(index, new Point3f(-11.0f, -1.0f, i));
+			index++;
+			grid.setCoordinate(index, new Point3f( 11.0f, -1.0f, i));
+			index++; 
+		}
+
+		for(int i=-10; i<=10; i++)
+		{
+			grid.setCoordinate(index, new Point3f(i, -1.0f,-11.0f));
+			index++;
+			grid.setCoordinate(index, new Point3f(i, -1.0f, 11.0f));
+			index++; 
+		}
+		
+		Color3f green = new Color3f(0.0f, 1.0f, 0.0f);
+		for(int i=0; i<88; i++)
+		{
+			grid.setColor(i, green);	
+		}
+		
+		Shape3D gridShape = new Shape3D(grid);
+		return gridShape;
 	}
 	
 	//create and return a background for the world
@@ -102,20 +167,27 @@ public class Representation3D extends Applet implements Representation
 	}
 
 	//add default lighting to the BranchGroup
+	//currently light bounds are HUGE for testing
 	public void addDefaultLights(BranchGroup bg)
 	{
-		//currently Light Bounds are HUGE for testing
+		DirectionalLight keyLight = new DirectionalLight(true,
+			new Color3f(1.0f, 1.0f, 1.0f), 
+			new Vector3f(.433f, -.5f, -.75f));
+		keyLight.setInfluencingBounds(new BoundingSphere(new Point3d(0.0,0.0,0.0),200.0));
+		bg.addChild(keyLight);
+		
+		DirectionalLight fillLight = new DirectionalLight(true,
+			new Color3f(0.125f, 0.125f, 0.125f), 
+			new Vector3f(-.259f, .25f, -.933f));
+		fillLight.setInfluencingBounds(new BoundingSphere(new Point3d(0.0,0.0,0.0),200.0));
+		bg.addChild(fillLight);		
 
-		AmbientLight amLight = new AmbientLight(); //ambient light
-		amLight.setInfluencingBounds(new BoundingSphere(new Point3d(0.0,0.0,0.0), 200.0)); //set bounds of what is lit
-		bg.addChild(amLight); //add light to scene
-
-		DirectionalLight dirLight1 = new DirectionalLight(); //directional light
-		dirLight1.setInfluencingBounds(new BoundingSphere(new Point3d(0.0,0.0,0.0), 200.0));
-		dirLight1.setColor(new Color3f(1.0f, 1.0f, 1.0f)); //color of the light
-		//dirLight1.setDirection(new Vector3f(-1.0f, -0.5f, -1.0f)); //direction of the light
-		dirLight1.setDirection(new Vector3f(0.0f, 0.0f, -1.0f)); //direction of the light
-		bg.addChild(dirLight1); //add light to scene
+		DirectionalLight backLight = new DirectionalLight(true,
+			new Color3f(1.0f, 1.0f, 1.0f), 
+			new Vector3f(0.0f, -0.259f, .966f));
+		backLight.setInfluencingBounds(new BoundingSphere(new Point3d(0.0,0.0,0.0),200.0));
+		bg.addChild(backLight);			
+	
 	}
 
 	//an update method
@@ -129,7 +201,9 @@ public class Representation3D extends Applet implements Representation
 		while(i.hasNext())
 		{
 			e = i.next(); //get the next element
-			
+
+			//System.out.println(elementsToNodes.get(e));
+						
 			if(e.next == null && e.prev == null) //if isn't attached to World's list
 			{
 				//delete Branch
@@ -146,12 +220,12 @@ public class Representation3D extends Applet implements Representation
 		{
 			if(e.changed)
 			{
-				bg = elementsToNodes.get(e); //get the corresponding ElementBranch
+				bg = elementsToNodes.get(e); //get the corresponding GameElementBranch
 				
 				if(bg == null) //if element wasn't in the list
 				{
 					//add Branch
-					ElementBranch nbg = new ElementBranch(e); //make a new branch for the element
+					GameElementBranch nbg = new GameElementBranch(e); //make a new branch for the element
 					elementsToNodes.put(e,nbg); //make a conversion entry so we can find the branch later
 					scene.addChild(nbg.getBranchScene()); //add the branch to the scene
 				}

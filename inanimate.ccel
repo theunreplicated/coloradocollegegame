@@ -31,7 +31,7 @@
 				<name>eye</name>
 				<center>-.425</center>
 				<center>.3</center>
-				<center>.8</center>
+				<center>-.8</center>
 				<radius>.24</radius>
 				<height>0.37</height>
 				<rotation>90</rotation>
@@ -42,7 +42,7 @@
 				<name>eye</name>
 				<center>.425</center>
 				<center>.3</center>
-				<center>.8</center>
+				<center>-.8</center>
 				<radius>.24</radius>
 				<height>0.37</height>
 				<rotation>90</rotation>
@@ -53,10 +53,10 @@
 				<name>nose</name>
 				<center>0</center>
 				<center>0</center>
-				<center>1.2</center>
+				<center>-1.2</center>
 				<radius>.2</radius>
 				<height>0.7</height>
-				<rotation>90</rotation>
+				<rotation>-90</rotation>
 				<rotation>0</rotation>
 				<rotation>0</rotation>
 			</cone>
