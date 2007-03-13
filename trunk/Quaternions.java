@@ -39,7 +39,8 @@ public class Quaternions
 	//  require q to be a unit because it should be anyway (based on the game)
 	public static float[] rotatePoint(float[] p, float[] q)
 	{
-		/*There are three different implementations for this class. Will need to test for which is fastest*/
+		/*There are three different implementations for this method. 
+		  Will need to test for which is fastest*/
 	
 		//explicit formula
 		//float[] qc = new float[] {-q[X],-q[Y],-q[Z],q[W]}; //make the conjugate
