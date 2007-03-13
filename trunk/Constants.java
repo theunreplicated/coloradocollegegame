@@ -68,11 +68,11 @@ public class Constants
 
 	// graphics
 	public static final short UPDATE_PERIOD = 10;
-	public static final short CANVAS_WIDTH = 300;
-	public static final short CANVAS_HEIGHT = 300;
+	public static final short CANVAS_WIDTH = 600;
+	public static final short CANVAS_HEIGHT = 600;
 
-	// resolver messages
-	public static final short SUCCESS = 0;
+	// resolver stuff
+	public static final short DEFAULT_RULE_ARRAY_SIZE = 20;
 	
 	public static byte[] toByteArray(Object _message)
 	{
