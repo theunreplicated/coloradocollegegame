@@ -26,6 +26,14 @@ public class Constants
 	public static final float[] DEFAULT_POSITION = {0,0,0};
 	public static final float[] DEFAULT_FACING = {0,0,0,1}; //in Quaternions!
 	public static final float[] DEFAULT_SCALE = {0,0,0};
+	public static final float[][] DEFAULT_BOUNDS = {{ 1, 1, 1},
+							{ 1, 1,-1},
+							{-1, 1,-1},
+							{-1, 1, 1},
+							{ 1,-1, 1},
+							{ 1,-1,-1},
+							{-1,-1,-1},
+							{-1,-1, 1}}; //a default bounding box in 3D with W=H=L=2
 
 	// IDs for actions that the World understands
 	public static final int MOVE_TO = 101;
@@ -41,6 +49,7 @@ public class Constants
 	
 	//Quaternion rotations for "cardinal rotation" (in 3D)--a rotation of 
 	// 15 degrees either clockwise or counterclockwise around a particular axis (looking down)
+	//NOTE: we may need to start calculating these directly.
 	public static final float[] QUAT_CLOX = {-0.13052619f, 0.0f, 0.0f, 0.9914449f};
 	public static final float[] QUAT_CCLX = {0.13052619f, 0.0f ,0.0f, 0.9914449f};
 	public static final float[] QUAT_CLOY = {0.0f, -0.13052619f, 0.0f, 0.9914449f};
