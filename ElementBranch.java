@@ -1,10 +1,10 @@
-//GameElementBranch.java
+//ElementBranch.java
 //@author Joel Ross
 
-import javax.media.j3d.*;
+import javax.media.j3d.BranchGroup;
 
 /***
- An interface for J3D Representation versions of Elements (of all kinds).
+ An interface for J3D Representation versions of Elements (of all kinds... stuff, really).
 ***/
 
 public interface ElementBranch

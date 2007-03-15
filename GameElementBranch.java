@@ -109,6 +109,10 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 			
 			//we could probably break up the code some, but will deal with that later.
 		}
+		
+		sroot.addChild(createBoundingBox(e)); //draw the bounding box for testing.
+						      //note that this draws where it should be, not where it is
+		
 		broot.compile(); //let J3D optimize the branch
 	}//constructor
 
@@ -143,6 +147,55 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 	{
 		Transform3D t = new Transform3D(new Quat4f(f), new Vector3f(p), 1);
 		coord.setTransform(t);
+	}
+
+	public Shape3D createBoundingBox(GameElement e)
+	{
+		float[][] obb = e.boundingBox;
+
+		LineArray box = new LineArray(24, LineArray.COORDINATES | LineArray.COLOR_3);
+		//each pair is an edge of the box
+		box.setCoordinate(0, new Point3f(obb[0]));
+		box.setCoordinate(1, new Point3f(obb[1]));
+
+		box.setCoordinate(2, new Point3f(obb[1]));
+		box.setCoordinate(3, new Point3f(obb[2]));
+
+		box.setCoordinate(4, new Point3f(obb[2]));
+		box.setCoordinate(5, new Point3f(obb[3]));
+
+		box.setCoordinate(6, new Point3f(obb[3]));
+		box.setCoordinate(7, new Point3f(obb[0]));
+
+		box.setCoordinate(8, new Point3f(obb[4]));
+		box.setCoordinate(9, new Point3f(obb[5]));
+
+		box.setCoordinate(10, new Point3f(obb[5]));
+		box.setCoordinate(11, new Point3f(obb[6]));
+
+		box.setCoordinate(12, new Point3f(obb[6]));
+		box.setCoordinate(13, new Point3f(obb[7]));
+
+		box.setCoordinate(14, new Point3f(obb[7]));
+		box.setCoordinate(15, new Point3f(obb[4]));
+
+		box.setCoordinate(16, new Point3f(obb[0]));
+		box.setCoordinate(17, new Point3f(obb[4]));
+
+		box.setCoordinate(18, new Point3f(obb[1]));
+		box.setCoordinate(19, new Point3f(obb[5]));
+
+		box.setCoordinate(20, new Point3f(obb[2]));
+		box.setCoordinate(21, new Point3f(obb[6]));
+
+		box.setCoordinate(22, new Point3f(obb[3]));
+		box.setCoordinate(23, new Point3f(obb[7]));
+
+		Color3f magenta = new Color3f(1.0f, 0.0f, 1.0f);
+		for(int i=0; i<24; i++)
+			box.setColor(i, magenta);	
+		
+		return new Shape3D(box);	
 	}
 
 	//This is just for fun. Though might be neat to include it even once we aren't using cubes.

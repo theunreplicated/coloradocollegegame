@@ -40,16 +40,16 @@ public class Representation3D extends Applet implements Representation
 
 		BranchGroup superRoot = new BranchGroup(); //the ultimate root of the entire scene. Created here so we can add stuff later	
 
-		//addDefaultLights(superRoot); //add default lighting to the entire world
-
 		elementStart = _client.getWorldElements(); //get the Elements to start building the tree
 		elementStart.attribute("isClient", true); //mark the first element as the Client (Representation-dependent attribute)
 		ViewingPlatform vp = createCamera(elementStart, superRoot); //build the camera FIRST
-
+		
+		/*tie the lighting to the camera, so that objects are always lit as if from the front.*/
 		TransformGroup vpt = vp.getMultiTransformGroup().getTransformGroup(0);
 		BranchGroup candleStick = new BranchGroup();
 		addDefaultLights(candleStick);
 		vpt.addChild(candleStick);
+		//addDefaultLights(superRoot); //add default lighting to world--doesn't move
 
 		scene = createSceneGraph(elementStart); //initialize the scene based on the Client's world
 		scene.setCapability(Group.ALLOW_CHILDREN_WRITE); //let us modify the children at runtime
@@ -102,55 +102,11 @@ public class Representation3D extends Applet implements Representation
 			e = e.next; //loop
 		} while(e != first);
 	
+		//Representation-level objects
 		gscene.addChild(createGrid());
-
-		//for pillars
-		TransformGroup bt1 = new TransformGroup(new Transform3D(new Quat4f(0,0,0,1),new Vector3f(2,0,2),1));
-		bt1.addChild(new ColorCube(.5));
-		gscene.addChild(bt1);
-		TransformGroup bt2 = new TransformGroup(new Transform3D(new Quat4f(0,0,0,1),new Vector3f(-2,0,2),1));
-		bt2.addChild(new ColorCube(.5));
-		gscene.addChild(bt2);
-		TransformGroup bt3 = new TransformGroup(new Transform3D(new Quat4f(0,0,0,1),new Vector3f(2,0,-2),1));
-		bt3.addChild(new ColorCube(.5));
-		gscene.addChild(bt3);
-		TransformGroup bt4 = new TransformGroup(new Transform3D(new Quat4f(0,0,0,1),new Vector3f(-2,0,-2),1));
-		bt4.addChild(new ColorCube(.5));
-		gscene.addChild(bt4);
+		gscene.addChild(createPillars());
 		
 		return gscene; //return the branch
-	}
-	
-	//creates a Representation-level grid to display as the ground. For testing mostly
-	public Shape3D createGrid()
-	{
-		LineArray grid = new LineArray(88, LineArray.COORDINATES | LineArray.COLOR_3);
-		
-		int index = 0;
-		for(int i=-10; i<=10; i++)
-		{
-			grid.setCoordinate(index, new Point3f(-11.0f, -1.0f, i));
-			index++;
-			grid.setCoordinate(index, new Point3f( 11.0f, -1.0f, i));
-			index++; 
-		}
-
-		for(int i=-10; i<=10; i++)
-		{
-			grid.setCoordinate(index, new Point3f(i, -1.0f,-11.0f));
-			index++;
-			grid.setCoordinate(index, new Point3f(i, -1.0f, 11.0f));
-			index++; 
-		}
-		
-		Color3f green = new Color3f(0.0f, 1.0f, 0.0f);
-		for(int i=0; i<88; i++)
-		{
-			grid.setColor(i, green);	
-		}
-		
-		Shape3D gridShape = new Shape3D(grid);
-		return gridShape;
 	}
 	
 	//create and return a background for the world
@@ -188,6 +144,56 @@ public class Representation3D extends Applet implements Representation
 		backLight.setInfluencingBounds(new BoundingSphere(new Point3d(0.0,0.0,0.0),200.0));
 		bg.addChild(backLight);			
 	
+	}
+
+	//creates a Representation-level grid to display as the ground. For testing mostly
+	public Shape3D createGrid()
+	{
+		LineArray grid = new LineArray(88, LineArray.COORDINATES | LineArray.COLOR_3);
+		
+		int index = 0;
+		for(int i=-10; i<=10; i++)
+		{
+			grid.setCoordinate(index, new Point3f(-11.0f, -1.0f, i));
+			index++;
+			grid.setCoordinate(index, new Point3f( 11.0f, -1.0f, i));
+			index++; 
+		}
+		for(int i=-10; i<=10; i++)
+		{
+			grid.setCoordinate(index, new Point3f(i, -1.0f,-11.0f));
+			index++;
+			grid.setCoordinate(index, new Point3f(i, -1.0f, 11.0f));
+			index++; 
+		}
+		
+		Color3f green = new Color3f(0.0f, 1.0f, 0.0f);
+		for(int i=0; i<88; i++)
+			grid.setColor(i, green);	
+		
+		Shape3D gridShape = new Shape3D(grid);
+		return gridShape;
+	}
+
+	//creates a Representation-level set of "pillars" to display. For testing mostly	
+	public BranchGroup createPillars()
+	{
+		BranchGroup root = new BranchGroup();
+		
+		TransformGroup bt1 = new TransformGroup(new Transform3D(new Quat4f(0,0,0,1),new Vector3f(2,0,2),1));
+		bt1.addChild(new ColorCube(.5));
+		root.addChild(bt1);
+		TransformGroup bt2 = new TransformGroup(new Transform3D(new Quat4f(0,0,0,1),new Vector3f(-2,0,2),1));
+		bt2.addChild(new ColorCube(.5));
+		root.addChild(bt2);
+		TransformGroup bt3 = new TransformGroup(new Transform3D(new Quat4f(0,0,0,1),new Vector3f(2,0,-2),1));
+		bt3.addChild(new ColorCube(.5));
+		root.addChild(bt3);
+		TransformGroup bt4 = new TransformGroup(new Transform3D(new Quat4f(0,0,0,1),new Vector3f(-2,0,-2),1));
+		bt4.addChild(new ColorCube(.5));
+		root.addChild(bt4);	
+		
+		return root;		
 	}
 
 	//an update method

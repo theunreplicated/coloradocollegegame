@@ -8,10 +8,16 @@ public class GameElement extends LinkedElement<GameElement>
 
 	private float[] position = new float[3]; //World-level postition of the element
 	private float[] facing = new float[4]; //The element's orientation (in Quaternions!)
-	float[][] boundingBox = null;
+	float[][] boundingBox = null; //boundingBox is an array of vectors representing the 8 points of the box
+				      //The order is the top 4 counterclockwise starting with the +x +z coordinate
+				      //then the bottom 4 in the same order
+				      //See VectorUtils.java for details
 	VirtualShape[] shapes = null;
 	private HashMap attributes = null;
 	String type = null;
+
+	/* For convienence */
+	public final static int X=Constants.X, Y=Constants.Y, Z=Constants.Z;
 
 	// Remove these once we have Element and ElementGenerator working
 	public int[][] dimensions = new int[3][4]; 
@@ -61,6 +67,11 @@ public class GameElement extends LinkedElement<GameElement>
 		return id;
 	}
 
+	public Object[] getInfoArray()
+	{
+		return new Object[] { typeId, position[X], position[Y], position[Z] };
+	}
+
 	public Object attribute(String _key)
 	{
 		return attributes.get(_key);
@@ -71,87 +82,137 @@ public class GameElement extends LinkedElement<GameElement>
 		attributes.put(_key,_value);
 	}
 
-	/* this takes in the index of the dimension you 
-	 * want to change in the position array and the value you want to 
-	 * nudge it to */
-	public void nudge(int _dim, float _value)
-	{
-		position[_dim] += _value;
-	} // nudge
+	/* I'm thinking we can probably get rid of the individual dimension calls and just have
+	   everything work with vectors */
 
-	public void nudge( float[] delta )
-	{
-		for( int i = 0 ; i < position.length; i++ )
-			position[i] += delta[i];
-	}
+	/************* 
+	 * Accessors *
+	 *************/
 
-	public void setPosition(float[] _position)
-	{
-		for( int i = _position.length-1 ; i >= 0; i--)
-			position[i] = _position[i];
-	} // setposition
-
-	/* this takes in the index of the dimension you 
-	 * want to change in the position array and the value you want to 
-	 * change it to */
-	public void setPosition(int _dim, float _value)
-	{
-		position[_dim] = _value;
-	}
-	
 	public float[] getPosition()
 	{
 		return position;
-	}
-	
-	/* this takes in the index of the dimension you 
-	 * want */
+	}	
+
+	//returns the specified dimension of the position
 	public float getPosition(int dim)
 	{
 		return position[dim];
 	}
-
-	//rotate by the specified quaternion
-	public void rotate(float[] q)
-	{
-		if(q.length != 4)
-			System.out.println("Bad Quaternion length. Bad!");
-		else
-			facing = Quaternions.mul(facing,q);
-
-		// So far emtpy... fill me please
-		
-		//If you want to be filled in, you should have an orientation variable or something
-		//  that we can set when we rotate you.
-	}
-
-	public void setFacing(float[] _facing)
-	{
-		for( int i = _facing.length-1 ; i >= 0; i--)
-			facing[i] = _facing[i];
-	} // setFacing		
 
 	public float[] getFacing()
 	{
 		return facing;
 	}
 
-	public Object[] getInfoArray()
+	public float[][] getBoundingBox()
 	{
-		return new Object[] { typeId, position[X], position[Y], position[Z] };
+		return boundingBox;
+	}
+	
+	/************ 
+	 * Mutators *
+	 ************/
+
+	//changes position in the specified dimension by the specified value
+/*	public void nudge(int _dim, float _value)
+	{
+		position[_dim] += _value;
+
+		//also need to add boundingBox movement
+	}
+*/
+	//changes position by a vector
+	public void nudge( float[] delta )
+	{
+		for( int i = 0 ; i < position.length; i++ )
+			position[i] += delta[i];
+
+		nudgeBoundingBox(delta); //nudge the boundingBox as well
+	}
+	
+	//sets position to the given
+	public void setPosition(float[] _position)
+	{
+		for( int i = position.length-1 ; i >= 0; i--)
+			position[i] = _position[i];
 	}
 
+	//sets the position in the specified dimension to the specified value
+/*	public void setPosition(int _dim, float _value)
+	{
+		position[_dim] = _value;
+	}
+*/	
+
+	//rotate by the specified Quaternion
+	public void rotate(float[] q)
+	{
+		if(q.length != 4)
+			System.out.println("Bad Quaternion length. Bad!");
+		else
+			facing = Quaternions.mul(facing,q);
+		
+		rotateBoundingBox(q); //rotate the boundingBox as well
+
+	}
+
+	//sets the facing to the specified Quaternion
+	public void setFacing(float[] _facing)
+	{
+		for( int i = facing.length-1 ; i >= 0; i--)
+			facing[i] = _facing[i];
+	}	
+
+	//moves the boundingBox by the specified vector
+	public void nudgeBoundingBox(float[] v)
+	{
+		for(int i=0; i < boundingBox.length; i++)
+		{
+			for(int j=0; j< boundingBox[i].length; j++)
+			{
+				boundingBox[i][j] += v[j];
+			}
+		}
+	}
+	
+	//rotates the boundingBox by the specified Quaternion
+	public void rotateBoundingBox(float[] q)
+	{
+		Quaternions.rotatePoints(boundingBox, q);
+	}
+
+	//sets the boundingBox to the specified box
+	public void setBoundingBox(float[][] b)
+	{
+		boundingBox = b;	
+
+		//System.out.println("BoundingBox =");
+		//VectorUtils.print(boundingBox);
+	}
+	
+	/*********************** 
+	 * Collision Detection *
+	 ***********************/	
+
+
+	//this method will run a collision detection tree using other collision methods.
 	public boolean isColliding(GameElement _element)
 	{
-		/* Joel, do you want to write this function? */
-		return false; //you can never collide!  mwuahahaha!
+//COLLISIONS UNDER CONSTRUCTION
+		//currently just uses OBBs in 3D to check
+		return VectorUtils.OBB3DIntersect(boundingBox, _element.boundingBox); 
 	}
 
-	public String isCollidingShape(GameElement _element)
+	//method is currently empty.
+	public String isCollidingShape(GameElement _element) //why are you returning a String?
 	{
-		/* And this one? */
-		return null; //nope! Not colliding!
+		/* I'll get to it eventually. Shape-level collisions are not exactly high-priority */
+		return null;
 	}
+
+
+
 
 	/*
 	public boolean isRelevant(float[] _position, float _radius)
@@ -163,8 +224,6 @@ public class GameElement extends LinkedElement<GameElement>
 		return ((float)Math.sqrt( sum ) - _radius - relevantRadius) < 0;
 	} */
 
-	/* For convienence */
-	public final static int X=Constants.X, Y=Constants.Y, Z=Constants.Z;
 
 	/*  Deprecated stuff*/
 	public int[][] getAbsoluteCoordinates()

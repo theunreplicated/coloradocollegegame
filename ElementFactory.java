@@ -41,6 +41,7 @@ public class ElementFactory
 			int i, j, k;
 			float[] position;
 			float[] facing;
+			float[][] bounds;
 			HashMap attributes;
 			float[][] minMax;
 			float[][] tempMinMax = null;
@@ -51,11 +52,27 @@ public class ElementFactory
 				elements = doc.getElementsByTagName("element");
 				for(i = elements.getLength()-1;i>=0; i--)
 				{
+					element = (Element) elements.item(i);
+
+					/*
+					NodeList centerNodes = element.getElementsByTagName("center");
+					position = new float[centerNodes.getLength()];
+					for(int p = position.length-1; p>=0; p--)
+					{
+						position[p] = Float.parseFloat(centerNodes.item(p).getTextContent());
+					}
+					System.out.println(position.length);
+					*/
+					
+					
+					//WE NEED TO PARSE THIS STUFF FROM THE XML!!
+					//Only use the defaults if it's not in the file					
 					position = Constants.DEFAULT_POSITION;
 					facing = Constants.DEFAULT_FACING;
+					bounds = Constants.DEFAULT_BOUNDS;
 					attributes = new HashMap<String, Object>();
 
-					element = (Element) elements.item(i);
+					//element = (Element) elements.item(i);
 					name = (Element) element.getElementsByTagName("name").item(0);
 					plural = (Element) element.getElementsByTagName("plural").item(0);
 					shape = (Element) element.getElementsByTagName("shapes").item(0);
@@ -106,8 +123,13 @@ public class ElementFactory
 							}
 						}
 					}
-					defaultElements.put(name.getTextContent(),
-						new GameElement(name.getTextContent(), position, facing, minMax, shapes, attributes));
+					if(bounds == null)
+						defaultElements.put(name.getTextContent(),
+							new GameElement(name.getTextContent(), position, facing, minMax, shapes, attributes));
+					else
+						defaultElements.put(name.getTextContent(),
+							new GameElement(name.getTextContent(), position, facing, bounds, shapes, attributes));
+
 				}
 			}
 			
