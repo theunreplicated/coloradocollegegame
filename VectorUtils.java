@@ -8,10 +8,21 @@
 
 public class VectorUtils
 {
+	public static final short X = 0; //for readable indexing (sometimes)
+	public static final short Y = 1;
+	public static final short Z = 2;
+	
 	//returns the sum of two 3D vectors
 	public static float[] add(float[] v, float[] w)
 	{
 		return new float[] {v[0]+w[0], v[1]+w[1], v[2]+w[2]}; 
+	}
+
+	//adds a vector to every vector in an array. Batch adding.
+	public static void add(float[][] m, float[] v)
+	{
+		for(int i=0; i<m.length; i++)
+			m[i] = add(m[i],v);
 	}
 
 	//returns the difference of two 3D vectors
@@ -29,93 +40,75 @@ public class VectorUtils
 	//returns the cross product of two 3D vectors
 	public static float[] cross(float[] v, float[] w)
 	{
-		return new float[] {(v[1]*w[2])-(w[1]*v[2]), (w[0]*v[2])-(v[0]*w[2]), (v[0]*w[1])-(w[0]*v[1])};
+		return new float[] {(v[1]*w[2])-(v[2]*w[1]), 
+				    (v[2]*w[0])-(v[0]*w[2]), 
+				    (v[0]*w[1])-(v[1]*w[0])};
 	}
 
 	//A method that determines if two oriented bounding boxes (OBBs) in 3D intersect.
-	//OBBs use 3D vectors of 8 elements, specified in the order of the unit box
-	//	0 = { 1, 1, 1}
-	//	1 = { 1, 1,-1}
-	//	2 = {-1, 1,-1}
-	//	3 = {-1, 1, 1}
-	//	4 = { 1,-1, 1}
-	//	5 = { 1,-1,-1}
-	//	6 = {-1,-1,-1}
-	//	7 = {-1,-1, 1}
-	public static boolean OBB3DIntersect(float[][] m, float[][] e)
+	//@param: a and b are vectors representing the half-dimensions of the boxes (x,y,z)
+	//	  T is the vector representing the difference in translation (from A to B)
+	//	  R is the rotation matrix representing the difference in rotation (from A to B)
+	//Cite: Algorithm from ftp://ftp.cs.unc.edu/pub/users/manocha/PAPERS/COLLISION/sig96.pdf 
+	public static boolean OBB3DIntersect(float[] a, float[] b, float[] T, float[][] R)
 	{
-		//define the face normals (mine and e's)
-		float[] mf1 = { (m[0][0]+m[1][0]+m[4][0]+m[5][0])/4.0f, 
-				(m[0][1]+m[1][1]+m[4][1]+m[5][1])/4.0f,
-				(m[0][2]+m[1][2]+m[4][2]+m[5][2])/4.0f};
-		float[] mf2 = {	(m[0][0]+m[1][0]+m[2][0]+m[3][0])/4.0f,
-				(m[0][1]+m[1][1]+m[2][1]+m[3][1])/4.0f,
-				(m[0][2]+m[1][2]+m[2][2]+m[3][2])/4.0f};
-		float[] mf3 = { (m[0][0]+m[1][0]+m[5][0]+m[6][0])/4.0f,
-				(m[0][1]+m[1][1]+m[5][1]+m[6][1])/4.0f,
-				(m[0][2]+m[1][2]+m[5][2]+m[6][2])/4.0f};
-		float[] ef1 = { (e[0][0]+e[1][0]+e[4][0]+e[5][0])/4.0f,
-				(e[0][1]+e[1][1]+e[4][1]+e[5][1])/4.0f,
-				(e[0][2]+e[1][2]+e[4][2]+e[5][2])/4.0f};
-		float[] ef2 = {	(e[0][0]+e[1][0]+e[2][0]+e[3][0])/4.0f,
-				(e[0][1]+e[1][1]+e[2][1]+e[3][1])/4.0f,
-				(e[0][2]+e[1][2]+e[2][2]+e[3][2])/4.0f};
-		float[] ef3 = {	(e[0][0]+e[1][0]+e[5][0]+e[6][0])/4.0f,
-				(e[0][1]+e[1][1]+e[5][1]+e[6][1])/4.0f,
-				(e[0][2]+e[1][2]+e[5][2]+e[6][2])/4.0f};
+		float R11 = Math.abs(R[0][0]);
+		float R12 = Math.abs(R[0][1]);
+		float R13 = Math.abs(R[0][2]);
+		float R21 = Math.abs(R[1][0]);
+		float R22 = Math.abs(R[1][1]);
+		float R23 = Math.abs(R[1][2]);
+		float R31 = Math.abs(R[2][0]);
+		float R32 = Math.abs(R[2][1]);
+		float R33 = Math.abs(R[2][2]);
 
-		float[] v;
-		for(int i=0; i<8; i++)
-		{
-			v = sub(e[i],m[0]); //the vector we will be projecting
-			
-			//check mf1
-			if(dot(mf1,v) > 0) //check the projection
-				return false; //if we found a plane then they are not intersecting
-			//check mf2
-			if(dot(mf2,v) > 0)
-				return false; 
-			//check mf3
-			if(dot(mf3,v) > 0)
-				return false; 
-			//check ef1
-			if(dot(ef1,v) > 0)
-				return false; 
-			//check ef2
-			if(dot(ef2,v) > 0) 
-				return false; 
-			//check ef3
-			if(dot(ef3,v) > 0) 
-				return false; 
-			//check mf1 X ef1
-			if(dot(cross(mf1,ef1),v) > 0)
-				return false; 
-			//check mf1 X ef2
-			if(dot(cross(mf1,ef2),v) > 0) 
-				return false; 
-			//check mf1 X ef3
-			if(dot(cross(mf1,ef3),v) > 0) 
-				return false; 
-			//check mf2 X ef1
-			if(dot(cross(mf2,ef1),v) > 0) 
-				return false; 
-			//check mf2 X ef2
-			if(dot(cross(mf2,ef2),v) > 0) 
-				return false;
-			//check mf2 X ef3
-			if(dot(cross(mf2,ef3),v) > 0) 
-				return false; 
-			//check mf3 X ef1
-			if(dot(cross(mf3,ef1),v) > 0) 
-				return false; 
-			//check mf3 X ef2
-			if(dot(cross(mf3,ef2),v) > 0) 
-				return false; 
-			//check mf3 X ef3
-			if(dot(cross(mf3,ef3),v) > 0)
-				return false; 
-		}
-		return true; //if we got through, we intersect	
+		//Ax face
+		if(Math.abs(T[X]) > a[X] + b[X]*R11 + b[Y]*R12 + b[Z]*R13)
+			return false;
+		//Ay face
+		if(Math.abs(T[Y]) > a[Y] + b[X]*R21 + b[Y]*R22 + b[Z]*R23)
+			return false;
+		//Az face
+		if(Math.abs(T[Z]) > a[Z] + b[X]*R31 + b[Y]*R32 + b[Z]*R33)
+			return false;
+		//Bx face
+		if(Math.abs(T[X]*R[X][X] + T[Y]*R[Y][X] + T[Z]*R[Z][X]) > b[X] + a[X]*R11 + a[Y]*R21 + a[Z]*R31)
+			return false;
+		//By face
+		if(Math.abs(T[X]*R[X][Y] + T[Y]*R[Y][Y] + T[Z]*R[Z][Y]) > b[Y] + a[X]*R12 + a[Y]*R22 + a[Z]*R32)
+			return false;
+		//Bz face
+		if(Math.abs(T[X]*R[X][Z] + T[Y]*R[Y][Z] + T[Z]*R[Z][Z]) > b[Z] + a[X]*R13 + a[Y]*R23 + a[Z]*R33)
+			return false;
+		//Ax X Bx
+		if(Math.abs(T[Z]*R[Y][X] - T[Y]*R[Z][X]) > a[Y]*R31 + a[Z]*R21 + b[Y]*R13 + b[Z]*R12)
+			return false;
+		//Ax X By
+		if(Math.abs(T[Z]*R[Y][Y] - T[Y]*R[Z][Y]) > a[Y]*R32 + a[Z]*R22 + b[X]*R13 + b[Z]*R11)
+			return false;
+		//Ax X Bz
+		if(Math.abs(T[Z]*R[Y][Z] - T[Y]*R[Z][Z]) > a[Y]*R33 + a[Z]*R23 + b[X]*R12 + b[Y]*R11)
+			return false;
+		//Ay X Bx
+		if(Math.abs(T[X]*R[Z][X] - T[Z]*R[X][X]) > a[X]*R31 + a[Z]*R11 + b[Y]*R23 + b[Z]*R22)
+			return false;
+		//Ay X By
+		if(Math.abs(T[X]*R[Z][Y] - T[Z]*R[X][Y]) > a[X]*R32 + a[Z]*R12 + b[X]*R23 * b[Z]*R21)
+			return false;
+		//Ay X Bz
+		if(Math.abs(T[X]*R[Z][Z] - T[Z]*R[X][Z]) > a[X]*R33 + a[Z]*R13 + b[X]*R22 + b[Y]*R21)
+			return false;
+		//Az X Bx
+		if(Math.abs(T[Y]*R[X][X] - T[X]*R[Y][X]) > a[X]*R21 + a[Y]*R11 + b[Y]*R33 + b[Z]*R32)
+			return false;
+		//Az X By
+		if(Math.abs(T[Y]*R[X][Y] - T[X]*R[Y][Y]) > a[X]*R22 + a[Y]*R12 + b[X]*R33 + b[Z]*R31)
+			return false;
+		//Az X Bz
+		if(Math.abs(T[Y]*R[X][Z] - T[X]*R[Y][Z]) > a[X]*R23 + a[Y]*R13 + b[X]*R32 + b[Y]*R31)
+			return false;	
+
+		return true; //if we couldn't find a separating axis, we intersect	
 	}
 
 	//returns a string representation of the 3D vector
@@ -148,5 +141,4 @@ public class VectorUtils
 			System.out.print("}\n");
 		}
 	}
-
 }

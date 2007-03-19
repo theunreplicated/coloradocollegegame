@@ -23,6 +23,9 @@ public class ViewElementBranch implements ElementBranch
 	
 	private GameElementBranch avatar; //if we want one
 
+	private static boolean STATIC_VIEW = false; //reset this for quick view change in testing
+						    //Remove/change these checks once we have a switch working
+
 	//constructor
 	public ViewElementBranch(GameElement e)
 	{
@@ -33,7 +36,8 @@ public class ViewElementBranch implements ElementBranch
 		Transform3D posi = new Transform3D(new Quat4f(e.getFacing()),new Vector3f(e.getPosition()),1); //set us to the element's transform
 		coord.setTransform(posi); //set our transform group to the default position
 	
-		//avatar = new GameElementBranch(e); //the avatar object for this view
+		if(STATIC_VIEW)
+			avatar = new GameElementBranch(e); //the avatar object for this view
 	}
 
 	//a method to fetch the ViewingPlatform in order to construct the view branch
@@ -60,33 +64,39 @@ public class ViewElementBranch implements ElementBranch
 	
 	public void setTranslation(float[] p)
 	{
-		/**/
-		Transform3D t = new Transform3D(); //a new Transform
-		coord.getTransform(t); //fill the transform with our current settings
-		t.setTranslation(new Vector3f(p)); //set the new translation
-		coord.setTransform(t); //set as our new state
-		/**/
-		//avatar.setTranslation(p);
+		if(!STATIC_VIEW)
+		{
+			Transform3D t = new Transform3D(); //a new Transform
+			coord.getTransform(t); //fill the transform with our current settings
+			t.setTranslation(new Vector3f(p)); //set the new translation
+			coord.setTransform(t); //set as our new state
+		}
+		else
+			avatar.setTranslation(p);
 	}
 		
 	public void setRotation(float[] f)
 	{
-		/**/
-		Transform3D t = new Transform3D(); //a new Transform
-		coord.getTransform(t); //fill the transform with our current settings
-		t.setRotation(new Quat4f(f)); //set our current rotation
-		coord.setTransform(t);
-		/**/
-		//avatar.setRotation(f);
+		if(!STATIC_VIEW)
+		{
+			Transform3D t = new Transform3D(); //a new Transform
+			coord.getTransform(t); //fill the transform with our current settings
+			t.setRotation(new Quat4f(f)); //set our current rotation
+			coord.setTransform(t);
+		}
+		else
+			avatar.setRotation(f);
 	}
 	
 	public void setTransform(float[] p, float[] f)
 	{
-		/**/
-		Transform3D t = new Transform3D(new Quat4f(f), new Vector3f(p), 1);
-		coord.setTransform(t);
-		/**/
-		//avatar.setTransform(p,f);
+		if(!STATIC_VIEW)
+		{
+			Transform3D t = new Transform3D(new Quat4f(f), new Vector3f(p), 1);
+			coord.setTransform(t);
+		}
+		else
+			avatar.setTransform(p,f);
 	}
 
 

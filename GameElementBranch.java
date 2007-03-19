@@ -151,52 +151,40 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 
 	public Shape3D createBoundingBox(GameElement e)
 	{
-		float[][] obb = e.boundingBox;
+		float[] obb = e.getBoundingBox();
+
+		//create the corners out of the obb half-dimensions
+		Point3f c0 = new Point3f( obb[0], obb[1], obb[2]);
+		Point3f c1 = new Point3f( obb[0], obb[1],-obb[2]);
+		Point3f c2 = new Point3f(-obb[0], obb[1],-obb[2]);
+		Point3f c3 = new Point3f(-obb[0], obb[1], obb[2]);
+		Point3f c4 = new Point3f( obb[0],-obb[1], obb[2]);
+		Point3f c5 = new Point3f( obb[0],-obb[1],-obb[2]);
+		Point3f c6 = new Point3f(-obb[0],-obb[1],-obb[2]);
+		Point3f c7 = new Point3f(-obb[0],-obb[1], obb[2]);
 
 		LineArray box = new LineArray(24, LineArray.COORDINATES | LineArray.COLOR_3);
 		//each pair is an edge of the box
-		box.setCoordinate(0, new Point3f(obb[0]));
-		box.setCoordinate(1, new Point3f(obb[1]));
-
-		box.setCoordinate(2, new Point3f(obb[1]));
-		box.setCoordinate(3, new Point3f(obb[2]));
-
-		box.setCoordinate(4, new Point3f(obb[2]));
-		box.setCoordinate(5, new Point3f(obb[3]));
-
-		box.setCoordinate(6, new Point3f(obb[3]));
-		box.setCoordinate(7, new Point3f(obb[0]));
-
-		box.setCoordinate(8, new Point3f(obb[4]));
-		box.setCoordinate(9, new Point3f(obb[5]));
-
-		box.setCoordinate(10, new Point3f(obb[5]));
-		box.setCoordinate(11, new Point3f(obb[6]));
-
-		box.setCoordinate(12, new Point3f(obb[6]));
-		box.setCoordinate(13, new Point3f(obb[7]));
-
-		box.setCoordinate(14, new Point3f(obb[7]));
-		box.setCoordinate(15, new Point3f(obb[4]));
-
-		box.setCoordinate(16, new Point3f(obb[0]));
-		box.setCoordinate(17, new Point3f(obb[4]));
-
-		box.setCoordinate(18, new Point3f(obb[1]));
-		box.setCoordinate(19, new Point3f(obb[5]));
-
-		box.setCoordinate(20, new Point3f(obb[2]));
-		box.setCoordinate(21, new Point3f(obb[6]));
-
-		box.setCoordinate(22, new Point3f(obb[3]));
-		box.setCoordinate(23, new Point3f(obb[7]));
+		box.setCoordinate(0, c0);	box.setCoordinate(1, c1);
+		box.setCoordinate(2, c1);	box.setCoordinate(3, c2);
+		box.setCoordinate(4, c2);	box.setCoordinate(5, c3);
+		box.setCoordinate(6, c3);	box.setCoordinate(7, c0);
+		box.setCoordinate(8, c4);	box.setCoordinate(9, c5);
+		box.setCoordinate(10, c5);	box.setCoordinate(11, c6);
+		box.setCoordinate(12, c6);	box.setCoordinate(13, c7);
+		box.setCoordinate(14, c7);	box.setCoordinate(15, c4);
+		box.setCoordinate(16, c0);	box.setCoordinate(17, c4);
+		box.setCoordinate(18, c1);	box.setCoordinate(19, c5);
+		box.setCoordinate(20, c2);	box.setCoordinate(21, c6);
+		box.setCoordinate(22, c3);	box.setCoordinate(23, c7);
 
 		Color3f magenta = new Color3f(1.0f, 0.0f, 1.0f);
 		for(int i=0; i<24; i++)
 			box.setColor(i, magenta);	
 		
-		return new Shape3D(box);	
+		return new Shape3D(box);
 	}
+
 
 	//This is just for fun. Though might be neat to include it even once we aren't using cubes.
 	//Basically pass it a transform group of the tree, and it will return a transform group for you to continue adding to

@@ -26,14 +26,7 @@ public class Constants
 	public static final float[] DEFAULT_POSITION = {0,0,0};
 	public static final float[] DEFAULT_FACING = {0,0,0,1}; //in Quaternions!
 	public static final float[] DEFAULT_SCALE = {0,0,0};
-	public static final float[][] DEFAULT_BOUNDS = {{ 1, 1, 1},
-							{ 1, 1,-1},
-							{-1, 1,-1},
-							{-1, 1, 1},
-							{ 1,-1, 1},
-							{ 1,-1,-1},
-							{-1,-1,-1},
-							{-1,-1, 1}}; //a default bounding box in 3D with W=H=L=2
+	public static final float[] DEFAULT_BOUNDS = {1.0f, 1.0f, 1.0f}; //the half-dimensions of a default bounding box in 3D
 
 	// IDs for actions that the World understands
 	public static final int MOVE_TO = 101;
