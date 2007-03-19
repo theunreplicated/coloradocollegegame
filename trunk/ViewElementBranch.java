@@ -37,7 +37,11 @@ public class ViewElementBranch implements ElementBranch
 		coord.setTransform(posi); //set our transform group to the default position
 	
 		if(STATIC_VIEW)
+		{
 			avatar = new GameElementBranch(e); //the avatar object for this view
+			posi.setTranslation(new Vector3f(0f,0f,5f));
+			coord.setTransform(posi); //set the camera further back
+		}
 	}
 
 	//a method to fetch the ViewingPlatform in order to construct the view branch
