@@ -3,7 +3,8 @@
 	Note that Rotations are handled in Quaternions within the Game
 -->
 <!-- 	Bounding boxes are by default axis-aligned, specifying the box's
-	total length along the x-axis, the y-axis, and the z-axis
+	half-dimension (half the length) along the x-axis, the y-axis, 
+	and the z-axis
 -->
 
 <element_types>
@@ -25,9 +26,9 @@
 		<center>0</center>
 		<center>0</center>
 		<center>0</center>
-		<bound>2</bound>
-		<bound>2</bound>
-		<bound>2</bound>
+		<bound>1</bound>
+		<bound>1</bound>
+		<bound>1</bound>
 		<shapes>
 			<sphere>
 				<name>head</name>

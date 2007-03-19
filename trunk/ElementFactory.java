@@ -41,7 +41,7 @@ public class ElementFactory
 			int i, j, k;
 			float[] position;
 			float[] facing;
-			float[][] bounds;
+			float[] bounds;
 			HashMap attributes;
 			float[][] minMax;
 			float[][] tempMinMax = null;
@@ -123,10 +123,8 @@ public class ElementFactory
 							}
 						}
 					}
-					if(bounds == null)
-						defaultElements.put(name.getTextContent(),
-							new GameElement(name.getTextContent(), position, facing, minMax, shapes, attributes));
-					else
+						//defaultElements.put(name.getTextContent(),
+						//	new GameElement(name.getTextContent(), position, facing, minMax, shapes, attributes));
 						defaultElements.put(name.getTextContent(),
 							new GameElement(name.getTextContent(), position, facing, bounds, shapes, attributes));
 

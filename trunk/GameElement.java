@@ -8,10 +8,8 @@ public class GameElement extends LinkedElement<GameElement>
 
 	private float[] position = new float[3]; //World-level postition of the element
 	private float[] facing = new float[4]; //The element's orientation (in Quaternions!)
-	float[][] boundingBox = null; //boundingBox is an array of vectors representing the 8 points of the box
-				      //The order is the top 4 counterclockwise starting with the +x +z coordinate
-				      //then the bottom 4 in the same order
-				      //See VectorUtils.java for details
+	private float[] boundingBox = new float[3];
+
 	VirtualShape[] shapes = null;
 	private HashMap attributes = null;
 	String type = null;
@@ -22,7 +20,7 @@ public class GameElement extends LinkedElement<GameElement>
 	// Remove these once we have Element and ElementGenerator working
 	public int[][] dimensions = new int[3][4]; 
 
-	public GameElement( String _type, float[] _position, float[] _facing, float[][] _boundingBox, VirtualShape[] _shapes, HashMap _attributes)
+	public GameElement( String _type, float[] _position, float[] _facing, float[] _boundingBox, VirtualShape[] _shapes, HashMap _attributes)
 	{
 		type = _type;
 		position = _position;
@@ -40,7 +38,7 @@ public class GameElement extends LinkedElement<GameElement>
 	{
 		type = new String(original.type);
 		shapes = new VirtualShape[original.shapes.length];
-		boundingBox = new float[original.boundingBox.length][original.boundingBox[0].length];
+		boundingBox = new float[original.boundingBox.length];
 		System.arraycopy(original.position,0,position,0,original.position.length);
 		System.arraycopy(original.facing,0,facing,0,original.facing.length);
 		System.arraycopy(original.shapes,0,shapes,0,original.shapes.length);
@@ -105,7 +103,7 @@ public class GameElement extends LinkedElement<GameElement>
 		return facing;
 	}
 
-	public float[][] getBoundingBox()
+	public float[] getBoundingBox()
 	{
 		return boundingBox;
 	}
@@ -118,8 +116,6 @@ public class GameElement extends LinkedElement<GameElement>
 /*	public void nudge(int _dim, float _value)
 	{
 		position[_dim] += _value;
-
-		//also need to add boundingBox movement
 	}
 */
 	//changes position by a vector
@@ -127,8 +123,6 @@ public class GameElement extends LinkedElement<GameElement>
 	{
 		for( int i = 0 ; i < position.length; i++ )
 			position[i] += delta[i];
-
-		nudgeBoundingBox(delta); //nudge the boundingBox as well
 	}
 	
 	//sets position to the given
@@ -152,9 +146,6 @@ public class GameElement extends LinkedElement<GameElement>
 			System.out.println("Bad Quaternion length. Bad!");
 		else
 			facing = Quaternions.mul(facing,q);
-		
-		rotateBoundingBox(q); //rotate the boundingBox as well
-
 	}
 
 	//sets the facing to the specified Quaternion
@@ -164,44 +155,20 @@ public class GameElement extends LinkedElement<GameElement>
 			facing[i] = _facing[i];
 	}	
 
-	//moves the boundingBox by the specified vector
-	public void nudgeBoundingBox(float[] v)
-	{
-		for(int i=0; i < boundingBox.length; i++)
-		{
-			for(int j=0; j< boundingBox[i].length; j++)
-			{
-				boundingBox[i][j] += v[j];
-			}
-		}
-	}
-	
-	//rotates the boundingBox by the specified Quaternion
-	public void rotateBoundingBox(float[] q)
-	{
-		Quaternions.rotatePoints(boundingBox, q);
-	}
-
-	//sets the boundingBox to the specified box
-	public void setBoundingBox(float[][] b)
-	{
-		boundingBox = b;	
-
-		//System.out.println("BoundingBox =");
-		//VectorUtils.print(boundingBox);
-	}
 	
 	/*********************** 
 	 * Collision Detection *
 	 ***********************/	
 
-
 	//this method will run a collision detection tree using other collision methods.
 	public boolean isColliding(GameElement _element)
 	{
-//COLLISIONS UNDER CONSTRUCTION
 		//currently just uses OBBs in 3D to check
-		return VectorUtils.OBB3DIntersect(boundingBox, _element.boundingBox); 
+		return VectorUtils.OBB3DIntersect(boundingBox, 
+						_element.getBoundingBox(), 
+						VectorUtils.sub(_element.getPosition(),position),
+						Quaternions.getMatrixFromQuat(_element.getFacing(),facing));
+
 	}
 
 	//method is currently empty.

@@ -102,16 +102,14 @@ public class World
 			element.nudge( _dpos );
 		}
 		float[] position = element.getPosition();
-		float[][] box = element.getBoundingBox();
 
-		Object[] message = new Object[position.length+3];
+		Object[] message = new Object[position.length+2];
 		message[0] = Constants.MOVE_TO;
 		message[1] = _row;
 		for(int i = 0; i < position.length; i++)
 		{
 			message[i+2] = position[i];
 		}
-		message[message.length-1] = box; //also send the changed bounding box
 		
 		myIO.send(message);
 		myLogger.message( "nudge position: " + _row + " (" + element.getPosition(0) + "," + element.getPosition(1) + "," + element.getPosition(2) + ")\n" , false );
@@ -132,16 +130,14 @@ public class World
 			element.rotate( _dpos );
 		}
 		float[] facing = element.getFacing();
-		float[][] box = element.getBoundingBox();
 
-		Object[] message = new Object[facing.length+3];
+		Object[] message = new Object[facing.length+2];
 		message[0] = Constants.ROTATE_TO;
 		message[1] = _row;
 		for(int i = 0; i < facing.length; i++)
 		{
 			message[i+2] = facing[i];
 		}
-		message[message.length-1] = box; //also send the changed bounding box
 		
 		myIO.send(message);
 		myLogger.message( "rotate facing: " + _row + " (" + facing[0] + "," + facing[1] + "," + facing[2] + "," + facing[3] + ")\n" , false );
@@ -157,17 +153,15 @@ public class World
 	public void setPosition( Object[] _message, int _start)
 	{
 		GameElement element = elements.get((Integer) _message[_start++]);
-		float[] _pos = new float[_message.length-_start-1];
+		float[] _pos = new float[_message.length-_start];
 		for(int i = 0; i < _pos.length; i++)
 		{
 			_pos[i] = ((Float) _message[_start+i]).floatValue();
 		}
-		float[][] _box = (float[][]) _message[_message.length-1];
 
 		synchronized(element)
 		{
 			element.setPosition( _pos );
-			element.setBoundingBox(_box); //also need to reset the bounding box
 		}
 		myLogger.message( "move position: " + element.id() + " (" + element.getPosition(0) + "," + element.getPosition(1) + "," + element.getPosition(2) + ")\n" , false );
 		synchronized(first)
@@ -182,17 +176,15 @@ public class World
 	public void setFacing( Object[] _message, int _start)
 	{
 		GameElement element = elements.get((Integer) _message[_start++]);
-		float[] _fac = new float[_message.length-_start-1];
+		float[] _fac = new float[_message.length-_start];
 		for(int i = 0; i < _fac.length; i++)
 		{
 			_fac[i] = ((Float) _message[_start+i]).floatValue();
 		}
-		float[][] _box = (float[][]) _message[_message.length-1];
 
 		synchronized(element)
 		{
 			element.setFacing( _fac );
-			element.setBoundingBox(_box); //also need to reset the bounding box
 		}
 		myLogger.message( "rotate facing: " + element.id() + " (" + _fac[0] + "," + _fac[1] + "," + _fac[2] + "," + _fac[3] + ")\n" , false );
 		synchronized(first)
@@ -235,8 +227,8 @@ public class World
 		GameElement e = first; //for looping
 		do
 		{
-			GameElement e2 = first; //for looping
-			do
+			GameElement e2 = e.next; //for looping
+			while(e2 != first)
 			{
 				
 				//check collisions
@@ -244,9 +236,10 @@ public class World
 					System.out.println("Collision detected!! " + e + " and " + e2);
 			
 				e2 = e2.next;
-			}while(e2 != first);
+			}
 
 			e = e.next; //loop
 		} while(e != first);
+
 	}
 }

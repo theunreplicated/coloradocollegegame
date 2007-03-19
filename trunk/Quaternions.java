@@ -35,13 +35,26 @@ public class Quaternions
 		q[W] = (float)(q[W]/len);
 	}
 
+	//returns the difference between two quaternions (the quaternion which will allow a rotation from q1 to q2)
+	//  require q to be a unit because it should be anyway (based on the game)
+	public static float[] sub(float[] q2, float[] q1)
+	{
+		/* The explicit formula
+		return mul(-q1,q2)
+		*/
+		
+		//simplified quaternion multiplication
+		return new float[] {
+			q1[W]*q2[X] - q1[X]*q2[W] - q1[Y]*q2[Z] + q1[Z]*q2[Y],
+			q1[W]*q2[Y] - q1[Y]*q2[W] - q1[Z]*q2[X] + q1[X]*q2[Z],
+			q1[W]*q2[Z] - q1[Z]*q2[W] - q1[X]*q2[Y] + q1[Y]*q2[X],
+			q1[W]*q2[W] + q1[X]*q2[X] + q1[Y]*q2[Y] + q1[Z]*q2[Z]};	
+	}
+
 	//rotates the given point by the given UNIT Quaternion, and returns the new point
 	//  require q to be a unit because it should be anyway (based on the game)
 	public static float[] rotatePoint(float[] p, float[] q)
 	{
-		/*There are different implementations for this method. 
-		  Will need to test for which is fastest*/
-	
 		/* The explicit formula
 		float[] qc = new float[] {-q[X],-q[Y],-q[Z],q[W]}; //make the conjugate
 		float[] vq = new float[] {p[X],p[Y],p[Z],0}; //make vector into a Quaternion
@@ -63,19 +76,6 @@ public class Quaternions
 			p[X]*(1-2*(y2 + z2)) + 2*(p[Y]*(xy - wz) + p[Z]*(xz + wy)),
 			p[Y]*(1-2*(x2 + z2)) + 2*(p[X]*(xy + wz) + p[Z]*(yz - wx)),
 			p[Z]*(1-2*(x2 + y2)) + 2*(p[X]*(xz - wy) + p[Y]*(yz + wx))};	
-
-		/*
-		//create matrix
-		float[] m = new float[] {
-			1-2*(y2 + z2), 2*(xy - wz), 2*(xz + wy),
-			2*(xy + wz), 1-2*(x2 + z2), 2*(yz - wx),
-			2*(xz - wy), 2*(yz + wx), 1-2*(x2 + y2)};
-		return new float[] {
-			m[0]*p[X] + m[1]*p[Y] + m[2]*p[Z],
-			m[3]*p[X] + m[4]*p[Y] + m[5]*p[Z],
-			m[6]*p[X] + m[7]*p[Y] + m[8]*p[Z]};
-		*/		
-		
 	}
 	
 	//batch rotating method -- save some time by doing all assignments at once
@@ -105,7 +105,6 @@ public class Quaternions
 		}
 	}
 
-
 	//returns a Quaternion from an array of Euler angles (XYZ order)
 	public static float[] getQuatFromEuler(float[] e)
 	{
@@ -121,5 +120,32 @@ public class Quaternions
 			(float)(cx*sy*cz - sx*cy*sz),
  			(float)(cx*cy*sz - sx*sy*cz),
 			(float)(cx*cy*cz + sx*sy*sz)};
+	}
+
+	//returns a rotation matrix from the given Quaternion
+	public static float[][] getMatrixFromQuat(float[] q)
+	{
+		float x2 = q[X]*q[X];
+		float y2 = q[Y]*q[Y];
+		float z2 = q[Z]*q[Z];
+		float xy = q[X]*q[Y];
+		float yz = q[Y]*q[Z];
+		float xz = q[X]*q[Z];
+		float wx = q[W]*q[X];
+		float wy = q[W]*q[Y];
+		float wz = q[W]*q[Z];
+
+		return new float[][] {	{1-2*(y2 + z2), 2*(xy - wz), 2*(xz + wy)},
+					{2*(xy + wz), 1-2*(x2 + z2), 2*(yz - wx)},
+					{2*(xz - wy), 2*(yz + wx), 1-2*(x2 + y2)}}; 
+					//construct and return the rotation matrix			
+	}
+
+	//returns the rotation matrix that represents the rotation to Quaternions q2 from q1
+	//  require q to be a unit because it should be anyway (based on the game)
+	public static float[][] getMatrixFromQuat(float[] q2, float[] q1)
+	{
+		//could probably make this explicit instead of calling another function to save time?
+		return getMatrixFromQuat(sub(q2,q1));	
 	}
 }
