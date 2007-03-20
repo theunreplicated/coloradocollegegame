@@ -11,7 +11,7 @@ public class Client
 	{
 		logger = new Logger( _verbose );
 
-		ElementFactory ef = new ElementFactory();
+		ElementFactory ef = new ElementFactory(logger);
 
 		w = new World(ef,logger);
 

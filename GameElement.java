@@ -1,5 +1,6 @@
+import java.io.*;
 import java.util.*;
-public class GameElement extends LinkedElement<GameElement>
+public class GameElement extends LinkedElement<GameElement> implements Serializable
 { 
 	public boolean changed = true;
 	private int id;
@@ -60,22 +61,43 @@ public class GameElement extends LinkedElement<GameElement>
 		return(typeId);
 	}
 	
+	public void id(int _id)
+	{
+		id = _id;
+	}
 	public int id()
 	{
 		return id;
 	}
 
-	public Object[] getInfoArray()
+	public synchronized Object[] getInfoArray()
 	{
-		return new Object[] { typeId, position[X], position[Y], position[Z] };
+		return new Object[] {
+								typeId,
+								new float[] {
+									position[X],
+									position[Y],
+									position[Z]
+								}
+							};
 	}
 
-	public Object attribute(String _key)
+	public synchronized void setAttributes(HashMap _attributes)
+	{
+		attributes = _attributes; 
+	}
+
+	public synchronized HashMap getAttributes()
+	{
+		return attributes;
+	}
+
+	public synchronized Object attribute(String _key)
 	{
 		return attributes.get(_key);
 	}
 
-	public void attribute(String _key , Object _value)
+	public synchronized void attribute(String _key , Object _value)
 	{
 		attributes.put(_key,_value);
 	}
@@ -87,23 +109,64 @@ public class GameElement extends LinkedElement<GameElement>
 	 * Accessors *
 	 *************/
 
-	public float[] getPosition()
+	private synchronized void writeObject(java.io.ObjectOutputStream out) throws IOException
+	{
+		out.writeInt(id);
+		out.writeInt(typeId);
+		out.writeObject(position);
+		out.writeObject(facing);
+		out.writeObject(attributes);
+	}
+
+	private synchronized void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException
+	{
+		id = in.readInt();
+		typeId = in.readInt();
+		position = (float[]) in.readObject();
+		facing = (float[]) in.readObject();
+		attributes = (HashMap) in.readObject();
+	}
+	private synchronized void readObjectNoData() throws ObjectStreamException
+	{
+	}
+
+	public synchronized String toString()
+	{
+		String s = "GameElement #" + id + ":\n" +
+			" Type: " + type +" (" + typeId + ")\n" + 
+		  " Position:";
+		for(float f : position)
+			s += " " + f;
+		s += "\n Attributes:\n";
+		Set<Map.Entry<String,Object>> entries = attributes.entrySet();
+		Iterator<Map.Entry<String,Object>> it = entries.iterator();
+		Map.Entry<String,Object> entry;
+		while(it.hasNext())
+		{
+			entry = it.next();
+			s += "  " + entry.getKey() + ": " + entry.getValue() + "\n";
+		}
+		return s;
+
+	}
+
+	public synchronized float[] getPosition()
 	{
 		return position;
 	}	
 
 	//returns the specified dimension of the position
-	public float getPosition(int dim)
+	public synchronized float getPosition(int dim)
 	{
 		return position[dim];
 	}
 
-	public float[] getFacing()
+	public synchronized float[] getFacing()
 	{
 		return facing;
 	}
 
-	public float[] getBoundingBox()
+	public synchronized float[] getBoundingBox()
 	{
 		return boundingBox;
 	}
@@ -119,14 +182,14 @@ public class GameElement extends LinkedElement<GameElement>
 	}
 */
 	//changes position by a vector
-	public void nudge( float[] delta )
+	public synchronized void nudge( float[] delta )
 	{
 		for( int i = 0 ; i < position.length; i++ )
 			position[i] += delta[i];
 	}
 	
 	//sets position to the given
-	public void setPosition(float[] _position)
+	public synchronized void setPosition(float[] _position)
 	{
 		for( int i = position.length-1 ; i >= 0; i--)
 			position[i] = _position[i];
@@ -140,7 +203,7 @@ public class GameElement extends LinkedElement<GameElement>
 */	
 
 	//rotate by the specified Quaternion
-	public void rotate(float[] q)
+	public synchronized void rotate(float[] q)
 	{
 		if(q.length != 4)
 			System.out.println("Bad Quaternion length. Bad!");
@@ -149,19 +212,20 @@ public class GameElement extends LinkedElement<GameElement>
 	}
 
 	//sets the facing to the specified Quaternion
-	public void setFacing(float[] _facing)
+	public synchronized void setFacing(float[] _facing)
 	{
 		for( int i = facing.length-1 ; i >= 0; i--)
 			facing[i] = _facing[i];
 	}	
 
-	
+
 	/*********************** 
 	 * Collision Detection *
 	 ***********************/	
 
+
 	//this method will run a collision detection tree using other collision methods.
-	public boolean isColliding(GameElement _element)
+	public synchronized boolean isColliding(GameElement _element)
 	{
 		//currently just uses OBBs in 3D to check
 		return VectorUtils.OBB3DIntersect(boundingBox, 
@@ -172,14 +236,11 @@ public class GameElement extends LinkedElement<GameElement>
 	}
 
 	//method is currently empty.
-	public String isCollidingShape(GameElement _element) //why are you returning a String?
+	public synchronized String isCollidingShape(GameElement _element) //why are you returning a String?
 	{
 		/* I'll get to it eventually. Shape-level collisions are not exactly high-priority */
 		return null;
 	}
-
-
-
 
 	/*
 	public boolean isRelevant(float[] _position, float _radius)
@@ -193,7 +254,7 @@ public class GameElement extends LinkedElement<GameElement>
 
 
 	/*  Deprecated stuff*/
-	public int[][] getAbsoluteCoordinates()
+	public synchronized int[][] getAbsoluteCoordinates()
 	{
 		for( int i = 0; i < dimensions[X].length ; i++ )
 		{

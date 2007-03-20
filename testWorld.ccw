@@ -1,0 +1,20 @@
+<world>
+	<element type="ball">
+		<position>1</position>
+		<position>0</position>
+		<position>0</position>
+		<attributes>
+			<friendly type="String">yes</friendly>
+		</attributes>
+	</element>
+	<element type="face">
+		<position>1</position>
+		<position>1</position>
+		<position>0</position>
+		<attributes>
+			<awesome type="String">no</awesome>
+			<cool type="String">yes</cool>
+		</attributes>
+	</element>
+</world>
+
