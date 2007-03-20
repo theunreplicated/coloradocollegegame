@@ -40,7 +40,9 @@ public class WorldFactory
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc;
 			Element element, attributesElement, newAttribute;
-			NodeList elements, attributesNodes;
+			NodeList elements, positionNodes, attributesNodes;
+			Node tmpNode;
+			String attributeType;
 			GameElement newElement;
 			float[] position;
 			int i;
@@ -55,13 +57,12 @@ public class WorldFactory
 
 					newElement = ef.getGameElement(element.getAttribute("type"));
 
-					NodeList positionNodes = element.getElementsByTagName("position");
+					positionNodes = element.getElementsByTagName("position");
 					position = new float[positionNodes.getLength()];
 					for(int p = position.length-1; p>=0; p--)
 					{
 						position[p] = Float.parseFloat(positionNodes.item(p).getTextContent());
 					}
-					System.out.println(position.length);
 					newElement.setPosition(position);
 					newElement.id(i);
 					attributesElement = (Element) element.getElementsByTagName("attributes").item(0);
@@ -71,10 +72,10 @@ public class WorldFactory
 
 					for(int a = attributesNodes.getLength()-1; a>=0; a--)
 					{
-						Node tmpNode = attributesNodes.item(a);
+						tmpNode = attributesNodes.item(a);
 						if(tmpNode.getNodeType() != Node.ELEMENT_NODE) continue;
 						newAttribute = (Element) tmpNode;
-						String attributeType = newAttribute.getAttribute("type");
+						attributeType = newAttribute.getAttribute("type");
 						if(attributeType.equalsIgnoreCase("String"))
 						{
 							newElement.attribute(newAttribute.getTagName(), newAttribute.getTextContent());

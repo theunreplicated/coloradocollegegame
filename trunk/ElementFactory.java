@@ -40,7 +40,7 @@ public class ElementFactory
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc;
 			Element element, name, plural, shape;
-			NodeList elements, spheres, cylinders, boxes, cones;
+			NodeList elements, spheres, cylinders, boxes, cones, facingNodes, boundsNodes;
 			VirtualShape[] shapes;
 			int i, j, k;
 			float[] position;
@@ -58,25 +58,38 @@ public class ElementFactory
 				{
 					element = (Element) elements.item(i);
 
-					/*
-					NodeList centerNodes = element.getElementsByTagName("center");
-					position = new float[centerNodes.getLength()];
-					for(int p = position.length-1; p>=0; p--)
-					{
-						position[p] = Float.parseFloat(centerNodes.item(p).getTextContent());
-					}
-					System.out.println(position.length);
-					*/
-					
-					
-					//WE NEED TO PARSE THIS STUFF FROM THE XML!!
-					//Only use the defaults if it's not in the file					
 					position = Constants.DEFAULT_POSITION;
-					facing = Constants.DEFAULT_FACING;
-					bounds = Constants.DEFAULT_BOUNDS;
+
+					facingNodes = element.getElementsByTagName("facing");
+					if(facingNodes.getLength() == 0)
+					{
+						facing = Constants.DEFAULT_FACING;
+					}
+					else
+					{
+						facing = new float[facingNodes.getLength()];
+						for(int p = facing.length-1; p>=0; p--)
+						{
+							facing[p] = Float.parseFloat(facingNodes.item(p).getTextContent());
+						}
+					}					
+					
+					boundsNodes = element.getElementsByTagName("bounds");
+					if(boundsNodes.getLength() == 0)
+					{
+						bounds = Constants.DEFAULT_BOUNDS;
+					}
+					else
+					{
+						bounds = new float[boundsNodes.getLength()];
+						for(int p = bounds.length-1; p>=0; p--)
+						{
+							bounds[p] = Float.parseFloat(boundsNodes.item(p).getTextContent());
+						}
+					}					
+					
 					attributes = new HashMap<String, Object>();
 
-					//element = (Element) elements.item(i);
 					name = (Element) element.getElementsByTagName("name").item(0);
 					plural = (Element) element.getElementsByTagName("plural").item(0);
 					shape = (Element) element.getElementsByTagName("shapes").item(0);

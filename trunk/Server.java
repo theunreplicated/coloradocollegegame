@@ -22,7 +22,7 @@ public class Server implements IO
 		WorldFactory wf = new WorldFactory(ef, myLogger);
 		myWorld = new World(ef, myLogger);
 		wf.fillWorld(myWorld); 
-		System.out.println(myWorld);
+		myLogger.message("\n" + myWorld.toString(), false);
 
 		for( int i = ids.length - 1; i >= 0; i-- )
 			ids[i] = -1;
