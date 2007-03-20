@@ -20,9 +20,29 @@ public class World
 		myIO = _io;
 	}
 	
+	public GameElement[] getElements()
+	{
+		Collection<GameElement> c = elements.values();
+		GameElement[] ge = c.toArray(new GameElement[]{});
+		return ge;
+		// return (GameElement[]) (elements.values().toArray());
+	}
+
 	public GameElement getFirstElement()
 	{
 		return first;
+	}
+
+	public String toString()
+	{
+		GameElement ge = first;
+		String output = "** CURRENT WORLD **\n";
+		do
+		{
+			output += ge + "\n";
+			ge = ge.next;
+		} while(ge != first);
+		return output;
 	}
 
 	public Object[] getElementInfo( int _row )
@@ -61,17 +81,37 @@ public class World
 		}
 	}
 
+	public GameElement addElement(GameElement newElement)
+	{
+		if(first == null)
+		{
+			first = newElement;
+			first.next = first.prev = first;
+		}
+		else
+		{
+			synchronized(first)
+			{
+				first.insertBefore(newElement);
+			}
+		}
+		elements.put(newElement.id(),newElement);
+
+		synchronized( first )
+		{
+			first.notifyAll();
+		}
+		return newElement;
+	}
+
 	public GameElement addElement(Object[] _message, int _start)
 	{
 		int _id = ((Integer) _message[_start++]).intValue();
 		int _type = ((Integer) _message[_start++]).intValue();
-		float[] _pos = new float[_message.length-_start];
-		for(int i = 0; i < _pos.length; i++)
-		{
-			_pos[i] = ((Float) _message[_start+i]).floatValue();
-		}
+		float[] _pos = (float[]) _message[_start++];
 		
 		GameElement newElement = ef.getGameElement(_type);
+		newElement.id(_id);
 		newElement.setPosition(_pos);
 		if(first == null)
 		{
@@ -94,22 +134,33 @@ public class World
 		return newElement;
 	}
 
+	public void addMultipleElements(Object[] _message, int _start)
+	{
+		GameElement[] newElements = (GameElement[]) _message[_start];
+		GameElement ge;
+		for(GameElement newElement : newElements)
+		{
+			ge = ef.getGameElement(newElement.getTypeId());
+			ge.id(newElement.id());
+			ge.setPosition(newElement.getPosition());
+			ge.setFacing(newElement.getFacing());
+			ge.setAttributes(newElement.getAttributes());
+			this.addElement(ge);
+		}
+
+	}
+
 	public void nudgeElement( int _row, float[] _dpos )
 	{
 		GameElement element = elements.get(_row);
-		synchronized(element)
-		{
-			element.nudge( _dpos );
-		}
+		element.nudge( _dpos );
 		float[] position = element.getPosition();
 
-		Object[] message = new Object[position.length+2];
-		message[0] = Constants.MOVE_TO;
-		message[1] = _row;
-		for(int i = 0; i < position.length; i++)
-		{
-			message[i+2] = position[i];
-		}
+		Object[] message = new Object[] {
+			Constants.MOVE_TO,
+			_row,
+			position
+		};
 		
 		myIO.send(message);
 		myLogger.message( "nudge position: " + _row + " (" + element.getPosition(0) + "," + element.getPosition(1) + "," + element.getPosition(2) + ")\n" , false );
@@ -125,19 +176,14 @@ public class World
 	public void rotateElement( int _row, float[] _dpos )
 	{
 		GameElement element = elements.get(_row);
-		synchronized(element)
-		{
-			element.rotate( _dpos );
-		}
+		element.rotate( _dpos );
 		float[] facing = element.getFacing();
 
-		Object[] message = new Object[facing.length+2];
-		message[0] = Constants.ROTATE_TO;
-		message[1] = _row;
-		for(int i = 0; i < facing.length; i++)
-		{
-			message[i+2] = facing[i];
-		}
+		Object[] message = new Object[] {
+			Constants.ROTATE_TO,
+			_row,
+			facing
+		};
 		
 		myIO.send(message);
 		myLogger.message( "rotate facing: " + _row + " (" + facing[0] + "," + facing[1] + "," + facing[2] + "," + facing[3] + ")\n" , false );
@@ -153,16 +199,9 @@ public class World
 	public void setPosition( Object[] _message, int _start)
 	{
 		GameElement element = elements.get((Integer) _message[_start++]);
-		float[] _pos = new float[_message.length-_start];
-		for(int i = 0; i < _pos.length; i++)
-		{
-			_pos[i] = ((Float) _message[_start+i]).floatValue();
-		}
+		float[] _pos = (float[]) _message[_start++];
 
-		synchronized(element)
-		{
-			element.setPosition( _pos );
-		}
+		element.setPosition( _pos );
 		myLogger.message( "move position: " + element.id() + " (" + element.getPosition(0) + "," + element.getPosition(1) + "," + element.getPosition(2) + ")\n" , false );
 		synchronized(first)
 		{
@@ -176,16 +215,9 @@ public class World
 	public void setFacing( Object[] _message, int _start)
 	{
 		GameElement element = elements.get((Integer) _message[_start++]);
-		float[] _fac = new float[_message.length-_start];
-		for(int i = 0; i < _fac.length; i++)
-		{
-			_fac[i] = ((Float) _message[_start+i]).floatValue();
-		}
+		float[] _fac = (float[]) _message[_start++];
 
-		synchronized(element)
-		{
-			element.setFacing( _fac );
-		}
+		element.setFacing( _fac );
 		myLogger.message( "rotate facing: " + element.id() + " (" + _fac[0] + "," + _fac[1] + "," + _fac[2] + "," + _fac[3] + ")\n" , false );
 		synchronized(first)
 		{
@@ -213,13 +245,15 @@ public class World
 				removeElement( message, 1 );
 				myLogger.message("Removing player: " + message[1] + "\n", false);
 				break;
+			case Constants.SEND_WORLD:
+				addMultipleElements( message, 1);
+				break;
 			default:
 				myLogger.message("Received unparsable message: " + message[0] + "\n", true);
 		}
 
 		return Constants.SUCCESS; //eventually every action in the world will return an int for whether or not it was a valid action
 	}
-
 
 	//a TESTING method to check the world for a collision
 	public void checkCollisions()

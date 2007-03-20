@@ -18,7 +18,11 @@ public class Server implements IO
 	{
 
 		myLogger = _logger;
-		myWorld = new World(new ElementFactory() , myLogger);
+		ElementFactory ef = new ElementFactory(myLogger);
+		WorldFactory wf = new WorldFactory(ef, myLogger);
+		myWorld = new World(ef, myLogger);
+		wf.fillWorld(myWorld); 
+		System.out.println(myWorld);
 
 		for( int i = ids.length - 1; i >= 0; i-- )
 			ids[i] = -1;
@@ -122,32 +126,10 @@ public class Server implements IO
 		}
 	}
 
+	// fix to handle synchronization
 	public void sendWorld(  int _row )
 	{
-		synchronized(threads)
-		{
-			int i;
-			Object[] message = new Object[2+Constants.ELEMENT_INFO_SIZE];
-			
-			for( i = ids.length - 1; i >= 0; i-- ) 
-			{
-				if( ids[i] >= 0 && _row != i )
-				{
-					message[0] = Constants.ADD_PLAYER;
-					message[1] = ids[i];
-					System.arraycopy(myWorld.getElementInfo(ids[i]),0,message,2,Constants.ELEMENT_INFO_SIZE);
-					threads[_row].send(message);
-				try {
-					 Thread.sleep(200);
-				}
-				catch(Exception e)
-				{
-					System.exit(0);
-				}
-				}
-				
-			}
-		}
+		threads[_row].send(new Object[]{ Constants.SEND_WORLD, myWorld.getElements() });
 	}
 
 	public static void main(String args[])

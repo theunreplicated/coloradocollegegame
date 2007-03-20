@@ -18,11 +18,13 @@ public class Constants
 	public static final int LOGOUT = 2;
 	public static final int ADD_PLAYER = 3;
 	public static final int REMOVE_PLAYER = 4;
+	public static final int SEND_WORLD = 5;
 	public static final int MESSAGE_SIZE = 90000;
 
 	// Startup
 	public static final String DEFAULT_DATA_DIR = ".";
 	public static final String ELEMENT_LIST_EXTENSION = "ccel";
+	public static final String WORLD_EXTENSION = "ccw";
 	public static final float[] DEFAULT_POSITION = {0,0,0};
 	public static final float[] DEFAULT_FACING = {0,0,0,1}; //in Quaternions!
 	public static final float[] DEFAULT_SCALE = {0,0,0};
@@ -64,7 +66,7 @@ public class Constants
 	public static final float INITIAL_X = 0;
 	public static final float INITIAL_Y = 0;
 	public static final float INITIAL_Z = 0;
-	public static final short ELEMENT_INFO_SIZE = 4;
+	public static final short ELEMENT_INFO_SIZE = 2;
 	public static final short MIN = 0;
 	public static final short MAX = 1;
 	public static final short RADIUS = 0;

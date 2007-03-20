@@ -6,23 +6,27 @@ import org.w3c.dom.*;
 
 public class ElementFactory
 {
+	private Logger myLogger;
 	private HashMap<String, GameElement> defaultElements = new HashMap<String, GameElement>();
 	private String[] defaultElementKeys;
 
-	public ElementFactory(File folder, String ext)
+	public ElementFactory(File folder, String ext, Logger _myLogger)
 	{
+		myLogger = _myLogger;
 		File[] files = folder.listFiles(new EGFileFilter(ext));
 		createDefaultElements(files);
 	}
 
-	public ElementFactory(File folder)
+	public ElementFactory(File folder, Logger _myLogger)
 	{
+		myLogger = _myLogger;
 		File[] files = folder.listFiles(new EGFileFilter(Constants.ELEMENT_LIST_EXTENSION));
 		createDefaultElements(files);
 	}
 
-	public ElementFactory()
+	public ElementFactory(Logger _myLogger)
 	{
+		myLogger = _myLogger;
 		File folder = new File(Constants.DEFAULT_DATA_DIR);
 		File[] files = folder.listFiles(new EGFileFilter(Constants.ELEMENT_LIST_EXTENSION));
 		createDefaultElements(files);
@@ -141,7 +145,7 @@ public class ElementFactory
 		}
 		catch(Exception e) // better error reporting!
 		{
-			System.err.println("Failed to read input files! : " + e.getMessage() + " :\n");
+			myLogger.message("Failed to read input files! : " + e.getMessage() + " :\n", true);
 			e.printStackTrace();
 		}
 	}
