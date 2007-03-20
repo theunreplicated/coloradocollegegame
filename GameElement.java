@@ -126,6 +126,8 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		facing = (float[]) in.readObject();
 		attributes = (HashMap) in.readObject();
 	}
+
+	// To do: Figure out what this is for (part of synchronization and writing objects) and fill it in
 	private synchronized void readObjectNoData() throws ObjectStreamException
 	{
 	}
@@ -136,6 +138,9 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 			" Type: " + type +" (" + typeId + ")\n" + 
 		  " Position:";
 		for(float f : position)
+			s += " " + f;
+		s += "\n Facing:";
+		for(float f : facing)
 			s += " " + f;
 		s += "\n Attributes:\n";
 		Set<Map.Entry<String,Object>> entries = attributes.entrySet();

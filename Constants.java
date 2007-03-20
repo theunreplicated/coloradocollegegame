@@ -120,14 +120,4 @@ public class Constants
 		}
 		return a;
 	}
-
-	public static String toString(int[] _data)
-	{
-		String a = "";
-		for(int i : _data)
-		{
-			a += i + " ";
-		}
-		return a;
-	}
 }
