@@ -8,6 +8,7 @@
 -->
 
 <element_types>
+
 	<element>
 		<name>ball</name>
 		<plural>balls</plural>
@@ -20,12 +21,10 @@
 			</sphere>
 		</shapes>
 	</element>
+
 	<element>
 		<name>face</name>
 		<plural>faces</plural>
-		<center>0</center>
-		<center>0</center>
-		<center>0</center>
 		<bound>1</bound>
 		<bound>1</bound>
 		<bound>1</bound>
@@ -72,6 +71,61 @@
 			</cone>
 		</shapes>
 	</element>
+
+	<element>
+		<name>big pillar</name>
+		<plural>big pillars</plural>
+		<bound>1</bound>
+		<bound>6</bound>
+		<bound>1</bound>
+		<shapes>
+			<box>
+				<name>base1</name>
+				<center>0</center>
+				<center>-5.75</center>
+				<center>0</center>
+				<dimension>3</dimension>
+				<dimension>.5</dimension>
+				<dimension>3</dimension>
+			</box>
+			<box>
+				<name>base2</name>
+				<center>0</center>
+				<center>-5.25</center>
+				<center>0</center>
+				<dimension>2.5</dimension>
+				<dimension>.5</dimension>
+				<dimension>2.5</dimension>
+			</box>
+			<box>
+				<name>top2</name>
+				<center>0</center>
+				<center>5.25</center>
+				<center>0</center>
+				<dimension>2.5</dimension>
+				<dimension>.5</dimension>
+				<dimension>2.5</dimension>
+			</box>
+			<box>
+				<name>top1</name>
+				<center>0</center>
+				<center>5.75</center>
+				<center>0</center>
+				<dimension>3</dimension>
+				<dimension>.5</dimension>
+				<dimension>3</dimension>
+			</box>			
+			<cylinder>
+				<name>column</name>
+				<center>0</center>
+				<center>0</center>
+				<center>0</center>
+				<radius>1</radius>
+				<height>10</height>
+			</cylinder>
+		</shapes>
+	</element>
+
 	<element>
 		<name>glasses</name>
 		<plural>pairs of glasses</plural>
@@ -111,4 +165,5 @@
 			</cylinder>
 		</shapes>
 	</element>
+
 </element_types>

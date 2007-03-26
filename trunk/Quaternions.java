@@ -141,11 +141,11 @@ public class Quaternions
 					//construct and return the rotation matrix			
 	}
 
-	//returns the rotation matrix that represents the rotation to Quaternions q2 from q1
+	//returns the rotation matrix that represents the rotation to Quaternions q1 from q2
 	//  require q to be a unit because it should be anyway (based on the game)
-	public static float[][] getMatrixFromQuat(float[] q2, float[] q1)
+	public static float[][] getMatrixFromQuat(float[] q1, float[] q2)
 	{
 		//could probably make this explicit instead of calling another function to save time?
-		return getMatrixFromQuat(sub(q2,q1));	
+		return getMatrixFromQuat(sub(q1,q2));	
 	}
 }

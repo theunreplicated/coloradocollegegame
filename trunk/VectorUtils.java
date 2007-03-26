@@ -15,7 +15,7 @@ public class VectorUtils
 	//returns the sum of two 3D vectors
 	public static float[] add(float[] v, float[] w)
 	{
-		return new float[] {v[0]+w[0], v[1]+w[1], v[2]+w[2]}; 
+		return new float[] {v[X]+w[X], v[Y]+w[Y], v[Z]+w[Z]}; 
 	}
 
 	//adds a vector to every vector in an array. Batch adding.
@@ -28,21 +28,21 @@ public class VectorUtils
 	//returns the difference of two 3D vectors
 	public static float[] sub(float[] v, float[] w)
 	{
-		return new float[] {v[0]-w[0], v[1]-w[1], v[2]-w[2]};
+		return new float[] {v[X]-w[X], v[Y]-w[Y], v[Z]-w[Z]};
 	}
 
 	//returns the dot product of two 3D vectors
 	public static float dot(float[] v, float[] w)
 	{
-		return (v[0]*w[0])+(v[1]*w[1])+(v[2]*w[2]);
+		return (v[X]*w[X])+(v[Y]*w[Y])+(v[Z]*w[Z]);
 	}
 	
 	//returns the cross product of two 3D vectors
 	public static float[] cross(float[] v, float[] w)
 	{
-		return new float[] {(v[1]*w[2])-(v[2]*w[1]), 
-				    (v[2]*w[0])-(v[0]*w[2]), 
-				    (v[0]*w[1])-(v[1]*w[0])};
+		return new float[] {(v[Y]*w[Z])-(v[Z]*w[Y]), 
+				    (v[Z]*w[X])-(v[X]*w[Z]), 
+				    (v[X]*w[Y])-(v[Y]*w[X])};
 	}
 
 	//A method that determines if two oriented bounding boxes (OBBs) in 3D intersect.
@@ -114,7 +114,7 @@ public class VectorUtils
 	//returns a string representation of the 3D vector
 	public static String toString(float[] v)
 	{
-		return "{"+v[0]+","+v[1]+","+v[2]+"}";
+		return "{"+v[X]+","+v[Y]+","+v[Z]+"}";
 	}
 	
 	//returns a string representation of the vector array, independent of length

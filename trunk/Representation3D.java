@@ -104,7 +104,7 @@ public class Representation3D extends Applet implements Representation
 	
 		//Representation-level objects
 		gscene.addChild(createGrid());
-		gscene.addChild(createPillars());
+		//gscene.addChild(createPillars());
 		
 		return gscene; //return the branch
 	}
