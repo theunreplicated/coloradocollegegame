@@ -1,19 +1,34 @@
 <world>
-	<element type="ball">
-		<position>1</position>
-		<position>0</position>
-		<position>0</position>
+	<element type="big pillar">
+		<position>7.5</position>
+		<position>5</position>
+		<position>7.5</position>
 		<attributes>
 			<friendly type="String">yes</friendly>
 		</attributes>
 	</element>
-	<element type="face">
-		<position>1</position>
-		<position>1</position>
-		<position>0</position>
+	<element type="big pillar">
+		<position>7.5</position>
+		<position>5</position>
+		<position>-7.5</position>
 		<attributes>
-			<awesome type="String">no</awesome>
-			<cool type="String">yes</cool>
+			<friendly type="String">yes</friendly>
+		</attributes>
+	</element>
+	<element type="big pillar">
+		<position>-7.5</position>
+		<position>5</position>
+		<position>7.5</position>
+		<attributes>
+			<friendly type="String">yes</friendly>
+		</attributes>
+	</element>
+	<element type="big pillar">
+		<position>-7.5</position>
+		<position>5</position>
+		<position>-7.5</position>
+		<attributes>
+			<friendly type="String">yes</friendly>
 		</attributes>
 	</element>
 </world>

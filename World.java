@@ -264,10 +264,9 @@ public class World
 			GameElement e2 = e.next; //for looping
 			while(e2 != first)
 			{
-				
 				//check collisions
 				if(e.isColliding(e2))
-					System.out.println("Collision detected!! " + e + " and " + e2);
+					System.out.println("Collision detected!! Element " + e.id() + " and  Element " + e2.id());
 			
 				e2 = e2.next;
 			}

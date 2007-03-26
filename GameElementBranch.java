@@ -52,62 +52,43 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		
 		for(VirtualShape s : e.shapes) //run through the shapes!
 		{
+			Transform3D local = new Transform3D(new Quat4f(s.getRotation()), new Vector3f(s.getCenter()),1); //the local coordinates for the shape
+			TransformGroup localg = new TransformGroup(local);
+			
+			Node p; //the shape to add--Node so we can have all kinds of geometry
+			
 			//now see what kind of shapes we're using. 
 			//instanceof allows us to deal with extensions of the virtual primitives,
-			//but do we want that? If not, then change to be a getClassName (or whatever)
+			//  but do we want that? If not, then change to be a getClassName (or whatever)
 			if(s instanceof VirtualBox)
 			{
-				Transform3D local = new Transform3D(new Quat4f(s.getRotation()), new Vector3f(s.getCenter()),1); //the local coordinates for the shape
-				TransformGroup localg = new TransformGroup(local);
-				
-				//make the primitive
-				Box p = new Box(((VirtualBox)s).getDimX(), ((VirtualBox)s).getDimY(), ((VirtualBox)s).getDimZ(), Primitive.GENERATE_NORMALS, appear);
-					//TransformGroup rot = createSpinningBehavior(localg);
-					//rot.addChild(new ColorCube(0.2));
-				
-				localg.addChild(p); //add the primitive to the TransformGroup
-				sroot.addChild(localg); //add the TransformGroup to the shape root node			
+				//make the primitive - convert full dimensions to half-dimensions
+				p = new Box(.5f*((VirtualBox)s).getDimX(), .5f*((VirtualBox)s).getDimY(), .5f*((VirtualBox)s).getDimZ(), Primitive.GENERATE_NORMALS, appear);
 			}
 			else if(s instanceof VirtualSphere)
 			{
-				Transform3D local = new Transform3D(new Quat4f(s.getRotation()), new Vector3f(s.getCenter()),1); //the local coordinates for the shape
-				TransformGroup localg = new TransformGroup(local);
-				
 				//make the primitive
-				Sphere p = new Sphere(((VirtualSphere)s).getRadius(), Primitive.GENERATE_NORMALS, appear);
-				
-				localg.addChild(p); //add the primitive to the TransformGroup
-				sroot.addChild(localg); //add the TransformGroup to the shape root node			
+				p = new Sphere(((VirtualSphere)s).getRadius(), Primitive.GENERATE_NORMALS, appear);
 			}
 			else if(s instanceof VirtualCylinder)
 			{
-				Transform3D local = new Transform3D(new Quat4f(s.getRotation()), new Vector3f(s.getCenter()),1); //the local coordinates for the shape
-				TransformGroup localg = new TransformGroup(local);
-				
 				//make the primitive
-				Cylinder p = new Cylinder(((VirtualCylinder)s).getRadius(), ((VirtualCylinder)s).getHeight(), Primitive.GENERATE_NORMALS, appear);
-				
-				localg.addChild(p); //add the primitive to the TransformGroup
-				sroot.addChild(localg); //add the TransformGroup to the shape root node			
+				p = new Cylinder(((VirtualCylinder)s).getRadius(), ((VirtualCylinder)s).getHeight(), Primitive.GENERATE_NORMALS, appear);
 			}
 			else if(s instanceof VirtualCone)
 			{
-				Transform3D local = new Transform3D(new Quat4f(s.getRotation()), new Vector3f(s.getCenter()),1); //the local coordinates for the shape
-				TransformGroup localg = new TransformGroup(local);
-				
 				//make the primitive
-				Cone p = new Cone(((VirtualCone)s).getRadius(), ((VirtualCone)s).getHeight(), Primitive.GENERATE_NORMALS, appear);
-				
-				localg.addChild(p); //add the primitive to the TransformGroup
-				sroot.addChild(localg); //add the TransformGroup to the shape root node			
+				p = new Cone(((VirtualCone)s).getRadius(), ((VirtualCone)s).getHeight(), Primitive.GENERATE_NORMALS, appear);
 			}
 			else
 			{
-				//print error message
-				System.out.println("unrecognizable shape");
+				System.out.println("unrecognizable shape"); //print an error message (for testing--should really be logging this)
+				//p = new ColorCube(.1f); //make a default "shape" to show
+				p = createSpinningBehavior(new ColorCube(.1f)); //make an obnoxious default "shape" to show
 			}
-			
-			//we could probably break up the code some, but will deal with that later.
+
+			localg.addChild(p); //add the primitive to the TransformGroup
+			sroot.addChild(localg); //add the TransformGroup to the shape root node			
 		}
 		
 		sroot.addChild(createBoundingBox(e)); //draw the bounding box for testing.
@@ -185,19 +166,16 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		return new Shape3D(box);
 	}
 
-
-	//This is just for fun. Though might be neat to include it even once we aren't using cubes.
-	//Basically pass it a transform group of the tree, and it will return a transform group for you to continue adding to
-	public TransformGroup createSpinningBehavior(TransformGroup bg)
+	//This is just for fun.
+	//@param a J3D Node (could be anything) to attach to the end of the transform.
+	public TransformGroup createSpinningBehavior(Node arg)
 	{
-		TransformGroup spinx = new TransformGroup(); //another node for coordinate system transformation
+		TransformGroup spinx = new TransformGroup(); //a node for a coordinate system transformation (also the root)
 		spinx.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE); //allow us to change the transformation at runtime
-		TransformGroup spiny = new TransformGroup(); //as the above lines
-		spiny.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+		TransformGroup spiny = new TransformGroup(); //and again
+		spiny.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE); //ditto
+		spinx.addChild(spiny); //add one transform to the other	
 
-		bg.addChild(spinx); //add the first coordinate system transformation to the root
-		spinx.addChild(spiny); //add the other coordinate system transformtions to the tree
-		
 		Transform3D yAxis = new Transform3D(); //a transformation-defined coordinate system. We don't touch it initially
 		Transform3D xAxis = new Transform3D(); //another change in the coordinate system
 		xAxis.rotZ(Math.PI/4.0d); //make xAxis actually change the y-axis (the default) into the x-axis by rotating around the z-axis
@@ -214,7 +192,8 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		spinx.addChild(rotator); //add the behavior to the tree
 		spiny.addChild(rotator2); //ditto
 		
-		return spiny;
+		spiny.addChild(arg); //add our argument to this branch
+		return spinx; //return the "root" of this branch
 	}	
 	
 	//member functions
