@@ -1,4 +1,4 @@
-<!-- 	Rotations are specified in degrees using Euler rotations
+<!-- 	Rotations are specified in degrees using Euler facings
 	Rotation order is XYZ
 	Note that Rotations are handled in Quaternions within the Game
 -->
@@ -14,9 +14,9 @@
 		<plural>balls</plural>
 		<shapes>
 			<sphere>
-				<center>0</center>
-				<center>0</center>
-				<center>0</center>
+				<position>0</position>
+				<position>0</position>
+				<position>0</position>
 				<radius>1</radius>
 			</sphere>
 		</shapes>
@@ -25,49 +25,49 @@
 	<element>
 		<name>face</name>
 		<plural>faces</plural>
-		<bound>1</bound>
-		<bound>1</bound>
-		<bound>1</bound>
+		<bounds>1</bounds>
+		<bounds>1</bounds>
+		<bounds>1</bounds>
 		<shapes>
 			<sphere>
 				<name>head</name>
-				<center>0</center>
-				<center>0</center>
-				<center>0</center>
+				<position>0</position>
+				<position>0</position>
+				<position>0</position>
 				<radius>1</radius>
 			</sphere>
 			<cylinder>
 				<name>eye</name>
-				<center>-.425</center>
-				<center>.3</center>
-				<center>-.8</center>
+				<position>-.425</position>
+				<position>.3</position>
+				<position>-.8</position>
 				<radius>.24</radius>
 				<height>0.37</height>
-				<rotation>90</rotation>
-				<rotation>0</rotation>
-				<rotation>0</rotation>
+				<facing>90</facing>
+				<facing>0</facing>
+				<facing>0</facing>
 			</cylinder>
 			<cylinder>
 				<name>eye</name>
-				<center>.425</center>
-				<center>.3</center>
-				<center>-.8</center>
+				<position>.425</position>
+				<position>.3</position>
+				<position>-.8</position>
 				<radius>.24</radius>
 				<height>0.37</height>
-				<rotation>90</rotation>
-				<rotation>0</rotation>
-				<rotation>0</rotation>
+				<facing>90</facing>
+				<facing>0</facing>
+				<facing>0</facing>
 			</cylinder>
 			<cone>
 				<name>nose</name>
-				<center>0</center>
-				<center>0</center>
-				<center>-1.2</center>
+				<position>0</position>
+				<position>0</position>
+				<position>-1.2</position>
 				<radius>.2</radius>
 				<height>0.7</height>
-				<rotation>-90</rotation>
-				<rotation>0</rotation>
-				<rotation>0</rotation>
+				<facing>-90</facing>
+				<facing>0</facing>
+				<facing>0</facing>
 			</cone>
 		</shapes>
 	</element>
@@ -75,51 +75,51 @@
 	<element>
 		<name>big pillar</name>
 		<plural>big pillars</plural>
-		<bound>1</bound>
-		<bound>6</bound>
-		<bound>1</bound>
+		<bounds>1.5</bounds>
+		<bounds>6</bounds>
+		<bounds>1.5</bounds>
 		<shapes>
 			<box>
 				<name>base1</name>
-				<center>0</center>
-				<center>-5.75</center>
-				<center>0</center>
+				<position>0</position>
+				<position>-5.75</position>
+				<position>0</position>
 				<dimension>3</dimension>
 				<dimension>.5</dimension>
 				<dimension>3</dimension>
 			</box>
 			<box>
 				<name>base2</name>
-				<center>0</center>
-				<center>-5.25</center>
-				<center>0</center>
+				<position>0</position>
+				<position>-5.25</position>
+				<position>0</position>
 				<dimension>2.5</dimension>
 				<dimension>.5</dimension>
 				<dimension>2.5</dimension>
 			</box>
 			<box>
 				<name>top2</name>
-				<center>0</center>
-				<center>5.25</center>
-				<center>0</center>
+				<position>0</position>
+				<position>5.25</position>
+				<position>0</position>
 				<dimension>2.5</dimension>
 				<dimension>.5</dimension>
 				<dimension>2.5</dimension>
 			</box>
 			<box>
 				<name>top1</name>
-				<center>0</center>
-				<center>5.75</center>
-				<center>0</center>
+				<position>0</position>
+				<position>5.75</position>
+				<position>0</position>
 				<dimension>3</dimension>
 				<dimension>.5</dimension>
 				<dimension>3</dimension>
 			</box>			
 			<cylinder>
 				<name>column</name>
-				<center>0</center>
-				<center>0</center>
-				<center>0</center>
+				<position>0</position>
+				<position>0</position>
+				<position>0</position>
 				<radius>1</radius>
 				<height>10</height>
 			</cylinder>
@@ -132,36 +132,36 @@
 		<shapes>
 			<cylinder>
 				<name>lens</name>
-				<center>-8</center>
-				<center>0</center>
-				<center>0</center>
+				<position>-8</position>
+				<position>0</position>
+				<position>0</position>
 				<radius>5</radius>
 				<height>0.5</height>
-				<rotation>90</rotation>
-				<rotation>0</rotation>
-				<rotation>0</rotation>
+				<facing>90</facing>
+				<facing>0</facing>
+				<facing>0</facing>
 			</cylinder>
 			<cylinder>
 				<name>lens</name>
-				<center>8</center>
-				<center>0</center>
-				<center>0</center>
+				<position>8</position>
+				<position>0</position>
+				<position>0</position>
 				<radius>5</radius>
 				<height>0.5</height>
-				<rotation>90</rotation>
-				<rotation>0</rotation>
-				<rotation>0</rotation>
+				<facing>90</facing>
+				<facing>0</facing>
+				<facing>0</facing>
 			</cylinder>
 			<cylinder>
 				<name>bridge</name>
-				<center>0</center>
-				<center>0</center>
-				<center>0</center>
+				<position>0</position>
+				<position>0</position>
+				<position>0</position>
 				<radius>1</radius>
 				<height>6</height>
-				<rotation>0</rotation>
-				<rotation>0</rotation>
-				<rotation>90</rotation>
+				<facing>0</facing>
+				<facing>0</facing>
+				<facing>90</facing>
 			</cylinder>
 		</shapes>
 	</element>

@@ -5,8 +5,8 @@ public class VirtualCylinder implements VirtualShape
 {
 	private float radius;
 	private float height;
-	private float[] center;
-	private float[] rotation; //in quaternions
+	private float[] position;
+	private float[] facing; //in quaternions
 
 	public VirtualCylinder(Node _info)
 	{
@@ -17,33 +17,31 @@ public class VirtualCylinder implements VirtualShape
 		Element _height = (Element) info.getElementsByTagName("height").item(0);
 		height = Float.parseFloat(_height.getTextContent());
 
-		NodeList centerNodes = info.getElementsByTagName("center");
-		center = new float[centerNodes.getLength()];
-		for(int i = center.length-1; i>=0; i--)
+		NodeList positionNodes = info.getElementsByTagName("position");
+		position = new float[positionNodes.getLength()];
+		for(int i = position.length-1; i>=0; i--)
 		{
-			center[i] = Float.parseFloat(centerNodes.item(i).getTextContent());
+			position[i] = Float.parseFloat(positionNodes.item(i).getTextContent());
 		}
 
-		NodeList rotationNodes = info.getElementsByTagName("rotation");
-		float[] rotEuler = new float[rotationNodes.getLength()]; //construct an array of Euler rotations
+		NodeList facingNodes = info.getElementsByTagName("facing");
+		float[] rotEuler = new float[facingNodes.getLength()]; //construct an array of Euler facings
 		for(int i = rotEuler.length-1; i>=0; i--)
 		{
-			rotEuler[i] = Float.parseFloat(rotationNodes.item(i).getTextContent());
+			rotEuler[i] = Float.parseFloat(facingNodes.item(i).getTextContent());
 			rotEuler[i] = (float)Math.toRadians(rotEuler[i]); //change to Radians. We like radians.
 		}
-		if(rotEuler.length != 0)
-		{
-			rotation = Quaternions.getQuatFromEuler(rotEuler); //set the rotation to be in Quaternions
-		}
+		if(rotEuler.length == 3)
+			facing = Quaternions.getQuatFromEuler(rotEuler); //set the facing to be in Quaternions
 		else
-			rotation = new float[] {0,0,0,1}; //set to a unit
+			facing = Constants.DEFAULT_FACING; //set to a unit
 	}
 
-	public VirtualCylinder(float _radius, float _height, float[] _center)
+	public VirtualCylinder(float _radius, float _height, float[] _position)
 	{
 		radius = _radius;
 		height = _height;
-		center = _center;
+		position = _position;
 	}
 
 	public float getRadius()
@@ -56,26 +54,26 @@ public class VirtualCylinder implements VirtualShape
 		return height;
 	}
 	
-	public float[] getCenter()
+	public float[] getPosition()
 	{
-		return center;
+		return position;
 	}
 
-	public float[] getRotation()
+	public float[] getFacing()
 	{
-		return rotation;
+		return facing;
 	}
 
 	public float[][] getMinMax()
 	{
-		float[][] tmp = new float[center.length][2];
+		float[][] tmp = new float[position.length][2];
 		
-		tmp[Constants.X][Constants.MIN] = center[Constants.X]-radius;
-		tmp[Constants.X][Constants.MAX] = center[Constants.X]+radius;
-		tmp[Constants.Y][Constants.MIN] = center[Constants.Y]-radius;
-		tmp[Constants.Y][Constants.MIN] = center[Constants.Y]+radius;
-		tmp[Constants.Z][Constants.MAX] = center[Constants.Z]-height/2;
-		tmp[Constants.Z][Constants.MAX] = center[Constants.Z]+height/2;
+		tmp[Constants.X][Constants.MIN] = position[Constants.X]-radius;
+		tmp[Constants.X][Constants.MAX] = position[Constants.X]+radius;
+		tmp[Constants.Y][Constants.MIN] = position[Constants.Y]-radius;
+		tmp[Constants.Y][Constants.MIN] = position[Constants.Y]+radius;
+		tmp[Constants.Z][Constants.MAX] = position[Constants.Z]-height/2;
+		tmp[Constants.Z][Constants.MAX] = position[Constants.Z]+height/2;
 
 		return( tmp );
 	}

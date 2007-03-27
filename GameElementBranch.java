@@ -52,7 +52,7 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		
 		for(VirtualShape s : e.shapes) //run through the shapes!
 		{
-			Transform3D local = new Transform3D(new Quat4f(s.getRotation()), new Vector3f(s.getCenter()),1); //the local coordinates for the shape
+			Transform3D local = new Transform3D(new Quat4f(s.getFacing()), new Vector3f(s.getPosition()),1); //the local coordinates for the shape
 			TransformGroup localg = new TransformGroup(local);
 			
 			Node p; //the shape to add--Node so we can have all kinds of geometry

@@ -40,11 +40,12 @@ public class WorldFactory
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc;
 			Element element, attributesElement, newAttribute;
-			NodeList elements, positionNodes, attributesNodes;
+			NodeList elements, positionNodes, facingNodes, attributesNodes;
 			Node tmpNode;
 			String attributeType;
 			GameElement newElement;
 			float[] position;
+			float[] facing;
 			int i;
 			
 			for(File file : files)
@@ -56,6 +57,7 @@ public class WorldFactory
 					element = (Element) elements.item(i);
 
 					newElement = ef.getGameElement(element.getAttribute("type"));
+					newElement.id(i);					
 
 					positionNodes = element.getElementsByTagName("position");
 					position = new float[positionNodes.getLength()];
@@ -65,6 +67,20 @@ public class WorldFactory
 					}
 					newElement.setPosition(position);
 					newElement.id(i);
+					
+					facingNodes = element.getElementsByTagName("facing");
+					float[] facingEuler = new float[facingNodes.getLength()];
+					for(int f = facingEuler.length-1; f>=0; f--)
+					{
+						facingEuler[f] = Float.parseFloat(facingNodes.item(f).getTextContent());
+						facingEuler[f] = (float)Math.toRadians(facingEuler[f]); //change to Radians. We like radians.
+					}
+					if(facingEuler.length == 3) //only sets rotation in 3D atm
+						facing = Quaternions.getQuatFromEuler(facingEuler); //set the rotation to be in Quaternions
+					else
+						facing = Constants.DEFAULT_FACING; //set to the default unit
+					newElement.setFacing(facing);
+					
 					attributesElement = (Element) element.getElementsByTagName("attributes").item(0);
 
 					// grab all of the children of attributesElement

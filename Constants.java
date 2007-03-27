@@ -27,7 +27,7 @@ public class Constants
 	public static final String WORLD_EXTENSION = "ccw";
 	public static final float[] DEFAULT_POSITION = {0,0,0};
 	public static final float[] DEFAULT_FACING = {0,0,0,1}; //in Quaternions!
-	public static final float[] DEFAULT_SCALE = {0,0,0};
+	public static final float[] DEFAULT_SCALE = {1,1,1};
 	public static final float[] DEFAULT_BOUNDS = {1.0f, 1.0f, 1.0f}; //the half-dimensions of a default bounding box in 3D
 
 	// IDs for actions that the World understands
