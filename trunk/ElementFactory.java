@@ -58,21 +58,9 @@ public class ElementFactory
 				{
 					element = (Element) elements.item(i);
 
+					//should we change these somehow?
 					position = Constants.DEFAULT_POSITION;
-
-					facingNodes = element.getElementsByTagName("facing");
-					if(facingNodes.getLength() == 0)
-					{
-						facing = Constants.DEFAULT_FACING;
-					}
-					else
-					{
-						facing = new float[facingNodes.getLength()];
-						for(int p = facing.length-1; p>=0; p--)
-						{
-							facing[p] = Float.parseFloat(facingNodes.item(p).getTextContent());
-						}
-					}					
+					facing = Constants.DEFAULT_FACING;
 					
 					boundsNodes = element.getElementsByTagName("bounds");
 					if(boundsNodes.getLength() == 0)

@@ -2,6 +2,6 @@ public interface VirtualShape
 {
 	public float[][] getMinMax();
 	public void scale( double[] _factors );
-	public float[] getCenter();
-	public float[] getRotation();
+	public float[] getPosition();
+	public float[] getFacing();
 }
