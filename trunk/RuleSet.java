@@ -19,7 +19,7 @@ public class RuleSet
 		oldRules = temp;
 	}
 
-	public Rule[] getRules(String[] needles)
+	public Rule[] getRules(int[] needles)
 	{
 		String ruleKey;
 		Rule[] rules = new Rule[Constants.DEFAULT_RULE_ARRAY_SIZE];
@@ -28,14 +28,22 @@ public class RuleSet
 		for(int i = (int) Math.pow(2,(needles.length))-1; i >= 0; i--)
 		{
 			ruleKey = "";
-			for( int j = needles.length-1; j >= 0; j--)
+			int j;
+			for( j = needles.length-1; j >= 0; j--)
 			{
 				if(((i >>> j ) & 1) == 1)
 				{
+					if(needles[j] == 0)
+						break;
 					ruleKey += needles[j];
 				}
 				ruleKey += "_";
 			}
+			if( j != -1 )
+				continue;
+
+			System.out.println(ruleKey);
+
 			newRules = haystack.get(ruleKey);
 			if(newRules == null) continue;
 			if(newRules.length+numRules > rules.length)

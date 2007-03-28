@@ -39,7 +39,6 @@ public class Representation2D extends JPanel implements Representation
 		g.setColor(Color.WHITE);
 		g.fillRect(0,0,this.getWidth(),this.getHeight());
 
-		
 		GameElement e=first;
 		int[][] tmpPoints = e.getAbsoluteCoordinates();
 		g.setColor(Color.BLACK);
