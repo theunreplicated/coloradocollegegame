@@ -69,15 +69,17 @@ public class WorldFactory
 					newElement.id(i);
 					
 					facingNodes = element.getElementsByTagName("facing");
-					float[] facingEuler = new float[facingNodes.getLength()];
-					for(int f = facingEuler.length-1; f>=0; f--)
+					if(facingNodes.getLength() == 3)
 					{
-						facingEuler[f] = Float.parseFloat(facingNodes.item(f).getTextContent());
-						facingEuler[f] = (float)Math.toRadians(facingEuler[f]); //change to Radians. We like radians.
-					}
-					if(facingEuler.length == 3) //only sets rotation in 3D atm
+						float[] facingEuler = new float[3];
+						for(int f = facingEuler.length-1; f>=0; f--)
+						{
+							facingEuler[f] = Float.parseFloat(facingNodes.item(f).getTextContent());
+							facingEuler[f] = (float)Math.toRadians(facingEuler[f]); //change to Radians. We like radians.
+						}
 						facing = Quaternions.getQuatFromEuler(facingEuler); //set the rotation to be in Quaternions
-					else
+					}
+					else //if we didn't have a 3D rotation specified
 						facing = Constants.DEFAULT_FACING; //set to the default unit
 					newElement.setFacing(facing);
 					
