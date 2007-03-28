@@ -40,7 +40,7 @@ public class ClientIO implements IO
 			myWorld.setIO(this);
 			myWorld.addElement(new Object[] {
 													id,
-													3,
+													"face",
 													new float[] {
 														Constants.INITIAL_X,
 														Constants.INITIAL_Y,
@@ -54,7 +54,7 @@ public class ClientIO implements IO
 			this.send(new Object[] {
 									Constants.ADD_PLAYER,
 									id,
-									3,
+									"face",
 									new float[] {
 										Constants.INITIAL_X,
 										Constants.INITIAL_Y,

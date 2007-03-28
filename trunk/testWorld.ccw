@@ -4,7 +4,6 @@
 		<position>5</position>
 		<position>7.5</position>
 		<attributes>
-			<friendly type="String">yes</friendly>
 		</attributes>
 	</element>
 	<element type="big pillar">

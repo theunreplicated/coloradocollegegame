@@ -170,7 +170,7 @@ public class ElementFactory
 	{
 		return(defaultElementKeys[_type]);
 	}
-	
+
 	private class EGFileFilter implements FileFilter
 	{
 		private String ext;
