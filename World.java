@@ -19,6 +19,11 @@ public class World
 	{
 		myIO = _io;
 	}
+
+	public HashMap<Integer,GameElement> getElementsHash()
+	{
+		return elements;
+	}
 	
 	public GameElement[] getElements()
 	{

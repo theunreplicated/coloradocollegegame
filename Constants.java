@@ -79,6 +79,7 @@ public class Constants
 
 	// resolver stuff
 	public static final short DEFAULT_RULE_ARRAY_SIZE = 20;
+	public static final short SENTENCE_LENGTH = 4;
 	
 	public static byte[] toByteArray(Object _message)
 	{
