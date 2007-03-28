@@ -112,7 +112,15 @@ public class World
 	public GameElement addElement(Object[] _message, int _start)
 	{
 		int _id = ((Integer) _message[_start++]).intValue();
-		int _type = ((Integer) _message[_start++]).intValue();
+		int _type;
+		if(_message[_start] instanceof String)
+		{
+			_type = ef.getType((String) _message[_start++]);
+		}
+		else
+		{
+			_type = ((Integer) _message[_start++]).intValue();
+		}
 		float[] _pos = (float[]) _message[_start++];
 		
 		GameElement newElement = ef.getGameElement(_type);

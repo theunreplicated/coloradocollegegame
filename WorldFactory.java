@@ -82,26 +82,29 @@ public class WorldFactory
 					newElement.setFacing(facing);
 					
 					attributesElement = (Element) element.getElementsByTagName("attributes").item(0);
-
-					// grab all of the children of attributesElement
-					attributesNodes = attributesElement.getChildNodes();
-
-					for(int a = attributesNodes.getLength()-1; a>=0; a--)
+					if(attributesElement != null)
 					{
-						tmpNode = attributesNodes.item(a);
-						if(tmpNode.getNodeType() != Node.ELEMENT_NODE) continue;
-						newAttribute = (Element) tmpNode;
-						attributeType = newAttribute.getAttribute("type");
-						if(attributeType.equalsIgnoreCase("String"))
+						// grab all of the children of attributesElement
+						attributesNodes = attributesElement.getChildNodes();
+
+						for(int a = attributesNodes.getLength()-1; a>=0; a--)
 						{
-							newElement.attribute(newAttribute.getTagName(), newAttribute.getTextContent());
+							tmpNode = attributesNodes.item(a);
+							if(tmpNode.getNodeType() != Node.ELEMENT_NODE) continue;
+							newAttribute = (Element) tmpNode;
+							attributeType = newAttribute.getAttribute("type");
+							if(attributeType.equalsIgnoreCase("String"))
+							{
+								newElement.attribute(newAttribute.getTagName(), newAttribute.getTextContent());
+							}
+							else if(attributeType.equalsIgnoreCase("int"))
+							{
+								newElement.attribute(newAttribute.getTagName(), Integer.parseInt(newAttribute.getTextContent()));
+							}
+							// &c.
 						}
-						else if(attributeType.equalsIgnoreCase("int"))
-						{
-							newElement.attribute(newAttribute.getTagName(), Integer.parseInt(newAttribute.getTextContent()));
-						}
-						// &c.
 					}
+					
 					// add element to World
 					w.addElement(newElement);
 				}
