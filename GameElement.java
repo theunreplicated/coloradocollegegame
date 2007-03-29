@@ -72,14 +72,13 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 
 	public synchronized Object[] getInfoArray()
 	{
-		return new Object[] {
-								typeId,
-								new float[] {
-									position[X],
-									position[Y],
-									position[Z]
-								}
-							};
+		return new Object[] {	typeId,
+					new float[] 	{
+						position[X],
+						position[Y],
+						position[Z]
+							}
+					};
 	}
 
 	public synchronized void setAttributes(HashMap _attributes)
@@ -102,8 +101,6 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		attributes.put(_key,_value);
 	}
 
-	/* I'm thinking we can probably get rid of the individual dimension calls and just have
-	   everything work with vectors */
 
 	/************* 
 	 * Accessors *
@@ -160,12 +157,6 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		return position;
 	}	
 
-	//returns the specified dimension of the position
-	public synchronized float getPosition(int dim)
-	{
-		return position[dim];
-	}
-
 	public synchronized float[] getFacing()
 	{
 		return facing;
@@ -175,17 +166,12 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	{
 		return boundingBox;
 	}
+
 	
 	/************ 
 	 * Mutators *
 	 ************/
 
-	//changes position in the specified dimension by the specified value
-/*	public void nudge(int _dim, float _value)
-	{
-		position[_dim] += _value;
-	}
-*/
 	//changes position by a vector
 	public synchronized void nudge( float[] delta )
 	{
@@ -199,13 +185,6 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		for( int i = position.length-1 ; i >= 0; i--)
 			position[i] = _position[i];
 	}
-
-	//sets the position in the specified dimension to the specified value
-/*	public void setPosition(int _dim, float _value)
-	{
-		position[_dim] = _value;
-	}
-*/	
 
 	//rotate by the specified Quaternion
 	public synchronized void rotate(float[] q)
@@ -228,7 +207,6 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	 * Collision Detection *
 	 ***********************/	
 
-
 	//this method will run a collision detection tree using other collision methods.
 	public synchronized boolean isColliding(GameElement _element)
 	{
@@ -240,10 +218,18 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 
 	}
 
-	//method is currently empty.
+	/* I'll get to it eventually. Shape-level collisions are not exactly high-priority */
+	//What are we checking? Is someone else's shape collides with us? If our shapes collide with somene else?
+	// If our shapes collide with someone else's?
 	public synchronized String isCollidingShape(GameElement _element) //why are you returning a String?
 	{
-		/* I'll get to it eventually. Shape-level collisions are not exactly high-priority */
+		//for each shape in me
+			//check each shape in you
+				//get relative position/rotation
+				//use VectorUtils to check OBB collisions
+				
+				//if we have a collisions--return all? return String? what?
+		
 		return null;
 	}
 

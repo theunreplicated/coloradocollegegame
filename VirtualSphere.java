@@ -6,6 +6,7 @@ public class VirtualSphere implements VirtualShape
 	private float radius;
 	private float[] position;
 	private float[] facing; //in quaternions
+	private float[] boundingBox;
 
 	public VirtualSphere(Node _info)
 	{
@@ -30,13 +31,15 @@ public class VirtualSphere implements VirtualShape
 			facing = Quaternions.getQuatFromEuler(rotEuler); //set the facing to be in Quaternions
 		else
 			facing = Constants.DEFAULT_FACING; //set to a unit
-	}
 
+		boundingBox = new float[] {radius, radius, radius};
+	}
 
 	public VirtualSphere(float _radius, float[] _position)
 	{
 		radius = _radius;
 		position = _position;
+		boundingBox = new float[] {radius, radius, radius};
 	}
 
 	public float getRadius()
@@ -54,18 +57,11 @@ public class VirtualSphere implements VirtualShape
 		return facing;
 	}
 
-	public float[][] getMinMax()
+	public float[] getBoundingBox()
 	{
-		float[][] tmp = new float[position.length][2];
-		
-		for( int i = 0; i < tmp.length; i++)
-		{
-			tmp[i][Constants.MIN] = position[i]-radius;
-			tmp[i][Constants.MAX] = position[i]+radius;
-		}
-
-		return( tmp );
+		return boundingBox;
 	}
+
 
 	public void scale( double[] factors )
 	{

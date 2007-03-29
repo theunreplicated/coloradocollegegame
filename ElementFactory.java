@@ -39,8 +39,10 @@ public class ElementFactory
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc;
-			Element element, name, plural, shape;
-			NodeList elements, spheres, cylinders, boxes, cones, facingNodes, boundsNodes;
+			Element element, name, plural, shape, newAttribute, attributesElement;
+			NodeList elements, spheres, cylinders, boxes, cones, kml, facingNodes, boundsNodes, attributesNodes;
+			Node tmpNode;
+			String attributeType;
 			VirtualShape[] shapes;
 			int i, j, k;
 			float[] position;
@@ -58,26 +60,38 @@ public class ElementFactory
 				{
 					element = (Element) elements.item(i);
 
-					//should we change these somehow?
 					position = Constants.DEFAULT_POSITION;
 					facing = Constants.DEFAULT_FACING;
 					
-					boundsNodes = element.getElementsByTagName("bounds");
-					if(boundsNodes.getLength() == 0)
-					{
-						bounds = Constants.DEFAULT_BOUNDS;
-					}
-					else
-					{
-						bounds = new float[boundsNodes.getLength()];
-						for(int p = bounds.length-1; p>=0; p--)
-						{
-							bounds[p] = Float.parseFloat(boundsNodes.item(p).getTextContent());
-						}
-					}					
-					
 					attributes = new HashMap<String, Object>();
+					attributesElement = (Element) element.getElementsByTagName("attributes").item(0);
+					if(attributesElement != null)
+					{
+						// grab all of the children of attributesElement
+						attributesNodes = attributesElement.getChildNodes();
 
+						for(int a = attributesNodes.getLength()-1; a>=0; a--)
+						{
+							tmpNode = attributesNodes.item(a);
+							if(tmpNode.getNodeType() != Node.ELEMENT_NODE) continue;
+							newAttribute = (Element) tmpNode;
+							attributeType = newAttribute.getAttribute("type");
+							if(attributeType.equalsIgnoreCase("String"))
+							{
+								attributes.put(newAttribute.getTagName(), newAttribute.getTextContent());
+							}
+							else if(attributeType.equalsIgnoreCase("int"))
+							{
+								attributes.put(newAttribute.getTagName(), Integer.parseInt(newAttribute.getTextContent()));
+							}
+							else if(attributeType.equalsIgnoreCase("hex")) //for 32bit hexadecimal
+							{
+								attributes.put(newAttribute.getTagName(), (int)Long.parseLong(newAttribute.getTextContent(),16));	
+							}
+							// &c.
+						}
+					}
+					
 					name = (Element) element.getElementsByTagName("name").item(0);
 					plural = (Element) element.getElementsByTagName("plural").item(0);
 					shape = (Element) element.getElementsByTagName("shapes").item(0);
@@ -85,6 +99,7 @@ public class ElementFactory
 					cylinders = shape.getElementsByTagName("cylinder");
 					boxes = shape.getElementsByTagName("box");
 					cones = shape.getElementsByTagName("cone");
+					kml = shape.getElementsByTagName("kml");
 					shapes = new VirtualShape[spheres.getLength() + cylinders.getLength() + boxes.getLength() + cones.getLength()];
 					j = shapes.length-1;
 
@@ -110,29 +125,64 @@ public class ElementFactory
 					for( ; j >= 0 && k >= 0; j--, k--)
 					{
 						shapes[j] = new VirtualSphere(spheres.item(k));
+
+					}
+					
+					//will probably have to do more to get stuff out of kmz
+					k = kml.getLength()-1;
+					for( ; j >= 0 && k >= 0; j--, k--)
+					{
+						shapes[j] = new VirtualKML(kml.item(k));
 					}
 
-					minMax = shapes[shapes.length-1].getMinMax();
-					for(j = shapes.length-2; j >= 0; j--)
+					//determine bounds
+					boundsNodes = element.getElementsByTagName("bounds");
+					if(boundsNodes.getLength() == 0) //if bounds aren't specified, create our own out of the shapes
 					{
-						tempMinMax = shapes[j].getMinMax();
-						for(k = tempMinMax.length-1; k >= 0; k--)
+						float[] max = new float[] {0,0,0}; //the lengths of our maximal AABB
+						float[][] corners = new float[8][3]; //an array for the corners of a shape
+						float[] sbb; //for iteration
+						
+						for(int s=0; s<shapes.length; s++) //run through all the shapes
 						{
-							if(minMax[k][Constants.MIN] < tempMinMax[k][Constants.MIN])
+							sbb = shapes[s].getBoundingBox(); //fetch the boundingBox once
+							//construct the corners of the AABB for the shape
+							corners[0] = new float[] { sbb[0], sbb[1], sbb[2]}; //construct the corners of the AABB for the shape
+							corners[1] = new float[] { sbb[0], sbb[1],-sbb[2]};
+							corners[2] = new float[] {-sbb[0], sbb[1],-sbb[2]};
+							corners[3] = new float[] {-sbb[0], sbb[1], sbb[2]};
+							corners[4] = new float[] { sbb[0],-sbb[1], sbb[2]};
+							corners[5] = new float[] { sbb[0],-sbb[1],-sbb[2]};
+							corners[6] = new float[] {-sbb[0],-sbb[1],-sbb[2]};
+							corners[7] = new float[] {-sbb[0],-sbb[1], sbb[2]};
+							Quaternions.rotatePoints(corners, shapes[s].getFacing()); //rotate the corners into an OBB						
+							VectorUtils.add(corners,shapes[s].getPosition()); //move the OBB to the shape's position
+
+							for(int c=0; c<corners.length; c++) //run through the corners
 							{
-								minMax[k][Constants.MIN] = tempMinMax[k][Constants.MIN];
-							}
-							if(minMax[k][Constants.MAX] > tempMinMax[k][Constants.MAX])
-							{
-								minMax[k][Constants.MAX] = tempMinMax[k][Constants.MAX];
+								//if abs of any coordinate is outside current bounds, increase the bounds
+								if(Math.abs(corners[c][0]) > max[0])
+									max[0] = Math.abs(corners[c][0]);
+								if(Math.abs(corners[c][1]) > max[1])
+									max[1] = Math.abs(corners[c][1]);
+								if(Math.abs(corners[c][2]) > max[2])
+									max[2] = Math.abs(corners[c][2]);
 							}
 						}
+						
+						bounds = max; //set bounds equal to whatever the max was					
 					}
-						//defaultElements.put(name.getTextContent(),
-						//	new GameElement(name.getTextContent(), position, facing, minMax, shapes, attributes));
-						defaultElements.put(name.getTextContent(),
-							new GameElement(name.getTextContent(), position, facing, bounds, shapes, attributes));
+					else //if bounds were specified, use those
+					{
+						bounds = new float[boundsNodes.getLength()];
+						for(int p = bounds.length-1; p>=0; p--)
+						{
+							bounds[p] = Float.parseFloat(boundsNodes.item(p).getTextContent());
+						}
+					}
 
+					defaultElements.put(name.getTextContent(),
+						new GameElement(name.getTextContent(), position, facing, bounds, shapes, attributes));
 				}
 			}
 			

@@ -111,21 +111,24 @@ public class VectorUtils
 		return true; //if we couldn't find a separating axis, we intersect	
 	}
 
-	//returns a string representation of the 3D vector
+	//returns a string representation of the vector (of any dimensions)
 	public static String toString(float[] v)
 	{
-		return "{"+v[X]+","+v[Y]+","+v[Z]+"}";
+		String s = "{"+ v[0];
+		for(int i=1; i<v.length; i++)
+			s += ", " + v[i];
+		return s+"}";
 	}
 	
-	//returns a string representation of the vector array, independent of length
+	//returns a string representation of a vector array, independent of length
 	public static String toString(float[][] a)
 	{
 		String s = "{" + toString(a[0]);
 		
 		for(int i=1; i<a.length; i++)
-			s += "," + toString(a[i]);
+			s += ", " + toString(a[i]);
 		
-		return s;
+		return s+"}";
 	}
 
 	//prints out the array of vectors, independent of length

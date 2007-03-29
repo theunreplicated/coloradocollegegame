@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.event.*;
+import java.awt.*;
 
 public class ClientInput implements MouseListener, KeyListener
 {
@@ -82,7 +83,18 @@ public class ClientInput implements MouseListener, KeyListener
 			case KeyEvent.VK_NUMPAD9: //spin clockwise around z
 				myIO.rotateSelf(Constants.QUAT_CLOZ);
 				break;
-		
+
+			/*attribute change testing--demonstration only*/
+			case KeyEvent.VK_R:
+				myIO.changeAttribute("color", Color.RED.getRGB());
+				break;
+			case KeyEvent.VK_G:
+				myIO.changeAttribute("color", Color.GREEN.getRGB());
+				break;
+			case KeyEvent.VK_B:
+				myIO.changeAttribute("color", Color.BLUE.getRGB());
+				break;
+			
 			default:
 				myLogger.message("You typed: " + ke.getKeyChar() + " (" + ke.getKeyCode() + ")" + "\n", false);
 

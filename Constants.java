@@ -33,6 +33,7 @@ public class Constants
 	// IDs for actions that the World understands
 	public static final int MOVE_TO = 101;
 	public static final int ROTATE_TO = 202;
+	public static final int ATTRIBUTE = 303;
 
 	// Unit vectors for cardinal movement (in 3D)
 	public static final float[] VEC_POSX = {1.0f, 0.0f, 0.0f};
