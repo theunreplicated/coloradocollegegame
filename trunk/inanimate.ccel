@@ -124,6 +124,9 @@
 				<height>10</height>
 			</cylinder>
 		</shapes>
+		<attributes>
+			<color type="hex">ffffff00</color>		
+		</attributes>
 	</element>
 
 	<element>

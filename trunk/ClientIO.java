@@ -38,28 +38,27 @@ public class ClientIO implements IO
 
 			myLogger.message("Connected as id: " + id + "\n", false);
 			myWorld.setIO(this);
-			myWorld.addElement(new Object[] {
-													id,
-													"face",
-													new float[] {
-														Constants.INITIAL_X,
-														Constants.INITIAL_Y,
-														Constants.INITIAL_Z
-													}
-												}, 0);
+			myWorld.addElement(new Object[] {	id,
+								"face",
+								new float[] {
+									Constants.INITIAL_X,
+									Constants.INITIAL_Y,
+									Constants.INITIAL_Z
+										}
+									},
+								0);
 
 			serverListener = new ServerListenerThread(servConnection, myClient, myWorld);
 			serverListener.start();
 
-			this.send(new Object[] {
-									Constants.ADD_PLAYER,
-									id,
-									"face",
-									new float[] {
-										Constants.INITIAL_X,
-										Constants.INITIAL_Y,
-										Constants.INITIAL_Z
-									}
+			this.send(new Object[] {		Constants.ADD_PLAYER,
+								id,
+								"face",
+								new float[] {
+									Constants.INITIAL_X,
+									Constants.INITIAL_Y,
+									Constants.INITIAL_Z
+										}
 								});
 		}
 		catch(IOException ioe)
@@ -89,6 +88,11 @@ public class ClientIO implements IO
 	public void rotateSelf(float[] q)
 	{
 		myWorld.rotateElement(myClient.id, q);
+	}
+
+	public void changeAttribute(String k, Object v)
+	{
+		myWorld.attributeElement(myClient.id, k, v);
 	}
 
 	public ClientInput getClientInput()

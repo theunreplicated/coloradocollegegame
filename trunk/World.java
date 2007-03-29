@@ -176,7 +176,7 @@ public class World
 		};
 		
 		myIO.send(message);
-		myLogger.message( "nudge position: " + _row + " (" + element.getPosition(0) + "," + element.getPosition(1) + "," + element.getPosition(2) + ")\n" , false );
+		myLogger.message( "nudge position: " + _row + " " + VectorUtils.toString(position)+"\n", false );
 		synchronized(first)
 		{
 			element.changed = true;
@@ -199,7 +199,7 @@ public class World
 		};
 		
 		myIO.send(message);
-		myLogger.message( "rotate facing: " + _row + " (" + facing[0] + "," + facing[1] + "," + facing[2] + "," + facing[3] + ")\n" , false );
+		myLogger.message( "rotate facing: " + _row + " " + VectorUtils.toString(facing)+"\n", false );
 		synchronized(first)
 		{
 			element.changed = true;
@@ -209,13 +209,34 @@ public class World
 		checkCollisions(); //for testing
 	}
 
+	public void attributeElement(int _row, String k, Object v)
+	{
+		GameElement element = elements.get(_row);
+		element.attribute(k, v);
+
+		Object[] message = new Object[] {
+			Constants.ATTRIBUTE,
+			_row,
+			k,
+			v
+		};
+		
+		myIO.send(message);
+		myLogger.message( "set attribute: " + _row + " " + k + " -> " + v +"\n", false );
+		synchronized(first)
+		{
+			element.changed = true;
+			first.notifyAll();
+		}
+	}	
+
 	public void setPosition( Object[] _message, int _start)
 	{
 		GameElement element = elements.get((Integer) _message[_start++]);
 		float[] _pos = (float[]) _message[_start++];
 
 		element.setPosition( _pos );
-		myLogger.message( "move position: " + element.id() + " (" + element.getPosition(0) + "," + element.getPosition(1) + "," + element.getPosition(2) + ")\n" , false );
+		myLogger.message( "move position: " + element.id() + " " + VectorUtils.toString(_pos)+"\n", false );
 		synchronized(first)
 		{
 			element.changed = true;
@@ -231,7 +252,7 @@ public class World
 		float[] _fac = (float[]) _message[_start++];
 
 		element.setFacing( _fac );
-		myLogger.message( "rotate facing: " + element.id() + " (" + _fac[0] + "," + _fac[1] + "," + _fac[2] + "," + _fac[3] + ")\n" , false );
+		myLogger.message( "rotate facing: " + element.id() + " " + VectorUtils.toString(_fac)+"\n", false );
 		synchronized(first)
 		{
 			element.changed = true;
@@ -239,6 +260,21 @@ public class World
 		}
 		
 		checkCollisions(); //for testing
+	}
+
+	public void setAttribute( Object[] _message, int _start)
+	{
+		GameElement element = elements.get((Integer) _message[_start++]);
+		String k = (String) _message[_start++];
+		Object v = _message[_start++]; 
+
+		element.attribute(k,v);
+		myLogger.message( "set attribute: " + element.id() + " " + k + " -> " + v +"\n", false );
+		synchronized(first)
+		{
+			element.changed = true;
+			first.notifyAll();
+		}
 	}
 	
 	public int parse(Object[] message)
@@ -250,6 +286,9 @@ public class World
 				break;
 			case Constants.ROTATE_TO:
 				setFacing( message, 1);
+				break;
+			case Constants.ATTRIBUTE:
+				setAttribute( message, 1);
 				break;
 			case Constants.ADD_PLAYER:
 				addElement( message, 1);

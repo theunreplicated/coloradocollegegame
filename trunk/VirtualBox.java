@@ -6,7 +6,7 @@ public class VirtualBox implements VirtualShape
 	private float[] dimensions;
 	private float[] position;
 	private float[] facing; //in quaternions
-
+	private float[] boundingBox;
 
 	public VirtualBox(Node _info)
 	{
@@ -35,13 +35,15 @@ public class VirtualBox implements VirtualShape
 			facing = Quaternions.getQuatFromEuler(rotEuler); //set the facing to be in Quaternions
 		else
 			facing = Constants.DEFAULT_FACING; //set to a unit
-	}
 
+		boundingBox = new float[] {0.5f*dimensions[0], 0.5f*dimensions[1], 0.5f*dimensions[2]}; //get the half-dimensions
+	}
 
 	public VirtualBox(float[] _dimensions, float[] _position)
 	{
 		dimensions = _dimensions;
 		position = _position;
+		boundingBox = new float[] {0.5f*dimensions[0], 0.5f*dimensions[1], 0.5f*dimensions[2]}; //get the half-dimensions
 	}
 
 	public float getDimX()
@@ -69,18 +71,11 @@ public class VirtualBox implements VirtualShape
 		return facing;
 	}
 
-	public float[][] getMinMax()
+	public float[] getBoundingBox()
 	{
-		float[][] tmp = new float[position.length][2];
-		
-		for( int i = 0; i < tmp.length; i++)
-		{
-			tmp[i][Constants.MIN] = position[i]-dimensions[i]/2;
-			tmp[i][Constants.MAX] = position[i]+dimensions[i]/2;
-		}
-
-		return( tmp );
+		return boundingBox;
 	}
+
 
 	public void scale( double[] factors )
 	{

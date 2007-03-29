@@ -7,6 +7,7 @@ public class VirtualCone implements VirtualShape
 	private float height;
 	private float[] position;
 	private float[] facing; //in quaternions
+	private float[] boundingBox;
 
 	public VirtualCone(Node _info)
 	{
@@ -35,14 +36,16 @@ public class VirtualCone implements VirtualShape
 			facing = Quaternions.getQuatFromEuler(rotEuler); //set the facing to be in Quaternions
 		else
 			facing = Constants.DEFAULT_FACING; //set to a unit
+	
+		boundingBox = new float[] {radius, 0.5f*height, radius};
 	}
-
 
 	public VirtualCone(float _radius, float _height, float[] _position)
 	{
 		radius = _radius;
 		height = _height;
 		position = _position;
+		boundingBox = new float[] {radius, 0.5f*height, radius};
 	}
 
 	public float getRadius()
@@ -65,19 +68,11 @@ public class VirtualCone implements VirtualShape
 		return facing;
 	}
 
-	public float[][] getMinMax()
+	public float[] getBoundingBox()
 	{
-		float[][] tmp = new float[position.length][2];
-		
-		tmp[Constants.X][Constants.MIN] = position[Constants.X]-radius;
-		tmp[Constants.X][Constants.MAX] = position[Constants.X]+radius;
-		tmp[Constants.Y][Constants.MIN] = position[Constants.Y]-radius;
-		tmp[Constants.Y][Constants.MIN] = position[Constants.Y]+radius;
-		tmp[Constants.Z][Constants.MAX] = position[Constants.Z]-height/2;
-		tmp[Constants.Z][Constants.MAX] = position[Constants.Z]+height/2;
-
-		return( tmp );
+		return boundingBox;
 	}
+
 
 	public void scale( double[] factors )
 	{

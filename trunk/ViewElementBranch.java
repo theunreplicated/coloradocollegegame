@@ -5,6 +5,7 @@ import com.sun.j3d.utils.universe.*;
 import com.sun.j3d.utils.geometry.*;
 import javax.media.j3d.*;
 import javax.vecmath.*;
+import java.awt.Color;
 
 /***
  A type of ElementBranch that defines a J3D branch for a view--a camera.
@@ -103,5 +104,10 @@ public class ViewElementBranch implements ElementBranch
 			avatar.setTransform(p,f);
 	}
 
+	public void setMaterial(Color c)
+	{
+		if(STATIC_VIEW)
+			avatar.setMaterial(c);	
+	}
 
 }

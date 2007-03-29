@@ -4,6 +4,7 @@
 import com.sun.j3d.utils.geometry.*;
 import javax.media.j3d.*;
 import javax.vecmath.*;
+import java.awt.Color;
 
 /***
  A class that represents a GameElement as a branch of the Java3D tree.
@@ -30,23 +31,8 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		coord.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE); //allow us to change the transformation at runtime
 		broot.addChild(coord); //add the transformation to the root.
 		
-		//setting an appearance so our objects look like objects.
-		//This stuff should probably be taken directly from the Element.
-		//Or adjust the appearance based on Shape inside the loop
-		appear = new Appearance(); //will need to specify how to get this appearance from the Element
-		Material mat = new Material();
-		if(e.attribute("isClient") != null) //make client a different color!
-		{
-			mat.setDiffuseColor(1.0f,0.0f,0.0f);
-		}
-		else
-		{
-			mat.setDiffuseColor(0.0f,0.0f,1.0f);
-		}
-		mat.setSpecularColor(1.0f,1.0f,1.0f);
-		mat.setShininess(64.0f); //I swear to god: "shininess - the material's shininess in the range [1.0, 128.0] with 1.0 being not shiny and 128.0 being very shiny."
-		appear.setMaterial(mat);
-
+		appear = createAppearance(e);
+		
 		BranchGroup sroot = new BranchGroup(); //a root for the shapes. In case we want to do other stuff to them (if it's redundant then J3D will get rid of it anyway)
 		coord.addChild(sroot); //add sroot to the tree
 		
@@ -97,6 +83,30 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		broot.compile(); //let J3D optimize the branch
 	}//constructor
 
+	//defines the appearance node based on the given GameElement
+	public Appearance createAppearance(GameElement e)
+	{
+		Appearance a = new Appearance(); //will need to specify how to get this appearance from the Element
+		a.setCapability(Appearance.ALLOW_MATERIAL_READ);
+		a.setCapability(Appearance.ALLOW_MATERIAL_WRITE);
+		Material mat = new Material();
+		mat.setCapability(Material.ALLOW_COMPONENT_WRITE);
+		a.setMaterial(mat);
+
+		//constant stuff
+		mat.setSpecularColor(1.0f,1.0f,1.0f);
+		mat.setShininess(64.0f); //I swear to god: "shininess - the material's shininess in the range [1.0, 128.0] with 1.0 being not shiny and 128.0 being very shiny."
+
+		//variable color
+		if(e.attribute("color") != null) //if a color is specified
+			mat.setDiffuseColor(new Color3f(new Color((Integer)e.attribute("color"))));
+		else //make blue by default
+			mat.setDiffuseColor(0.0f,0.0f,1.0f);
+
+		return a;	
+	}
+
+	//returns the root of this branch (so we can add it to a J3D tree)
 	public BranchGroup getBranchScene()
 	{
 		return broot;
@@ -130,6 +140,16 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		coord.setTransform(t);
 	}
 
+	//more options? maybe a more general command?
+	//Maybe have it take in an Appearance object which Rep3D can then create (so we aren't passing as much stuff around)?
+	public void setMaterial(Color c)
+	{
+		Material mat = appear.getMaterial(); //get our old settings
+		mat.setDiffuseColor(new Color3f(c)); //change the diffuse color to that specified
+		appear.setMaterial(mat); //reset our material
+	}
+
+	//maybe also draw based on shapes?
 	public Shape3D createBoundingBox(GameElement e)
 	{
 		float[] obb = e.getBoundingBox();

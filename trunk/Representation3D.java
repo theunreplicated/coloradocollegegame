@@ -22,13 +22,14 @@ public class Representation3D extends Applet implements Representation
 	
 	GameElement elementStart; //for checking the list
 	BranchGroup scene; //the root of the scene--lets us add more elements
+	Canvas3D canvas3D;
 	
 	//constructor
 	public Representation3D(Client _client)
 	{
 		setLayout(new BorderLayout()); //set the Applet's layout
 		GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration(); //how does SimpleUniverse want to draw stuff?
-		Canvas3D canvas3D = new Canvas3D(config); //make a new canvas, as SimpleUniverse likes it
+		canvas3D = new Canvas3D(config); //make a new canvas, as SimpleUniverse likes it
 		add("Center",canvas3D); //add the canvas to the Applet
 		Viewer viewer = new Viewer(canvas3D); //a Viewer to go with the canvas
 
@@ -239,6 +240,10 @@ public class Representation3D extends Applet implements Representation
 				{
 					//change branch
 					bg.setTransform(e.getPosition(),e.getFacing());
+					if(e.attribute("color") != null)
+					{
+						bg.setMaterial(new Color((Integer)e.attribute("color")));	
+					}
 				}
 				
 				e.changed = false; //mark as unchanged
@@ -247,6 +252,12 @@ public class Representation3D extends Applet implements Representation
 			e = e.next;
 		} while(e!=elementStart);
 	} //update
+
+	//fetches the canvas we're drawing this on, in case we want to embed in a different window
+	public Canvas3D getCanvas()
+	{
+		return canvas3D;	
+	}
 
 	//this looks familiar...
 	public static void main(String[] args)
