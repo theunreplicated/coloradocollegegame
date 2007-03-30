@@ -103,7 +103,11 @@ public class WorldFactory
 							{
 								newElement.attribute(newAttribute.getTagName(), Integer.parseInt(newAttribute.getTextContent()));
 							}
-							else if(attributeType.equalsIgnoreCase("hex")) //for 32bit hexadecimal
+							else if(attributeType.equalsIgnoreCase("float"))
+							{
+								newElement.attribute(newAttribute.getTagName(), Float.parseFloat(newAttribute.getTextContent()));
+							}
+							else if(attributeType.equalsIgnoreCase("hex32")) //for 32bit hexadecimal
 							{
 								newElement.attribute(newAttribute.getTagName(), (int)Long.parseLong(newAttribute.getTextContent(),16));	
 							}

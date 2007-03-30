@@ -4,7 +4,8 @@
 import com.sun.j3d.utils.geometry.*;
 import javax.media.j3d.*;
 import javax.vecmath.*;
-import java.awt.Color;
+import java.awt.*;
+import com.sun.j3d.utils.image.*;
 
 /***
  A class that represents a GameElement as a branch of the Java3D tree.
@@ -43,28 +44,33 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 			
 			Node p; //the shape to add--Node so we can have all kinds of geometry
 			
+			//set flags based on the element
+			int sflags = Primitive.GENERATE_NORMALS; //always want these for shading
+			if(e.attribute("texture") != null) //if we have a texture
+				sflags = sflags | Primitive.GENERATE_TEXTURE_COORDS; //generate texture coords
+			
 			//now see what kind of shapes we're using. 
 			//instanceof allows us to deal with extensions of the virtual primitives,
 			//  but do we want that? If not, then change to be a getClassName (or whatever)
 			if(s instanceof VirtualBox)
 			{
 				//make the primitive - convert full dimensions to half-dimensions
-				p = new Box(.5f*((VirtualBox)s).getDimX(), .5f*((VirtualBox)s).getDimY(), .5f*((VirtualBox)s).getDimZ(), Primitive.GENERATE_NORMALS, appear);
+				p = new Box(.5f*((VirtualBox)s).getDimX(), .5f*((VirtualBox)s).getDimY(), .5f*((VirtualBox)s).getDimZ(), sflags, appear);
 			}
 			else if(s instanceof VirtualSphere)
 			{
 				//make the primitive
-				p = new Sphere(((VirtualSphere)s).getRadius(), Primitive.GENERATE_NORMALS, appear);
+				p = new Sphere(((VirtualSphere)s).getRadius(), sflags, appear);
 			}
 			else if(s instanceof VirtualCylinder)
 			{
 				//make the primitive
-				p = new Cylinder(((VirtualCylinder)s).getRadius(), ((VirtualCylinder)s).getHeight(), Primitive.GENERATE_NORMALS, appear);
+				p = new Cylinder(((VirtualCylinder)s).getRadius(), ((VirtualCylinder)s).getHeight(), sflags, appear);
 			}
 			else if(s instanceof VirtualCone)
 			{
 				//make the primitive
-				p = new Cone(((VirtualCone)s).getRadius(), ((VirtualCone)s).getHeight(), Primitive.GENERATE_NORMALS, appear);
+				p = new Cone(((VirtualCone)s).getRadius(), ((VirtualCone)s).getHeight(), sflags, appear);
 			}
 			else
 			{
@@ -96,12 +102,50 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		//constant stuff
 		mat.setSpecularColor(1.0f,1.0f,1.0f);
 		mat.setShininess(64.0f); //I swear to god: "shininess - the material's shininess in the range [1.0, 128.0] with 1.0 being not shiny and 128.0 being very shiny."
+		
+		/**ATTRIBUTE VARIABLES**/
 
-		//variable color
+		//color
 		if(e.attribute("color") != null) //if a color is specified
-			mat.setDiffuseColor(new Color3f(new Color((Integer)e.attribute("color"))));
+		{
+			int c = (Integer)e.attribute("color");
+			mat.setDiffuseColor(((c>>16)&0xff)/255f, ((c>>8)&0xff)/255f, (c&0xff)/255f); //, ((c>>24)&0xff)/255f);
+
+			//System.out.println("alpha="+((c>>24)&0xff));
+		}
 		else //make blue by default
 			mat.setDiffuseColor(0.0f,0.0f,1.0f);
+		
+		//texture
+		if(e.attribute("texture") != null)
+		{
+			try
+			{
+				TextureLoader loader = new TextureLoader((String)e.attribute("texture"), new Canvas()); //make a new Canvas for an image observer (or do we want to pass something else?)
+				a.setTexture(loader.getTexture());
+					//ImageComponent2D texImage = loader.getImage(); 
+					//Texture2D texture = new Texture2D(Texture.BASE_LEVEL,Texture.RGBA,texImage.getWidth(),texImage.getHeight());
+					//texture.setImage(0,texImage); 
+					//a.setTexture(texture);
+					
+				//TextureAttributes texAttrib = new TextureAttributes();
+				//texAttrib.setTextureMode(TextureAttributes.DECAL); //blend in with specified color--do we want this?
+				//a.setTextureAttributes(texAttrib);
+			}
+			catch(Exception ex)
+			{	
+				//need better error reporting here
+				System.out.println("Failed to load texture image: "+e.attribute("texture"));
+			}
+		}
+
+		//transparency
+		if(e.attribute("transparency") != null)
+		{
+			a.setTransparencyAttributes(new TransparencyAttributes(
+							TransparencyAttributes.NICEST,
+							(Float)e.attribute("transparency")));
+		}
 
 		return a;	
 	}
@@ -140,13 +184,14 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		coord.setTransform(t);
 	}
 
-	//more options? maybe a more general command?
-	//Maybe have it take in an Appearance object which Rep3D can then create (so we aren't passing as much stuff around)?
-	public void setMaterial(Color c)
+	public Appearance getAppearance()
 	{
-		Material mat = appear.getMaterial(); //get our old settings
-		mat.setDiffuseColor(new Color3f(c)); //change the diffuse color to that specified
-		appear.setMaterial(mat); //reset our material
+		return appear;
+	}
+
+	public void setAppearance(Appearance a)
+	{
+		appear = a;
 	}
 
 	//maybe also draw based on shapes?

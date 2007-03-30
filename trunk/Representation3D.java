@@ -78,9 +78,9 @@ public class Representation3D extends Applet implements Representation
 		//now create a ViewGameElementBranch version
 		ViewElementBranch veb = new ViewElementBranch(e);
 		elementsToNodes.put(e,veb); //add it to the hashmap!
-		GameElementBranch avatar = veb.getAvatar();
-		if(avatar != null)
-			vscene.addChild(avatar.getBranchScene()); //add the branch to the root.
+//MAYBE HAVE THE AVATAR ATTACHED TO THE VIEW BRANCH? SPECIFIED IN VEB?
+		if(veb.getViewMode() != ViewElementBranch.FIRST_PERSON_VIEW) //if we're not in FPV
+			vscene.addChild(veb.getAvatar().getBranchScene()); //add the avatar to the scene graph.
 		
 		return veb.getViewingPlatform();	
 	}
@@ -105,7 +105,6 @@ public class Representation3D extends Applet implements Representation
 	
 		//Representation-level objects
 		gscene.addChild(createGrid());
-		//gscene.addChild(createPillars());
 		
 		return gscene; //return the branch
 	}
@@ -176,27 +175,6 @@ public class Representation3D extends Applet implements Representation
 		return gridShape;
 	}
 
-	//creates a Representation-level set of "pillars" to display. For testing mostly	
-	public BranchGroup createPillars()
-	{
-		BranchGroup root = new BranchGroup();
-		
-		TransformGroup bt1 = new TransformGroup(new Transform3D(new Quat4f(0,0,0,1),new Vector3f(2,0,2),1));
-		bt1.addChild(new ColorCube(.5));
-		root.addChild(bt1);
-		TransformGroup bt2 = new TransformGroup(new Transform3D(new Quat4f(0,0,0,1),new Vector3f(-2,0,2),1));
-		bt2.addChild(new ColorCube(.5));
-		root.addChild(bt2);
-		TransformGroup bt3 = new TransformGroup(new Transform3D(new Quat4f(0,0,0,1),new Vector3f(2,0,-2),1));
-		bt3.addChild(new ColorCube(.5));
-		root.addChild(bt3);
-		TransformGroup bt4 = new TransformGroup(new Transform3D(new Quat4f(0,0,0,1),new Vector3f(-2,0,-2),1));
-		bt4.addChild(new ColorCube(.5));
-		root.addChild(bt4);	
-		
-		return root;		
-	}
-
 	//an update method
 	public void update()
 	{
@@ -240,9 +218,18 @@ public class Representation3D extends Applet implements Representation
 				{
 					//change branch
 					bg.setTransform(e.getPosition(),e.getFacing());
+					
 					if(e.attribute("color") != null)
 					{
-						bg.setMaterial(new Color((Integer)e.attribute("color")));	
+						Appearance a = bg.getAppearance(); //get old appearance
+						if(a != null)
+						{
+							Material mat = a.getMaterial(); //get old material
+							int c = (Integer)e.attribute("color");
+							mat.setDiffuseColor(((c>>16)&0xff)/255f, ((c>>8)&0xff)/255f, (c&0xff)/255f); //, ((c>>24)&0xff)/255f);
+							a.setMaterial(mat); //reset our material
+							bg.setAppearance(a); //set the new appearance
+						}
 					}
 				}
 				
