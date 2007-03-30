@@ -72,6 +72,7 @@ public class Constants
 	public static final short MAX = 1;
 	public static final short RADIUS = 0;
 	public static final short HEIGHT = 1;
+	public static final String UNIQUE_GE_PREFIX = "GE_";
 
 	// graphics
 	public static final short UPDATE_PERIOD = 10;
