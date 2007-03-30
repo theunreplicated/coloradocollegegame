@@ -94,7 +94,7 @@ public class ClientInput implements MouseListener, KeyListener
 			case KeyEvent.VK_B:
 				myIO.changeAttribute("color", Color.BLUE.getRGB());
 				break;
-			
+	
 			default:
 				myLogger.message("You typed: " + ke.getKeyChar() + " (" + ke.getKeyCode() + ")" + "\n", false);
 

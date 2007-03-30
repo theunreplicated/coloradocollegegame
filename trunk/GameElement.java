@@ -1,6 +1,6 @@
 import java.io.*;
 import java.util.*;
-public class GameElement extends LinkedElement<GameElement> implements Serializable
+public class GameElement extends LinkedElement<GameElement> implements Serializable, Comparable
 { 
 	public boolean changed = true;
 	private int id;
@@ -129,6 +129,13 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	{
 	}
 
+	// The way to compare one GameElement to another is to compare their
+	// types (only used right now in the ElementFactory).
+	public int compareTo(Object _ge)
+	{
+		return(type.compareTo(((GameElement) _ge).type));
+	}
+
 	public synchronized String toString()
 	{
 		String s = "GameElement #" + id + ":\n" +
@@ -146,7 +153,10 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		while(it.hasNext())
 		{
 			entry = it.next();
-			s += "  " + entry.getKey() + ": " + entry.getValue() + "\n";
+			if(entry.getValue() instanceof GameElement) // to prevent infinite loops
+				s += "  " + entry.getKey() + ": " + Constants.UNIQUE_GE_PREFIX + ((GameElement) entry.getValue()).id + "\n";
+			else
+				s += "  " + entry.getKey() + ": " + entry.getValue() + "\n";
 		}
 		return s;
 

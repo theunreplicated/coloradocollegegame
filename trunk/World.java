@@ -218,9 +218,17 @@ public class World
 			Constants.ATTRIBUTE,
 			_row,
 			k,
-			v
+			null
 		};
 		
+		if(v instanceof GameElement)
+		{
+			message[3] = Constants.UNIQUE_GE_PREFIX+((GameElement) v).id(); 
+		}
+		else
+		{
+			message[3] = v;
+		}
 		myIO.send(message);
 		myLogger.message( "set attribute: " + _row + " " + k + " -> " + v +"\n", false );
 		synchronized(first)
@@ -268,6 +276,14 @@ public class World
 		String k = (String) _message[_start++];
 		Object v = _message[_start++]; 
 
+		if(v instanceof String)
+		{
+			if(((String) v).startsWith(Constants.UNIQUE_GE_PREFIX))
+			{
+				Integer id = Integer.parseInt(((String) v).substring(Constants.UNIQUE_GE_PREFIX.length()));
+				v = elements.get(id);
+			}
+		}
 		element.attribute(k,v);
 		myLogger.message( "set attribute: " + element.id() + " " + k + " -> " + v +"\n", false );
 		synchronized(first)

@@ -189,6 +189,7 @@ public class ElementFactory
 			// iterate through hashmap to create our array...
 			defaultElementKeys = new String[] {""};
 			defaultElementKeys = defaultElements.keySet().toArray(defaultElementKeys);
+			Arrays.sort(defaultElementKeys);
 			for(i = 0; i < defaultElementKeys.length; i++)
 			{
 				defaultElements.get(defaultElementKeys[i]).setTypeId(i);
