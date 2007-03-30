@@ -125,7 +125,9 @@
 			</cylinder>
 		</shapes>
 		<attributes>
-			<color type="hex">ffffff00</color>		
+			<color type="hex32">ffffff00</color>
+			<texture type="String">textures/smoke01.jpg</texture>	
+			<transparency type="float">0.3</transparency>
 		</attributes>
 	</element>
 
