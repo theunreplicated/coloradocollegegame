@@ -183,7 +183,14 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	 ************/
 
 	//changes position by a vector
-	public synchronized void nudge( float[] delta )
+	public synchronized void nudgeAbsolute( float[] delta )
+	{
+		for( int i = 0 ; i < position.length; i++ )
+			position[i] += delta[i];
+	}
+	
+	//changes position by a vector relatively -- JOEL FIX ME... PLEASE!!!
+	public synchronized void nudgeRelative( float[] delta )
 	{
 		for( int i = 0 ; i < position.length; i++ )
 			position[i] += delta[i];

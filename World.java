@@ -166,7 +166,7 @@ public class World
 	public void nudgeElement( int _row, float[] _dpos )
 	{
 		GameElement element = elements.get(_row);
-		element.nudge( _dpos );
+		element.nudgeRelative( _dpos );
 		float[] position = element.getPosition();
 
 		Object[] message = new Object[] {
