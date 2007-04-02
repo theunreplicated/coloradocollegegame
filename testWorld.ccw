@@ -24,6 +24,9 @@
 		<position>-7.5</position>
 		<position>5</position>
 		<position>-7.5</position>
+		<scale>2</scale>
+		<scale>2</scale>
+		<scale>2</scale>
 		<attributes>
 			<friendly type="String">yes</friendly>
 		</attributes>

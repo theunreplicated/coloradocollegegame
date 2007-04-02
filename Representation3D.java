@@ -71,18 +71,16 @@ public class Representation3D extends Applet implements Representation
 	}
 	
 	//creates a "view" or camera based on the given element
-	//this will probably need to be argument based depending on what kind of camera we want
-	//Also, this MUST be called BEFORE createSceneGraph() (I could probably make it explicit, but it doesn't seem as nice)
+	//  this will probably need to be argument based depending on what kind of camera we want
+	//  Also, this MUST be called BEFORE createSceneGraph() (I could probably make it explicit, but it doesn't seem as nice)
 	public ViewingPlatform createCamera(GameElement e, BranchGroup vscene)
 	{
-		//now create a ViewGameElementBranch version
-		ViewElementBranch veb = new ViewElementBranch(e);
+		ViewElementBranch veb = new ViewElementBranch(e); //Create the camera (effectively)
 		elementsToNodes.put(e,veb); //add it to the hashmap!
-//MAYBE HAVE THE AVATAR ATTACHED TO THE VIEW BRANCH? SPECIFIED IN VEB?
 		if(veb.getViewMode() != ViewElementBranch.FIRST_PERSON_VIEW) //if we're not in FPV
-			vscene.addChild(veb.getAvatar().getBranchScene()); //add the avatar to the scene graph.
+			vscene.addChild(veb.getBranchScene()); //add the avatar to the scene graph.
 		
-		return veb.getViewingPlatform();	
+		return veb.getViewingPlatform();
 	}
 
 	//create the bulk of the Java3D tree
@@ -218,19 +216,6 @@ public class Representation3D extends Applet implements Representation
 				{
 					//change branch
 					bg.setTransform(e.getPosition(),e.getFacing());
-					
-					if(e.attribute("color") != null)
-					{
-						Appearance a = bg.getAppearance(); //get old appearance
-						if(a != null)
-						{
-							Material mat = a.getMaterial(); //get old material
-							int c = (Integer)e.attribute("color");
-							mat.setDiffuseColor(((c>>16)&0xff)/255f, ((c>>8)&0xff)/255f, (c&0xff)/255f); //, ((c>>24)&0xff)/255f);
-							a.setMaterial(mat); //reset our material
-							bg.setAppearance(a); //set the new appearance
-						}
-					}
 				}
 				
 				e.changed = false; //mark as unchanged

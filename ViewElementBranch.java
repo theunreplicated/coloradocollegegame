@@ -17,15 +17,15 @@ import javax.vecmath.*;
 
 public class ViewElementBranch implements ElementBranch
 {
-	public static final short FIRST_PERSON_VIEW = 0;
-	public static final short FOLLOWING_VIEW = 1;
-	public static final short STATIC_VIEW = 2;
+	public static final int FIRST_PERSON_VIEW = 0;
+	public static final int FOLLOWING_VIEW = 1;
+	public static final int STATIC_VIEW = 2;
 
 	//member variables
 	private ViewingPlatform camera;
 	private TransformGroup coord; //transformed coordinates for this branch
 	private GameElementBranch avatar; //if we want one
-	private short view = 0;
+	private int viewMode = 0;
 
 	//constructor
 	public ViewElementBranch(GameElement e)
@@ -36,11 +36,11 @@ public class ViewElementBranch implements ElementBranch
 		coord.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE); //allow us to change the transformation at runtime
 
 		Transform3D posi;
-		if(view == FIRST_PERSON_VIEW)
+		if(viewMode == FIRST_PERSON_VIEW)
 		{
 			posi = new Transform3D(new Quat4f(e.getFacing()), new Vector3f(e.getPosition()), 1); //set us to the element's transform
 		}
-		else if(view == FOLLOWING_VIEW)
+		else if(viewMode == FOLLOWING_VIEW)
 		{
 			//fill this in (initialization)
 			
@@ -63,9 +63,9 @@ public class ViewElementBranch implements ElementBranch
 		return camera;
 	}
 
-	public short getViewMode()
+	public int getViewMode()
 	{
-		return view;
+		return viewMode;
 	}
 	
 	public GameElementBranch getAvatar()
@@ -73,7 +73,7 @@ public class ViewElementBranch implements ElementBranch
 		return avatar;	
 	}
 
-	public void changeView(short to)
+	public void changeView(int to)
 	{
 		//Implement this method!
 		System.out.println("Change view to "+to); 
@@ -81,14 +81,14 @@ public class ViewElementBranch implements ElementBranch
 	
 	public void setTranslation(float[] p)
 	{
-		if(view == FIRST_PERSON_VIEW)
+		if(viewMode == FIRST_PERSON_VIEW)
 		{
 			Transform3D t = new Transform3D(); //a new Transform
 			coord.getTransform(t); //fill the transform with our current settings
 			t.setTranslation(new Vector3f(p)); //set the new translation
 			coord.setTransform(t); //set as our new state
 		}
-		else if(view == FOLLOWING_VIEW)
+		else if(viewMode == FOLLOWING_VIEW)
 		{
 			//fill this in	
 		}
@@ -98,14 +98,14 @@ public class ViewElementBranch implements ElementBranch
 		
 	public void setRotation(float[] f)
 	{
-		if(view == FIRST_PERSON_VIEW)
+		if(viewMode == FIRST_PERSON_VIEW)
 		{
 			Transform3D t = new Transform3D(); //a new Transform
 			coord.getTransform(t); //fill the transform with our current settings
 			t.setRotation(new Quat4f(f)); //set our current rotation
 			coord.setTransform(t);
 		}
-		else if(view == FOLLOWING_VIEW)
+		else if(viewMode == FOLLOWING_VIEW)
 		{
 			//fill this in
 		}
@@ -115,12 +115,12 @@ public class ViewElementBranch implements ElementBranch
 	
 	public void setTransform(float[] p, float[] f)
 	{
-		if(view == FIRST_PERSON_VIEW)
+		if(viewMode == FIRST_PERSON_VIEW)
 		{
 			Transform3D t = new Transform3D(new Quat4f(f), new Vector3f(p), 1);
 			coord.setTransform(t);
 		}
-		else if(view == FOLLOWING_VIEW)
+		else if(viewMode == FOLLOWING_VIEW)
 		{
 			//fill this in
 		}
@@ -128,6 +128,11 @@ public class ViewElementBranch implements ElementBranch
 			avatar.setTransform(p,f);
 	}
 
+	/**
+	 **Methods that get passed along to the avatar
+	 **/
+	
+/*	
 	public void setAppearance(Appearance a)
 	{
 		avatar.setAppearance(a);	
@@ -137,15 +142,15 @@ public class ViewElementBranch implements ElementBranch
 	{
 		return avatar.getAppearance();
 	}
+*/
 
 	public BranchGroup getBranchScene()
 	{
-		//what should we be returning?
-		return null;
+		return avatar.getBranchScene();
 	}
 	
 	public void detach()
 	{
-		//how do we delete a camera?
+		avatar.detach();
 	}
 }

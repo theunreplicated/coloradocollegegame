@@ -71,7 +71,7 @@ public class Quaternions
 		float wy = q[W]*q[Y];
 		float wz = q[W]*q[Z];
 
-		//direct assignment
+		//direct assignment a la rotation matrix
 		return new float[] {	
 			p[X]*(1-2*(y2 + z2)) + 2*(p[Y]*(xy - wz) + p[Z]*(xz + wy)),
 			p[Y]*(1-2*(x2 + z2)) + 2*(p[X]*(xy + wz) + p[Z]*(yz - wx)),
@@ -135,10 +135,10 @@ public class Quaternions
 		float wy = q[W]*q[Y];
 		float wz = q[W]*q[Z];
 
+		//construct and return the rotation matrix
 		return new float[][] {	{1-2*(y2 + z2), 2*(xy - wz), 2*(xz + wy)},
 					{2*(xy + wz), 1-2*(x2 + z2), 2*(yz - wx)},
 					{2*(xz - wy), 2*(yz + wx), 1-2*(x2 + y2)}}; 
-					//construct and return the rotation matrix			
 	}
 
 	//returns the rotation matrix that represents the rotation to Quaternions q1 from q2

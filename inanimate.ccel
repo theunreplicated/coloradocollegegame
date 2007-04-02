@@ -122,10 +122,12 @@
 				<position>0</position>
 				<radius>1</radius>
 				<height>10</height>
+				<color>ffffff00</color>
+				<!--<texture>textures/earth.jpg</texture>-->
 			</cylinder>
 		</shapes>
 		<attributes>
-			<color type="hex32">ffffff00</color>
+			<color type="hex32">ff0000ff</color>
 			<texture type="String">textures/smoke01.jpg</texture>	
 			<transparency type="float">0.3</transparency>
 		</attributes>

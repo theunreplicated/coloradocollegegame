@@ -40,12 +40,13 @@ public class WorldFactory
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc;
 			Element element, attributesElement, newAttribute;
-			NodeList elements, positionNodes, facingNodes, attributesNodes;
+			NodeList elements, positionNodes, facingNodes, scaleNodes, attributesNodes;
 			Node tmpNode;
 			String attributeType;
 			GameElement newElement;
 			float[] position;
 			float[] facing;
+			float[] scale;
 			int i;
 			
 			for(File file : files)
@@ -66,7 +67,6 @@ public class WorldFactory
 						position[p] = Float.parseFloat(positionNodes.item(p).getTextContent());
 					}
 					newElement.setPosition(position);
-					newElement.id(i);
 					
 					facingNodes = element.getElementsByTagName("facing");
 					if(facingNodes.getLength() == 3)
@@ -82,6 +82,17 @@ public class WorldFactory
 					else //if we didn't have a 3D rotation specified
 						facing = Constants.DEFAULT_FACING; //set to the default unit
 					newElement.setFacing(facing);
+
+					scaleNodes = element.getElementsByTagName("scale");
+					if(scaleNodes.getLength() != 0)
+					{
+						scale = new float[scaleNodes.getLength()];
+						for(int s = scale.length-1; s>=0; s--)
+						{
+							scale[s] = Float.parseFloat(scaleNodes.item(s).getTextContent());
+						}
+						newElement.setScale(scale);
+					}	
 					
 					attributesElement = (Element) element.getElementsByTagName("attributes").item(0);
 					if(attributesElement != null)

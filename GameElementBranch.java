@@ -17,7 +17,7 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 {
 	//member variables - anything we'd want to change later (Element level)
 	private TransformGroup coord; //transformed coordinates for this branch
-	private Appearance appear; //an appearance node reference
+	//private Appearance appear; //an appearance node reference--doesn't mean anything at the moment
 	private BranchGroup broot; //the root of the branch.
 	
 	//constructor
@@ -27,13 +27,45 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		broot.setCapability(BranchGroup.ALLOW_DETACH); //let us remove the branch at runtime
 
 		Transform3D posi = new Transform3D(new Quat4f(e.getFacing()),new Vector3f(e.getPosition()),1); //make the new coordinate system
+		//System.out.println("---New Element---");
+		//System.out.println(posi);
+		//posi.setScale(new Vector3d(new Vector3f(e.getScale())));
+		//posi.setScale(new Vector3d(1,.0005,1));
+		//System.out.println(posi);
 		coord = new TransformGroup(posi); //create the coordinate node
 		coord.setCapability(TransformGroup.ALLOW_TRANSFORM_READ); //allow us to read the transformation at runtime
 		coord.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE); //allow us to change the transformation at runtime
 		broot.addChild(coord); //add the transformation to the root.
 		
-		appear = createAppearance(e);
+		/**Set default appearance variables**/
+		//color
+		float[] defaultColor; //{r,g,b,a}
+		if(e.attribute("color") != null) //if a color is specified
+		{
+			int c = (Integer)e.attribute("color");
+			defaultColor = new float[] {	((c>>16)&0xff)/255f, 
+							((c>>8)&0xff)/255f, 
+							(c&0xff)/255f,
+							((c>>24)&0xff)/255f};
+		}
+		else
+			defaultColor = new float[] {0f,0f,1f,1f}; //blue and opaque for default
 		
+		//texture
+		String defaultTexture = (String)e.attribute("texture");
+		
+		//transparency
+		TransparencyAttributes elementTransparency;
+		if(e.attribute("transparency") != null)
+		{
+			elementTransparency = new TransparencyAttributes(
+							TransparencyAttributes.NICEST,
+							(Float)e.attribute("transparency"));
+		}
+		else
+			elementTransparency = null;
+
+
 		BranchGroup sroot = new BranchGroup(); //a root for the shapes. In case we want to do other stuff to them (if it's redundant then J3D will get rid of it anyway)
 		coord.addChild(sroot); //add sroot to the tree
 		
@@ -44,9 +76,12 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 			
 			Node p; //the shape to add--Node so we can have all kinds of geometry
 			
+			//create new Appearance object based on defaults (above) and Shape s
+			Appearance shapeAppearance = createAppearance(s, defaultColor, defaultTexture, elementTransparency); 
+
 			//set flags based on the element
 			int sflags = Primitive.GENERATE_NORMALS; //always want these for shading
-			if(e.attribute("texture") != null) //if we have a texture
+			if(shapeAppearance.getTexture() != null) //if we have a texture
 				sflags = sflags | Primitive.GENERATE_TEXTURE_COORDS; //generate texture coords
 			
 			//now see what kind of shapes we're using. 
@@ -55,22 +90,22 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 			if(s instanceof VirtualBox)
 			{
 				//make the primitive - convert full dimensions to half-dimensions
-				p = new Box(.5f*((VirtualBox)s).getDimX(), .5f*((VirtualBox)s).getDimY(), .5f*((VirtualBox)s).getDimZ(), sflags, appear);
+				p = new Box(.5f*((VirtualBox)s).getDimX(), .5f*((VirtualBox)s).getDimY(), .5f*((VirtualBox)s).getDimZ(), sflags, shapeAppearance);
 			}
 			else if(s instanceof VirtualSphere)
 			{
 				//make the primitive
-				p = new Sphere(((VirtualSphere)s).getRadius(), sflags, appear);
+				p = new Sphere(((VirtualSphere)s).getRadius(), sflags, shapeAppearance);
 			}
 			else if(s instanceof VirtualCylinder)
 			{
 				//make the primitive
-				p = new Cylinder(((VirtualCylinder)s).getRadius(), ((VirtualCylinder)s).getHeight(), sflags, appear);
+				p = new Cylinder(((VirtualCylinder)s).getRadius(), ((VirtualCylinder)s).getHeight(), sflags, shapeAppearance);
 			}
 			else if(s instanceof VirtualCone)
 			{
 				//make the primitive
-				p = new Cone(((VirtualCone)s).getRadius(), ((VirtualCone)s).getHeight(), sflags, appear);
+				p = new Cone(((VirtualCone)s).getRadius(), ((VirtualCone)s).getHeight(), sflags, shapeAppearance);
 			}
 			else
 			{
@@ -84,70 +119,67 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		}
 		
 		sroot.addChild(createBoundingBox(e)); //draw the bounding box for testing.
-						      //note that this draws where it should be, not where it is
-		
+						      		
 		broot.compile(); //let J3D optimize the branch
 	}//constructor
 
-	//defines the appearance node based on the given GameElement
-	public Appearance createAppearance(GameElement e)
-	{
-		Appearance a = new Appearance(); //will need to specify how to get this appearance from the Element
-		a.setCapability(Appearance.ALLOW_MATERIAL_READ);
-		a.setCapability(Appearance.ALLOW_MATERIAL_WRITE);
-		Material mat = new Material();
-		mat.setCapability(Material.ALLOW_COMPONENT_WRITE);
-		a.setMaterial(mat);
 
-		//constant stuff
-		mat.setSpecularColor(1.0f,1.0f,1.0f);
-		mat.setShininess(64.0f); //I swear to god: "shininess - the material's shininess in the range [1.0, 128.0] with 1.0 being not shiny and 128.0 being very shiny."
+	//defines the appearance node based on the given GameElement
+	public Appearance createAppearance(VirtualShape s, float[] defaultColor, String defaultTexture, TransparencyAttributes elementTransparency)
+	{
+		int A = 3; //for readability with color decomposition
+		int R = 0;
+		int G = 1;
+		int B = 2;
 		
-		/**ATTRIBUTE VARIABLES**/
+		Appearance a = new Appearance();
+		Material mat = new Material(); //use defaults
+		a.setMaterial(mat);
+		a.setTransparencyAttributes(elementTransparency);
 
 		//color
-		if(e.attribute("color") != null) //if a color is specified
-		{
-			int c = (Integer)e.attribute("color");
-			mat.setDiffuseColor(((c>>16)&0xff)/255f, ((c>>8)&0xff)/255f, (c&0xff)/255f); //, ((c>>24)&0xff)/255f);
-
-			//System.out.println("alpha="+((c>>24)&0xff));
-		}
-		else //make blue by default
-			mat.setDiffuseColor(0.0f,0.0f,1.0f);
-		
+		int c = s.getColor();
+		float[] shapeColor = new float[] {((c>>16)&0xff)/255f, ((c>>8)&0xff)/255f, (c&0xff)/255f, ((c>>24)&0xff)/255f};
+		//float temp = (1-shapeColor[A])*(defaultColor[A]);
+		float temp = (1-shapeColor[A]); //Currently treating Element-color as having alpha of 1.0f
+		mat.setDiffuseColor(
+			(shapeColor[A]*shapeColor[R]) + (temp*defaultColor[R]),
+			(shapeColor[A]*shapeColor[G]) + (temp*defaultColor[G]),
+			(shapeColor[A]*shapeColor[B]) + (temp*defaultColor[B])); //alpha blending!
+	
 		//texture
-		if(e.attribute("texture") != null)
+		if(defaultTexture != null) //first assign an element texture (if possible)
 		{
 			try
 			{
-				TextureLoader loader = new TextureLoader((String)e.attribute("texture"), new Canvas()); //make a new Canvas for an image observer (or do we want to pass something else?)
+				TextureLoader loader = new TextureLoader(defaultTexture, new Canvas()); //make a new Canvas for an image observer (or do we want to pass something else?)
 				a.setTexture(loader.getTexture());
-					//ImageComponent2D texImage = loader.getImage(); 
-					//Texture2D texture = new Texture2D(Texture.BASE_LEVEL,Texture.RGBA,texImage.getWidth(),texImage.getHeight());
-					//texture.setImage(0,texImage); 
-					//a.setTexture(texture);
-					
-				//TextureAttributes texAttrib = new TextureAttributes();
-				//texAttrib.setTextureMode(TextureAttributes.DECAL); //blend in with specified color--do we want this?
-				//a.setTextureAttributes(texAttrib);
 			}
 			catch(Exception ex)
 			{	
 				//need better error reporting here
-				System.out.println("Failed to load texture image: "+e.attribute("texture"));
+				System.out.println("Failed to load texture image: "+defaultTexture);
 			}
 		}
-
-		//transparency
-		if(e.attribute("transparency") != null)
+		if(s.getTexture() != null) //then overwrite with an attribute texture (if possible)
 		{
-			a.setTransparencyAttributes(new TransparencyAttributes(
-							TransparencyAttributes.NICEST,
-							(Float)e.attribute("transparency")));
-		}
+			try
+			{
+				TextureLoader loader = new TextureLoader(s.getTexture(), new Canvas()); //make a new Canvas for an image observer (or do we want to pass something else?)
+				a.setTexture(loader.getTexture());
+			}
+			catch(Exception ex)
+			{	
+				//need better error reporting here
+				System.out.println("Failed to load texture image: "+s.getTexture());
+			}
+		}		
 
-		return a;	
+//		TextureAttributes texAttrib = new TextureAttributes();
+//		texAttrib.setTextureMode(TextureAttributes.REPLACE); //blend in with specified color--do we want this?
+//		a.setTextureAttributes(texAttrib);
+
+		return a; //return the Appearance
 	}
 
 	//returns the root of this branch (so we can add it to a J3D tree)
@@ -162,6 +194,7 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		broot.detach();
 	}
 
+	//sets the translation transform of this element to vector p
 	public void setTranslation(float[] p)
 	{
 		Transform3D t = new Transform3D(); //a new Transform
@@ -170,6 +203,7 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		coord.setTransform(t); //set as our new state
 	}
 		
+	//sets the rotation transform of this element to Quaterion f
 	public void setRotation(float[] f)
 	{
 		Transform3D t = new Transform3D(); //a new Transform
@@ -177,23 +211,27 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		t.setRotation(new Quat4f(f)); //set our current rotation
 		coord.setTransform(t);
 	}
-	
+
+	//sets the transform of this element to translation vector p and rotation Quaternion f	
 	public void setTransform(float[] p, float[] f)
 	{
 		Transform3D t = new Transform3D(new Quat4f(f), new Vector3f(p), 1);
 		coord.setTransform(t);
 	}
 
+/*
+	//returns the Appearance node of this element
 	public Appearance getAppearance()
 	{
 		return appear;
 	}
 
+	//sets the Appearance node of this element
 	public void setAppearance(Appearance a)
 	{
 		appear = a;
 	}
-
+*/
 	//maybe also draw based on shapes?
 	public Shape3D createBoundingBox(GameElement e)
 	{

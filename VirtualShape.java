@@ -3,6 +3,7 @@ import javax.xml.parsers.*;
 
 public class VirtualShape
 {
+	private String name;
 	private float[] position;
 	private float[] facing; //in quaternions
 	protected float[] boundingBox;
@@ -17,24 +18,31 @@ public class VirtualShape
 	public VirtualShape(Node _info)
 	{
 		Element info = (Element) _info;
+
+		NodeList nameNodes = info.getElementsByTagName("name");
+		if(nameNodes.getLength() != 0)
+			name = nameNodes.item(0).getTextContent();
+		else
+			name = "Bruce"; //what do we make the name by default?
+
 		NodeList colorNodes = info.getElementsByTagName("color");
 		if(colorNodes.getLength() != 0)
 		{
 			color = (int)Long.parseLong(colorNodes.item(0).getTextContent(),16);	
 		}
+		else
+			color = 0;
 
 		NodeList textureNodes = info.getElementsByTagName("texture");
 		if(textureNodes.getLength() != 0)
-		{
-			texture = textureNodes.item(0).getTextContent();	
-		}
+			texture = textureNodes.item(0).getTextContent();
+		else
+			texture = null;	
 
 		NodeList positionNodes = info.getElementsByTagName("position");
 		position = new float[positionNodes.getLength()];
 		for(int i = position.length-1; i>=0; i--)
-		{
 			position[i] = Float.parseFloat(positionNodes.item(i).getTextContent());
-		}
 
 		NodeList facingNodes = info.getElementsByTagName("facing");
 		float[] rotEuler = new float[facingNodes.getLength()]; //construct an array of Euler facings
@@ -47,6 +55,11 @@ public class VirtualShape
 			facing = Quaternions.getQuatFromEuler(rotEuler); //set the facing to be in Quaternions
 		else
 			facing = Constants.DEFAULT_FACING; //set to a unit
+	}
+
+	public String getName()
+	{
+		return name;
 	}
 
 	public float[] getPosition()
