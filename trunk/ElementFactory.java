@@ -48,6 +48,7 @@ public class ElementFactory
 			float[] position;
 			float[] facing;
 			float[] bounds;
+			float[] scale;
 			HashMap attributes;
 			float[][] minMax;
 			float[][] tempMinMax = null;
@@ -62,6 +63,7 @@ public class ElementFactory
 
 					position = Constants.DEFAULT_POSITION;
 					facing = Constants.DEFAULT_FACING;
+					scale = Constants.DEFAULT_SCALE;
 					
 					attributes = new HashMap<String, Object>();
 					attributesElement = (Element) element.getElementsByTagName("attributes").item(0);
@@ -186,7 +188,7 @@ public class ElementFactory
 					}
 
 					defaultElements.put(name.getTextContent(),
-						new GameElement(name.getTextContent(), position, facing, bounds, shapes, attributes));
+						new GameElement(name.getTextContent(), position, facing, bounds, scale, shapes, attributes));
 				}
 			}
 			

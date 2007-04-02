@@ -15,6 +15,6 @@ public interface ElementBranch
 	public void setTranslation(float[] position);
 	public void setRotation(float[] facing);
 	public void setTransform(float[] position, float[] facing);
-	public Appearance getAppearance();
-	public void setAppearance(Appearance a);
+	//public Appearance getAppearance();
+	//public void setAppearance(Appearance a);
 }

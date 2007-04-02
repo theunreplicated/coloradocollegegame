@@ -7,7 +7,7 @@ public class ClientInput implements MouseListener, KeyListener
 	private ClientIO myIO;
 	private Logger myLogger;
 	private boolean[] modifiers = { false, false, false }; //indicate whether or not the shift,
-							       //ctrl and alt modifier keys are currently
+							       //ctrl and alt modifier keys are pressed
 
 	public ClientInput(ClientIO _cio,Logger _myLogger)
 	{
@@ -84,17 +84,6 @@ public class ClientInput implements MouseListener, KeyListener
 				myIO.rotateSelf(Constants.QUAT_CLOZ);
 				break;
 
-			/*attribute change testing--demonstration only*/
-			case KeyEvent.VK_R:
-				myIO.changeAttribute("color", Color.RED.getRGB());
-				break;
-			case KeyEvent.VK_G:
-				myIO.changeAttribute("color", Color.GREEN.getRGB());
-				break;
-			case KeyEvent.VK_B:
-				myIO.changeAttribute("color", Color.BLUE.getRGB());
-				break;
-	
 			default:
 				myLogger.message("You typed: " + ke.getKeyChar() + " (" + ke.getKeyCode() + ")" + "\n", false);
 

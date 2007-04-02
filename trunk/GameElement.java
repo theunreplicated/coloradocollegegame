@@ -10,6 +10,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	private float[] position = new float[3]; //World-level postition of the element
 	private float[] facing = new float[4]; //The element's orientation (in Quaternions!)
 	private float[] boundingBox = new float[3];
+	private float[] scale = new float[3];
 
 	VirtualShape[] shapes = null;
 	private HashMap attributes = null;
@@ -21,13 +22,14 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	// Remove these once we have Element and ElementGenerator working
 	public int[][] dimensions = new int[3][4]; 
 
-	public GameElement( String _type, float[] _position, float[] _facing, float[] _boundingBox, VirtualShape[] _shapes, HashMap _attributes)
+	public GameElement( String _type, float[] _position, float[] _facing, float[] _boundingBox, float[] _scale, VirtualShape[] _shapes, HashMap _attributes)
 	{
 		type = _type;
 		position = _position;
 		facing = _facing;
 		shapes = _shapes;
 		boundingBox = _boundingBox;
+		scale = _scale;
 		
 		attributes = _attributes;
 		/*initialize is depracated */
@@ -44,6 +46,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		System.arraycopy(original.facing,0,facing,0,original.facing.length);
 		System.arraycopy(original.shapes,0,shapes,0,original.shapes.length);
 		System.arraycopy(original.boundingBox,0,boundingBox,0,original.boundingBox.length);
+		System.arraycopy(original.scale,0,scale,0,original.scale.length);
 		if(original.attributes != null)
 			attributes = (HashMap) original.attributes.clone();
 		typeId = original.typeId;
@@ -159,7 +162,12 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 				s += "  " + entry.getKey() + ": " + entry.getValue() + "\n";
 		}
 		return s;
-
+	
+	}
+	
+	public synchronized VirtualShape[] getShapes()
+	{
+		return shapes;
 	}
 
 	public synchronized float[] getPosition()
@@ -175,6 +183,11 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	public synchronized float[] getBoundingBox()
 	{
 		return boundingBox;
+	}
+
+	public synchronized float[] getScale()
+	{
+		return scale;
 	}
 
 	
@@ -219,6 +232,20 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 			facing[i] = _facing[i];
 	}	
 
+	//scale by the specified factors
+	public synchronized void scale(float[] delta)
+	{
+		for( int i = 0 ; i < scale.length; i++ )
+			scale[i] *= delta[i];		
+	}
+
+	//sets the scale to the specified factors
+	public synchronized void setScale(float[] _scale)
+	{
+		for( int i = scale.length-1 ; i >= 0; i--)
+			scale[i] = _scale[i];
+	}
+
 
 	/*********************** 
 	 * Collision Detection *
@@ -230,24 +257,52 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		//currently just uses OBBs in 3D to check
 		return VectorUtils.OBB3DIntersect(boundingBox, 
 						_element.getBoundingBox(), 
-						VectorUtils.sub(_element.getPosition(),position),
-						Quaternions.getMatrixFromQuat(_element.getFacing(),facing));
+						VectorUtils.sub(position, _element.getPosition()),
+						Quaternions.getMatrixFromQuat(facing, _element.getFacing()));
 
 	}
 
-	/* I'll get to it eventually. Shape-level collisions are not exactly high-priority */
-	//What are we checking? Is someone else's shape collides with us? If our shapes collide with somene else?
-	// If our shapes collide with someone else's?
-	public synchronized String isCollidingShape(GameElement _element) //why are you returning a String?
+	//Returns an ArrayList containing String[] pairs of the names of shapes which intersect between the two elements
+	//-NOTE: This hasn't been tested yet. It should work, but I'm too lazy to check.
+	//	 Also, this method is going to be pretty damn slow, and should rarely be called (and never without some filtering)
+	public synchronized ArrayList<String[]> isCollidingShape(GameElement _element)
 	{
-		//for each shape in me
-			//check each shape in you
-				//get relative position/rotation
-				//use VectorUtils to check OBB collisions
-				
-				//if we have a collisions--return all? return String? what?
+		ArrayList<String[]> collisions = new ArrayList<String[]>(); //a list of shape pairs that collide
 		
-		return null;
+		VirtualShape[] ushapes = _element.getShapes();
+		float[] uposition = _element.getPosition();
+		float[] ufacing = _element.getFacing();
+
+		float[] sposi;
+		float[] sface;
+		float[] a;
+		float[] T; 
+		float[][] R;
+
+		for(int i=0; i<shapes.length; i++) //for every Shape in me
+		{
+			sposi = shapes[i].getPosition();
+			sface = shapes[i].getFacing();
+			a = shapes[i].getBoundingBox();
+			
+			for(int j=0; j<ushapes.length; j++) //for every Shape in you
+			{
+				//get relative position/rotation
+				T = VectorUtils.sub(	VectorUtils.add(sposi,position), 
+							VectorUtils.add(ushapes[j].getPosition(), uposition));
+				R = Quaternions.getMatrixFromQuat(	Quaternions.mul(sface, facing), 
+									Quaternions.mul(ushapes[j].getFacing(), ufacing));	
+								
+				//use VectorUtils to check for OBB collisions
+				if(VectorUtils.OBB3DIntersect(a,ushapes[j].getBoundingBox(), T, R)) //if collides
+					collisions.add(new String[] {shapes[i].getName(), ushapes[j].getName()});
+			}
+		}
+		
+		if(collisions.size() == 0)
+			return null;
+		else
+			return collisions;
 	}
 
 	/*
