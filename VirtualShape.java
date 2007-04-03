@@ -6,6 +6,7 @@ public class VirtualShape
 	private String name;
 	private float[] position;
 	private float[] facing; //in quaternions
+	private float[] scale;
 	protected float[] boundingBox;
 	private int color;
 	private String texture;
@@ -13,6 +14,13 @@ public class VirtualShape
 	public VirtualShape(float[] _position)
 	{
 		position = _position;
+
+		//set everything else as default--you can't just leave this stuff undefined!!
+		name = Constants.DEFAULT_NAME;
+		facing = Constants.DEFAULT_FACING;
+		scale = Constants.DEFAULT_SCALE;
+		color = Constants.DEFAULT_COLOR;
+		texture = Constants.DEFAULT_TEXTURE;   
 	}
 
 	public VirtualShape(Node _info)
@@ -23,26 +31,17 @@ public class VirtualShape
 		if(nameNodes.getLength() != 0)
 			name = nameNodes.item(0).getTextContent();
 		else
-			name = "Bruce"; //what do we make the name by default?
-
-		NodeList colorNodes = info.getElementsByTagName("color");
-		if(colorNodes.getLength() != 0)
-		{
-			color = (int)Long.parseLong(colorNodes.item(0).getTextContent(),16);	
-		}
-		else
-			color = 0;
-
-		NodeList textureNodes = info.getElementsByTagName("texture");
-		if(textureNodes.getLength() != 0)
-			texture = textureNodes.item(0).getTextContent();
-		else
-			texture = null;	
+			name = Constants.DEFAULT_NAME;
 
 		NodeList positionNodes = info.getElementsByTagName("position");
-		position = new float[positionNodes.getLength()];
-		for(int i = position.length-1; i>=0; i--)
-			position[i] = Float.parseFloat(positionNodes.item(i).getTextContent());
+		if(positionNodes.getLength() != 0)
+		{
+			position = new float[positionNodes.getLength()];
+			for(int i = position.length-1; i>=0; i--)
+				position[i] = Float.parseFloat(positionNodes.item(i).getTextContent());
+		}
+		else
+			position = Constants.DEFAULT_POSITION;
 
 		NodeList facingNodes = info.getElementsByTagName("facing");
 		float[] rotEuler = new float[facingNodes.getLength()]; //construct an array of Euler facings
@@ -55,6 +54,30 @@ public class VirtualShape
 			facing = Quaternions.getQuatFromEuler(rotEuler); //set the facing to be in Quaternions
 		else
 			facing = Constants.DEFAULT_FACING; //set to a unit
+
+		NodeList scaleNodes = info.getElementsByTagName("scale");
+		if(scaleNodes.getLength() != 0)
+		{
+			scale = new float[scaleNodes.getLength()];
+			for(int i = scale.length-1; i>=0; i--)
+				scale[i] = Float.parseFloat(scaleNodes.item(i).getTextContent());
+		}
+		else
+			scale = Constants.DEFAULT_SCALE;
+
+		NodeList colorNodes = info.getElementsByTagName("color");
+		if(colorNodes.getLength() != 0)
+		{
+			color = (int)Long.parseLong(colorNodes.item(0).getTextContent(),16);	
+		}
+		else
+			color = Constants.DEFAULT_COLOR;
+
+		NodeList textureNodes = info.getElementsByTagName("texture");
+		if(textureNodes.getLength() != 0)
+			texture = textureNodes.item(0).getTextContent();
+		else
+			texture = Constants.DEFAULT_TEXTURE;	
 	}
 
 	public String getName()
@@ -72,6 +95,11 @@ public class VirtualShape
 		return facing;
 	}
 
+	public float[] getScale()
+	{ 
+		return scale;
+	}
+
 	public float[] getBoundingBox()
 	{
 		return boundingBox;
@@ -86,6 +114,4 @@ public class VirtualShape
 	{
 		return texture;
 	}
-
-	public void scale( double[] _factors ){ }
 }

@@ -27,11 +27,7 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		broot.setCapability(BranchGroup.ALLOW_DETACH); //let us remove the branch at runtime
 
 		Transform3D posi = new Transform3D(new Quat4f(e.getFacing()),new Vector3f(e.getPosition()),1); //make the new coordinate system
-		//System.out.println("---New Element---");
-		//System.out.println(posi);
-		//posi.setScale(new Vector3d(new Vector3f(e.getScale())));
-		//posi.setScale(new Vector3d(1,.0005,1));
-		//System.out.println(posi);
+		posi.setScale(new Vector3d(new Vector3f(e.getScale())));
 		coord = new TransformGroup(posi); //create the coordinate node
 		coord.setCapability(TransformGroup.ALLOW_TRANSFORM_READ); //allow us to read the transformation at runtime
 		coord.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE); //allow us to change the transformation at runtime
@@ -72,6 +68,7 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		for(VirtualShape s : e.shapes) //run through the shapes!
 		{
 			Transform3D local = new Transform3D(new Quat4f(s.getFacing()), new Vector3f(s.getPosition()),1); //the local coordinates for the shape
+			local.setScale(new Vector3d(new Vector3f(s.getScale()))); //the scale of the shape
 			TransformGroup localg = new TransformGroup(local);
 			
 			Node p; //the shape to add--Node so we can have all kinds of geometry
@@ -122,7 +119,6 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 						      		
 		broot.compile(); //let J3D optimize the branch
 	}//constructor
-
 
 	//defines the appearance node based on the given GameElement
 	public Appearance createAppearance(VirtualShape s, float[] defaultColor, String defaultTexture, TransparencyAttributes elementTransparency)
@@ -211,11 +207,31 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		t.setRotation(new Quat4f(f)); //set our current rotation
 		coord.setTransform(t);
 	}
+	
+	//sets the scale transform of this element to Quaterion f
+	public void setScale(float[] s)
+	{
+		Transform3D t = new Transform3D(); //a new Transform
+		coord.getTransform(t); //fill the transform with our current settings
+		t.setScale(new Vector3d((double)s[0], (double)s[1], (double)s[2])); //set our current scale
+		coord.setTransform(t);
+	}
+	
 
 	//sets the transform of this element to translation vector p and rotation Quaternion f	
-	public void setTransform(float[] p, float[] f)
+	//--holding onto this for now. I'm not sure if I'm going to want to keep it or not (probably not)
+/*	public void setTransform(float[] p, float[] f)
 	{
 		Transform3D t = new Transform3D(new Quat4f(f), new Vector3f(p), 1);
+		//t.setScale(new Vector3d(1.0d, 0.5d, 1.0d));
+		coord.setTransform(t);
+	}
+*/
+	//sets the transform of this element to translation vector p and rotation Quaternion f	
+	public void setTransform(float[] p, float[] f, float[] s)
+	{
+		Transform3D t = new Transform3D(new Quat4f(f), new Vector3f(p), 1);
+		t.setScale(new Vector3d((double)s[0], (double)s[1], (double)s[2])); //set our current scale
 		coord.setTransform(t);
 	}
 

@@ -55,6 +55,12 @@ public class World
 		return elements.get(_row).getInfoArray();
 	}
 
+	//for speed and ease of use
+	public float[] getElementFacing(int _row)
+	{
+		return elements.get(_row).getFacing();
+	}
+
 	public void removeElement(Object[] _message, int _start)
 	{
 		GameElement toRemove = elements.get((Integer) _message[_start]);
@@ -157,6 +163,7 @@ public class World
 			ge.id(newElement.id());
 			ge.setPosition(newElement.getPosition());
 			ge.setFacing(newElement.getFacing());
+			ge.setScale(newElement.getScale());
 			ge.setAttributes(newElement.getAttributes());
 			this.addElement(ge);
 		}
@@ -166,7 +173,7 @@ public class World
 	public void nudgeElement( int _row, float[] _dpos )
 	{
 		GameElement element = elements.get(_row);
-		element.nudgeRelative( _dpos );
+		element.nudge( _dpos );
 		float[] position = element.getPosition();
 
 		Object[] message = new Object[] {

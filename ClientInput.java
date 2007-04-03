@@ -2,12 +2,17 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 
-public class ClientInput implements MouseListener, KeyListener
+public class ClientInput implements KeyListener, MouseListener, MouseMotionListener
 {
 	private ClientIO myIO;
 	private Logger myLogger;
 	private boolean[] modifiers = { false, false, false }; //indicate whether or not the shift,
 							       //ctrl and alt modifier keys are pressed
+	//for mouse movement - do what exactly?
+	private int mx = 0; //"old" position
+	private int my = 0;
+	private int dx = 0; //change in position
+	private int dy = 0;
 
 	public ClientInput(ClientIO _cio,Logger _myLogger)
 	{
@@ -52,11 +57,11 @@ public class ClientInput implements MouseListener, KeyListener
 				//myIO.moveSelf(new float[] {0.0f, -1.0f, 0.0f});
 				break;
 			case KeyEvent.VK_PAGE_UP:
-				myIO.moveSelf(Constants.VEC_POSZ);
+				myIO.moveSelf(Constants.VEC_NEGZ);
 				//myIO.moveSelf(new float[] {0.0f, 0.0f, 1.0f});
 				break;
 			case KeyEvent.VK_PAGE_DOWN:
-				myIO.moveSelf(Constants.VEC_NEGZ);
+				myIO.moveSelf(Constants.VEC_POSZ);
 				//myIO.moveSelf(new float[] {0.0f, 0.0f, -1.0f});
 				break;
 			
@@ -68,6 +73,7 @@ public class ClientInput implements MouseListener, KeyListener
 				myIO.rotateSelf(Constants.QUAT_CCLY);
 				break;
 			case KeyEvent.VK_NUMPAD5: //return to center
+				System.out.println("Not yet implemented.");
 				//WRITE THIS METHOD!!!
 				//Is there anyway for ClientInput to set stuff back to default?
 				break;
@@ -82,6 +88,20 @@ public class ClientInput implements MouseListener, KeyListener
 				break;
 			case KeyEvent.VK_NUMPAD9: //spin clockwise around z
 				myIO.rotateSelf(Constants.QUAT_CLOZ);
+				break;
+
+			/*Intuitive 3D movement (I hope), though it is planar - Joel*/
+			case KeyEvent.VK_W:
+				myIO.moveSelf(Constants.VEC_NEGZ);
+				break;
+			case KeyEvent.VK_S:
+				myIO.moveSelf(Constants.VEC_POSZ);
+				break;
+			case KeyEvent.VK_A:
+				myIO.rotateSelf(Constants.QUAT_CCLY);	
+				break;
+			case KeyEvent.VK_D:
+				myIO.rotateSelf(Constants.QUAT_CLOY);
 				break;
 
 			default:
@@ -114,11 +134,13 @@ public class ClientInput implements MouseListener, KeyListener
 		myLogger.message("Mouse Clicked!\n", false);
 	}
 
-	public void mouseEntered(MouseEvent me){}
-
-	public void mouseExited(MouseEvent me){}
-
+	//While mouseMotion would be awesome, I think it'll effectively spam the server.
+	//Maybe if we get it down to Representation-only (camera adjustments and stuff).
 	public void mousePressed(MouseEvent me){}
-
 	public void mouseReleased(MouseEvent me){}
+	public void mouseDragged(MouseEvent me){}
+
+	public void mouseEntered(MouseEvent me){}
+	public void mouseExited(MouseEvent me){}
+	public void mouseMoved(MouseEvent me) {}
 }

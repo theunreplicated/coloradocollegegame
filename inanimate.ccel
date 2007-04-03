@@ -120,6 +120,9 @@
 				<position>0</position>
 				<position>0</position>
 				<position>0</position>
+				<!--<scale>.5</scale>
+				<scale>2</scale>
+				<scale>.5</scale>-->
 				<radius>1</radius>
 				<height>10</height>
 				<color>ffffff00</color>

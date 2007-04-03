@@ -36,10 +36,4 @@ public class VirtualCylinder extends VirtualShape
 	{
 		return height;
 	}
-	
-	public void scale( double[] factors )
-	{
-		radius *= factors[Constants.RADIUS];
-		height *= factors[Constants.HEIGHT];
-	}
 }

@@ -40,10 +40,4 @@ public class VirtualBox extends VirtualShape
 	{
 		return dimensions[2];
 	}
-
-	public void scale( double[] factors )
-	{
-		for( int i = 0; i < factors.length; i++ )
-			dimensions[i] *= factors[i];
-	}
 }

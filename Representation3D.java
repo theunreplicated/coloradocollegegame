@@ -36,8 +36,9 @@ public class Representation3D extends Applet implements Representation
 		//ClientInput stuff
 		ClientInput ci = _client.getClientInput();
 		canvas3D.setFocusable(true);
-		canvas3D.addMouseListener(ci);
 		canvas3D.addKeyListener(ci);
+		canvas3D.addMouseListener(ci);
+		canvas3D.addMouseMotionListener(ci);
 
 		BranchGroup superRoot = new BranchGroup(); //the ultimate root of the entire scene. Created here so we can add stuff later	
 
@@ -56,7 +57,6 @@ public class Representation3D extends Applet implements Representation
 		scene.setCapability(Group.ALLOW_CHILDREN_WRITE); //let us modify the children at runtime
 		scene.setCapability(Group.ALLOW_CHILDREN_EXTEND); //allow us to add more Elements to the scene during runtime
 		superRoot.addChild(scene); //add the scene to the tree
-
 
 		SimpleUniverse simpleU = new SimpleUniverse(vp, viewer);
 		//simpleU.getViewingPlatform().setNominalViewingTransform(); //set default eye's locathe Eye's location
@@ -77,7 +77,7 @@ public class Representation3D extends Applet implements Representation
 	{
 		ViewElementBranch veb = new ViewElementBranch(e); //Create the camera (effectively)
 		elementsToNodes.put(e,veb); //add it to the hashmap!
-		if(veb.getViewMode() != ViewElementBranch.FIRST_PERSON_VIEW) //if we're not in FPV
+		if(veb.getAvatar() != null) //if we "have" an avatar
 			vscene.addChild(veb.getBranchScene()); //add the avatar to the scene graph.
 		
 		return veb.getViewingPlatform();
@@ -141,7 +141,6 @@ public class Representation3D extends Applet implements Representation
 			new Vector3f(0.0f, -0.259f, .966f));
 		backLight.setInfluencingBounds(new BoundingSphere(new Point3d(0.0,0.0,0.0),200.0));
 		bg.addChild(backLight);			
-	
 	}
 
 	//creates a Representation-level grid to display as the ground. For testing mostly
@@ -215,7 +214,7 @@ public class Representation3D extends Applet implements Representation
 				else //otherwise
 				{
 					//change branch
-					bg.setTransform(e.getPosition(),e.getFacing());
+					bg.setTransform(e.getPosition(),e.getFacing(), e.getScale());
 				}
 				
 				e.changed = false; //mark as unchanged
