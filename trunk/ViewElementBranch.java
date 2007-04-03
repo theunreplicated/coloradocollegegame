@@ -18,14 +18,18 @@ import javax.vecmath.*;
 public class ViewElementBranch implements ElementBranch
 {
 	public static final int FIRST_PERSON_VIEW = 0;
-	public static final int FOLLOWING_VIEW = 1;
-	public static final int STATIC_VIEW = 2;
+	public static final int OFFSET_VIEW = 1;
+	public static final int FOLLOWING_VIEW = 2;
+	public static final int STATIC_VIEW = 3;
+
+	public static final float[] OFFSET = new float[] {0.0f, 1.0f, 7.5f};
 
 	//member variables
 	private ViewingPlatform camera;
 	private TransformGroup coord; //transformed coordinates for this branch
 	private GameElementBranch avatar; //if we want one
-	private int viewMode = 0;
+	
+	private int viewMode = 1;
 
 	//constructor
 	public ViewElementBranch(GameElement e)
@@ -40,13 +44,13 @@ public class ViewElementBranch implements ElementBranch
 		{
 			posi = new Transform3D(new Quat4f(e.getFacing()), new Vector3f(e.getPosition()), 1); //set us to the element's transform
 		}
-		else if(viewMode == FOLLOWING_VIEW)
+		else if(viewMode == OFFSET_VIEW)
 		{
 			//fill this in (initialization)
-			
-			//temp
-			posi = new Transform3D(new Quat4f(Constants.DEFAULT_FACING), new Vector3f(0f,0f,5f), 1);
 
+			Vector3f p = new Vector3f(e.getPosition());
+			p.add(new Vector3f(OFFSET));
+			posi = new Transform3D(new Quat4f(e.getFacing()), p, 1);
 		}
 		else
 		{
@@ -70,7 +74,10 @@ public class ViewElementBranch implements ElementBranch
 	
 	public GameElementBranch getAvatar()
 	{
-		return avatar;	
+		if(viewMode != FIRST_PERSON_VIEW)
+			return avatar;	
+		else
+			return null;
 	}
 
 	public void changeView(int to)
@@ -88,9 +95,20 @@ public class ViewElementBranch implements ElementBranch
 			t.setTranslation(new Vector3f(p)); //set the new translation
 			coord.setTransform(t); //set as our new state
 		}
-		else if(viewMode == FOLLOWING_VIEW)
+		else if(viewMode == OFFSET_VIEW)
 		{
-			//fill this in	
+			//Do what here? We NEED facing and position to do an offset!
+
+			/*
+			Transform3D t = new Transform3D(); //a new Transform
+			coord.getTransform(t); //fill the transform with our current settings
+			Vector3f pp = new Vector3f(p);
+			pp.add(new Vector3f(Quaternions.rotatePoint(OFFSET,f)));
+			t.setTranslation(pp); //set the new translation
+			coord.setTransform(t); //set as our new state
+			*/
+			
+			avatar.setTranslation(p);
 		}
 		else
 			avatar.setTranslation(p);
@@ -105,27 +123,69 @@ public class ViewElementBranch implements ElementBranch
 			t.setRotation(new Quat4f(f)); //set our current rotation
 			coord.setTransform(t);
 		}
-		else if(viewMode == FOLLOWING_VIEW)
+		else if(viewMode == OFFSET_VIEW)
 		{
-			//fill this in
+			//Do what here? We NEED facing and position to do an offset!
+			
+			/*
+			Transform3D t = new Transform3D(); //a new Transform
+			coord.getTransform(t); //fill the transform with our current settings
+			Vector3f pp = new Vector3f(p);
+			pp.add(new Vector3f(Quaternions.rotatePoint(OFFSET,f)));
+			t.setTranslation(pp); //set the new translation
+			coord.setTransform(t); //set as our new state
+			*/
+
+			avatar.setRotation(f);
 		}
 		else
 			avatar.setRotation(f);
 	}
+
+	public void setScale(float[] s)
+	{
+		if(viewMode == FIRST_PERSON_VIEW)
+		{
+			Transform3D t = new Transform3D(); //a new Transform
+			coord.getTransform(t); //fill the transform with our current settings
+			t.setScale(new Vector3d((double)s[0], (double)s[1], (double)s[2])); //set our current scale
+			coord.setTransform(t);
+		}
+		else if(viewMode == OFFSET_VIEW)
+		{
+			//should we have the offset be based on the scale? I think that's what it does atm
+			
+			Transform3D t = new Transform3D(); //a new Transform
+			coord.getTransform(t); //fill the transform with our current settings
+			t.setScale(new Vector3d((double)s[0], (double)s[1], (double)s[2])); //set our current scale
+			coord.setTransform(t);
+			
+			avatar.setScale(s);
+		}
+		else
+			avatar.setScale(s);
+	}
 	
-	public void setTransform(float[] p, float[] f)
+	public void setTransform(float[] p, float[] f, float[] s)
 	{
 		if(viewMode == FIRST_PERSON_VIEW)
 		{
 			Transform3D t = new Transform3D(new Quat4f(f), new Vector3f(p), 1);
+			t.setScale(new Vector3d((double)s[0], (double)s[1], (double)s[2])); //set our current scale
 			coord.setTransform(t);
 		}
-		else if(viewMode == FOLLOWING_VIEW)
+		else if(viewMode == OFFSET_VIEW)
 		{
-			//fill this in
+			Vector3f pp = new Vector3f(p);
+			pp.add(new Vector3f(Quaternions.rotatePoint(OFFSET,f)));
+			Transform3D t = new Transform3D(new Quat4f(f), pp, 1);
+			t.setScale(new Vector3d((double)s[0], (double)s[1], (double)s[2])); //set our current scale
+			coord.setTransform(t);
+	
+			avatar.setTransform(p,f,s);
 		}
 		else
-			avatar.setTransform(p,f);
+			avatar.setTransform(p,f,s);
 	}
 
 	/**

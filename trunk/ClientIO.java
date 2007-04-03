@@ -79,9 +79,25 @@ public class ClientIO implements IO
 		}
 	}
 
-	//move along the specified vector
+	//move along the specified vector RELATIVE to current facing
 	public void moveSelf(float[] v)
 	{
+		myWorld.nudgeElement(myClient.id, Quaternions.rotatePoint(v,
+							myWorld.getElementFacing(myClient.id)));
+	}
+	
+	/**Do we want to add a method to move based on an int direction defined in Constants?**/
+	
+	//move along the specified vector INDEPENDENT of current facing
+	public void moveSelfAbsolute(float[] v)
+	{
+		myWorld.nudgeElement(myClient.id, v);
+	}
+	
+	//move along the specified vector relative to the camera's current facing
+	public void moveSelfRelativeCamera(float[] v)
+	{
+		//change this--how does ClientIO see the Representation?
 		myWorld.nudgeElement(myClient.id, v);
 	}
 	

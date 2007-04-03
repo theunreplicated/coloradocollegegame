@@ -115,6 +115,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		out.writeInt(typeId);
 		out.writeObject(position);
 		out.writeObject(facing);
+		out.writeObject(scale);
 		out.writeObject(attributes);
 	}
 
@@ -124,6 +125,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		typeId = in.readInt();
 		position = (float[]) in.readObject();
 		facing = (float[]) in.readObject();
+		scale = (float[]) in.readObject();
 		attributes = (HashMap) in.readObject();
 	}
 
@@ -148,6 +150,9 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 			s += " " + f;
 		s += "\n Facing:";
 		for(float f : facing)
+			s += " " + f;
+		s += "\n Scale:";
+		for(float f : scale)
 			s += " " + f;
 		s += "\n Attributes:\n";
 		Set<Map.Entry<String,Object>> entries = attributes.entrySet();
@@ -180,14 +185,14 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		return facing;
 	}
 
-	public synchronized float[] getBoundingBox()
-	{
-		return boundingBox;
-	}
-
 	public synchronized float[] getScale()
 	{
 		return scale;
+	}
+
+	public synchronized float[] getBoundingBox()
+	{
+		return boundingBox;
 	}
 
 	
@@ -196,19 +201,19 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	 ************/
 
 	//changes position by a vector
-	public synchronized void nudgeAbsolute( float[] delta )
+	public synchronized void nudge( float[] delta )
 	{
 		for( int i = 0 ; i < position.length; i++ )
 			position[i] += delta[i];
 	}
 	
 	//changes position by a vector relatively -- JOEL FIX ME... PLEASE!!!
-	public synchronized void nudgeRelative( float[] delta )
+/*	public synchronized void nudgeRelative( float[] delta )
 	{
 		for( int i = 0 ; i < position.length; i++ )
 			position[i] += delta[i];
 	}
-	
+*/	
 	//sets position to the given
 	public synchronized void setPosition(float[] _position)
 	{

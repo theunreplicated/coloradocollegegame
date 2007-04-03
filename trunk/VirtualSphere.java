@@ -26,9 +26,4 @@ public class VirtualSphere extends VirtualShape
 	{
 		return radius;
 	}
-
-	public void scale( double[] factors )
-	{
-		radius *= factors[Constants.RADIUS];
-	}
 }

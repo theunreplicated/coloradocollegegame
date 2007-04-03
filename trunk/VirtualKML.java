@@ -16,15 +16,11 @@ public class VirtualKML extends VirtualShape //A shape built from a Google Sketc
 	
 	}
 
-	/*public VirtualKML(float[] _position)
+	public VirtualKML(float[] _position)
 	{
 		super(_position);
-		dimensions = _dimensions;
-		boundingBox = new float[] {0.5f*dimensions[0], 0.5f*dimensions[1], 0.5f*dimensions[2]}; //get the half-dimensions
-	}*/
-
-	public void scale( double[] factors )
-	{
+		
 		//fill this in
+		boundingBox = new float[] {1,1,1}; //specify the boundingBox based on ??
 	}
 }

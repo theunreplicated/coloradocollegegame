@@ -25,10 +25,15 @@ public class Constants
 	public static final String DEFAULT_DATA_DIR = ".";
 	public static final String ELEMENT_LIST_EXTENSION = "ccel";
 	public static final String WORLD_EXTENSION = "ccw";
+	
+	// Defaults (for Element and Shape)
 	public static final float[] DEFAULT_POSITION = {0,0,0};
 	public static final float[] DEFAULT_FACING = {0,0,0,1}; //in Quaternions!
 	public static final float[] DEFAULT_SCALE = {1,1,1};
 	public static final float[] DEFAULT_BOUNDS = {1.0f, 1.0f, 1.0f}; //the half-dimensions of a default bounding box in 3D
+	public static final String DEFAULT_NAME = "Bruce";
+	public static final int DEFAULT_COLOR = 0;
+	public static final String DEFAULT_TEXTURE = null;
 
 	// IDs for actions that the World understands
 	public static final int MOVE_TO = 101;
