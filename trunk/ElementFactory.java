@@ -40,11 +40,12 @@ public class ElementFactory
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc;
 			Element element, name, plural, shape, newAttribute, attributesElement;
-			NodeList elements, spheres, cylinders, boxes, cones, kml, facingNodes, boundsNodes, attributesNodes;
+			NodeList elements, spheres, cylinders, boxes, cones, kmz, kmzUrls, facingNodes, boundsNodes, attributesNodes;
 			Node tmpNode;
 			String attributeType;
 			VirtualShape[] shapes;
 			int i, j, k;
+			int kmlCount;
 			float[] position;
 			float[] facing;
 			float[] bounds;
@@ -105,8 +106,15 @@ public class ElementFactory
 					cylinders = shape.getElementsByTagName("cylinder");
 					boxes = shape.getElementsByTagName("box");
 					cones = shape.getElementsByTagName("cone");
-					kml = shape.getElementsByTagName("kml");
-					shapes = new VirtualShape[spheres.getLength() + cylinders.getLength() + boxes.getLength() + cones.getLength()];
+					kmz = shape.getElementsByTagName("kmz");
+					kmlCount = 0;
+					for(int c = kmz.getLength()-1; c>=0; c--)
+					{
+						kmzUrls = ((Element)kmz.item(c)).getElementsByTagName("url"); //better damn well be a 1:1 ratio.
+						kmlCount += SketchUpUtils.countKMLFiles(kmzUrls.item(0).getTextContent());
+					}
+					
+					shapes = new VirtualShape[spheres.getLength() + cylinders.getLength() + boxes.getLength() + cones.getLength() + kmlCount];
 					j = shapes.length-1;
 
 					k = cones.getLength()-1;
@@ -131,14 +139,28 @@ public class ElementFactory
 					for( ; j >= 0 && k >= 0; j--, k--)
 					{
 						shapes[j] = new VirtualSphere(spheres.item(k));
-
 					}
+
+					/*SKETCHUP STUFF GOES HERE*/
 					
-					//will probably have to do more to get stuff out of kmz
-					k = kml.getLength()-1;
+					k = kmz.getLength()-1;
 					for( ; j >= 0 && k >= 0; j--, k--)
 					{
-						shapes[j] = new VirtualKML(kml.item(k));
+						
+						//get KML stuff out of kmz.item(k);
+						//create a VirtualKML() for each KML file
+						Document[] kmldocs = SketchUpUtils.decompressKMZ(
+							((Element)kmz.item(k)).getElementsByTagName("url").item(0).getTextContent());
+						
+						for(int q = kmldocs.length-1; q>=0 && j>=0; j--, q--)
+							shapes[j] = new VirtualKML(kmz.item(k),kmldocs[q]);
+						
+						//kmz.item(k).getTextC
+						
+						
+						//do stuff to KMZ to get KML objects.
+						
+						//shapes[j] = new VirtualKML(kml.item(k));
 					}
 
 					//determine bounds
@@ -149,7 +171,7 @@ public class ElementFactory
 						float[][] corners = new float[8][3]; //an array for the corners of a shape
 						float[] sbb; //for iteration
 						
-						for(int s=0; s<shapes.length; s++) //run through all the shapes
+						for(int s=0; s<shapes.length && shapes[s] != null; s++) //run through all the shapes, double check that is defined
 						{
 							sbb = shapes[s].getBoundingBox(); //fetch the boundingBox once
 							//construct the corners of the AABB for the shape
