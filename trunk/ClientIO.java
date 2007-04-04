@@ -20,6 +20,7 @@ public class ClientIO implements IO
 	private World myWorld;
 	private Logger myLogger;
 	private ClientInput input;
+	private Representation rep;
 
 	public ClientIO(Client _myClient, World _myWorld, String _server, int _port, Logger _logger )
 	{
@@ -65,6 +66,14 @@ public class ClientIO implements IO
 		{
 			myLogger.message( "Failed to connect to server: " + ioe.getMessage() + "\n" , true );
 		}
+	}
+
+	// A temporary function to set the Representation, until we get a
+	// RepresentationResolver in place to handle user input that is based
+	// on or affects the Representation.
+	public void setRepresentation(Representation _rep)
+	{
+		rep = _rep;
 	}
 
 	public void send( Object _message )
