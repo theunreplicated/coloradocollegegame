@@ -28,6 +28,30 @@ java Representation3D -s <domain>
 
 Move around!
 
+*CONTROLS*
+{{{
+W - Forward
+S - Backward
+A - Turn Left
+D - Turn Right
+
+UP - Up
+DOWN - Down
+LEFT - Strafe Left
+RIGHT - Strafe Right
+
+Number Pad
+1 - Not Implemented
+2 - Pitch Back
+3 - Not Implemented
+4 - Turn Left
+5 - Not Implemented
+6 - Turn Right
+7 - Roll Left
+8 - Roll Right
+9 - Pitch Right
+0 - Not Implemented
+}}}
 
 Note: To make either the Server or the Client display testing messages (i.e. make it verbose)  add a -v:
 
@@ -43,4 +67,5 @@ java Server -v
 }}}
 
 And have fun!
+
 
