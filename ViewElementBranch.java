@@ -46,8 +46,6 @@ public class ViewElementBranch implements ElementBranch
 		}
 		else if(viewMode == OFFSET_VIEW)
 		{
-			//fill this in (initialization)
-
 			Vector3f p = new Vector3f(e.getPosition());
 			p.add(new Vector3f(OFFSET));
 			posi = new Transform3D(new Quat4f(e.getFacing()), p, 1);
@@ -191,6 +189,16 @@ public class ViewElementBranch implements ElementBranch
 	/**
 	 **Methods that get passed along to the avatar
 	 **/
+
+	public BranchGroup getBranchScene()
+	{
+		return avatar.getBranchScene();
+	}
+	
+	public void detach()
+	{
+		avatar.detach();
+	}
 	
 /*	
 	public void setAppearance(Appearance a)
@@ -204,13 +212,4 @@ public class ViewElementBranch implements ElementBranch
 	}
 */
 
-	public BranchGroup getBranchScene()
-	{
-		return avatar.getBranchScene();
-	}
-	
-	public void detach()
-	{
-		avatar.detach();
-	}
 }

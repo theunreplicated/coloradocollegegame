@@ -137,6 +137,17 @@
 	</element>
 
 	<element>
+		<name>KMZ tester</name>
+		<plural>KMZ testers</plural>
+		<shapes>
+			<kmz>
+				<name>KMZ file</name>
+				<url>test.kmz</url>
+			</kmz>
+		</shapes>
+	</element>
+
+	<element>
 		<name>glasses</name>
 		<plural>pairs of glasses</plural>
 		<shapes>
