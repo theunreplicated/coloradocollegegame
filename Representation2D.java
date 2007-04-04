@@ -21,6 +21,9 @@ public class Representation2D extends JPanel implements Representation
 	{
 		first = _first;
 
+		// Setting the Representation - a temporary solution for camera-relative movement -- Omer.
+		_ci.setRepresentation(this);
+
 		this.setFocusable( true );
 		this.setPreferredSize(new Dimension(Constants.CANVAS_WIDTH, Constants.CANVAS_HEIGHT));
 

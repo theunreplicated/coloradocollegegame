@@ -35,6 +35,10 @@ public class Representation3D extends Applet implements Representation
 
 		//ClientInput stuff
 		ClientInput ci = _client.getClientInput();
+		
+		// Setting the Representation - a temporary solution for camera-relative movement -- Omer.
+		ci.setRepresentation(this);
+
 		canvas3D.setFocusable(true);
 		canvas3D.addKeyListener(ci);
 		canvas3D.addMouseListener(ci);

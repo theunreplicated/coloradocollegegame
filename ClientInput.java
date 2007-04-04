@@ -8,6 +8,8 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 	private Logger myLogger;
 	private boolean[] modifiers = { false, false, false }; //indicate whether or not the shift,
 							       //ctrl and alt modifier keys are pressed
+
+	private Representation rep = null;
 	//for mouse movement - do what exactly?
 	private int mx = 0; //"old" position
 	private int my = 0;
@@ -18,6 +20,12 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 	{
 		myIO = _cio;
 		myLogger = _myLogger;
+	}
+
+	public void setRepresentation(Representation _rep)
+	{
+		rep = _rep;
+		myIO.setRepresentation(rep);
 	}
 
 	public void keyPressed(KeyEvent ke)
