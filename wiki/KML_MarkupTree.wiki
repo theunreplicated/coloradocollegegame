@@ -10,15 +10,30 @@ The information that will be needed for creating an element/object from the KML 
 please note that the style tags have not been implemented yet. 
 
 kml
-	Document
-		name
-		!DocumentOrigin
-		Folder
-			Placemark
-				!GeometeryCollection
-					Polygon // faces
-						!outerBoundaryIs
-							!LinearRing
-								coordinates
-					!LineString // edges
-						coordinates
+
+	
+--->Document
+
+--->--->name
+
+--->--->!DocumentOrigin
+
+--->--->--->coordinates
+
+--->Folder
+
+--->--->--->Placemark
+
+--->--->--->--->!GeometeryCollection
+
+--->--->--->--->--->Polygon // faces
+
+--->--->--->--->--->--->outerBoundaryIs
+
+--->--->--->--->--->--->--->!LinearRing
+
+--->--->--->--->--->--->--->--->coordinates
+
+--->--->--->--->--->!LineString // edges
+
+--->--->--->--->--->--->coordinates
