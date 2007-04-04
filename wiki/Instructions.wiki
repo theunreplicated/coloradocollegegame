@@ -12,14 +12,16 @@ javac *.java
 }}}
 
 ~~Run the Server on matheserver.~~
+
 Run the Server anywhere you like.
 
 {{{
 java Server
 }}}
 
-Run the Client User Interface(s) ((such as Representation2D)) *connecting to domain-name <domain> (e.g., localhost)*!
+Run the Client User Interface(s) ((such as ~~Representation2D~~ Representation3D)) *connecting to domain-name <domain> (e.g., localhost)*!
 
+~~java Representation2D -s <domain>~~
 {{{
 java Representation3D -s <domain>
 }}}
@@ -29,6 +31,7 @@ Move around!
 
 Note: To make either the Server or the Client display testing messages (i.e. make it verbose)  add a -v:
 
+~~java Representation2D -v -s <domain>~~
 {{{
 java Representation3D -v -s <domain>
 }}}
@@ -40,3 +43,4 @@ java Server -v
 }}}
 
 And have fun!
+
