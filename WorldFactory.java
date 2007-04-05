@@ -32,6 +32,13 @@ public class WorldFactory
 		files = folder.listFiles(new WGFileFilter(Constants.WORLD_EXTENSION));
 	}
 
+	public WorldFactory(File[] _files, ElementFactory _ef, Logger _myLogger)
+	{
+		files = _files;
+		ef = _ef;
+		myLogger = _myLogger;
+	}
+
 	public void fillWorld(World w)
 	{
 		try
@@ -42,7 +49,6 @@ public class WorldFactory
 			Element element, attributesElement, newAttribute;
 			NodeList elements, positionNodes, facingNodes, scaleNodes, attributesNodes;
 			Node tmpNode;
-			String attributeType;
 			GameElement newElement;
 			float[] position;
 			float[] facing;
@@ -51,6 +57,12 @@ public class WorldFactory
 			
 			for(File file : files)
 			{
+
+				if(!file.exists())
+				{
+					myLogger.message("WorldFactory cannot find file: " + file + "\n", true);
+					continue;
+				}
 				doc = db.parse(file);
 				elements = doc.getElementsByTagName("element");
 				for(i = elements.getLength()-1;i>=0; i--)
@@ -58,7 +70,12 @@ public class WorldFactory
 					element = (Element) elements.item(i);
 
 					newElement = ef.getGameElement(element.getAttribute("type"));
-					newElement.id(i);					
+
+					/* For an explanation of ELEMENT_ID_PADDING and id strategies
+					 * in general, please see the long comment in Constants.java
+					 * where ELMENT_ID_PADDING is declared.
+					 */
+					newElement.id((i+1)*10*Constants.ELEMENT_ID_PADDING+Constants.ELEMENT_ID_PADDING);
 
 					positionNodes = element.getElementsByTagName("position");
 					position = new float[positionNodes.getLength()];
@@ -105,24 +122,7 @@ public class WorldFactory
 							tmpNode = attributesNodes.item(a);
 							if(tmpNode.getNodeType() != Node.ELEMENT_NODE) continue;
 							newAttribute = (Element) tmpNode;
-							attributeType = newAttribute.getAttribute("type");
-							if(attributeType.equalsIgnoreCase("String"))
-							{
-								newElement.attribute(newAttribute.getTagName(), newAttribute.getTextContent());
-							}
-							else if(attributeType.equalsIgnoreCase("int"))
-							{
-								newElement.attribute(newAttribute.getTagName(), Integer.parseInt(newAttribute.getTextContent()));
-							}
-							else if(attributeType.equalsIgnoreCase("float"))
-							{
-								newElement.attribute(newAttribute.getTagName(), Float.parseFloat(newAttribute.getTextContent()));
-							}
-							else if(attributeType.equalsIgnoreCase("hex32")) //for 32bit hexadecimal
-							{
-								newElement.attribute(newAttribute.getTagName(), (int)Long.parseLong(newAttribute.getTextContent(),16));	
-							}
-							// &c.
+							newElement.attribute(newAttribute.getTagName(), Constants.parseXMLwithType(newAttribute));
 						}
 					}
 					
@@ -139,7 +139,6 @@ public class WorldFactory
 		}
 
 	}
-
 
 
 	private class WGFileFilter implements FileFilter

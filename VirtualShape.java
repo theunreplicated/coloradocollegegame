@@ -10,6 +10,7 @@ public class VirtualShape
 	protected float[] boundingBox;
 	private int color;
 	private String texture;
+	private int texturePattern;
 	
 	public VirtualShape(float[] _position)
 	{
@@ -21,6 +22,7 @@ public class VirtualShape
 		scale = Constants.DEFAULT_SCALE;
 		color = Constants.DEFAULT_COLOR;
 		texture = Constants.DEFAULT_TEXTURE;   
+		texturePattern = Constants.DEFAULT_TEXTURE_PATTERN;
 	}
 
 	public VirtualShape(Node _info)
@@ -75,9 +77,24 @@ public class VirtualShape
 
 		NodeList textureNodes = info.getElementsByTagName("texture");
 		if(textureNodes.getLength() != 0)
+		{
 			texture = textureNodes.item(0).getTextContent();
+			NodeList texturePatternNodes = info.getElementsByTagName("texture_pattern");
+			if(texturePatternNodes.getLength() != 0)
+			{
+				texturePattern = Constants.parseTexture(texturePatternNodes.item(0).getTextContent());
+			}
+			else
+			{
+				texturePattern = Constants.DEFAULT_TEXTURE_PATTERN;
+			}
+		}
 		else
-			texture = Constants.DEFAULT_TEXTURE;	
+		{
+			texture = Constants.DEFAULT_TEXTURE;
+			texturePattern = Constants.DEFAULT_TEXTURE_PATTERN;
+		}
+
 	}
 
 	public String getName()
@@ -113,5 +130,10 @@ public class VirtualShape
 	public String getTexture()
 	{
 		return texture;
+	}
+
+	public int getTexturePattern()
+	{
+		return texturePattern;
 	}
 }

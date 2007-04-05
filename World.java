@@ -41,6 +41,7 @@ public class World
 	public String toString()
 	{
 		GameElement ge = first;
+		if(ge == null) { return "** WORLD IS EMPTY **\n"; }
 		String output = "** CURRENT WORLD **\n";
 		do
 		{
