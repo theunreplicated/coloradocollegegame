@@ -31,7 +31,14 @@ public class ElementFactory
 		File[] files = folder.listFiles(new EGFileFilter(Constants.ELEMENT_LIST_EXTENSION));
 		createDefaultElements(files);
 	}
-	public void createDefaultElements(File[] files)
+
+	public ElementFactory(File[] _files, Logger _myLogger)
+	{
+		myLogger = _myLogger;
+		createDefaultElements(_files);
+	}
+
+	private void createDefaultElements(File[] files)
 	{
 
 		try
@@ -42,7 +49,6 @@ public class ElementFactory
 			Element element, name, plural, shape, newAttribute, attributesElement;
 			NodeList elements, spheres, cylinders, boxes, cones, kmz, kmzUrls, facingNodes, boundsNodes, attributesNodes;
 			Node tmpNode;
-			String attributeType;
 			VirtualShape[] shapes;
 			int i, j, k;
 			int kmlCount;
@@ -56,6 +62,11 @@ public class ElementFactory
 			
 			for(File file : files)
 			{
+				if(!file.exists())
+				{
+					myLogger.message("ElementFactory cannot find file: " + file + "\n", true);
+					continue;
+				}
 				doc = db.parse(file);
 				elements = doc.getElementsByTagName("element");
 				for(i = elements.getLength()-1;i>=0; i--)
@@ -78,24 +89,7 @@ public class ElementFactory
 							tmpNode = attributesNodes.item(a);
 							if(tmpNode.getNodeType() != Node.ELEMENT_NODE) continue;
 							newAttribute = (Element) tmpNode;
-							attributeType = newAttribute.getAttribute("type");
-							if(attributeType.equalsIgnoreCase("String"))
-							{
-								attributes.put(newAttribute.getTagName(), newAttribute.getTextContent());
-							}
-							else if(attributeType.equalsIgnoreCase("int"))
-							{
-								attributes.put(newAttribute.getTagName(), Integer.parseInt(newAttribute.getTextContent()));
-							}
-							else if(attributeType.equalsIgnoreCase("float"))
-							{
-								attributes.put(newAttribute.getTagName(), Float.parseFloat(newAttribute.getTextContent()));
-							}
-							else if(attributeType.equalsIgnoreCase("hex32")) //for 32bit hexadecimal
-							{
-								attributes.put(newAttribute.getTagName(), (int)Long.parseLong(newAttribute.getTextContent(),16));	
-							}
-							// &c.
+							attributes.put(newAttribute.getTagName(), Constants.parseXMLwithType(newAttribute));
 						}
 					}
 					
@@ -214,6 +208,11 @@ public class ElementFactory
 				}
 			}
 			
+			if(defaultElements.isEmpty())
+			{
+				myLogger.message("ElementFactory found no elements... You can't play a game without elements!\n", true);
+				System.exit(1);
+			}
 			// iterate through hashmap to create our array...
 			defaultElementKeys = new String[] {""};
 			defaultElementKeys = defaultElements.keySet().toArray(defaultElementKeys);

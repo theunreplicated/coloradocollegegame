@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.io.*;
+import org.w3c.dom.Element;
 
 public class Constants
 {
@@ -7,6 +8,31 @@ public class Constants
 
 	// server information
 	public static final int MAX_CONNECTIONS = 8;
+	public static final int ELEMENT_ID_PADDING = (int)Math.pow(10,(Constants.MAX_CONNECTIONS+"").length());
+	/* Element ids guaranteed to be unique and also to be able to
+	 * generate other unique ids easily. ELEMENT_ID_PADDING is:
+	 * 10^(x+1) where x = the length in digits of the number of
+	 * connections allowed on the server. So, with 8 maximum
+	 * connections, ELEMENT_ID_PADDING is 10. With 315 maximum
+	 * connections, ELEMENT_ID_PADDING is 1000. &c. All player elements
+	 * have an id of ELEMENT_ID_PADDING plus some value between
+	 * 1 and the total number of connections. So, the range of
+	 * IDs for players when the server allows a total of eight
+	 * connections is 11-18. The range of IDs for players when
+	 * the server allows a total of 315 connections is 1001-1315.
+	 * All non-player elements created by the server have an ID
+	 * that has ELEMENT_ID_PADDING as its last n digits. So, with
+	 * eight possible connections, elements created by the server
+	 * will count up as such: 110, 210, 310, 410, 510, &c. With
+	 * 315 possible connections, elements created by the server
+	 * will count up as such: 11000, 21000, 31000, 41000, &c.
+	 * Each player can also create elements. The IDs of those
+	 * elements end in the digits that make up the player's ID.
+	 * So, player 15's elements will count up as such: 115, 215,
+	 * 315, 415, &c.
+	 * This system guarantees unique IDs for any element created
+	 * by any player or by the server.
+	 */
 
 	// communication between server(s) and client(s)
 	public static final String DEF_SERVER = "";
@@ -34,6 +60,7 @@ public class Constants
 	public static final String DEFAULT_NAME = "Bruce";
 	public static final int DEFAULT_COLOR = 0;
 	public static final String DEFAULT_TEXTURE = null;
+	public static final int DEFAULT_TEXTURE_PATTERN = 1;
 
 	// IDs for actions that the World understands
 	public static final int MOVE_TO = 101;
@@ -83,6 +110,10 @@ public class Constants
 	public static final short UPDATE_PERIOD = 10;
 	public static final short CANVAS_WIDTH = 600;
 	public static final short CANVAS_HEIGHT = 600;
+	public static final short TEXTURE_STRETCH = 1;
+	public static final short TEXTURE_CENTER = 2;
+	public static final short TEXTURE_TILE = 3;
+
 
 	// resolver stuff
 	public static final short DEFAULT_RULE_ARRAY_SIZE = 20;
@@ -128,4 +159,49 @@ public class Constants
 		}
 		return a;
 	}
+
+	public static int parseTexture(String _texture)
+	{
+		if(_texture.equalsIgnoreCase("stretch"))
+		{
+			return Constants.TEXTURE_STRETCH;
+		}
+		else if(_texture.equalsIgnoreCase("center"))
+		{
+			return Constants.TEXTURE_CENTER;
+		}
+		else if(_texture.equalsIgnoreCase("tile"))
+		{
+			return Constants.TEXTURE_TILE;
+		}
+		else
+		{
+			System.err.println("parseTexture in Constants.java received unknown texture pattern... Setting to " + Constants.DEFAULT_TEXTURE_PATTERN);
+			return Constants.DEFAULT_TEXTURE_PATTERN;
+		}
+	}
+
+	public static Object parseXMLwithType(Element _element)
+	{
+		String attributeType = _element.getAttribute("type");
+		if(attributeType.equalsIgnoreCase("String"))
+		{
+			return _element.getTextContent();
+		}
+		else if(attributeType.equalsIgnoreCase("int"))
+		{
+			return Integer.parseInt(_element.getTextContent());
+		}
+		else if(attributeType.equalsIgnoreCase("float"))
+		{
+			return Float.parseFloat(_element.getTextContent());
+		}
+		else if(attributeType.equalsIgnoreCase("hex32")) //for 32bit hexadecimal
+		{
+			return (int)Long.parseLong(_element.getTextContent(),16);
+		}
+		// &c.
+		return null;
+	}
+
 }

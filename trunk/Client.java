@@ -51,9 +51,9 @@ public class Client
 					port = Constants.DEF_PORT;
 				}
 			}
-			else if(args[i].equalsIgnoreCase("-h"))
+			else if(args[i].equalsIgnoreCase("-h") || args[i].equalsIgnoreCase("-help"))
 			{
-				System.out.println("Syntax: java Client [options]");
+				System.out.println("Syntax: java Represenation<2D|3D> [options]");
 				System.out.println("Options:");
 				System.out.println(" -h\t\tPrint this help screen");
 				System.out.println(" -v\t\tRun in verbose mode");

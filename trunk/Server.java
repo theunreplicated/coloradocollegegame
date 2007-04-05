@@ -14,12 +14,10 @@ public class Server implements IO
 	private World myWorld;
 	public Logger myLogger;
 
-	public Server( Logger _logger ,int _port)
+	public Server(WorldFactory wf, ElementFactory ef, Logger _logger ,int _port)
 	{
 
 		myLogger = _logger;
-		ElementFactory ef = new ElementFactory(myLogger);
-		WorldFactory wf = new WorldFactory(ef, myLogger);
 		myWorld = new World(ef, myLogger);
 		wf.fillWorld(myWorld); 
 		myLogger.message("\n" + myWorld.toString(), false);
@@ -69,7 +67,11 @@ public class Server implements IO
 				{
 					myLogger.message( "Creating client connection thread in row " + i + "\n", false );
 
-					ids[i] = i + (int)Math.pow(10,(Constants.MAX_CONNECTIONS+"").length());
+					/* For an explanation of ELEMENT_ID_PADDING and id strategies
+					 * in general, please see the long comment in Constants.java
+					 * where ELMENT_ID_PADDING is declared.
+					 */
+					ids[i] = i + 1 + Constants.ELEMENT_ID_PADDING;
 					System.out.println( ids[i] + "" );
 					threads[i] = new ClientThread(this, _conn, ids[i], i);
 					threads[i].start();
@@ -136,10 +138,20 @@ public class Server implements IO
 	{
 		// Take user input.
 		// Options:
-		//  port#
+		//  -p <port> 
 		//  -verbose
+		//  -dir <datadir>
+		//  -eext <elementext>
+		//  -wext <worldext>
+		//  -wfiles <worldfile> [worldfile [worldfile [...]]]
+		//  -efiles <elementfile> [elementfile [elementfile [...]]]
 		int port = Constants.DEF_PORT;
 		boolean verbose = false;
+		File dataDir = new File(Constants.DEFAULT_DATA_DIR);
+		String elementExt = Constants.ELEMENT_LIST_EXTENSION;
+		String worldExt = Constants.WORLD_EXTENSION;
+		File[] worldFiles = null;
+		File[] elementFiles = null;
 		for(int i=0; i < args.length; i++)
 		{
 			if(args[i].equalsIgnoreCase("-v"))
@@ -147,20 +159,128 @@ public class Server implements IO
 				verbose = true;
 				continue;
 			}
-			try
+			if(args[i].equalsIgnoreCase("-dir"))
 			{
-				port = Integer.parseInt(args[i]);
-				if(port > Constants.MAX_PORT || port < Constants.MIN_PORT)
+				if(args.length == i)
+				{
+					System.err.println("Bad usage of -dir option. Syntax: -dir <directory>");
+					System.exit(1);
+				}
+				dataDir = new File(args[++i]);
+				continue;
+			}
+			if(args[i].equalsIgnoreCase("-eext"))
+			{
+				if(args.length == i)
+				{
+					System.err.println("Bad usage of -eext option. Syntax: -eext <element file ext>");
+					System.exit(1);
+				}
+				elementExt = args[++i];
+				continue;
+			}
+			if(args[i].equalsIgnoreCase("-wext"))
+			{
+				if(args.length == i)
+				{
+					System.err.println("Bad usage of -wext option. Syntax: -wext <world file ext>");
+					System.exit(1);
+				}
+				worldExt = args[++i];
+				continue;
+			}
+			if(args[i].equalsIgnoreCase("-wfiles"))
+			{
+				if(args.length == i)
+				{
+					System.err.println("Bad usage of -wfiles option. Syntax: -wfiles <world file> [world file [world file [...]]]");
+					System.exit(1);
+				}
+				File[] tmpFiles = new File[args.length];
+
+				// We assume that there will be at least _one_ file.
+				tmpFiles[0] = new File(args[i+1]);
+				int j = 1;
+				while(args.length > i+j+1 && !args[i+j+1].startsWith("-"))
+				{
+					tmpFiles[j] = new File(args[i+j+1]);
+					j++;
+				}
+				worldFiles = new File[j];
+				System.arraycopy(tmpFiles,0,worldFiles,0,j);
+				i+=j;
+				continue;
+			}
+			if(args[i].equalsIgnoreCase("-efiles"))
+			{
+				if(args.length == i)
+				{
+					System.err.println("Bad usage of -efiles option. Syntax: -efiles <element file> [element file [element file [...]]]");
+					System.exit(1);
+				}
+				File[] tmpFiles = new File[args.length];
+
+				// We assume that there will be at least _one_ file.
+				tmpFiles[0] = new File(args[i+1]);
+				int j = 1;
+				while(args.length > i+j+1 && !args[i+j+1].startsWith("-"))
+				{
+					tmpFiles[j] = new File(args[i+j+1]);
+					j++;
+				}
+				elementFiles = new File[j];
+				System.arraycopy(tmpFiles,0,elementFiles,0,j);
+				i+=j;
+				continue;
+			}
+			if(args[i].equalsIgnoreCase("-p"))
+			{
+				if(args.length == i)
+				{
+					System.err.println("Bad usage of -p option. Syntax: -p <port>");
+					System.exit(1);
+				}
+				try
+				{
+					port = Integer.parseInt(args[++i]);
+					if(port > Constants.MAX_PORT || port < Constants.MIN_PORT)
+						port = Constants.DEF_PORT;
+				}
+				catch(NumberFormatException nfe)
+				{
 					port = Constants.DEF_PORT;
+				}
+				continue;
 			}
-			catch(NumberFormatException nfe)
+			if(args[i].equalsIgnoreCase("-help") || args[i].equalsIgnoreCase("-h"))
 			{
-				port = Constants.DEF_PORT;
+				System.out.println("Syntax: java Server [options]");
+				System.out.println("Options:");
+				System.out.println(" -h\t\tPrint this help screen");
+				System.out.println(" -v\t\tRun in verbose mode");
+				System.out.println(" -p <port>\tRun on port # <port>");
+				System.out.println(" -dir <dir>\tLook for data files in directory <dir>");
+				System.out.println(" -eext <ext>\tLook in data dir for Element List files that have extension <ext>");
+				System.out.println(" -wext <ext>\tLook in data dir for World files that have extension <ext>");
+				System.out.println(" -efiles <file> [file [file [...]]]\tOnly look for elements in the files specified");
+				System.out.println(" -wfiles <file> [file [file [...]]]\tBuild the world only out of the files specified");
+				System.exit(0);
 			}
+			System.err.println("Bad argument (ignoring): " + args[i]);
 		}
 
 		Logger myLogger = new Logger( verbose);
+		ElementFactory ef;
+		WorldFactory wf;
+		if(elementFiles != null)
+			ef = new ElementFactory(elementFiles, myLogger);
+		else
+			ef = new ElementFactory(dataDir, elementExt, myLogger);
 
-		Server s = new Server( myLogger , port);
+		if(worldFiles != null)
+			wf = new WorldFactory(worldFiles, ef, myLogger);
+		else
+			wf = new WorldFactory(dataDir, worldExt, ef, myLogger);
+		Server s = new Server(wf, ef, myLogger , port);
 	}
 }
