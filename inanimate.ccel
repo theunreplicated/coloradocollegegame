@@ -75,9 +75,6 @@
 	<element>
 		<name>big pillar</name>
 		<plural>big pillars</plural>
-		<bounds>1.5</bounds>
-		<bounds>6</bounds>
-		<bounds>1.5</bounds>
 		<shapes>
 			<box>
 				<name>base1</name>
@@ -131,6 +128,27 @@
 		</shapes>
 		<attributes>
 			<color type="hex32">ff0000ff</color>
+			<texture type="String">textures/smoke01.jpg</texture>	
+			<transparency type="float">0.3</transparency>
+		</attributes>
+	</element>
+
+	<element>
+		<name>maze wall</name>
+		<plural>maze walls</plural>
+		<shapes>
+			<box>
+				<name>wall</name>
+				<position>0</position>
+				<position>0</position>
+				<position>0</position>
+				<dimension>1</dimension>
+				<dimension>1</dimension>
+				<dimension>1</dimension>				
+			</box>
+		</shapes>
+		<attributes>
+			<color type="hex32">ffffff00</color>
 			<texture type="String">textures/smoke01.jpg</texture>	
 			<transparency type="float">0.3</transparency>
 		</attributes>

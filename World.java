@@ -165,6 +165,7 @@ public class World
 			ge.setPosition(newElement.getPosition());
 			ge.setFacing(newElement.getFacing());
 			ge.setScale(newElement.getScale());
+			ge.setBoundingBox(newElement.getBoundingBox());
 			ge.setAttributes(newElement.getAttributes());
 			this.addElement(ge);
 		}
@@ -175,6 +176,17 @@ public class World
 	{
 		GameElement element = elements.get(_row);
 		element.nudge( _dpos );
+		
+	if(hasCollisions(element)) //if we caused a collision
+	{
+		float[] backup = new float[_dpos.length]; //get the reversion
+		for(int i=0; i<backup.length; i++)
+			backup[i] = -1*_dpos[i];
+		element.nudge(backup); //undo the move
+	}	
+	else //let everybody know
+	{	
+
 		float[] position = element.getPosition();
 
 		Object[] message = new Object[] {
@@ -190,14 +202,25 @@ public class World
 			element.changed = true;
 			first.notifyAll();
 		}
-
-		checkCollisions(); //for testing
+	
+	}
 	}
 
 	public void rotateElement( int _row, float[] _dpos )
 	{
 		GameElement element = elements.get(_row);
 		element.rotate( _dpos );
+
+/*	if(hasCollisions(element)) //if we caused a collision
+	{
+		float[] backup = new float[_dpos.length] //get the reversion
+		for(int i=0; i<backup.length; i++)
+			backup[i] = -1*_dpos[i];
+		element.nudge(backup) //undo the move
+	}	
+	else //let everybody know
+	{	
+*/
 		float[] facing = element.getFacing();
 
 		Object[] message = new Object[] {
@@ -214,7 +237,7 @@ public class World
 			first.notifyAll();
 		}
 
-		checkCollisions(); //for testing
+/*	}*/
 	}
 
 	public void attributeElement(int _row, String k, Object v)
@@ -258,8 +281,6 @@ public class World
 			element.changed = true;
 			first.notifyAll();
 		}
-	
-		checkCollisions(); //for testing
 	}
 
 	public void setFacing( Object[] _message, int _start)
@@ -274,8 +295,6 @@ public class World
 			element.changed = true;
 			first.notifyAll();
 		}
-		
-		checkCollisions(); //for testing
 	}
 
 	public void setAttribute( Object[] _message, int _start)
@@ -342,13 +361,35 @@ public class World
 			{
 				//check collisions
 				if(e.isColliding(e2))
+				{
 					System.out.println("Collision detected!! Element " + e.id() + " and  Element " + e2.id());
-			
+					//System.out.println(e);
+					//System.out.println(e2);
+				}
 				e2 = e2.next;
 			}
 
 			e = e.next; //loop
 		} while(e != first);
-
 	}
+	//a TESTING method to check the world for a collision against a certain element
+	public boolean hasCollisions(GameElement e)
+	{
+		GameElement e2 = e.next; //for looping
+		while(e2 != e)
+		{
+			//check collisions
+			if(e.isColliding(e2))
+			{
+				System.out.println("Collision detected!! Element " + e.id() + " and  Element " + e2.id());
+				return true;
+				//System.out.println(e);
+				//System.out.println(e2);
+			}
+			e2 = e2.next;
+		}
+
+		return false;
+	}
+
 }

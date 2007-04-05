@@ -109,6 +109,7 @@ public class WorldFactory
 							scale[s] = Float.parseFloat(scaleNodes.item(s).getTextContent());
 						}
 						newElement.setScale(scale);
+						newElement.scaleBoundingBox(scale);
 					}	
 					
 					attributesElement = (Element) element.getElementsByTagName("attributes").item(0);

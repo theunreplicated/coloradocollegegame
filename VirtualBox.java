@@ -16,14 +16,14 @@ public class VirtualBox extends VirtualShape
 			dimensions[i] = Float.parseFloat(dimNodes.item(i).getTextContent());
 		}
 
-		boundingBox = new float[] {0.5f*dimensions[0], 0.5f*dimensions[1], 0.5f*dimensions[2]}; //get the half-dimensions
+		boundingBox = new float[] {0.5f*dimensions[0]*scale[0], 0.5f*dimensions[1]*scale[1], 0.5f*dimensions[2]*scale[2]}; //get the half-dimensions
 	}
 
 	public VirtualBox(float[] _dimensions, float[] _position)
 	{
 		super(_position);
 		dimensions = _dimensions;
-		boundingBox = new float[] {0.5f*dimensions[0], 0.5f*dimensions[1], 0.5f*dimensions[2]}; //get the half-dimensions
+		boundingBox = new float[] {0.5f*dimensions[0]*scale[0], 0.5f*dimensions[1]*scale[1], 0.5f*dimensions[2]*scale[2]}; //get the half-dimensions
 	}
 
 	public float getDimX()

@@ -9,8 +9,9 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 
 	private float[] position = new float[3]; //World-level postition of the element
 	private float[] facing = new float[4]; //The element's orientation (in Quaternions!)
-	private float[] boundingBox = new float[3];
 	private float[] scale = new float[3];
+	private float[] boundingBox = new float[3];
+	private float boundingRadius;
 
 	VirtualShape[] shapes = null;
 	private HashMap attributes = null;
@@ -27,9 +28,10 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		type = _type;
 		position = _position;
 		facing = _facing;
+		scale = _scale;
 		shapes = _shapes;
 		boundingBox = _boundingBox;
-		scale = _scale;
+		boundingRadius = VectorUtils.getContainingSphere(boundingBox);
 		
 		attributes = _attributes;
 		/*initialize is depracated */
@@ -44,9 +46,10 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		boundingBox = new float[original.boundingBox.length];
 		System.arraycopy(original.position,0,position,0,original.position.length);
 		System.arraycopy(original.facing,0,facing,0,original.facing.length);
+		System.arraycopy(original.scale,0,scale,0,original.scale.length);
 		System.arraycopy(original.shapes,0,shapes,0,original.shapes.length);
 		System.arraycopy(original.boundingBox,0,boundingBox,0,original.boundingBox.length);
-		System.arraycopy(original.scale,0,scale,0,original.scale.length);
+		boundingRadius = VectorUtils.getContainingSphere(boundingBox);
 		if(original.attributes != null)
 			attributes = (HashMap) original.attributes.clone();
 		typeId = original.typeId;
@@ -116,6 +119,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		out.writeObject(position);
 		out.writeObject(facing);
 		out.writeObject(scale);
+		out.writeObject(boundingBox);
 		out.writeObject(attributes);
 	}
 
@@ -126,6 +130,8 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		position = (float[]) in.readObject();
 		facing = (float[]) in.readObject();
 		scale = (float[]) in.readObject();
+		boundingBox = (float[]) in.readObject();
+		boundingRadius = VectorUtils.getContainingSphere(boundingBox);
 		attributes = (HashMap) in.readObject();
 	}
 
@@ -153,6 +159,9 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 			s += " " + f;
 		s += "\n Scale:";
 		for(float f : scale)
+			s += " " + f;
+		s += "\n BoundingBox:";
+		for(float f: boundingBox)
 			s += " " + f;
 		s += "\n Attributes:\n";
 		Set<Map.Entry<String,Object>> entries = attributes.entrySet();
@@ -193,6 +202,11 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	public synchronized float[] getBoundingBox()
 	{
 		return boundingBox;
+	}
+
+	public synchronized float getBoundingRadius()
+	{
+		return boundingRadius;
 	}
 
 	
@@ -241,7 +255,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	public synchronized void scale(float[] delta)
 	{
 		for( int i = 0 ; i < scale.length; i++ )
-			scale[i] *= delta[i];		
+			scale[i] *= delta[i];
 	}
 
 	//sets the scale to the specified factors
@@ -249,6 +263,20 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	{
 		for( int i = scale.length-1 ; i >= 0; i--)
 			scale[i] = _scale[i];
+	}
+
+	//scales the boundingBox (used when creating scaling elements)
+	public synchronized void scaleBoundingBox(float[] delta)
+	{
+		for( int i = 0 ; i < boundingBox.length; i++ )
+			boundingBox[i] *= delta[i];
+		boundingRadius = VectorUtils.getContainingSphere(boundingBox);
+	}
+
+	public synchronized void setBoundingBox(float[] bb)
+	{
+		boundingBox = bb;
+		boundingRadius = VectorUtils.getContainingSphere(boundingBox);
 	}
 
 
@@ -259,12 +287,18 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	//this method will run a collision detection tree using other collision methods.
 	public synchronized boolean isColliding(GameElement _element)
 	{
-		//currently just uses OBBs in 3D to check
-		return VectorUtils.OBB3DIntersect(boundingBox, 
+		//check bounding spheres
+		if(VectorUtils.getDistSqr(position, _element.getPosition()) <= 
+			(boundingRadius+_element.getBoundingRadius())*(boundingRadius+_element.getBoundingRadius()))
+		{
+			//uses OBBs in 3D to check
+			return VectorUtils.OBB3DIntersect(boundingBox, 
 						_element.getBoundingBox(), 
 						VectorUtils.sub(position, _element.getPosition()),
 						Quaternions.getMatrixFromQuat(facing, _element.getFacing()));
-
+		}
+		else
+			return false;
 	}
 
 	//Returns an ArrayList containing String[] pairs of the names of shapes which intersect between the two elements

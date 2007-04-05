@@ -97,7 +97,7 @@ public class Constants
 	public static final short Y = 1;
 	public static final short Z = 2;
 	public static final float INITIAL_X = 0;
-	public static final float INITIAL_Y = 0;
+	public static final float INITIAL_Y = 10; //for now
 	public static final float INITIAL_Z = 0;
 	public static final short ELEMENT_INFO_SIZE = 2;
 	public static final short MIN = 0;

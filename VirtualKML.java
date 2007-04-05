@@ -11,7 +11,7 @@ public class VirtualKML extends VirtualShape //A shape built from a Google Sketc
 		
 		System.out.println("Making new VirtualKML shape!");
 		
-		Element originElement = (Element)_doc.getElementsByTagName("DocumentOrigin").item(0);
+		Element originElement = ((Element)_doc.getElementsByTagName("DocumentOrigin").item(0));
 		String origin = ((Element)originElement.getElementsByTagName("coordinates").item(0)).getTextContent();
 		
 		System.out.println("Origin:"+origin);
