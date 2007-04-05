@@ -1,0 +1,2908 @@
+<world>
+
+	<element type="maze wall">
+		<position>-45.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>-45.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-40.0</position>
+		<position>2.0</position>
+		<position>-40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-40.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>-40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-35.0</position>
+		<position>2.0</position>
+		<position>-40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-35.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-30.0</position>
+		<position>2.0</position>
+		<position>-40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-30.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-25.0</position>
+		<position>2.0</position>
+		<position>-40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-25.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-20.0</position>
+		<position>2.0</position>
+		<position>-40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-20.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-15.0</position>
+		<position>2.0</position>
+		<position>-40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-15.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-10.0</position>
+		<position>2.0</position>
+		<position>-40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-10.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-5.0</position>
+		<position>2.0</position>
+		<position>-40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>0.0</position>
+		<position>2.0</position>
+		<position>-45.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-5.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>0.0</position>
+		<position>2.0</position>
+		<position>-40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>0.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>5.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>10.0</position>
+		<position>2.0</position>
+		<position>-40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>10.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>15.0</position>
+		<position>2.0</position>
+		<position>-40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>15.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>20.0</position>
+		<position>2.0</position>
+		<position>-40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>20.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>25.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>30.0</position>
+		<position>2.0</position>
+		<position>-40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>30.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>35.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>40.0</position>
+		<position>2.0</position>
+		<position>-40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>40.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>45.0</position>
+		<position>2.0</position>
+		<position>-40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>-45.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>45.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>-40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>-50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>-35.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-40.0</position>
+		<position>2.0</position>
+		<position>-30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>-30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-30.0</position>
+		<position>2.0</position>
+		<position>-30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-20.0</position>
+		<position>2.0</position>
+		<position>-30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-15.0</position>
+		<position>2.0</position>
+		<position>-30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-10.0</position>
+		<position>2.0</position>
+		<position>-30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>0.0</position>
+		<position>2.0</position>
+		<position>-30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>10.0</position>
+		<position>2.0</position>
+		<position>-35.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>10.0</position>
+		<position>2.0</position>
+		<position>-30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>20.0</position>
+		<position>2.0</position>
+		<position>-35.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>20.0</position>
+		<position>2.0</position>
+		<position>-30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>25.0</position>
+		<position>2.0</position>
+		<position>-30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>30.0</position>
+		<position>2.0</position>
+		<position>-35.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>30.0</position>
+		<position>2.0</position>
+		<position>-30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>35.0</position>
+		<position>2.0</position>
+		<position>-30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>40.0</position>
+		<position>2.0</position>
+		<position>-30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>45.0</position>
+		<position>2.0</position>
+		<position>-30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>-35.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>-30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-40.0</position>
+		<position>2.0</position>
+		<position>-25.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>-25.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-40.0</position>
+		<position>2.0</position>
+		<position>-20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>-20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-35.0</position>
+		<position>2.0</position>
+		<position>-20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-30.0</position>
+		<position>2.0</position>
+		<position>-25.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-30.0</position>
+		<position>2.0</position>
+		<position>-20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-25.0</position>
+		<position>2.0</position>
+		<position>-20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-20.0</position>
+		<position>2.0</position>
+		<position>-25.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-20.0</position>
+		<position>2.0</position>
+		<position>-20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-10.0</position>
+		<position>2.0</position>
+		<position>-25.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-10.0</position>
+		<position>2.0</position>
+		<position>-20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-5.0</position>
+		<position>2.0</position>
+		<position>-20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>0.0</position>
+		<position>2.0</position>
+		<position>-25.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>0.0</position>
+		<position>2.0</position>
+		<position>-20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>5.0</position>
+		<position>2.0</position>
+		<position>-20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>10.0</position>
+		<position>2.0</position>
+		<position>-25.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>10.0</position>
+		<position>2.0</position>
+		<position>-20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>20.0</position>
+		<position>2.0</position>
+		<position>-20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>25.0</position>
+		<position>2.0</position>
+		<position>-20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>30.0</position>
+		<position>2.0</position>
+		<position>-20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>40.0</position>
+		<position>2.0</position>
+		<position>-20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>-25.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>-20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-40.0</position>
+		<position>2.0</position>
+		<position>-15.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>-15.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-40.0</position>
+		<position>2.0</position>
+		<position>-10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>-10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-30.0</position>
+		<position>2.0</position>
+		<position>-10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-25.0</position>
+		<position>2.0</position>
+		<position>-10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-20.0</position>
+		<position>2.0</position>
+		<position>-10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-10.0</position>
+		<position>2.0</position>
+		<position>-10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-5.0</position>
+		<position>2.0</position>
+		<position>-10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>0.0</position>
+		<position>2.0</position>
+		<position>-10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>5.0</position>
+		<position>2.0</position>
+		<position>-10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>10.0</position>
+		<position>2.0</position>
+		<position>-15.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>10.0</position>
+		<position>2.0</position>
+		<position>-10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>20.0</position>
+		<position>2.0</position>
+		<position>-10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>25.0</position>
+		<position>2.0</position>
+		<position>-10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>30.0</position>
+		<position>2.0</position>
+		<position>-15.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>30.0</position>
+		<position>2.0</position>
+		<position>-10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>35.0</position>
+		<position>2.0</position>
+		<position>-10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>40.0</position>
+		<position>2.0</position>
+		<position>-15.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>40.0</position>
+		<position>2.0</position>
+		<position>-10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>45.0</position>
+		<position>2.0</position>
+		<position>-10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>-15.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>-10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>-5.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-40.0</position>
+		<position>2.0</position>
+		<position>0.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>0.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-35.0</position>
+		<position>2.0</position>
+		<position>0.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-30.0</position>
+		<position>2.0</position>
+		<position>0.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-20.0</position>
+		<position>2.0</position>
+		<position>-5.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-20.0</position>
+		<position>2.0</position>
+		<position>0.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-10.0</position>
+		<position>2.0</position>
+		<position>0.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>0.0</position>
+		<position>2.0</position>
+		<position>0.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>10.0</position>
+		<position>2.0</position>
+		<position>0.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>15.0</position>
+		<position>2.0</position>
+		<position>0.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>20.0</position>
+		<position>2.0</position>
+		<position>0.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>25.0</position>
+		<position>2.0</position>
+		<position>0.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>30.0</position>
+		<position>2.0</position>
+		<position>0.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>40.0</position>
+		<position>2.0</position>
+		<position>0.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>-5.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>0.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>5.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-40.0</position>
+		<position>2.0</position>
+		<position>10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-30.0</position>
+		<position>2.0</position>
+		<position>5.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-30.0</position>
+		<position>2.0</position>
+		<position>10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-20.0</position>
+		<position>2.0</position>
+		<position>5.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-20.0</position>
+		<position>2.0</position>
+		<position>10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-15.0</position>
+		<position>2.0</position>
+		<position>10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-10.0</position>
+		<position>2.0</position>
+		<position>5.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-10.0</position>
+		<position>2.0</position>
+		<position>10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-5.0</position>
+		<position>2.0</position>
+		<position>10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>0.0</position>
+		<position>2.0</position>
+		<position>5.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>0.0</position>
+		<position>2.0</position>
+		<position>10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>10.0</position>
+		<position>2.0</position>
+		<position>10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>15.0</position>
+		<position>2.0</position>
+		<position>10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>20.0</position>
+		<position>2.0</position>
+		<position>10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>25.0</position>
+		<position>2.0</position>
+		<position>10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>30.0</position>
+		<position>2.0</position>
+		<position>5.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>30.0</position>
+		<position>2.0</position>
+		<position>10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>40.0</position>
+		<position>2.0</position>
+		<position>5.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>40.0</position>
+		<position>2.0</position>
+		<position>10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>5.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>10.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-40.0</position>
+		<position>2.0</position>
+		<position>15.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>15.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-40.0</position>
+		<position>2.0</position>
+		<position>20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-30.0</position>
+		<position>2.0</position>
+		<position>15.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-30.0</position>
+		<position>2.0</position>
+		<position>20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-20.0</position>
+		<position>2.0</position>
+		<position>20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-15.0</position>
+		<position>2.0</position>
+		<position>20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-10.0</position>
+		<position>2.0</position>
+		<position>15.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-10.0</position>
+		<position>2.0</position>
+		<position>20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>0.0</position>
+		<position>2.0</position>
+		<position>15.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>0.0</position>
+		<position>2.0</position>
+		<position>20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>10.0</position>
+		<position>2.0</position>
+		<position>15.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>10.0</position>
+		<position>2.0</position>
+		<position>20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>20.0</position>
+		<position>2.0</position>
+		<position>20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>30.0</position>
+		<position>2.0</position>
+		<position>15.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>30.0</position>
+		<position>2.0</position>
+		<position>20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>35.0</position>
+		<position>2.0</position>
+		<position>20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>40.0</position>
+		<position>2.0</position>
+		<position>15.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>40.0</position>
+		<position>2.0</position>
+		<position>20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>45.0</position>
+		<position>2.0</position>
+		<position>20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>15.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>20.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-40.0</position>
+		<position>2.0</position>
+		<position>25.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>25.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-40.0</position>
+		<position>2.0</position>
+		<position>30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-30.0</position>
+		<position>2.0</position>
+		<position>25.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-30.0</position>
+		<position>2.0</position>
+		<position>30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-25.0</position>
+		<position>2.0</position>
+		<position>30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-20.0</position>
+		<position>2.0</position>
+		<position>30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-10.0</position>
+		<position>2.0</position>
+		<position>30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>0.0</position>
+		<position>2.0</position>
+		<position>25.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>0.0</position>
+		<position>2.0</position>
+		<position>30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>10.0</position>
+		<position>2.0</position>
+		<position>30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>20.0</position>
+		<position>2.0</position>
+		<position>25.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>20.0</position>
+		<position>2.0</position>
+		<position>30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>25.0</position>
+		<position>2.0</position>
+		<position>30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>30.0</position>
+		<position>2.0</position>
+		<position>30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>35.0</position>
+		<position>2.0</position>
+		<position>30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>40.0</position>
+		<position>2.0</position>
+		<position>30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>45.0</position>
+		<position>2.0</position>
+		<position>30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>25.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>30.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-40.0</position>
+		<position>2.0</position>
+		<position>35.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>35.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-40.0</position>
+		<position>2.0</position>
+		<position>40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-30.0</position>
+		<position>2.0</position>
+		<position>40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-20.0</position>
+		<position>2.0</position>
+		<position>35.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-20.0</position>
+		<position>2.0</position>
+		<position>40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-15.0</position>
+		<position>2.0</position>
+		<position>40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-10.0</position>
+		<position>2.0</position>
+		<position>35.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-10.0</position>
+		<position>2.0</position>
+		<position>40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-5.0</position>
+		<position>2.0</position>
+		<position>40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>0.0</position>
+		<position>2.0</position>
+		<position>35.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>0.0</position>
+		<position>2.0</position>
+		<position>40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>10.0</position>
+		<position>2.0</position>
+		<position>35.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>10.0</position>
+		<position>2.0</position>
+		<position>40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>20.0</position>
+		<position>2.0</position>
+		<position>40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>25.0</position>
+		<position>2.0</position>
+		<position>40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>30.0</position>
+		<position>2.0</position>
+		<position>40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>40.0</position>
+		<position>2.0</position>
+		<position>40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>45.0</position>
+		<position>2.0</position>
+		<position>40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>35.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>40.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-45.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-40.0</position>
+		<position>2.0</position>
+		<position>45.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>45.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-40.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-50.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-35.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-30.0</position>
+		<position>2.0</position>
+		<position>45.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-30.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-25.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-20.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-15.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-10.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>-5.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>0.0</position>
+		<position>2.0</position>
+		<position>45.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>0.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>5.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>10.0</position>
+		<position>2.0</position>
+		<position>45.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>10.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>15.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>20.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>25.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>30.0</position>
+		<position>2.0</position>
+		<position>45.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>30.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>35.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>40.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>45.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>45.0</position>
+		<facing>0.0</facing>
+		<facing>90.0</facing>
+		<facing>0.0</facing>
+		<scale>9.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+	<element type="maze wall">
+		<position>50.0</position>
+		<position>2.0</position>
+		<position>50.0</position>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<facing>0.0</facing>
+		<scale>1.0</scale>
+		<scale>9.0</scale>
+   		<scale>1.0</scale>
+	</element>
+
+</world>
+

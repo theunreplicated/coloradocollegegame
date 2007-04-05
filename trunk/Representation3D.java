@@ -150,26 +150,28 @@ public class Representation3D extends Applet implements Representation
 	//creates a Representation-level grid to display as the ground. For testing mostly
 	public Shape3D createGrid()
 	{
-		LineArray grid = new LineArray(88, LineArray.COORDINATES | LineArray.COLOR_3);
+		int gridSize = 50; //half-dimension size
+		int entries = 4*((2*gridSize)+1);
+		LineArray grid = new LineArray(entries, LineArray.COORDINATES | LineArray.COLOR_3);
 		
 		int index = 0;
-		for(int i=-10; i<=10; i++)
+		for(int i=-gridSize; i<=gridSize; i++)
 		{
-			grid.setCoordinate(index, new Point3f(-11.0f, -1.0f, i));
+			grid.setCoordinate(index, new Point3f(-gridSize-1.0f, -3.0f, i));
 			index++;
-			grid.setCoordinate(index, new Point3f( 11.0f, -1.0f, i));
+			grid.setCoordinate(index, new Point3f( gridSize+1.0f, -3.0f, i));
 			index++; 
 		}
-		for(int i=-10; i<=10; i++)
+		for(int i=-gridSize; i<=gridSize; i++)
 		{
-			grid.setCoordinate(index, new Point3f(i, -1.0f,-11.0f));
+			grid.setCoordinate(index, new Point3f(i, -3.0f,-gridSize-1.0f));
 			index++;
-			grid.setCoordinate(index, new Point3f(i, -1.0f, 11.0f));
+			grid.setCoordinate(index, new Point3f(i, -3.0f, gridSize+1.0f));
 			index++; 
 		}
 		
 		Color3f green = new Color3f(0.0f, 1.0f, 0.0f);
-		for(int i=0; i<88; i++)
+		for(int i=0; i<entries; i++)
 			grid.setColor(i, green);	
 		
 		Shape3D gridShape = new Shape3D(grid);

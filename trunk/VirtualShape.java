@@ -6,7 +6,7 @@ public class VirtualShape
 	private String name;
 	private float[] position;
 	private float[] facing; //in quaternions
-	private float[] scale;
+	protected float[] scale;
 	protected float[] boundingBox;
 	private int color;
 	private String texture;
@@ -85,9 +85,7 @@ public class VirtualShape
 				texturePattern = Constants.parseTexture(texturePatternNodes.item(0).getTextContent());
 			}
 			else
-			{
 				texturePattern = Constants.DEFAULT_TEXTURE_PATTERN;
-			}
 		}
 		else
 		{

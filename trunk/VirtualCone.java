@@ -16,7 +16,7 @@ public class VirtualCone extends VirtualShape
 		Element _height = (Element) info.getElementsByTagName("height").item(0);
 		height = Float.parseFloat(_height.getTextContent());
 
-		boundingBox = new float[] {radius, 0.5f*height, radius};
+		boundingBox = new float[] {radius*scale[0], 0.5f*height*scale[1], radius*scale[2]};
 	}
 
 	public VirtualCone(float _radius, float _height, float[] _position)
@@ -24,7 +24,7 @@ public class VirtualCone extends VirtualShape
 		super(_position);
 		radius = _radius;
 		height = _height;
-		boundingBox = new float[] {radius, 0.5f*height, radius};
+		boundingBox = new float[] {radius*scale[0], 0.5f*height*scale[1], radius*scale[2]};
 	}
 
 	public float getRadius()

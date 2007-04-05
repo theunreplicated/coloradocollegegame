@@ -116,7 +116,7 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		}
 		
 		sroot.addChild(createBoundingBox(e)); //draw the bounding box for testing.
-						      		
+										      		
 		broot.compile(); //let J3D optimize the branch
 	}//constructor
 
@@ -251,7 +251,9 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 	//maybe also draw based on shapes?
 	public Shape3D createBoundingBox(GameElement e)
 	{
-		float[] obb = e.getBoundingBox();
+		float[] obbo = e.getBoundingBox();
+		float[] scale = e.getScale(); //we unscale the boundingBox to draw it
+		float[] obb = new float[] {obbo[0]/scale[0], obbo[1]/scale[1], obbo[2]/scale[2]};		
 
 		//create the corners out of the obb half-dimensions
 		Point3f c0 = new Point3f( obb[0], obb[1], obb[2]);

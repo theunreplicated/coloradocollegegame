@@ -12,14 +12,14 @@ public class VirtualSphere extends VirtualShape
 		Element _radius = (Element) info.getElementsByTagName("radius").item(0);
 		radius = Float.parseFloat(_radius.getTextContent());
 
-		boundingBox = new float[] {radius, radius, radius};
+		boundingBox = new float[] {radius*scale[0], radius*scale[1], radius*scale[2]};
 	}
 
 	public VirtualSphere(float _radius, float[] _position)
 	{
 		super(_position);
 		radius = _radius;
-		boundingBox = new float[] {radius, radius, radius};
+		boundingBox = new float[] {radius*scale[0], radius*scale[1], radius*scale[2]};
 	}
 
 	public float getRadius()
