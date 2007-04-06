@@ -14,8 +14,8 @@ public class MazeWorldGenerator
 
 	public static void main(String[] args)
 	{
-		int rows = 10; //_r;
-		int cols = 10; //_c;
+		int rows = 8; //_r;
+		int cols = 8; //_c;
 		int flrs = 1; //_f;
 		
 		MazeBuilder bld = new MazeBuilder(rows,cols);
@@ -190,6 +190,53 @@ public class MazeWorldGenerator
 		System.out.println("<world>\n");
 		for(int i=0; i<walls.size(); i++)
 			System.out.println(walls.get(i));
+		//add pots of gold in the corners
+		float[] pp1 = new float[] {(rt/2.0f)+sx, 0, (rt/2.0f)+sz};
+		float[] pp2 = new float[] {((rt*cols)+sx-(rt/2.0f)), 0, (rt/2.0f)+sz};
+		float[] pp3 = new float[] {(rt/2.0f)+sx, 0, ((rt*rows)-(rt/2.0f))+sz};
+		float[] pp4 = new float[] {((rt*cols)+sx-(rt/2.0f)), 0, ((rt*rows)-(rt/2.0f))+sz};
+		
+		System.out.println(	"	<element type=\"pot of gold\">\n" +
+					"		<position>"+pp1[0]+"</position>\n" +
+					"		<position>"+pp1[1]+"</position>\n" +
+					"		<position>"+pp1[2]+"</position>\n" +
+					"		<scale>"+2+"</scale>\n" +
+					"		<scale>"+2+"</scale>\n" +
+					"   		<scale>"+2+"</scale>\n" +
+					"	</element>\n");
+		System.out.println(	"	<element type=\"pot of gold\">\n" +
+					"		<position>"+pp2[0]+"</position>\n" +
+					"		<position>"+pp2[1]+"</position>\n" +
+					"		<position>"+pp2[2]+"</position>\n" +
+					"		<scale>"+2+"</scale>\n" +
+					"		<scale>"+2+"</scale>\n" +
+					"   		<scale>"+2+"</scale>\n" +
+					"	</element>\n");
+		System.out.println(	"	<element type=\"pot of gold\">\n" +
+					"		<position>"+pp3[0]+"</position>\n" +
+					"		<position>"+pp3[1]+"</position>\n" +
+					"		<position>"+pp3[2]+"</position>\n" +
+					"		<scale>"+2+"</scale>\n" +
+					"		<scale>"+2+"</scale>\n" +
+					"   		<scale>"+2+"</scale>\n" +
+					"	</element>\n");
+		System.out.println(	"	<element type=\"pot of gold\">\n" +
+					"		<position>"+pp4[0]+"</position>\n" +
+					"		<position>"+pp4[1]+"</position>\n" +
+					"		<position>"+pp4[2]+"</position>\n" +
+					"		<scale>"+2+"</scale>\n" +
+					"		<scale>"+2+"</scale>\n" +
+					"   		<scale>"+2+"</scale>\n" +
+					"	</element>\n");
+		System.out.println(	"	<element type=\"pot of gold\">\n" +
+					"		<position>"+pp1[0]+"</position>\n" +
+					"		<position>"+pp1[1]+"</position>\n" +
+					"		<position>"+pp1[2]+"</position>\n" +
+					"		<scale>"+2+"</scale>\n" +
+					"		<scale>"+2+"</scale>\n" +
+					"   		<scale>"+2+"</scale>\n" +
+					"	</element>\n");
+		//close the world tag
 		System.out.println("</world>\n");
 	}
 

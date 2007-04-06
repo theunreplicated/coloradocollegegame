@@ -32,11 +32,11 @@
 		</attributes>
 	</element>
 
-	<element type="KMZ tester">
+	<!--<element type="KMZ tester">
 		<position>0</position>
 		<position>0</position>
 		<position>0</position>
-	</element>
+	</element>-->
 
 </world>
 

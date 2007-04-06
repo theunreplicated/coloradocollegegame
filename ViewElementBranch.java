@@ -17,23 +17,25 @@ import javax.vecmath.*;
 
 public class ViewElementBranch implements ElementBranch
 {
-	public static final int FIRST_PERSON_VIEW = 0;
-	public static final int OFFSET_VIEW = 1;
-	public static final int FOLLOWING_VIEW = 2;
-	public static final int STATIC_VIEW = 3;
+	public static final int STATIC_VIEW = 0;
+	public static final int FIRST_PERSON_VIEW = 1;
+	public static final int OFFSET_VIEW = 2;
+	public static final int FOLLOWING_VIEW = 3;
 
-	public static final float[] OFFSET = new float[] {0.0f, 1.0f, 7.5f};
+	public static final float[] OFFSET = new float[] {0.0f, 2.0f, 5.0f};
 
 	//member variables
 	private ViewingPlatform camera;
 	private TransformGroup coord; //transformed coordinates for this branch
 	private GameElementBranch avatar; //if we want one
+	private BranchGroup avatarRoot;
 	
-	private int viewMode = 1;
+	private int viewMode;
 
 	//constructor
-	public ViewElementBranch(GameElement e)
+	public ViewElementBranch(GameElement e, int v)
 	{
+		viewMode = v;
 		camera = new ViewingPlatform();
 		coord = camera.getMultiTransformGroup().getTransformGroup(0); //coord is the VP's transformation
 		coord.setCapability(TransformGroup.ALLOW_TRANSFORM_READ); //allow us to read the transformation at runtime
@@ -54,9 +56,53 @@ public class ViewElementBranch implements ElementBranch
 		{
 			posi = new Transform3D(new Quat4f(Constants.DEFAULT_FACING), new Vector3f(0f,0f,5f), 1);
 		}
+		System.out.println("initial");
+		System.out.println(posi);
 		coord.setTransform(posi); //set our transform group to the default position
 
 		avatar = new GameElementBranch(e); //the avatar object for this view
+	}
+
+	//cycles through the available view models.
+	public void changeView()
+	{
+		if(viewMode == FIRST_PERSON_VIEW)
+		{
+			attachAvatar();	//add the avatar	
+			//change the camera
+			
+			//FROM fpv TO offset
+			viewMode = OFFSET_VIEW;
+			Transform3D t = new Transform3D(); //a new Transform
+			coord.getTransform(t); //fill the transform with our current settings
+			Vector3f pp = avatar.getTranslation(); //get the avatar's translation
+			float[] f = new float[4];
+			avatar.getRotation().get(f); //get a float[] of the avatar's rotation
+			pp.add(new Vector3f(Quaternions.rotatePoint(OFFSET,f))); //add the spun offset to the translation
+			t.setTranslation(pp); //set the new translation
+			coord.setTransform(t); //set as our new state
+		}
+		else if(viewMode == OFFSET_VIEW)
+		{
+			detach(); //remove the avatar
+			//change the camera
+			
+			//FROM offset TO fpv
+			viewMode = FIRST_PERSON_VIEW;
+			Transform3D t = new Transform3D(); //a new Transform
+			coord.getTransform(t); //fill the transform with our current settings
+			t.setTranslation(avatar.getTranslation()); //set to our avatar's translation
+			coord.setTransform(t); //set as our new state
+		}
+		//add support for other views--probably change method 
+			
+	}
+
+	//change to specified viewMode
+	public void changeView(int to)
+	{
+		//Implement this method!
+		System.out.println("Change view to "+to);
 	}
 
 	//a method to fetch the ViewingPlatform in order to construct the view branch
@@ -70,22 +116,27 @@ public class ViewElementBranch implements ElementBranch
 		return viewMode;
 	}
 	
-	public GameElementBranch getAvatar()
+	public void createAvatar(BranchGroup bg)
 	{
-		if(viewMode != FIRST_PERSON_VIEW)
-			return avatar;	
-		else
-			return null;
-	}
-
-	public void changeView(int to)
-	{
-		//Implement this method!
-		System.out.println("Change view to "+to); 
+		avatarRoot = bg;
+		if(viewMode != FIRST_PERSON_VIEW) //if we're not in FP view
+			avatarRoot.addChild(avatar.getBranchScene()); //add the avatar to the scene graph.
 	}
 	
+	public void attachAvatar()
+	{
+		avatarRoot.addChild(avatar.getBranchScene()); //add the avatar to the scene graph.
+	}
+	
+	public GameElementBranch getAvatar()
+	{
+		return avatar;	
+	}
+
 	public void setTranslation(float[] p)
 	{
+		avatar.setTranslation(p); //always move the avatar Element
+
 		if(viewMode == FIRST_PERSON_VIEW)
 		{
 			Transform3D t = new Transform3D(); //a new Transform
@@ -106,14 +157,17 @@ public class ViewElementBranch implements ElementBranch
 			coord.setTransform(t); //set as our new state
 			*/
 			
-			avatar.setTranslation(p);
 		}
 		else
-			avatar.setTranslation(p);
+		{
+			
+		}
 	}
 		
 	public void setRotation(float[] f)
 	{
+		avatar.setRotation(f); //always move the avatar Element 
+
 		if(viewMode == FIRST_PERSON_VIEW)
 		{
 			Transform3D t = new Transform3D(); //a new Transform
@@ -133,15 +187,17 @@ public class ViewElementBranch implements ElementBranch
 			t.setTranslation(pp); //set the new translation
 			coord.setTransform(t); //set as our new state
 			*/
-
-			avatar.setRotation(f);
 		}
 		else
-			avatar.setRotation(f);
+		{
+			
+		}
 	}
 
 	public void setScale(float[] s)
 	{
+		avatar.setScale(s); //always move the avatar Element
+
 		if(viewMode == FIRST_PERSON_VIEW)
 		{
 			Transform3D t = new Transform3D(); //a new Transform
@@ -157,15 +213,17 @@ public class ViewElementBranch implements ElementBranch
 			coord.getTransform(t); //fill the transform with our current settings
 			t.setScale(new Vector3d((double)s[0], (double)s[1], (double)s[2])); //set our current scale
 			coord.setTransform(t);
-			
-			avatar.setScale(s);
 		}
 		else
-			avatar.setScale(s);
+		{
+		
+		}
 	}
 	
 	public void setTransform(float[] p, float[] f, float[] s)
 	{
+		avatar.setTransform(p,f,s); //always move the avatar Element
+
 		if(viewMode == FIRST_PERSON_VIEW)
 		{
 			Transform3D t = new Transform3D(new Quat4f(f), new Vector3f(p), 1);
@@ -179,11 +237,11 @@ public class ViewElementBranch implements ElementBranch
 			Transform3D t = new Transform3D(new Quat4f(f), pp, 1);
 			t.setScale(new Vector3d((double)s[0], (double)s[1], (double)s[2])); //set our current scale
 			coord.setTransform(t);
-	
-			avatar.setTransform(p,f,s);
 		}
 		else
-			avatar.setTransform(p,f,s);
+		{
+		
+		}
 	}
 
 	/**

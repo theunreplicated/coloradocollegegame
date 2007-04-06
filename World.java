@@ -363,8 +363,8 @@ public class World
 				if(e.isColliding(e2))
 				{
 					System.out.println("Collision detected!! Element " + e.id() + " and  Element " + e2.id());
-					//System.out.println(e);
-					//System.out.println(e2);
+					System.out.println(e);
+					System.out.println(e2);
 				}
 				e2 = e2.next;
 			}
@@ -382,9 +382,9 @@ public class World
 			if(e.isColliding(e2))
 			{
 				System.out.println("Collision detected!! Element " + e.id() + " and  Element " + e2.id());
+				System.out.println(e);
+				System.out.println(e2);
 				return true;
-				//System.out.println(e);
-				//System.out.println(e2);
 			}
 			e2 = e2.next;
 		}
