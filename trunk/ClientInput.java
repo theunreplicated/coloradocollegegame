@@ -112,6 +112,10 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 				myIO.rotateSelf(Constants.QUAT_CLOY);
 				break;
 
+			/*Camera stuff*/
+			case KeyEvent.VK_V:
+				rep.changeView();
+				break;
 			default:
 				myLogger.message("You typed: " + ke.getKeyChar() + " (" + ke.getKeyCode() + ")" + "\n", false);
 

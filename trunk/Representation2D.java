@@ -105,6 +105,15 @@ public class Representation2D extends JPanel implements Representation
 	public void update()
 	{}
 
+	//cycles through the views (not in use)
+	public void changeView()
+	{}
+	
+	//changes to the specified view (not in use)
+	public void changeView(int to)
+	{}
+
+
 	public static void main(String args[])
 	{
 		Client myClient = Client.initialize(args);

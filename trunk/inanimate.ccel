@@ -134,6 +134,57 @@
 	</element>
 
 	<element>
+		<name>pot of gold</name>
+		<plural>pots of gold</plural>
+		<shapes>
+			<sphere>
+				<name>base</name>
+				<position>0</position>
+				<position>-0.8</position>
+				<position>0</position>
+				<scale>1</scale>
+				<scale>.35</scale>
+				<scale>1</scale>
+				<radius>1</radius>
+			</sphere>
+			<cylinder>
+				<name>pot</name>
+				<position>0</position>
+				<position>0</position>
+				<position>0</position>
+				<radius>1</radius>
+				<height>1.6</height>
+			</cylinder>
+			<sphere>
+				<name>rim</name>
+				<position>0</position>
+				<position>0.8</position>
+				<position>0</position>
+				<scale>1.2</scale>
+				<scale>0.15</scale>
+				<scale>1.2</scale>
+				<radius>1</radius>
+			</sphere>
+			<sphere>
+				<name>gold</name>
+				<position>0</position>
+				<position>0.85</position>
+				<position>0</position>
+				<scale>0.95</scale>
+				<scale>0.2</scale>
+				<scale>0.95</scale>
+				<radius>1</radius>
+				<color>ffffff00</color>
+				<!--<texture>textures/earth.jpg</texture>-->
+			</sphere>
+		</shapes>
+		<attributes>
+			<color type="hex32">ff646464</color>
+			<!--<texture type="String">textures/smoke01.jpg</texture>-->	
+		</attributes>
+	</element>
+
+	<element>
 		<name>maze wall</name>
 		<plural>maze walls</plural>
 		<shapes>

@@ -23,9 +23,10 @@ public class Representation3D extends Applet implements Representation
 	GameElement elementStart; //for checking the list
 	BranchGroup scene; //the root of the scene--lets us add more elements
 	Canvas3D canvas3D;
+	ViewElementBranch veb;
 	
 	//constructor
-	public Representation3D(Client _client)
+	public Representation3D(Client _client, int viewMode)
 	{
 		setLayout(new BorderLayout()); //set the Applet's layout
 		GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration(); //how does SimpleUniverse want to draw stuff?
@@ -46,9 +47,14 @@ public class Representation3D extends Applet implements Representation
 
 		BranchGroup superRoot = new BranchGroup(); //the ultimate root of the entire scene. Created here so we can add stuff later	
 
+		scene = new BranchGroup();
+		scene.setCapability(Group.ALLOW_CHILDREN_WRITE); //let us modify the children at runtime
+		scene.setCapability(Group.ALLOW_CHILDREN_EXTEND); //allow us to add more Elements to the scene during runtime
+
 		elementStart = _client.getWorldElements(); //get the Elements to start building the tree
 		elementStart.attribute("isClient", true); //mark the first element as the Client (Representation-dependent attribute)
-		ViewingPlatform vp = createCamera(elementStart, superRoot); //build the camera FIRST
+		veb = createCamera(elementStart, scene, viewMode); //build the camera FIRST
+		ViewingPlatform vp = veb.getViewingPlatform();
 		
 		/*tie the lighting to the camera, so that objects are always lit as if from the front.*/
 		TransformGroup vpt = vp.getMultiTransformGroup().getTransformGroup(0);
@@ -57,9 +63,7 @@ public class Representation3D extends Applet implements Representation
 		vpt.addChild(candleStick);
 		//addDefaultLights(superRoot); //add default lighting to world--doesn't move
 
-		scene = createSceneGraph(elementStart); //initialize the scene based on the Client's world
-		scene.setCapability(Group.ALLOW_CHILDREN_WRITE); //let us modify the children at runtime
-		scene.setCapability(Group.ALLOW_CHILDREN_EXTEND); //allow us to add more Elements to the scene during runtime
+		createSceneGraph(elementStart, scene); //initialize the scene based on the Client's world
 		superRoot.addChild(scene); //add the scene to the tree
 
 		SimpleUniverse simpleU = new SimpleUniverse(vp, viewer);
@@ -77,20 +81,18 @@ public class Representation3D extends Applet implements Representation
 	//creates a "view" or camera based on the given element
 	//  this will probably need to be argument based depending on what kind of camera we want
 	//  Also, this MUST be called BEFORE createSceneGraph() (I could probably make it explicit, but it doesn't seem as nice)
-	public ViewingPlatform createCamera(GameElement e, BranchGroup vscene)
+	public ViewElementBranch createCamera(GameElement e, BranchGroup vscene, int viewMode)
 	{
-		ViewElementBranch veb = new ViewElementBranch(e); //Create the camera (effectively)
-		elementsToNodes.put(e,veb); //add it to the hashmap!
-		if(veb.getAvatar() != null) //if we "have" an avatar
-			vscene.addChild(veb.getBranchScene()); //add the avatar to the scene graph.
-		
-		return veb.getViewingPlatform();
+		ViewElementBranch _veb = new ViewElementBranch(e,viewMode); //Create the camera (effectively)
+		elementsToNodes.put(e,_veb); //add it to the hashmap!
+		_veb.createAvatar(vscene); //create the Avatar (adding it to the scene)
+		return _veb;
 	}
 
 	//create the bulk of the Java3D tree
-	public BranchGroup createSceneGraph(GameElement e)
+	public void createSceneGraph(GameElement e, BranchGroup gscene)
 	{
-		BranchGroup gscene = new BranchGroup(); //A root node for the bulk of the scene
+		//BranchGroup gscene = new BranchGroup(); //A root node for the bulk of the scene
 
 		GameElement first = e; //for looping
 		do
@@ -108,7 +110,7 @@ public class Representation3D extends Applet implements Representation
 		//Representation-level objects
 		gscene.addChild(createGrid());
 		
-		return gscene; //return the branch
+		//return gscene; //return the branch
 	}
 	
 	//create and return a background for the world
@@ -150,7 +152,7 @@ public class Representation3D extends Applet implements Representation
 	//creates a Representation-level grid to display as the ground. For testing mostly
 	public Shape3D createGrid()
 	{
-		int gridSize = 50; //half-dimension size
+		int gridSize = 40; //half-dimension size
 		int entries = 4*((2*gridSize)+1);
 		LineArray grid = new LineArray(entries, LineArray.COORDINATES | LineArray.COLOR_3);
 		
@@ -177,6 +179,19 @@ public class Representation3D extends Applet implements Representation
 		Shape3D gridShape = new Shape3D(grid);
 		return gridShape;
 	}
+
+	//cycles through the views
+	public void changeView()
+	{
+		veb.changeView();
+	}
+	
+	//changes to the specified view
+	public void changeView(int to)
+	{
+		veb.changeView(to);
+	}
+	
 
 	//an update method
 	public void update()
@@ -241,6 +256,6 @@ public class Representation3D extends Applet implements Representation
 	{
 		Client myClient = Client.initialize(args); //create a Client for the game
 
-		Frame f = new MainFrame(new Representation3D(myClient),300,300); //run the applet inside a Frame
+		Frame f = new MainFrame(new Representation3D(myClient, ViewElementBranch.OFFSET_VIEW),300,300); //run the applet inside a Frame
 	} 
 }

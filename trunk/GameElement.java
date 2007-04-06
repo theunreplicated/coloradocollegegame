@@ -163,6 +163,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		s += "\n BoundingBox:";
 		for(float f: boundingBox)
 			s += " " + f;
+		s += " ("+boundingRadius+")";
 		s += "\n Attributes:\n";
 		Set<Map.Entry<String,Object>> entries = attributes.entrySet();
 		Iterator<Map.Entry<String,Object>> it = entries.iterator();
