@@ -1,0 +1,34 @@
+<resolver>
+	<actions>
+		<action>
+			<name>move</name>
+			<inworld language="javascript">
+				var dvector = paramaters[0];
+				var vector = subject.getposition();
+				for(i = 0; i < dvector.length; i++)
+				{
+					vector[i] += dvector[i];
+				}
+				subject.setposition(vector);
+			</inworld>
+			<inrepresentation language="javascript">
+				representation.updateElement(subject);
+			</inrepresentation>
+		</action>
+	</actions>
+	<rules>
+		<rule>
+			<verb>move</verb>
+			<function language="javascript">
+				var status = 0;
+				for( obj in relevant)
+				{
+					if(subject.isColliding(obj))
+					{
+						status = 1;
+						break;
+					}
+				}
+			</function>
+		</rule>
+	</rules>

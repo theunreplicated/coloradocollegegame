@@ -3,6 +3,7 @@ import javax.xml.parsers.*;
 
 public class VirtualCone extends VirtualShape
 {
+	static final long serialVersionUID = 6883420106314429184L;
 	private float radius;
 	private float height;
 

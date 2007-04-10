@@ -11,12 +11,13 @@ import java.io.*;
 public class ClientIO implements IO
 {
 	//global variables
-    	public int id;
+	public int id;
 	private Client myClient;
 														   //pressed
-	private Socket servConnection;
+	private Socket servConnectionIn;
+	private Socket servConnectionOut;
 	private ServerListenerThread serverListener;
-	private OutputStream servOut;
+	private ObjectOutputStream oos;
 	private World myWorld;
 	private Logger myLogger;
 	private ClientInput input;
@@ -32,10 +33,20 @@ public class ClientIO implements IO
 		try
 		{
 			myLogger.message("Connecting...\n", false);
-			servConnection = new Socket(InetAddress.getByName(_server), _port);
-			servOut = servConnection.getOutputStream();
-			id = servConnection.getInputStream().read();
+			servConnectionIn = new Socket(InetAddress.getByName(_server), _port);
+			ObjectInputStream ois = new ObjectInputStream(servConnectionIn.getInputStream());
+			id = ois.readInt();
 			myClient.id = id;
+
+			// get the output stream
+			myLogger.message("Starting temporary server to get output stream...\n", false);
+			ServerSocket serve = new ServerSocket(_port+1);
+			servConnectionOut = serve.accept();
+
+			myLogger.message("Stopping temporary server with which we got an output stream...\n", false);
+			serve.close();
+
+			oos = new ObjectOutputStream(servConnectionOut.getOutputStream());
 
 			myLogger.message("Connected as id: " + id + "\n", false);
 			myWorld.setIO(this);
@@ -49,7 +60,7 @@ public class ClientIO implements IO
 									},
 								0);
 
-			serverListener = new ServerListenerThread(servConnection, myClient, myWorld);
+			serverListener = new ServerListenerThread(ois, myWorld);
 			serverListener.start();
 
 			this.send(new Object[] {		Constants.ADD_PLAYER,
@@ -80,7 +91,8 @@ public class ClientIO implements IO
 	{
 		try
 		{
-			servOut.write( Constants.toByteArray(_message) );
+			oos.writeObject(_message);
+			oos.flush();
 		}
 		catch( IOException ioe )
 		{
@@ -127,37 +139,33 @@ public class ClientIO implements IO
 
 	private class ServerListenerThread extends Thread
 	{
-		private InputStream servIn;
-		private Socket server;
+		private ObjectInputStream ois;
 		private World myWorld;
-		private Client myClient;
 
-		public ServerListenerThread(Socket _server, Client _myClient, World _myWorld)
+		public ServerListenerThread(ObjectInputStream _ois, World _myWorld)
 		{
-			server = _server;
+			ois = _ois;
 			myWorld = _myWorld;
-			myClient = _myClient;
 		}
 		
 		public void run()
 		{
 			try
 			{
-				servIn = server.getInputStream();
-				byte[] message = new byte[Constants.MESSAGE_SIZE];
-
-				int i;
 				Object[] objectMessage;
 
-				while( (servIn.read(message)) != -1 )
+				while( (objectMessage = (Object[]) ois.readObject()) != null)
 				{
-					objectMessage = (Object[]) Constants.fromByteArray(message);
 					myWorld.parse(objectMessage);
 				}
 			}
 			catch(IOException ioe)
 			{
 				myLogger.message( "Error while listening for server input: " + ioe.getMessage() + "\n", true );
+			}
+			catch(ClassNotFoundException cnfe)
+			{
+				myLogger.message( "Error while listening for server input (class not found): " + cnfe + "\n", true );
 			}
 		}
 

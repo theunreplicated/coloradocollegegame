@@ -3,6 +3,7 @@ import javax.xml.parsers.*;
 
 public class VirtualCylinder extends VirtualShape
 {
+	static final long serialVersionUID = -5324334570847991025L;
 	private float radius;
 	private float height;
 

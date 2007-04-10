@@ -33,7 +33,8 @@ public class Server implements IO
 		}
 		catch( IOException ioe )
 		{
-			System.err.println( ioe.getMessage() );
+			myLogger.message("Failed to start server: " + ioe + "\n", true);
+			System.exit(1);
 		}
 
 		myLogger.message("Starting server on port " + _port + "\n", false);
@@ -65,15 +66,14 @@ public class Server implements IO
 			{
 				if( ids[i] < 0 )
 				{
-					myLogger.message( "Creating client connection thread in row " + i + "\n", false );
 
 					/* For an explanation of ELEMENT_ID_PADDING and id strategies
 					 * in general, please see the long comment in Constants.java
 					 * where ELMENT_ID_PADDING is declared.
 					 */
 					ids[i] = i + 1 + Constants.ELEMENT_ID_PADDING;
-					System.out.println( ids[i] + "" );
-					threads[i] = new ClientThread(this, _conn, ids[i], i);
+					myLogger.message( "Creating client connection thread in row " + i + " (id is: " + ids[i] + ")\n", false );
+					threads[i] = new ClientThread(this, _conn, ids[i], i, myLogger);
 					threads[i].start();
 					
 					return;
@@ -131,7 +131,9 @@ public class Server implements IO
 	// fix to handle synchronization
 	public void sendWorld(  int _row )
 	{
+		System.out.println("sendWorld!");
 		threads[_row].send(new Object[]{ Constants.SEND_WORLD, myWorld.getElements() });
+		System.out.println("sendWorld!");
 	}
 
 	public static void main(String args[])
