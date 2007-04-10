@@ -9,56 +9,23 @@ Explain the benefits of using Google !SketchUp to model our world.
 
 Google !Sketchup has many design features that will allow for us to create models quickly, and anyone can create these models from their own home. The best way to possibly import said files will be using an xml type language. 
 
-The Free Version of [http://sketchup.google.com/index.html Google Sketchup] has an option to export the 3D model into many different file types. The one to use will be the .dae extension. 
+The Free Version of [http://sketchup.google.com/index.html Google Sketchup] has an option to export the 3D model into many different file types. The one to use will be the .kmz file extension as both the *Free* and Professional can export this file. 
 
-Here is what [http://download.sketchup.com/sketchuphelp/gsu6_win/gsuwin.html Google SketchUp] has to say about the .dae file extension: 
+Also by using the default .kmz file extension we are able to use Google's very own [http://sketchup.google.com/3dwarehouse/ 3D Warehouse] to be able to import a very vast amount of objects into our worlds. There are currently thousands (if not millions) of different models we can use. 
 
+To get a model into our world from the [http://sketchup.google.com/3dwarehouse/ 3D Warehouse] just follow these simple instructions: 
 
-= 3D Model (DAE) Export =
+*Option 1 - using a browser*
 
- !SketchUp allows you to export your models as DAE (Collada) files. Export a DAE file using  the Export > 3D Model menu item in the File menu.
-== Exporting a DAE File ==
+  # Find and Download the model that you wish to use within the browser of your choice. 
+  # Open the model in the latest version of [http://sketchup.google.com/download.html !SketchUp]
+  # Export to a .kmz file by: File > Export > 3D Model...  the export model to use is Google Earth (*.kmz)
 
-=== To export a DAE file: ===
+*Option 2 - from within !SketchUp*
 
-   #. Select File > Export > 3D Model. The Export Model dialog box is displayed.
-   #. Enter a file name for the exported file in the File name field.
-   #. Select the DAE export type from the Export type drop-down list.
-   #. (optional) Click on the Options button. The DAE Export Options dialog box is displayed.
-   #. (optional) Adjust the options in the DAE Export Options dialog box.
-   #. (optional) Click the OK button.
-   #. Click the Export button.
+  # Within !SketchUp: File > 3D Warehouse > Get Models...
+  # Find the model you wish to use. It acts like a browser for the warehouse. 
+  # Select Download model and Select "Yes" to the dialog box that pops up. 
+  # Export to a .kmz file by: File > Export > 3D Model...  the export model to use is Google Earth (*.kmz)
 
-== The DAE Export Options Dialog Box ==
-
- The DAE Export Options dialog box contains options for exporting DAE Files.
-
-=== Geometry ===
-
- The Geometry section of the DAE Export Options Dialog box is used to identify the geometry that will be exported.
-
-* Export only current selection:* The Export only current selection only checkbox is used to export the currently selected geometry. The entire !SketchUp model is exported when there is no selection. Additionally, the entire model is exported when this checkbox is not checked.
-
-* Triangulate all faces:* The Triangulate all faces checkbox is used to break the output into triangles instead of multi-sided faces.
-
-* Export two-sided faces:* The Export two-sided faces checkbox is used to export faces twice, once for the front and once for the back. This option doubles the number of polygons in the resulting DAE file and can slow down rendering. However, this option ensures that your model will appear more like it appears in !SketchUp. Both faces will always render, and materials applied to front and back faces are preserved.
-
-=== Materials ===
-
- The Materials section of the DAE Export Options Dialog box is used to identify how materials will be exported.
-
-* Export texture maps:* Check the Export texture maps checkbox to export textures with your DAE file.
-
-=== Cameras ===
-
- The Cameras section of the DAE Export Options Dialog box is used to identify how cameras will be exported.
-
- Generate cameras from scenes: Check the Generate cameras from scenes checkbox to create a camera object in the DAE file for each default camera position from each scene in your !SketchUp file.
-
-=== Scale ===
-
- The Scale section of the DAE Export Options Dialog box is used to identify the scale used in the DAE output.
-
-* Units:* The units drop-down list is used to determine the unit size in the DAE output.
-
- || _!SketchUp User Guide (Microsoft Windows): 3D Model (DAE) Export_ || _© Google Inc. 2007 !sketchup.google.com_ ||
+Have fun with the Google Library!
