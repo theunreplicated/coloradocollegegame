@@ -1,4 +1,4 @@
-#summary Explain the benefits of using Google !SketchUp to model our world.
+#summary Explain the benefits of using Google SketchUp to model our world.
 
 = Introduction =
 
@@ -9,7 +9,7 @@ Explain the benefits of using Google !SketchUp to model our world.
 
 Google !Sketchup has many design features that will allow for us to create models quickly, and anyone can create these models from their own home. The best way to possibly import said files will be using an xml type language. 
 
-The Free Version of [http://sketchup.google.com/index.html Google Sketchup] has an option to export the 3D model into many different file types. The one to use will be the .kmz file extension as both the *Free* and Professional can export this file. 
+The Free Version of [http://sketchup.google.com/index.html Google Sketchup] has an option to export the 3D model into many different file types. The one to use will be the .kmz file extension as both the *Free* and Professional can export this file type. 
 
 Also by using the default .kmz file extension we are able to use Google's very own [http://sketchup.google.com/3dwarehouse/ 3D Warehouse] to be able to import a very vast amount of objects into our worlds. There are currently thousands (if not millions) of different models we can use. 
 
@@ -31,7 +31,6 @@ Option 2 - !SketchUp
 
 
 Have fun with the Google Library!
-
 
 
 
