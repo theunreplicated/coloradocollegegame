@@ -1,20 +1,31 @@
 public class Rule
 {
-	private String function;
-	private String language;
-	public Rule(String _function, String _language)
+	private StringFunction func;
+  private GameElement owner = null;
+
+	public Rule(StringFunction _func)
 	{
-		function = _function;
-		language = _language;
+		func = _func;
+	}
+
+	public Rule(StringFunction _func, GameElement _owner)
+	{
+		func = _func;
+		owner = _owner;
 	}
 
 	public String function()
 	{
-		return function;
+		return func.getFunction();
 	}
 
 	public String language()
 	{
-		return language;
+		return func.getLanguage();
+	}
+
+	public GameElement owner()
+	{
+		return owner;
 	}
 }

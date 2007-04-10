@@ -2,49 +2,83 @@ import java.net.*;
 import java.io.*;
 
 class ClientThread extends Thread {
-	Server serve;
-	Socket client;
-	int id, row;
-	boolean verbose;
-	OutputStream out;
+	private Server serve;
+	private Socket clientOut;
+	private Socket clientIn;
+	private int id, row;
+	private boolean verbose;
+	private ObjectOutputStream oos;
+	private Logger myLogger;
 
-	public ClientThread(Server _server, Socket _client, int _id, int _row)
+	public ClientThread(Server _server, Socket _client, int _id, int _row, Logger _myLogger)
 	{
 		serve  = _server;
-		client = _client;
+		clientOut = _client;
+		clientIn = null;
 		id = _id;
 		row = _row;
+		myLogger = _myLogger;
 	}
 	
 	public void run()
 	{
 		try
 		{
-			InputStream in = client.getInputStream();
-			out = client.getOutputStream();
-			out.write( id );
+			oos = new ObjectOutputStream(clientOut.getOutputStream());
+			oos.writeInt( id );
+			oos.flush();
 
+			int wait = 0;
+			while(wait < Constants.TIMEOUT && clientIn == null)
+			{
+				try	
+				{
+					myLogger.message("ClientThread " + row + " is trying to connect to: " + clientOut.getInetAddress() + ":" + (clientOut.getLocalPort()+1)+"\n",false);
+					clientIn = new Socket(clientOut.getInetAddress(), clientOut.getLocalPort()+1);
+				}
+				catch(IOException ioe)
+				{
+					myLogger.message("ClientThread " + row + " could not get input stream from client of id " + id + "... waiting a bit longer\n", false);
+					try
+					{
+						Thread.sleep(1000);
+					}
+					catch(InterruptedException ie)
+					{
+						myLogger.message("ClientThread " + row + " interrupted while waiting to get input stream for client of id " + id + "\n", true);
+					}
+					wait += 1000;
+					clientIn = null;
+				}
+			}
+			ObjectInputStream ois = new ObjectInputStream(clientIn.getInputStream());
 			serve.sendWorld(row);
 
-			byte[] message = new byte[Constants.MESSAGE_SIZE];
 
-			int i;
 			Object[] objectMessage;
 
 
-			while( (in.read(message)) != -1 )
+			while( (objectMessage = (Object[]) ois.readObject()) != null )
 			{
-				objectMessage = (Object[]) Constants.fromByteArray(message);
 				serve.propagate(objectMessage, row);
 			}
 
-			serve.myLogger.message( "connection closed: " + row + "\n", false );
+			myLogger.message( "connection closed: " + row + "\n", false );
 			
-			client.close();
+			clientOut.close();
+			clientIn.close();
 		}
 		catch (IOException ioe)
 		{
-			serve.myLogger.message("Connection error on row " + row + ": " + ioe.getMessage() + "\n", true);
+			myLogger.message("Connection error on row " + row + ": " + ioe.getMessage() + "\n", true);
+		}
+		catch(ClassNotFoundException cnfe)
+		{
+			myLogger.message( "Sending error on row " + row + " (class not found): " + cnfe + "\n", true );
+		}
+		catch(Exception e)
+		{
+			myLogger.message("Error...\n", true);
 		}
 		serve.propagate( new Object[]{ Constants.REMOVE_PLAYER, id } , row );
 		serve.removeThread( row );
@@ -54,12 +88,12 @@ class ClientThread extends Thread {
 	{
 		try
 		{
-			out.write( Constants.toByteArray(_message) );
-			out.flush();
+			oos.writeObject(_message);
+			oos.flush();
 		}
 		catch( IOException ioe )
 		{
-			serve.myLogger.message( "Sending error on row " + row + ": " + ioe.getMessage() + "\n", true );
+			myLogger.message( "Sending error on row " + row + ": " + ioe.getMessage() + "\n", true );
 		}
 	}
 

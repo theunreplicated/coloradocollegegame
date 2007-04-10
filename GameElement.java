@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.*;
 public class GameElement extends LinkedElement<GameElement> implements Serializable, Comparable
 { 
+	static final long serialVersionUID = -5470967480584428990L;
 	public boolean changed = true;
 	private int id;
 	int typeId;
@@ -14,7 +15,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	private float boundingRadius;
 
 	VirtualShape[] shapes = null;
-	private HashMap attributes = null;
+	private AttributesHashMap attributes = null;
 	String type = null;
 
 	/* For convienence */
@@ -23,7 +24,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	// Remove these once we have Element and ElementGenerator working
 	public int[][] dimensions = new int[3][4]; 
 
-	public GameElement( String _type, float[] _position, float[] _facing, float[] _boundingBox, float[] _scale, VirtualShape[] _shapes, HashMap _attributes)
+	public GameElement( String _type, float[] _position, float[] _facing, float[] _boundingBox, float[] _scale, VirtualShape[] _shapes, AttributesHashMap _attributes)
 	{
 		type = _type;
 		position = _position;
@@ -51,7 +52,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		System.arraycopy(original.boundingBox,0,boundingBox,0,original.boundingBox.length);
 		boundingRadius = VectorUtils.getContainingSphere(boundingBox);
 		if(original.attributes != null)
-			attributes = (HashMap) original.attributes.clone();
+			attributes = (AttributesHashMap) original.attributes.clone();
 		typeId = original.typeId;
 		/*initialize is depracated */
 		initialize(position, 10, 10);
@@ -87,12 +88,12 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 					};
 	}
 
-	public synchronized void setAttributes(HashMap _attributes)
+	public synchronized void setAttributes(AttributesHashMap _attributes)
 	{
 		attributes = _attributes; 
 	}
 
-	public synchronized HashMap getAttributes()
+	public synchronized AttributesHashMap getAttributes()
 	{
 		return attributes;
 	}
@@ -112,33 +113,6 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	 * Accessors *
 	 *************/
 
-	private synchronized void writeObject(java.io.ObjectOutputStream out) throws IOException
-	{
-		out.writeInt(id);
-		out.writeInt(typeId);
-		out.writeObject(position);
-		out.writeObject(facing);
-		out.writeObject(scale);
-		out.writeObject(boundingBox);
-		out.writeObject(attributes);
-	}
-
-	private synchronized void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException
-	{
-		id = in.readInt();
-		typeId = in.readInt();
-		position = (float[]) in.readObject();
-		facing = (float[]) in.readObject();
-		scale = (float[]) in.readObject();
-		boundingBox = (float[]) in.readObject();
-		boundingRadius = VectorUtils.getContainingSphere(boundingBox);
-		attributes = (HashMap) in.readObject();
-	}
-
-	// To do: Figure out what this is for (part of synchronization and writing objects) and fill it in
-	private synchronized void readObjectNoData() throws ObjectStreamException
-	{
-	}
 
 	// The way to compare one GameElement to another is to compare their
 	// types (only used right now in the ElementFactory).
@@ -218,22 +192,16 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	//changes position by a vector
 	public synchronized void nudge( float[] delta )
 	{
+		float[] tmp = new float[position.length];
 		for( int i = 0 ; i < position.length; i++ )
-			position[i] += delta[i];
+			tmp[i] = position[i]+delta[i];
+		position = tmp;
 	}
 	
-	//changes position by a vector relatively -- JOEL FIX ME... PLEASE!!!
-/*	public synchronized void nudgeRelative( float[] delta )
-	{
-		for( int i = 0 ; i < position.length; i++ )
-			position[i] += delta[i];
-	}
-*/	
 	//sets position to the given
 	public synchronized void setPosition(float[] _position)
 	{
-		for( int i = position.length-1 ; i >= 0; i--)
-			position[i] = _position[i];
+		position = _position;
 	}
 
 	//rotate by the specified Quaternion
@@ -248,8 +216,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	//sets the facing to the specified Quaternion
 	public synchronized void setFacing(float[] _facing)
 	{
-		for( int i = facing.length-1 ; i >= 0; i--)
-			facing[i] = _facing[i];
+		facing = _facing;
 	}	
 
 	//scale by the specified factors
@@ -262,8 +229,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	//sets the scale to the specified factors
 	public synchronized void setScale(float[] _scale)
 	{
-		for( int i = scale.length-1 ; i >= 0; i--)
-			scale[i] = _scale[i];
+		scale = _scale;
 	}
 
 	//scales the boundingBox (used when creating scaling elements)
@@ -284,6 +250,11 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	/*********************** 
 	 * Collision Detection *
 	 ***********************/	
+
+	public synchronized boolean isRelevant(GameElement _element)
+	{
+		return true;
+	}
 
 	//this method will run a collision detection tree using other collision methods.
 	public synchronized boolean isColliding(GameElement _element)

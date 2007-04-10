@@ -3,6 +3,7 @@ import javax.xml.parsers.*;
 
 public class VirtualKML extends VirtualShape //A shape built from a Google SketchUp! model
 {
+	static final long serialVersionUID = -5324334570847991025L;	
 	float[][] linearRings;
 	
 	public VirtualKML(Node _info, Document _doc)

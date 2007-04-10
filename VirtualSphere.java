@@ -3,6 +3,7 @@ import javax.xml.parsers.*;
 
 public class VirtualSphere extends VirtualShape
 {
+	static final long serialVersionUID = 1234035442075705846L;
 	private float radius;
 
 	public VirtualSphere(Node _info)

@@ -1,6 +1,5 @@
 import java.util.*;
 import java.io.File;
-import java.io.FileFilter;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 
@@ -13,14 +12,14 @@ public class ElementFactory
 	public ElementFactory(File folder, String ext, Logger _myLogger)
 	{
 		myLogger = _myLogger;
-		File[] files = folder.listFiles(new EGFileFilter(ext));
+		File[] files = folder.listFiles(new FactoryFileFilter(ext));
 		createDefaultElements(files);
 	}
 
 	public ElementFactory(File folder, Logger _myLogger)
 	{
 		myLogger = _myLogger;
-		File[] files = folder.listFiles(new EGFileFilter(Constants.ELEMENT_LIST_EXTENSION));
+		File[] files = folder.listFiles(new FactoryFileFilter(Constants.ELEMENT_LIST_EXTENSION));
 		createDefaultElements(files);
 	}
 
@@ -28,7 +27,7 @@ public class ElementFactory
 	{
 		myLogger = _myLogger;
 		File folder = new File(Constants.DEFAULT_DATA_DIR);
-		File[] files = folder.listFiles(new EGFileFilter(Constants.ELEMENT_LIST_EXTENSION));
+		File[] files = folder.listFiles(new FactoryFileFilter(Constants.ELEMENT_LIST_EXTENSION));
 		createDefaultElements(files);
 	}
 
@@ -56,9 +55,7 @@ public class ElementFactory
 			float[] facing;
 			float[] bounds;
 			float[] scale;
-			HashMap attributes;
-			float[][] minMax;
-			float[][] tempMinMax = null;
+			AttributesHashMap attributes;
 			
 			for(File file : files)
 			{
@@ -77,7 +74,7 @@ public class ElementFactory
 					facing = Constants.DEFAULT_FACING;
 					scale = Constants.DEFAULT_SCALE;
 					
-					attributes = new HashMap<String, Object>();
+					attributes = new AttributesHashMap();
 					attributesElement = (Element) element.getElementsByTagName("attributes").item(0);
 					if(attributesElement != null)
 					{
@@ -249,17 +246,14 @@ public class ElementFactory
 		return(defaultElementKeys[_type]);
 	}
 
-	private class EGFileFilter implements FileFilter
+	public void setWorld(World w)
 	{
-		private String ext;
-		public EGFileFilter(String _ext)
+		Collection<GameElement> values = defaultElements.values();
+		Iterator<GameElement> it = values.iterator();
+		while(it.hasNext())
 		{
-			ext = _ext;
-		}
-
-		public boolean accept(File pathname)
-		{
-			return(pathname.getName().endsWith(ext));
+			GameElement ge = it.next();
+			ge.getAttributes().setWorld(w);
 		}
 	}
 }

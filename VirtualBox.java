@@ -3,6 +3,7 @@ import javax.xml.parsers.*;
 
 public class VirtualBox extends VirtualShape
 {
+	static final long serialVersionUID = 6811241179579246533L;
 	private float[] dimensions;
 
 	public VirtualBox(Node _info)

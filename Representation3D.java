@@ -17,6 +17,7 @@ import javax.vecmath.*;
 
 public class Representation3D extends Applet implements Representation
 {
+	static final long serialVersionUID = -7743175550804657967L;
 	//a hashmap for converting between the World and the Java3D tree.
 	HashMap<GameElement,ElementBranch> elementsToNodes = new HashMap<GameElement,ElementBranch>();
 	

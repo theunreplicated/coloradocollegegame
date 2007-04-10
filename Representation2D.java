@@ -10,6 +10,8 @@ import java.awt.image.*;
  */
 public class Representation2D extends JPanel implements Representation
 {
+	static final long serialVersionUID = -7743175550804657967L;
+
     /**
      * Creates the panel to view in game objects, elements, knicknacks, players, etc. 
      */

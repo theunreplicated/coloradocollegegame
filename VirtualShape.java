@@ -1,8 +1,11 @@
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
+import java.io.Serializable;
 
-public class VirtualShape
+public class VirtualShape implements Serializable
 {
+	static final long serialVersionUID = -1458411371995253014L;
+
 	private String name;
 	private float[] position;
 	private float[] facing; //in quaternions

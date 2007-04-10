@@ -13,6 +13,7 @@ public class World
 	{
 		myLogger = _logger;
 		ef = _ef;
+		ef.setWorld(this);
 	}
 
 	public void setIO( IO _io )
@@ -31,6 +32,11 @@ public class World
 		GameElement[] ge = c.toArray(new GameElement[]{});
 		return ge;
 		// return (GameElement[]) (elements.values().toArray());
+	}
+
+	public GameElement getElementById(int id)
+	{
+		return elements.get(id);
 	}
 
 	public GameElement getFirstElement()
@@ -107,6 +113,7 @@ public class World
 				first.insertBefore(newElement);
 			}
 		}
+		myLogger.message("Putting element with id: " + newElement.id()+"\n",false);
 		elements.put(newElement.id(),newElement);
 
 		synchronized( first )
@@ -145,6 +152,7 @@ public class World
 				first.insertBefore(newElement);
 			}
 		}
+		myLogger.message("Putting element with id: " + newElement.id()+"\n",false);
 		elements.put(_id,newElement);
 
 		synchronized( first )
@@ -157,17 +165,9 @@ public class World
 	public void addMultipleElements(Object[] _message, int _start)
 	{
 		GameElement[] newElements = (GameElement[]) _message[_start];
-		GameElement ge;
 		for(GameElement newElement : newElements)
 		{
-			ge = ef.getGameElement(newElement.getTypeId());
-			ge.id(newElement.id());
-			ge.setPosition(newElement.getPosition());
-			ge.setFacing(newElement.getFacing());
-			ge.setScale(newElement.getScale());
-			ge.setBoundingBox(newElement.getBoundingBox());
-			ge.setAttributes(newElement.getAttributes());
-			this.addElement(ge);
+			this.addElement(newElement);
 		}
 
 	}
@@ -177,33 +177,34 @@ public class World
 		GameElement element = elements.get(_row);
 		element.nudge( _dpos );
 		
-	if(hasCollisions(element)) //if we caused a collision
-	{
-		float[] backup = new float[_dpos.length]; //get the reversion
-		for(int i=0; i<backup.length; i++)
-			backup[i] = -1*_dpos[i];
-		element.nudge(backup); //undo the move
-	}	
-	else //let everybody know
-	{	
-
-		float[] position = element.getPosition();
-
-		Object[] message = new Object[] {
-			Constants.MOVE_TO,
-			_row,
-			position
-		};
-		
-		myIO.send(message);
-		myLogger.message( "nudge position: " + _row + " " + VectorUtils.toString(position)+"\n", false );
-		synchronized(first)
+	/*	if(hasCollisions(element)) //if we caused a collision
 		{
-			element.changed = true;
-			first.notifyAll();
-		}
-	
-	}
+			float[] backup = new float[_dpos.length]; //get the reversion
+			for(int i=0; i<backup.length; i++)
+				backup[i] = -1*_dpos[i];
+			element.nudge(backup); //undo the move
+		}	
+		else //let everybody know
+		{ */	
+
+			float[] position = element.getPosition();
+
+			Object[] message = new Object[] {
+				Constants.MOVE_TO,
+				_row,
+				position
+			};
+
+
+			myIO.send(message);
+			myLogger.message( "nudge position: " + _row + " " + VectorUtils.toString(position)+"\n", false );
+			synchronized(first)
+			{
+				element.changed = true;
+				first.notifyAll();
+			}
+		
+	//	}
 	}
 
 	public void rotateElement( int _row, float[] _dpos )

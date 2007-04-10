@@ -1,6 +1,5 @@
 import java.util.*;
 import java.io.File;
-import java.io.FileFilter;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 
@@ -14,14 +13,14 @@ public class WorldFactory
 	{
 		ef = _ef;
 		myLogger = _myLogger;
-		files = folder.listFiles(new WGFileFilter(ext));
+		files = folder.listFiles(new FactoryFileFilter(ext));
 	}
 
 	public WorldFactory(File folder, ElementFactory _ef, Logger _myLogger)
 	{
 		ef = _ef;
 		myLogger = _myLogger;
-		files = folder.listFiles(new WGFileFilter(Constants.WORLD_EXTENSION));
+		files = folder.listFiles(new FactoryFileFilter(Constants.WORLD_EXTENSION));
 	}
 
 	public WorldFactory(ElementFactory _ef, Logger _myLogger)
@@ -29,7 +28,7 @@ public class WorldFactory
 		ef = _ef;
 		myLogger = _myLogger;
 		File folder = new File(Constants.DEFAULT_DATA_DIR);
-		files = folder.listFiles(new WGFileFilter(Constants.WORLD_EXTENSION));
+		files = folder.listFiles(new FactoryFileFilter(Constants.WORLD_EXTENSION));
 	}
 
 	public WorldFactory(File[] _files, ElementFactory _ef, Logger _myLogger)
@@ -139,20 +138,5 @@ public class WorldFactory
 			e.printStackTrace();
 		}
 
-	}
-
-
-	private class WGFileFilter implements FileFilter
-	{
-		private String ext;
-		public WGFileFilter(String _ext)
-		{
-			ext = _ext;
-		}
-
-		public boolean accept(File pathname)
-		{
-			return(pathname.getName().endsWith(ext));
-		}
 	}
 }

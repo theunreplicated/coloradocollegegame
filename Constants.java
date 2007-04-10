@@ -7,6 +7,7 @@ public class Constants
 	public static final int SUCCESS = 1; //won't compile without this guys... Remove it when you've removed the reference in World
 
 	// server information
+	public static final int TIMEOUT = 3000; // maximum time for no communication: 3 seconds
 	public static final int MAX_CONNECTIONS = 8;
 	public static final int ELEMENT_ID_PADDING = (int)Math.pow(10,(Constants.MAX_CONNECTIONS+"").length());
 	/* Element ids guaranteed to be unique and also to be able to
@@ -51,6 +52,8 @@ public class Constants
 	public static final String DEFAULT_DATA_DIR = ".";
 	public static final String ELEMENT_LIST_EXTENSION = "ccel";
 	public static final String WORLD_EXTENSION = "ccw";
+	public static final String ACTION_EXTENSION = "ccr";
+	public static final String RULE_EXTENSION = "ccr";
 	
 	// Defaults (for Element and Shape)
 	public static final float[] DEFAULT_POSITION = {0,0,0};
@@ -116,9 +119,11 @@ public class Constants
 
 
 	// resolver stuff
+	public static final short DEFAULT_RELEVANT_SIZE = 20;
 	public static final short DEFAULT_RULE_ARRAY_SIZE = 20;
 	public static final short SENTENCE_LENGTH = 4;
 	
+	/* Depricated
 	public static byte[] toByteArray(Object _message)
 	{
 		byte[] a = null;
@@ -131,7 +136,7 @@ public class Constants
 		}
 		catch(IOException ioe)
 		{
-			System.err.println("Died on toByteArray: " + ioe.getMessage());
+			System.err.println("Died on toByteArray: " + ioe);
 			System.exit(1);
 		}
 		return a;
@@ -149,16 +154,17 @@ public class Constants
 		}
 		catch(IOException ioe)
 		{
-			System.err.println("Died on fromByteArray: " + ioe.getMessage());
+			System.err.println("Died on fromByteArray: " + ioe);
 			System.exit(1);
 		}
 		catch(ClassNotFoundException cnfe)
 		{
-				System.err.println("Bad class on fromByteArray: " + cnfe.getMessage());
+				System.err.println("Bad class on fromByteArray: " + cnfe);
 				System.exit(1);
 		}
 		return a;
 	}
+	*/
 
 	public static int parseTexture(String _texture)
 	{
