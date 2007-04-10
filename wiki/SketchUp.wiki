@@ -15,17 +15,30 @@ Also by using the default .kmz file extension we are able to use Google's very o
 
 To get a model into our world from the [http://sketchup.google.com/3dwarehouse/ 3D Warehouse] just follow these simple instructions: 
 
-*Option 1 - using a browser*
+Option 1 - using a browser
 
   # Find and Download the model that you wish to use within the browser of your choice. 
   # Open the model in the latest version of [http://sketchup.google.com/download.html !SketchUp]
-  # Export to a .kmz file by: File > Export > 3D Model...  the export model to use is Google Earth (*.kmz)
+  # Export to a .kmz file by: File > Export > 3D Model...  the export model to use is Google Earth (.kmz)
 
-*Option 2 - from within !SketchUp*
+
+Option 2 - !SketchUp
 
   # Within !SketchUp: File > 3D Warehouse > Get Models...
   # Find the model you wish to use. It acts like a browser for the warehouse. 
   # Select Download model and Select "Yes" to the dialog box that pops up. 
-  # Export to a .kmz file by: File > Export > 3D Model...  the export model to use is Google Earth (*.kmz)
+  # Export to a .kmz file by: File > Export > 3D Model...  the export model to use is Google Earth (.kmz)
+
 
 Have fun with the Google Library!
+
+
+
+
+
+
+
+
+
+
+
