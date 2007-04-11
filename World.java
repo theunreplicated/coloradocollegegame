@@ -182,10 +182,11 @@ public class World
 			float[] backup = new float[_dpos.length]; //get the reversion
 			for(int i=0; i<backup.length; i++)
 				backup[i] = -1*_dpos[i];
+			
 			element.nudge(backup); //undo the move
 		}	
 		else //let everybody know
-		{ */	
+		{ /**/	
 
 			float[] position = element.getPosition();
 
@@ -204,7 +205,7 @@ public class World
 				first.notifyAll();
 			}
 		
-	//	}
+	/*	}/**/
 	}
 
 	public void rotateElement( int _row, float[] _dpos )
@@ -212,16 +213,6 @@ public class World
 		GameElement element = elements.get(_row);
 		element.rotate( _dpos );
 
-/*	if(hasCollisions(element)) //if we caused a collision
-	{
-		float[] backup = new float[_dpos.length] //get the reversion
-		for(int i=0; i<backup.length; i++)
-			backup[i] = -1*_dpos[i];
-		element.nudge(backup) //undo the move
-	}	
-	else //let everybody know
-	{	
-*/
 		float[] facing = element.getFacing();
 
 		Object[] message = new Object[] {
@@ -237,8 +228,6 @@ public class World
 			element.changed = true;
 			first.notifyAll();
 		}
-
-/*	}*/
 	}
 
 	public void attributeElement(int _row, String k, Object v)
@@ -373,6 +362,7 @@ public class World
 			e = e.next; //loop
 		} while(e != first);
 	}
+
 	//a TESTING method to check the world for a collision against a certain element
 	public boolean hasCollisions(GameElement e)
 	{

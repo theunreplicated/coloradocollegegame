@@ -109,6 +109,13 @@ public class Constants
 	public static final short HEIGHT = 1;
 	public static final String UNIQUE_GE_PREFIX = "GE_";
 
+	// SketchUp stuff
+	//radii from http://www.uwgb.edu/dutchs/UsefulData/UTMFormulas.HTM
+	public static final double WGS84_EQUATORIAL_RADIUS = 6378137.0;
+	public static final double WGS84_POLAR_RADIUS = 6356752.3142;
+	public static final double LON_METERS_PER_DEGREE = WGS84_EQUATORIAL_RADIUS*2*Math.PI/360.0d;
+	public static final double LAT_METERS_PER_DEGREE = WGS84_POLAR_RADIUS*2*Math.PI/360.0d;	
+
 	// graphics
 	public static final short UPDATE_PERIOD = 10;
 	public static final short CANVAS_WIDTH = 600;

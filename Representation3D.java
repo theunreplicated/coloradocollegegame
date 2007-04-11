@@ -18,6 +18,7 @@ import javax.vecmath.*;
 public class Representation3D extends Applet implements Representation
 {
 	static final long serialVersionUID = -7743175550804657967L;
+
 	//a hashmap for converting between the World and the Java3D tree.
 	HashMap<GameElement,ElementBranch> elementsToNodes = new HashMap<GameElement,ElementBranch>();
 	
@@ -90,11 +91,9 @@ public class Representation3D extends Applet implements Representation
 		return _veb;
 	}
 
-	//create the bulk of the Java3D tree
+	//create the bulk of the Java3D tree based on e, attaching it to gscene
 	public void createSceneGraph(GameElement e, BranchGroup gscene)
 	{
-		//BranchGroup gscene = new BranchGroup(); //A root node for the bulk of the scene
-
 		GameElement first = e; //for looping
 		do
 		{
@@ -110,8 +109,6 @@ public class Representation3D extends Applet implements Representation
 	
 		//Representation-level objects
 		gscene.addChild(createGrid());
-		
-		//return gscene; //return the branch
 	}
 	
 	//create and return a background for the world

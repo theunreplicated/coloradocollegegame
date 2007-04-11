@@ -210,8 +210,14 @@
 		<plural>KMZ testers</plural>
 		<shapes>
 			<kmz>
-				<name>KMZ file</name>
-				<url>test.kmz</url>
+				<name>KMZ file2</name>
+				<url>kmz/teapot.kmz</url>
+				<facing>-90</facing>
+				<facing>0</facing>
+				<facing>0</facing>
+				<scale>3</scale>
+				<scale>3</scale>
+				<scale>3</scale>
 			</kmz>
 		</shapes>
 	</element>

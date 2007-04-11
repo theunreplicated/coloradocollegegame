@@ -104,10 +104,15 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 				//make the primitive
 				p = new Cone(((VirtualCone)s).getRadius(), ((VirtualCone)s).getHeight(), sflags, shapeAppearance);
 			}
+			else if(s instanceof VirtualKML)
+			{
+				//make the primitive
+				p = createKMLShape((VirtualKML)s, shapeAppearance);
+			}
+
 			else
 			{
-				System.out.println("unrecognizable shape"); //print an error message (for testing--should really be logging this)
-				//p = new ColorCube(.1f); //make a default "shape" to show
+				System.out.println("Unrecognizable shape."); //print an error message (for testing--should really be logging this)
 				p = createSpinningBehavior(new ColorCube(.1f)); //make an obnoxious default "shape" to show
 			}
 
@@ -177,6 +182,35 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 
 		return a; //return the Appearance
 	}
+
+	//builds a branch of Shape3D objects to mirror the specification in a VirtualKML object
+	public BranchGroup createKMLShape(VirtualKML s, Appearance a)
+	{
+		BranchGroup bg = new BranchGroup();
+		
+		NormalGenerator ng = new NormalGenerator();
+		Stripifier st = new Stripifier();
+	
+		//for linearRings
+		double[][] lrs = s.getLinearRings();
+		for(int i=0; i<lrs.length; i++)
+		{
+ 			GeometryInfo gi = new GeometryInfo(GeometryInfo.POLYGON_ARRAY);
+   			gi.setCoordinates(lrs[i]); //set the geometry info
+		
+			int[] stripcounts = {lrs[i].length/3}; //create the stripcounts array--linearRings always have 3 points/coord
+			gi.setStripCounts(stripcounts);
+
+   			ng.generateNormals(gi); //generate normals
+  			st.stripify(gi); //convert to strips
+
+			bg.addChild(new Shape3D(gi.getGeometryArray(),a)); //add the polygon shape
+		}
+		//should add similar loops for other geometry
+		
+		return bg;	
+	}
+	
 
 	//returns the root of this branch (so we can add it to a J3D tree)
 	public BranchGroup getBranchScene()

@@ -132,26 +132,15 @@ public class ElementFactory
 						shapes[j] = new VirtualSphere(spheres.item(k));
 					}
 
-					/*SKETCHUP STUFF GOES HERE*/
-					
 					k = kmz.getLength()-1;
-					for( ; j >= 0 && k >= 0; j--, k--)
+					for( ; j >= 0 && k >= 0; k--)
 					{
-						
 						//get KML stuff out of kmz.item(k);
 						//create a VirtualKML() for each KML file
 						Document[] kmldocs = SketchUpUtils.decompressKMZ(
 							((Element)kmz.item(k)).getElementsByTagName("url").item(0).getTextContent());
-						
 						for(int q = kmldocs.length-1; q>=0 && j>=0; j--, q--)
 							shapes[j] = new VirtualKML(kmz.item(k),kmldocs[q]);
-						
-						//kmz.item(k).getTextC
-						
-						
-						//do stuff to KMZ to get KML objects.
-						
-						//shapes[j] = new VirtualKML(kml.item(k));
 					}
 
 					//determine bounds

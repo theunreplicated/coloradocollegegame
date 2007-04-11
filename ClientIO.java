@@ -51,7 +51,7 @@ public class ClientIO implements IO
 			myLogger.message("Connected as id: " + id + "\n", false);
 			myWorld.setIO(this);
 			myWorld.addElement(new Object[] {	id,
-								"face",
+								"R2",
 								new float[] {
 									Constants.INITIAL_X,
 									Constants.INITIAL_Y,
@@ -65,7 +65,7 @@ public class ClientIO implements IO
 
 			this.send(new Object[] {		Constants.ADD_PLAYER,
 								id,
-								"face",
+								"R2",
 								new float[] {
 									Constants.INITIAL_X,
 									Constants.INITIAL_Y,

@@ -113,6 +113,46 @@ public class VectorUtils
 		if(Math.abs(T[Y]*R[X][Z] - T[X]*R[Y][Z]) > a[X]*R23 + a[Y]*R13 + b[X]*R32 + b[Y]*R31)
 			return false;	
 
+		//print out debugging stuff since we've collided
+		System.out.println("a= "+VectorUtils.toString(a));
+		System.out.println("b= "+VectorUtils.toString(b));
+		System.out.println("T= "+VectorUtils.toString(T));
+		System.out.println("R= "+VectorUtils.toString(R));
+		
+		System.out.println("L=A1");
+		System.out.println("   "+Math.abs(T[X])+" > "+a[X]+" + "+(b[X]*R11 + b[Y]*R12 + b[Z]*R13));	
+		System.out.println("L=A2");
+		System.out.println("   "+Math.abs(T[Y])+" > "+a[Y]+" + "+(b[X]*R21 + b[Y]*R22 + b[Z]*R23));	
+		System.out.println("L=A3");
+		System.out.println("   "+Math.abs(T[Z])+" > "+a[Z]+" + "+(b[X]*R31 + b[Y]*R32 + b[Z]*R33));	
+		System.out.println("L=B1");
+		System.out.println("   "+Math.abs(T[X]*R[X][X] + T[Y]*R[Y][X] + T[Z]*R[Z][X])+" > "+b[X]+" + "+(a[X]*R11 + a[Y]*R21 + a[Z]*R31));	
+		System.out.println("L=B2");
+		System.out.println("   "+Math.abs(T[X]*R[X][Y] + T[Y]*R[Y][Y] + T[Z]*R[Z][Y])+" > "+b[Y]+" + "+(a[X]*R12 + a[Y]*R22 + a[Z]*R32));	
+		System.out.println("L=B3");
+		System.out.println("   "+Math.abs(T[X]*R[X][Z] + T[Y]*R[Y][Z] + T[Z]*R[Z][Z])+" > "+b[Z]+" + "+(a[X]*R13 + a[Y]*R23 + a[Z]*R33));	
+		System.out.println("L=A1 X B1");
+		System.out.println("   "+Math.abs(T[Z]*R[Y][X] - T[Y]*R[Z][X])+" > "+(a[Y]*R31 + a[Z]*R21)+" + "+(b[Y]*R13 + b[Z]*R12));	
+		System.out.println("L=A1 X B2");
+		System.out.println("   "+Math.abs(T[Z]*R[Y][Y] - T[Y]*R[Z][Y])+" > "+(a[Y]*R32 + a[Z]*R22)+" + "+(b[X]*R13 + b[Z]*R11));	
+		System.out.println("L=A1 X B3");
+		System.out.println("   "+Math.abs(T[Z]*R[Y][Z] - T[Y]*R[Z][Z])+" > "+(a[Y]*R33 + a[Z]*R23)+" + "+(b[X]*R12 + b[Y]*R11));	
+		System.out.println("L=A2 X B1");
+		System.out.println("   "+Math.abs(T[X]*R[Z][X] - T[Z]*R[X][X])+" > "+(a[X]*R31 + a[Z]*R11)+" + "+(b[Y]*R23 + b[Z]*R22));	
+		System.out.println("L=A2 X B2");
+		System.out.println("   "+Math.abs(T[X]*R[Z][Y] - T[Z]*R[X][Y])+" > "+(a[X]*R32 + a[Z]*R12)+" + "+(b[X]*R23 * b[Z]*R21));	
+		System.out.println("L=A2 X B3");
+		System.out.println("   "+Math.abs(T[X]*R[Z][Z] - T[Z]*R[X][Z])+" > "+(a[X]*R33 + a[Z]*R13)+" + "+(b[X]*R22 + b[Y]*R21));	
+		System.out.println("L=A3 X B1");
+		System.out.println("   "+Math.abs(T[Y]*R[X][X] - T[X]*R[Y][X])+" > "+(a[X]*R21 + a[Y]*R11)+" + "+(b[Y]*R33 + b[Z]*R32));	
+		System.out.println("L=A3 X B2");
+		System.out.println("   "+Math.abs(T[Y]*R[X][Y] - T[X]*R[Y][Y])+" > "+(a[X]*R22 + a[Y]*R12)+" + "+(b[X]*R33 + b[Z]*R31));	
+		System.out.println("L=A3 X B3");
+		System.out.println("   "+Math.abs(T[Y]*R[X][Z] - T[X]*R[Y][Z])+" > "+(a[X]*R23 + a[Y]*R13)+" + "+(b[X]*R32 + b[Y]*R31));	
+			
+		
+
+
 		return true; //if we couldn't find a separating axis, we intersect	
 	}
 	

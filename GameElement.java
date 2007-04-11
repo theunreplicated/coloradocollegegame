@@ -113,7 +113,6 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	 * Accessors *
 	 *************/
 
-
 	// The way to compare one GameElement to another is to compare their
 	// types (only used right now in the ElementFactory).
 	public int compareTo(Object _ge)
@@ -240,6 +239,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		boundingRadius = VectorUtils.getContainingSphere(boundingBox);
 	}
 
+	//sets the boundingBox, for scaling (not sure if this is used or not)
 	public synchronized void setBoundingBox(float[] bb)
 	{
 		boundingBox = bb;
@@ -263,11 +263,44 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		if(VectorUtils.getDistSqr(position, _element.getPosition()) <= 
 			(boundingRadius+_element.getBoundingRadius())*(boundingRadius+_element.getBoundingRadius()))
 		{
+		/*//the current method
 			//uses OBBs in 3D to check
 			return VectorUtils.OBB3DIntersect(boundingBox, 
 						_element.getBoundingBox(), 
 						VectorUtils.sub(position, _element.getPosition()),
 						Quaternions.getMatrixFromQuat(facing, _element.getFacing()));
+						//Quaternions.getMatrixFromQuat(_element.getFacing(), facing));
+		*/
+			//testing stuff
+			if(VectorUtils.OBB3DIntersect(boundingBox, 
+						_element.getBoundingBox(), 
+						VectorUtils.sub(_element.getPosition(), position),
+						//Quaternions.getMatrixFromQuat(facing, _element.getFacing())))
+						Quaternions.getMatrixFromQuat(_element.getFacing(), facing)))
+			{	
+			/*	System.out.println("\nface,eFacing");
+				VectorUtils.print(Quaternions.getMatrixFromQuat(
+							Quaternions.sub(facing,_element.getFacing())));
+				System.out.print("Still collides: ");
+				System.out.println(VectorUtils.OBB3DIntersect(boundingBox, 
+							_element.getBoundingBox(), 
+							VectorUtils.sub(_element.getPosition(), position),
+							Quaternions.getMatrixFromQuat(facing, _element.getFacing())));
+				
+				System.out.println("\neFacing,face");
+				VectorUtils.print(Quaternions.getMatrixFromQuat(
+							Quaternions.sub(_element.getFacing(),facing)));
+				System.out.print("Still collides: ");
+				System.out.println(VectorUtils.OBB3DIntersect(boundingBox, 
+							_element.getBoundingBox(), 
+							VectorUtils.sub(_element.getPosition(), position),
+							Quaternions.getMatrixFromQuat(_element.getFacing(), facing))+"\n");
+			*/
+				return true;
+			}
+			else
+				return false;
+		
 		}
 		else
 			return false;
