@@ -7,7 +7,6 @@ public class VirtualKML extends VirtualShape //A shape built from a Google Sketc
 
 	private double[][] linearRings; //an array of double[] representing the coords (every 3 elements) of the ring
 					//in double precision because that's the level we're being passed from SketchUp
-	float[][] linearRings;
 	
 	public VirtualKML(Node _info, Document _doc)
 	{
