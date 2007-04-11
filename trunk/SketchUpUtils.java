@@ -14,6 +14,16 @@ import org.w3c.dom.*;
 
 public class SketchUpUtils
 {
+	public static double[] parseCoordinate(String c)
+	{
+		String[] coords = c.split(",");
+		double[] f = new double[coords.length];
+		for(int i=0; i<coords.length; i++)
+			f[i] = Double.parseDouble(coords[i]);		
+		
+		return f;
+	}
+
 	public static int countKMLFiles(String filename)
 	{
 		int count = 0;
@@ -37,44 +47,6 @@ public class SketchUpUtils
 
 		return count;
 	}
-
-/*	public static Object decompressKMZ(String filename)
-	{
-		try
-		{
-			FileInputStream fis = new FileInputStream("filename");
-			ZipInputStream zin = new ZipInputStream(new BufferedInputStream(fis));         		
-			ZipEntry entry;
-			long offset = 0;
-			InputStream stream = new InputStream(); 
-			while((entry = zin.getNextEntry()) != null) 
-			{
-				stream.reat( 				
-
-
-			}			
-
-
-         		ZipFile kmzFile = new ZipFile(filename);
-         		System.out.println("kmz file contains "+kmzFile.size()+" entries");
-         		Enumeration e = kmzFile.entries();
-         		while(e.hasMoreElements())
-         		{
-          	  		parseKML(kmzFile.getInputStream((ZipEntry)e.nextElement()));   			
-			}
-
-
-		}
-		catch(Exception e)
-		{
-			System.out.println(e);
-		}
-
-
-
-		System.out.println("decompressKMZ() returning...");
-		return null;
-	}*/
 
 	public static Document[] decompressKMZ(String filename)
 	{
@@ -102,7 +74,6 @@ public class SketchUpUtils
 				i++;
 			}
 
-			System.out.println("decompressKMZ() returning...");
 			return docArray;
 		}
 		catch(Exception e)
@@ -111,14 +82,8 @@ public class SketchUpUtils
 			System.out.println(e);
 		}
 
-
-
-		System.out.println("decompressKMZ() returning...");
 		return null;
 	}
-
-
-
 
 	public static Document parseKML(InputStream kml)
 	{
@@ -129,9 +94,7 @@ public class SketchUpUtils
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			doc = db.parse(kml);
 
-			System.out.println("parseKML() returning...");
 			return doc;			
-			//and now we can parse the doc!! Get whatever info we want!!
 		}
 		catch(Exception e)
 		{
@@ -139,10 +102,7 @@ public class SketchUpUtils
 			System.out.println(e);
 		}
 		
-		
-		System.out.println("parseKML() returning...");
 		return null;
 	}
-
 
 }

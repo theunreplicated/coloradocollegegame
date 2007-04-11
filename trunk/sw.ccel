@@ -1,0 +1,63 @@
+<!-- 	Rotations are specified in degrees using Euler facings
+	Rotation order is XYZ
+	Note that Rotations are handled in Quaternions within the Game
+-->
+<!-- 	Bounding boxes are by default axis-aligned, specifying the box's
+	half-dimension (half the length) along the x-axis, the y-axis, 
+	and the z-axis
+-->
+
+<element_types>
+
+	<element>
+		<name>xwing</name>
+		<plural>xwings</plural>
+		<shapes>
+			<kmz>
+				<name>kmz model</name>
+				<url>kmz/xwing.kmz</url>
+				<facing>-90</facing>
+				<facing>0</facing>
+				<facing>0</facing>
+				<scale>.1</scale>
+				<scale>.1</scale>
+				<scale>.1</scale>
+			</kmz>
+		</shapes>
+	</element>
+
+	<element>
+		<name>R2</name>
+		<plural>R2 units</plural>
+		<shapes>
+			<kmz>
+				<name>kmz model</name>
+				<url>kmz/r2_d2.kmz</url>
+				<facing>-90</facing>
+				<facing>180</facing>
+				<facing>0</facing>
+				<scale>.1</scale>
+				<scale>.1</scale>
+				<scale>.1</scale>
+			</kmz>
+		</shapes>
+	</element>
+
+	<element>
+		<name>millenium falcon</name>
+		<plural>There are two of them?!</plural>
+		<shapes>
+			<kmz>
+				<name>kmz model</name>
+				<url>kmz/millenium_falcon.kmz</url>
+				<facing>-90</facing>
+				<facing>0</facing>
+				<facing>0</facing>
+				<scale>.1</scale>
+				<scale>.1</scale>
+				<scale>.1</scale>
+			</kmz>
+		</shapes>
+	</element>
+
+</element_types>

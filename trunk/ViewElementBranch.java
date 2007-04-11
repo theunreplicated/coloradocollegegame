@@ -27,10 +27,10 @@ public class ViewElementBranch implements ElementBranch
 	//member variables
 	private ViewingPlatform camera;
 	private TransformGroup coord; //transformed coordinates for this branch
-	private GameElementBranch avatar; //if we want one
-	private BranchGroup avatarRoot;
+	private GameElementBranch avatar;
+	private BranchGroup avatarRoot; //where the avatar branch is attached
 	
-	private int viewMode;
+	private int viewMode; //what kind of view we're using
 
 	//constructor
 	public ViewElementBranch(GameElement e, int v)
@@ -56,8 +56,6 @@ public class ViewElementBranch implements ElementBranch
 		{
 			posi = new Transform3D(new Quat4f(Constants.DEFAULT_FACING), new Vector3f(0f,0f,5f), 1);
 		}
-		System.out.println("initial");
-		System.out.println(posi);
 		coord.setTransform(posi); //set our transform group to the default position
 
 		avatar = new GameElementBranch(e); //the avatar object for this view
@@ -66,43 +64,41 @@ public class ViewElementBranch implements ElementBranch
 	//cycles through the available view models.
 	public void changeView()
 	{
-		if(viewMode == FIRST_PERSON_VIEW)
+		changeView((viewMode%2)+1); //cycle between 1 and 2 only
+	}
+
+	//change to specified viewMode
+	public void changeView(int to)
+	{
+		//add "from" checking here?
+
+		if(to == FIRST_PERSON_VIEW)
 		{
-			attachAvatar();	//add the avatar	
-			//change the camera
-			
-			//FROM fpv TO offset
-			viewMode = OFFSET_VIEW;
+			viewMode = FIRST_PERSON_VIEW; //set the new mode
+			if(avatar.getBranchScene().isLive()) //if is attached
+				detach(); //remove the avatar
+
 			Transform3D t = new Transform3D(); //a new Transform
 			coord.getTransform(t); //fill the transform with our current settings
-			Vector3f pp = avatar.getTranslation(); //get the avatar's translation
+			t.setTranslation(avatar.getTranslation()); //set to our avatar's translation
+			coord.setTransform(t); //set as our new state
+		}
+		else if(to == OFFSET_VIEW)
+		{
+			viewMode = OFFSET_VIEW; //set the new mode
+			if(!avatar.getBranchScene().isLive()) //if is NOT attached
+				attachAvatar();	//add the avatar
+
+			Transform3D t = new Transform3D(); //a new Transform
+			coord.getTransform(t); //fill the transform with our current settings
+			Vector3f pp = avatar.getTranslation(); //get the avatar's current translation
 			float[] f = new float[4];
 			avatar.getRotation().get(f); //get a float[] of the avatar's rotation
 			pp.add(new Vector3f(Quaternions.rotatePoint(OFFSET,f))); //add the spun offset to the translation
 			t.setTranslation(pp); //set the new translation
 			coord.setTransform(t); //set as our new state
 		}
-		else if(viewMode == OFFSET_VIEW)
-		{
-			detach(); //remove the avatar
-			//change the camera
-			
-			//FROM offset TO fpv
-			viewMode = FIRST_PERSON_VIEW;
-			Transform3D t = new Transform3D(); //a new Transform
-			coord.getTransform(t); //fill the transform with our current settings
-			t.setTranslation(avatar.getTranslation()); //set to our avatar's translation
-			coord.setTransform(t); //set as our new state
-		}
-		//add support for other views--probably change method 
-			
-	}
-
-	//change to specified viewMode
-	public void changeView(int to)
-	{
-		//Implement this method!
-		System.out.println("Change view to "+to);
+		//add support for other views
 	}
 
 	//a method to fetch the ViewingPlatform in order to construct the view branch
@@ -147,7 +143,7 @@ public class ViewElementBranch implements ElementBranch
 		else if(viewMode == OFFSET_VIEW)
 		{
 			//Do what here? We NEED facing and position to do an offset!
-
+				//which we can get from the AVATAR now. Fill in later	
 			/*
 			Transform3D t = new Transform3D(); //a new Transform
 			coord.getTransform(t); //fill the transform with our current settings

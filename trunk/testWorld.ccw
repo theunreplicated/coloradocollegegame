@@ -1,12 +1,12 @@
 <world>
 	<element type="big pillar">
 		<position>7.5</position>
-		<position>5</position>
+		<position>3</position>
 		<position>7.5</position>
 	</element>
 	<element type="big pillar">
 		<position>7.5</position>
-		<position>5</position>
+		<position>3</position>
 		<position>-7.5</position>
 		<attributes>
 			<friendly type="String">yes</friendly>
@@ -14,7 +14,7 @@
 	</element>
 	<element type="big pillar">
 		<position>-7.5</position>
-		<position>5</position>
+		<position>3</position>
 		<position>7.5</position>
 		<attributes>
 			<friendly type="String">yes</friendly>
@@ -22,21 +22,17 @@
 	</element>
 	<element type="big pillar">
 		<position>-7.5</position>
-		<position>5</position>
+		<position>3</position>
 		<position>-7.5</position>
-		<!--<scale>1</scale>
-		<scale>2</scale>
-		<scale>1</scale>-->
 		<attributes>
 			<friendly type="String">yes</friendly>
 		</attributes>
 	</element>
 
-	<!--<element type="KMZ tester">
+	<!--<element type="millenium falcon">
 		<position>0</position>
 		<position>0</position>
 		<position>0</position>
 	</element>-->
-
 </world>
 
