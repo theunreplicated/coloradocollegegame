@@ -172,7 +172,7 @@ public class World
 
 	}
 
-	public void nudgeElement( int _row, float[] _dpos )
+	public boolean nudgeElement( int _row, float[] _dpos )
 	{
 		GameElement element = elements.get(_row);
 		element.nudge( _dpos );
@@ -184,6 +184,7 @@ public class World
 				backup[i] = -1*_dpos[i];
 			
 			element.nudge(backup); //undo the move
+			return false;
 		}	
 		else //let everybody know
 		{ /**/	
@@ -204,11 +205,11 @@ public class World
 				element.changed = true;
 				first.notifyAll();
 			}
-		
+			return true;
 	/*	}/**/
 	}
 
-	public void rotateElement( int _row, float[] _dpos )
+	public boolean rotateElement( int _row, float[] _dpos )
 	{
 		GameElement element = elements.get(_row);
 		element.rotate( _dpos );
@@ -228,6 +229,7 @@ public class World
 			element.changed = true;
 			first.notifyAll();
 		}
+		return true;
 	}
 
 	public void attributeElement(int _row, String k, Object v)

@@ -120,6 +120,11 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		return(type.compareTo(((GameElement) _ge).type));
 	}
 
+	public boolean equals(Object _ge)
+	{
+		return(this == _ge);
+	}
+
 	public synchronized String toString()
 	{
 		String s = "GameElement #" + id + ":\n" +

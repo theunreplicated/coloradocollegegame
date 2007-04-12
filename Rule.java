@@ -28,4 +28,9 @@ public class Rule
 	{
 		return owner;
 	}
+
+	public String toString()
+	{
+		return "Rule in language " + func.getLanguage() + ":\n=======================\n" + func.getFunction() + "\n=======================\n";
+	}
 }

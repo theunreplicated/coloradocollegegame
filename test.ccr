@@ -5,7 +5,7 @@
 			<inworld language="javascript">
 				var dvector = paramaters[0];
 				var vector = subject.getposition();
-				for(i = 0; i < dvector.length; i++)
+				for(i = 0; i &lt; dvector.length; i++)
 				{
 					vector[i] += dvector[i];
 				}
@@ -32,3 +32,4 @@
 			</function>
 		</rule>
 	</rules>
+</resolver>

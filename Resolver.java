@@ -27,38 +27,51 @@ public class Resolver
 		int[] needles = new int[Constants.SENTENCE_LENGTH];
 		
 		needles[0] = sentence[0];
+		System.out.print("Needles: " + needles[0] + ",");
 		for(int i = 1; i < sentence.length; i++)
+		{
 			needles[i] = elementsHash.get(sentence[i]).getTypeId();
-
+			System.out.print(needles[i]+",");
+		}
+		System.out.println();
 		Rule[] applicable = rules.getRules(needles);
-		GameElement[] relevantElements = null;
+		IncrementedArray<GameElement> relevantElements = new IncrementedArray<GameElement>(Constants.DEFAULT_RELEVANT_SIZE);
 		if(sentence.length > 1)
 		{
 			GameElement subject = elementsHash.get(sentence[1]);
 			GameElement currentElement = first;
-			relevantElements = new GameElement[Constants.DEFAULT_RELEVANT_SIZE];
-			int numRelevant = 0;
 			do
 			{
 				/*find relevent ojects and get rules that apply to this sentence*/
 				if(subject.isRelevant(currentElement))
-				{
-					if(numRelevant == relevantElements.length)
-					{
-						GameElement[] tmp = new GameElement[relevantElements.length+Constants.DEFAULT_RELEVANT_SIZE];
-						System.arraycopy(relevantElements,0,tmp,0,relevantElements.length);
-						relevantElements = tmp;
-					}
-					relevantElements[numRelevant++] = currentElement;
-				}
+					relevantElements.add(currentElement);
 			}
 			while( (currentElement=currentElement.next) != first );
 		}
 
-		return resolve(applicable,sentence,_message,relevantElements);
+
+		System.out.println("***APPLICABLE RULES***");
+		for(Rule r : applicable)
+		{
+			System.out.println(r);
+		}
+		System.out.println("***SENTENCE***");
+		for(int i : sentence)
+		{
+			System.out.println(i);
+		}
+		System.out.println("***RELEVANT ELEMENTS***");
+
+		for(int i = relevantElements.length-1; i>=0; i--)
+		{
+			System.out.println(relevantElements.get(i));
+		}
+		return 1;
+		//return resolve(applicable,sentence,_message,relevantElements);
 	}
 
-	public int resolve( Rule[] _rules, int[] _sentence, Object[] _message, GameElement[] _relevantElements)
+	@SuppressWarnings("fallthrough")
+	public int resolve( Rule[] _rules, int[] _sentence, Object[] _message, IncrementedArray<GameElement> _relevantElements)
 	{
 		Object[] message = new Object[_message.length-1];
 		System.arraycopy(_message,0,message,0,message.length);

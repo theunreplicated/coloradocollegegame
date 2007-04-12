@@ -55,6 +55,8 @@ public class RuleSet
 			System.arraycopy(newRules,0,rules,numRules,newRules.length);
 			numRules += newRules.length;
 		}
-		return rules;
+		Rule[] tmp = new Rule[numRules];
+		System.arraycopy(rules,0,tmp,0,numRules);
+		return tmp;
 	}
 }
