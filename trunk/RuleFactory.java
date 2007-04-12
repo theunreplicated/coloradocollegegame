@@ -112,10 +112,10 @@ public class RuleFactory
 
 								for(String indirectobject : indirectobjects)
 								{
-									if(indirectobject.equals(""))
+									if(!indirectobject.equals(""))
 											indirectobject = ""+ef.getType(indirectobject);
 
-									key = indirectobject+"_"+directobject+"_"+verb+"_"+subject+"_";
+									key = indirectobject+"_"+directobject+"_"+subject+"_"+verb+"_";
 
 									for(String space : spaces)
 									{
@@ -140,6 +140,7 @@ public class RuleFactory
 	public void addRuleToSet(String _setName, String _key, Rule _rule)
 	{
 		RuleSet set;
+		System.out.println("Adding rule with key " + _key);
 		if( (set = ruleSets.get(_setName)) != null)
 		{
 			set.addRule(_key,_rule);

@@ -96,7 +96,7 @@ public class ActionFactory
 			Arrays.sort(defaultActionKeys);
 			for(i = 0; i < defaultActionKeys.length; i++)
 			{
-				defaultActions.get(defaultActionKeys[i]).setId(i);
+				defaultActions.get(defaultActionKeys[i]).setId(i+1);
 			}
 		}
 		catch(Exception e) // better error reporting!
@@ -113,7 +113,7 @@ public class ActionFactory
 
 	public Action getAction(int _actionTypeId)
 	{
-		return(getAction(defaultActionKeys[_actionTypeId]));
+		return(getAction(defaultActionKeys[_actionTypeId-1]));
 	}
 
 	public int getType(String _type)
@@ -123,6 +123,6 @@ public class ActionFactory
 
 	public String getType(int _type)
 	{
-		return(defaultActionKeys[_type]);
+		return(defaultActionKeys[_type-1]);
 	}
 }

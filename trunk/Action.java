@@ -1,4 +1,4 @@
-import java.util.HashMap;
+import java.util.*;
 
 public class Action
 {
@@ -6,7 +6,7 @@ public class Action
 	private int id;
 	private StringFunction worldFunction;
 	private StringFunction repFunction;
-	private HashMap<String, Object> parameters = null;
+	private IncrementedArray<Object> parameters = null;
 	private GameElement[] nouns = null;
 
 	public Action(String _name, StringFunction _world, StringFunction _rep)
@@ -22,16 +22,7 @@ public class Action
 		id = a.getId();
 		worldFunction = a.getWorldFunction();
 		repFunction = a.getRepFunction();
-	}
-
-	public Object getParameter(String key)
-	{
-		return(parameters.get(key));
-	}
-
-	public void putParameter(String key, Object value)
-	{
-		parameters.put(key,value);
+		parameters = new IncrementedArray<Object>(Constants.DEFAULT_ACTION_PARAMETERS_SIZE);
 	}
 
 	public String getName()
@@ -55,10 +46,6 @@ public class Action
 	{
 		return repFunction;
 	}
-	public HashMap<String,Object> getParameters()
-	{
-		return parameters;
-	}
 	public GameElement[] getNouns()
 	{
 		return nouns;
@@ -67,4 +54,55 @@ public class Action
 	{
 		nouns = _nouns;
 	}
+
+	public IncrementedArray<Object> parameters()
+	{
+		return parameters;
+	}
+	public void parameters(Object[] _parameters)
+	{
+		parameters = new IncrementedArray<Object>(_parameters, Constants.DEFAULT_ACTION_PARAMETERS_SIZE);
+	}
+
+	public boolean equals(String _name, GameElement[] _nouns, Object[] _parameters)
+	{
+		if(!name.equals(_name))
+			return false;
+
+		if(_nouns != null)
+		{
+			if(nouns.length < _nouns.length)
+				return false;
+
+			for(int i = _nouns.length-1; i>=0; i--)
+				if(nouns[i] != _nouns[i])
+					return false;
+		}
+
+		if(_parameters != null)
+		{
+			if(parameters.length < _parameters.length)
+				return false;
+
+			for(int i = _parameters.length-1; i>=0; i--)
+			{
+				if(!_parameters[i].equals(parameters.get(i)))
+					return false;
+			}
+		}
+
+		return true;
+	}
+
+	public String toString()
+	{
+		String stringAction = "Information on the " + name + " action\n";
+		if(worldFunction != null)
+			stringAction += "World Function in language " + worldFunction.getLanguage() + ":\n=======================\n" + worldFunction.getFunction() + "\n=======================\n";
+		if(repFunction != null)
+			stringAction += "Represenation Function in language " + repFunction.getLanguage() + ":\n=======================\n" + repFunction.getFunction() + "\n=======================\n";
+		
+		return stringAction;
+	}
+
 }

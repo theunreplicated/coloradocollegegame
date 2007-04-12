@@ -20,7 +20,14 @@ public class Server implements IO
 		myLogger = _logger;
 		myWorld = new World(ef, myLogger);
 		wf.fillWorld(myWorld); 
+		myWorld.setIO(this);
 		myLogger.message("\n" + myWorld.toString(), false);
+
+		MovingElement floatingPillar = new MovingElement(myWorld,myWorld.getElementById(110),
+				new Object[]{
+					new Object[]{ Constants.MOVE_TO, new float[]{-3.0f,0.0f,0.0f}},
+					new Object[]{ Constants.MOVE_TO, new float[]{3.0f,0.0f,0.0f}}
+				},1000,myLogger);
 
 		for( int i = ids.length - 1; i >= 0; i-- )
 			ids[i] = -1;
@@ -39,6 +46,7 @@ public class Server implements IO
 
 		myLogger.message("Starting server on port " + _port + "\n", false);
 
+		floatingPillar.start();
 		while(true)
 		{
 			try
