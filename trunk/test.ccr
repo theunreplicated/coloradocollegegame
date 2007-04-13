@@ -14,7 +14,6 @@
 			]]>
 			</inrepresentation>
 		</action>
-	</actions>
 		<action>
 			<name>move</name>
 			<inworld language="javascript">
