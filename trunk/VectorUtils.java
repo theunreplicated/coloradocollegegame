@@ -68,22 +68,22 @@ public class VectorUtils
 		float R33 = Math.abs(R[2][2]);
 
 		//Ax face
-		if(Math.abs(T[X]) >= a[X] + b[X]*R11 + b[Y]*R12 + b[Z]*R13)
+		if(Math.abs(T[X]) > a[X] + b[X]*R11 + b[Y]*R12 + b[Z]*R13)
 			return false;
 		//Ay face
-		if(Math.abs(T[Y]) >= a[Y] + b[X]*R21 + b[Y]*R22 + b[Z]*R23)
+		if(Math.abs(T[Y]) > a[Y] + b[X]*R21 + b[Y]*R22 + b[Z]*R23)
 			return false;
 		//Az face
-		if(Math.abs(T[Z]) >= a[Z] + b[X]*R31 + b[Y]*R32 + b[Z]*R33)
+		if(Math.abs(T[Z]) > a[Z] + b[X]*R31 + b[Y]*R32 + b[Z]*R33)
 			return false;
 		//Bx face
-		if(Math.abs(T[X]*R[X][X] + T[Y]*R[Y][X] + T[Z]*R[Z][X]) >= b[X] + a[X]*R11 + a[Y]*R21 + a[Z]*R31)
+		if(Math.abs(T[X]*R[X][X] + T[Y]*R[Y][X] + T[Z]*R[Z][X]) > b[X] + a[X]*R11 + a[Y]*R21 + a[Z]*R31)
 			return false;
 		//By face
-		if(Math.abs(T[X]*R[X][Y] + T[Y]*R[Y][Y] + T[Z]*R[Z][Y]) >= b[Y] + a[X]*R12 + a[Y]*R22 + a[Z]*R32)
+		if(Math.abs(T[X]*R[X][Y] + T[Y]*R[Y][Y] + T[Z]*R[Z][Y]) > b[Y] + a[X]*R12 + a[Y]*R22 + a[Z]*R32)
 			return false;
 		//Bz face
-		if(Math.abs(T[X]*R[X][Z] + T[Y]*R[Y][Z] + T[Z]*R[Z][Z]) >= b[Z] + a[X]*R13 + a[Y]*R23 + a[Z]*R33)
+		if(Math.abs(T[X]*R[X][Z] + T[Y]*R[Y][Z] + T[Z]*R[Z][Z]) > b[Z] + a[X]*R13 + a[Y]*R23 + a[Z]*R33)
 			return false;
 		//Ax X Bx
 		if(Math.abs(T[Z]*R[Y][X] - T[Y]*R[Z][X]) > a[Y]*R31 + a[Z]*R21 + b[Y]*R13 + b[Z]*R12)
@@ -113,12 +113,29 @@ public class VectorUtils
 		if(Math.abs(T[Y]*R[X][Z] - T[X]*R[Y][Z]) > a[X]*R23 + a[Y]*R13 + b[X]*R32 + b[Y]*R31)
 			return false;	
 
-		//print out debugging stuff since we've collided
+		return true; //if we couldn't find a separating axis, we intersect	
+	}
+
+	//prints out what the checks are for debugging
+	public static void printDebugInfo(float[] a, float[] b, float[] T, float[][] R)
+	{
+		float R11 = Math.abs(R[0][0]);
+		float R12 = Math.abs(R[0][1]);
+		float R13 = Math.abs(R[0][2]);
+		float R21 = Math.abs(R[1][0]);
+		float R22 = Math.abs(R[1][1]);
+		float R23 = Math.abs(R[1][2]);
+		float R31 = Math.abs(R[2][0]);
+		float R32 = Math.abs(R[2][1]);
+		float R33 = Math.abs(R[2][2]);		
+
 		System.out.println("a= "+VectorUtils.toString(a));
 		System.out.println("b= "+VectorUtils.toString(b));
 		System.out.println("T= "+VectorUtils.toString(T));
-		System.out.println("R= "+VectorUtils.toString(R));
-		
+		System.out.print("R= ");
+			VectorUtils.print(R);
+			System.out.println("");
+
 		System.out.println("L=A1");
 		System.out.println("   "+Math.abs(T[X])+" > "+a[X]+" + "+(b[X]*R11 + b[Y]*R12 + b[Z]*R13));	
 		System.out.println("L=A2");
@@ -149,13 +166,9 @@ public class VectorUtils
 		System.out.println("   "+Math.abs(T[Y]*R[X][Y] - T[X]*R[Y][Y])+" > "+(a[X]*R22 + a[Y]*R12)+" + "+(b[X]*R33 + b[Z]*R31));	
 		System.out.println("L=A3 X B3");
 		System.out.println("   "+Math.abs(T[Y]*R[X][Z] - T[X]*R[Y][Z])+" > "+(a[X]*R23 + a[Y]*R13)+" + "+(b[X]*R32 + b[Y]*R31));	
-			
-		
-
-
-		return true; //if we couldn't find a separating axis, we intersect	
 	}
 	
+
 	//returns the radius of the containing Sphere of a box with the given half-dimensions
 	public static float getContainingSphere(float[] box)
 	{

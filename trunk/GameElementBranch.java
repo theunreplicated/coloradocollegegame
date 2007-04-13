@@ -120,7 +120,7 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 			sroot.addChild(localg); //add the TransformGroup to the shape root node			
 		}
 		
-		sroot.addChild(createBoundingBox(e)); //draw the bounding box for testing.
+		//sroot.addChild(createBoundingBox(e)); //draw the bounding box for testing.
 										      		
 		broot.compile(); //let J3D optimize the branch
 	}//constructor

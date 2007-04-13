@@ -24,7 +24,7 @@ public class MovingElement extends Thread
 			switch( (Integer) command[0])
 			{
 				case Constants.MOVE_TO:
-					if(w.nudgeElement(me.id(), (float[]) command[1]))
+					if(w.nudgeInternal(me.id(), (float[]) command[1]))
 						command_id = (command_id+1)%commands.length;
 					break;
 				case Constants.ROTATE_TO:

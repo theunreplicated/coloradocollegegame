@@ -140,6 +140,9 @@ public class World
 		GameElement newElement = ef.getGameElement(_type);
 		newElement.id(_id);
 		newElement.setPosition(_pos);
+		if(_id < Constants.ELEMENT_ID_PADDING) //so that the avatars have different colors!
+			newElement.attribute("color",Constants.getColorByClientID(_id));
+
 		if(first == null)
 		{
 			first = newElement;
@@ -177,7 +180,7 @@ public class World
 		GameElement element = elements.get(_row);
 		element.nudge( _dpos );
 		
-	/*	if(hasCollisions(element)) //if we caused a collision
+	/**/	if(hasCollisions(element)) //if we caused a collision
 		{
 			float[] backup = new float[_dpos.length]; //get the reversion
 			for(int i=0; i<backup.length; i++)
@@ -206,7 +209,33 @@ public class World
 				first.notifyAll();
 			}
 			return true;
-	/*	}/**/
+	/**/	}/**/
+	}
+
+	//a nudge method without testing collisions (for MovingElement demonstration)
+	//We can remove this as soon as the resolver is handling collisions
+	public boolean nudgeInternal( int _row, float[] _dpos )
+	{
+		GameElement element = elements.get(_row);
+		element.nudge( _dpos );
+		
+		float[] position = element.getPosition();
+
+		Object[] message = new Object[] {
+			Constants.MOVE_TO,
+			_row,
+			position
+		};
+
+
+		myIO.send(message);
+		myLogger.message( "nudge position: " + _row + " " + VectorUtils.toString(position)+"\n", false );
+		synchronized(first)
+		{
+			element.changed = true;
+			first.notifyAll();
+		}
+		return true;
 	}
 
 	public boolean rotateElement( int _row, float[] _dpos )
