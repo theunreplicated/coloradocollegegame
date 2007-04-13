@@ -71,6 +71,9 @@ public class Action
 
 		if(_nouns != null)
 		{
+			if(nouns == null)
+				return false;
+
 			if(nouns.length < _nouns.length)
 				return false;
 
@@ -81,6 +84,9 @@ public class Action
 
 		if(_parameters != null)
 		{
+			if(parameters == null)
+				return false;
+
 			if(parameters.length < _parameters.length)
 				return false;
 

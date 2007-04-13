@@ -1,18 +1,37 @@
 <resolver>
 	<actions>
 		<action>
+			<name>move to</name>
+			<inworld language="javascript">
+			<![CDATA[
+				var vector = paramaters[0];
+				subject.setPosition(vector);
+			]]>
+			</inworld>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				representation.updateElement(subject);
+			]]>
+			</inrepresentation>
+		</action>
+	</actions>
+		<action>
 			<name>move</name>
 			<inworld language="javascript">
+			<![CDATA[
 				var dvector = paramaters[0];
-				var vector = subject.getposition();
-				for(i = 0; i &lt; dvector.length; i++)
+				var vector = subject.getPosition();
+				for(i = 0; i < dvector.length; i++)
 				{
 					vector[i] += dvector[i];
 				}
-				subject.setposition(vector);
+				subject.setPosition(vector);
+			]]>
 			</inworld>
 			<inrepresentation language="javascript">
+			<![CDATA[
 				representation.updateElement(subject);
+			]]>
 			</inrepresentation>
 		</action>
 	</actions>
@@ -20,15 +39,15 @@
 		<rule>
 			<verb>move</verb>
 			<function language="javascript">
-				var status = 0;
-				for( obj in relevant)
+			<![CDATA[
+				print("Hi!\n");
+				for(var i = 0; i < relevant.length; i++)
 				{
-					if(subject.isColliding(obj))
-					{
-						status = 1;
-						break;
-					}
+					print("Testing.... " + relevant.get(i).id() + " " + subject.id() + "\n");
+					if(relevant.get(i).isColliding(subject))
+						print("Collision!" + relevant.get(i).id() + " " + subject.id() + "\n");
 				}
+			]]>
 			</function>
 		</rule>
 	</rules>

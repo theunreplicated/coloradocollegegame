@@ -312,36 +312,6 @@ public class World
 		}
 	}
 	
-	public int parse(Object[] message)
-	{
-		switch(((Integer) message[0]).intValue())
-		{
-			case Constants.MOVE_TO:
-				setPosition( message, 1);
-				break;
-			case Constants.ROTATE_TO:
-				setFacing( message, 1);
-				break;
-			case Constants.ATTRIBUTE:
-				setAttribute( message, 1);
-				break;
-			case Constants.ADD_PLAYER:
-				addElement( message, 1);
-				break;
-			case Constants.REMOVE_PLAYER:
-				removeElement( message, 1 );
-				myLogger.message("Removing player: " + message[1] + "\n", false);
-				break;
-			case Constants.SEND_WORLD:
-				addMultipleElements( message, 1);
-				break;
-			default:
-				myLogger.message("Received unparsable message: " + message[0] + "\n", true);
-		}
-
-		return Constants.SUCCESS; //eventually every action in the world will return an int for whether or not it was a valid action
-	}
-
 	//a TESTING method to check the world for a collision
 	public void checkCollisions()
 	{

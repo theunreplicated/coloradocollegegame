@@ -2,20 +2,24 @@ import javax.swing.*;
 
 public class Client
 {
-	public Logger logger;
-	public int id;
+	ClientInput clientInput;
+	public Logger myLogger;
 	ClientIO myIO;
 	World w;
 
 	public Client(String _server, int _port, boolean _verbose )
 	{
-		logger = new Logger( _verbose );
+		myLogger = new Logger( _verbose );
 
-		ElementFactory ef = new ElementFactory(logger);
+		ElementFactory ef = new ElementFactory(myLogger);
+		ActionFactory af = new ActionFactory(myLogger);
+		RuleFactory rf = new RuleFactory(af,ef,myLogger);
 
-		w = new World(ef,logger);
+		w = new World(ef,myLogger);
+		Resolver r = new Resolver(w, rf, af,myLogger);
+		clientInput = new ClientInput(r,af,myLogger);
 
-		myIO = new ClientIO( this , w , _server, _port, logger );
+		myIO = new ClientIO( clientInput , r, w , _server, _port, myLogger );
 	}
 
 	public static Client initialize(String args[])
@@ -87,11 +91,11 @@ public class Client
 
 	public ClientInput getClientInput()
 	{
-		return myIO.getClientInput();
+		return clientInput;
 	}
 
 	public Logger getLogger()
 	{
-		return logger;
+		return myLogger;
 	}
 }

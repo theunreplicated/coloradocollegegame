@@ -12,6 +12,7 @@ public class Server implements IO
 	private ClientThread[] threads = new ClientThread[Constants.MAX_CONNECTIONS];
 	private int[] ids = new int[Constants.MAX_CONNECTIONS];
 	private World myWorld;
+	private Resolver resolver;
 	public Logger myLogger;
 
 	public Server(WorldFactory wf, ElementFactory ef, Logger _logger ,int _port)
@@ -19,8 +20,13 @@ public class Server implements IO
 
 		myLogger = _logger;
 		myWorld = new World(ef, myLogger);
-		wf.fillWorld(myWorld); 
+		wf.fillWorld(myWorld);
 		myWorld.setIO(this);
+
+		ActionFactory af = new ActionFactory(myLogger);
+		RuleFactory rf = new RuleFactory(af,ef,myLogger);
+		resolver = new Resolver(myWorld, rf, af,myLogger);
+
 		myLogger.message("\n" + myWorld.toString(), false);
 
 		MovingElement floatingPillar = new MovingElement(myWorld,myWorld.getElementById(110),
@@ -46,7 +52,7 @@ public class Server implements IO
 
 		myLogger.message("Starting server on port " + _port + "\n", false);
 
-		floatingPillar.start();
+//		floatingPillar.start();
 		while(true)
 		{
 			try
@@ -79,9 +85,8 @@ public class Server implements IO
 					 * in general, please see the long comment in Constants.java
 					 * where ELMENT_ID_PADDING is declared.
 					 */
-					ids[i] = i + 1 + Constants.ELEMENT_ID_PADDING;
 					myLogger.message( "Creating client connection thread in row " + i + " (id is: " + ids[i] + ")\n", false );
-					threads[i] = new ClientThread(this, _conn, ids[i], i, myLogger);
+					threads[i] = new ClientThread(this, _conn, i + 1 + Constants.ELEMENT_ID_PADDING, i, myLogger);
 					threads[i].start();
 					
 					return;
@@ -124,7 +129,7 @@ public class Server implements IO
 		synchronized(threads)
 		{
 			int i;
-			myWorld.parse((Object[]) _message);
+			resolver.parseOld((Object[]) _message);
 			for( i = ids.length - 1; i >= 0; i-- ) 
 			{
 				if( ids[i] >= 0 && _row != i )
@@ -141,6 +146,7 @@ public class Server implements IO
 	{
 		System.out.println("sendWorld!");
 		threads[_row].send(new Object[]{ Constants.SEND_WORLD, myWorld.getElements() });
+		ids[_row] = _row + 1 + Constants.ELEMENT_ID_PADDING;
 		System.out.println("sendWorld!");
 	}
 
