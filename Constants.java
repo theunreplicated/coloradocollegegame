@@ -220,4 +220,31 @@ public class Constants
 		return null;
 	}
 
+	//temp method, though it might be nice for the future
+	public static int getColorByClientID(int cid)
+	{
+		switch(cid%8)
+		{
+			case 0:
+				return (int)Long.parseLong("ffff0000",16);
+			case 1:
+				return (int)Long.parseLong("ff00ff00",16); 
+			case 2:
+				return (int)Long.parseLong("ff0000ff",16); 
+			case 3:
+				return (int)Long.parseLong("ffffff00",16); 
+			case 4:
+				return (int)Long.parseLong("ffff00ff",16); 
+			case 5:
+				return (int)Long.parseLong("ff00ffff",16); 
+			case 6:
+				return (int)Long.parseLong("ffffffff",16);
+			case 7:
+				return (int)Long.parseLong("ff000000",16);
+			default:
+				return 0;
+		}
+	}
+
+
 }

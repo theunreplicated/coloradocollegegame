@@ -268,7 +268,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		if(VectorUtils.getDistSqr(position, _element.getPosition()) <= 
 			(boundingRadius+_element.getBoundingRadius())*(boundingRadius+_element.getBoundingRadius()))
 		{
-		/*//the current method
+		/*//the old method
 			//uses OBBs in 3D to check
 			return VectorUtils.OBB3DIntersect(boundingBox, 
 						_element.getBoundingBox(), 
@@ -277,30 +277,46 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 						//Quaternions.getMatrixFromQuat(_element.getFacing(), facing));
 		*/
 			//testing stuff
+			/*float[] p = VectorUtils.sub(_element.getPosition(),position);
+			float[] pr = Quaternions.inverse(facing);
+			float[] t = Quaternions.rotatePoint(p,pr);
+			float[][] r = Quaternions.getMatrixFromQuat(facing, _element.getFacing());
+
 			if(VectorUtils.OBB3DIntersect(boundingBox, 
 						_element.getBoundingBox(), 
-						VectorUtils.sub(_element.getPosition(), position),
-						//Quaternions.getMatrixFromQuat(facing, _element.getFacing())))
-						Quaternions.getMatrixFromQuat(_element.getFacing(), facing)))
-			{	
-			/*	System.out.println("\nface,eFacing");
-				VectorUtils.print(Quaternions.getMatrixFromQuat(
-							Quaternions.sub(facing,_element.getFacing())));
-				System.out.print("Still collides: ");
-				System.out.println(VectorUtils.OBB3DIntersect(boundingBox, 
-							_element.getBoundingBox(), 
-							VectorUtils.sub(_element.getPosition(), position),
-							Quaternions.getMatrixFromQuat(facing, _element.getFacing())));
-				
-				System.out.println("\neFacing,face");
-				VectorUtils.print(Quaternions.getMatrixFromQuat(
-							Quaternions.sub(_element.getFacing(),facing)));
-				System.out.print("Still collides: ");
-				System.out.println(VectorUtils.OBB3DIntersect(boundingBox, 
-							_element.getBoundingBox(), 
-							VectorUtils.sub(_element.getPosition(), position),
-							Quaternions.getMatrixFromQuat(_element.getFacing(), facing))+"\n");
+						t,
+						r))
 			*/
+			
+			//WORKS in the XZ plane
+			float[] a = boundingBox;
+			float[] b = _element.getBoundingBox();
+			float[] T = Quaternions.rotatePoint(VectorUtils.sub(_element.getPosition(), position), facing);
+			float[][] R = Quaternions.getMatrixFromQuat(Quaternions.mul(_element.getFacing(), facing ));
+			
+			
+			/*float[] a = boundingBox;
+			float[] b = _element.getBoundingBox();
+			float[] T = VectorUtils.sub(_element.getPosition(), position);
+			float[] Ar = Quaternions.sub(new float[] {0,0,0,1},facing); //the rotation to return A to normal
+			float[] Ap = Quaternions.mul(Ar,facing); 
+			float[] Bp = Quaternions.mul(Ar,_element.getFacing());
+			float[][] R = Quaternions.getMatrixFromQuat(Quaternions.sub(Ap,Bp));
+			*/
+
+			//debug stuff
+			
+			//if(_element.id()==6110) //the wall we know about...
+			//	VectorUtils.printDebugInfo(a,b,T,R);
+
+			if(VectorUtils.OBB3DIntersect(a,b,T,R))
+			{
+				//other debug stuff
+				/*VectorUtils.printDebugInfo(a,b,T,R);
+				System.out.println("Ar= "+Quaternions.toString(Ar));
+				System.out.println("Ap= "+Quaternions.toString(Ap));
+				System.out.println("Bp= "+Quaternions.toString(Bp));
+				*/
 				return true;
 			}
 			else

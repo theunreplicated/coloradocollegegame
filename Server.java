@@ -1,5 +1,7 @@
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class Server implements IO
 {
@@ -14,7 +16,11 @@ public class Server implements IO
 	private World myWorld;
 	private Resolver resolver;
 	public Logger myLogger;
-
+	
+	//an array of MovingElement references so we can start/stop them all at once.
+	//could change this later
+	private ArrayList<MovingElement> movers = new ArrayList<MovingElement>(); 
+	
 	public Server(WorldFactory wf, ElementFactory ef, Logger _logger ,int _port)
 	{
 
@@ -29,11 +35,7 @@ public class Server implements IO
 
 		myLogger.message("\n" + myWorld.toString(), false);
 
-		MovingElement floatingPillar = new MovingElement(myWorld,myWorld.getElementById(110),
-				new Object[]{
-					new Object[]{ Constants.MOVE_TO, new float[]{-3.0f,0.0f,0.0f}},
-					new Object[]{ Constants.MOVE_TO, new float[]{3.0f,0.0f,0.0f}}
-				},1000,myLogger);
+		createMovingObjects(); //moved into it's own method for easy portability
 
 		for( int i = ids.length - 1; i >= 0; i-- )
 			ids[i] = -1;
@@ -52,7 +54,8 @@ public class Server implements IO
 
 		myLogger.message("Starting server on port " + _port + "\n", false);
 
-//		floatingPillar.start();
+		startMovingObjects(); //moved into its own method for easy portability
+	
 		while(true)
 		{
 			try
@@ -149,6 +152,50 @@ public class Server implements IO
 		ids[_row] = _row + 1 + Constants.ELEMENT_ID_PADDING;
 		System.out.println("sendWorld!");
 	}
+
+	//creates a bunch of MovingElements
+	private void createMovingObjects()
+	{
+		GameElement first = myWorld.getFirstElement();
+		GameElement e = first; //for looping
+		Random rand = new Random();
+		
+		do
+		{
+			//do stuff to e
+			if(e.attribute("moving")!=null)
+			{
+				int rmod = rand.nextInt(6)*5000;
+
+				if((Integer)e.attribute("moving")==1)
+				{
+					//create down-moving wall
+					movers.add(new MovingElement(myWorld,e, new Object[]{
+						new Object[]{ Constants.MOVE_TO, new float[]{0.0f,0.0f,10.0f}},
+						new Object[]{ Constants.MOVE_TO, new float[]{0.0f,0.0f,-10.0f}}
+							},5000+rmod,myLogger)); 
+				}
+				else if((Integer)e.attribute("moving")==2)
+				{
+					//create right-moving wall
+					movers.add(new MovingElement(myWorld,e, new Object[]{
+						new Object[]{ Constants.MOVE_TO, new float[]{10.0f,0.0f,0.0f}},
+						new Object[]{ Constants.MOVE_TO, new float[]{-10.0f,0.0f,0.0f}}
+							},5000+rmod,myLogger)); 
+				}
+			}
+			
+			e = e.next;
+		}while(e != first);
+	}
+
+	//starts the MovingElements moving
+	private void startMovingObjects()
+	{
+		for(int i=0; i<movers.size(); i++)
+			movers.get(i).start();
+	}
+	
 
 	public static void main(String args[])
 	{

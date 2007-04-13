@@ -39,14 +39,6 @@ public class Quaternions
 		
 		float[] q1i = {-1*q1[X], -1*q1[Y], -1*q1[Z], q1[W]};
 		
-		/*System.out.println(toString(mul(q2,q1i)));
-		System.out.println(toString(new float[] {
-			q1[W]*q2[X] - q1[X]*q2[W] - q1[Y]*q2[Z] + q1[Z]*q2[Y],
-			q1[W]*q2[Y] - q1[Y]*q2[W] - q1[Z]*q2[X] + q1[X]*q2[Z],
-			q1[W]*q2[Z] - q1[Z]*q2[W] - q1[X]*q2[Y] + q1[Y]*q2[X],
-			q1[W]*q2[W] + q1[X]*q2[X] + q1[Y]*q2[Y] + q1[Z]*q2[Z]}));*/		
-		//return mul(q2,q1i);
-		
 		//simplified quaternion multiplication
 		/**/return new float[] {
 			q1[W]*q2[X] - q1[X]*q2[W] - q1[Y]*q2[Z] + q1[Z]*q2[Y],
@@ -54,6 +46,11 @@ public class Quaternions
 			q1[W]*q2[Z] - q1[Z]*q2[W] - q1[X]*q2[Y] + q1[Y]*q2[X],
 			q1[W]*q2[W] + q1[X]*q2[X] + q1[Y]*q2[Y] + q1[Z]*q2[Z]};/**/
 		
+	}
+
+	public static float[] inverse(float[] q)
+	{
+		return new float[] {-1*q[X], -1*q[Y], -1*q[Z], q[W]};	
 	}
 
 	//normalizes the given Quaternion (sets its length to 1)
@@ -149,7 +146,7 @@ public class Quaternions
 		float wx = q[W]*q[X];
 		float wy = q[W]*q[Y];
 		float wz = q[W]*q[Z];
-
+		
 		//construct and return the rotation matrix
 		return new float[][] {	{1-2*(y2 + z2), 2*(xy - wz), 2*(xz + wy)},
 					{2*(xy + wz), 1-2*(x2 + z2), 2*(yz - wx)},
@@ -161,7 +158,7 @@ public class Quaternions
 	public static float[][] getMatrixFromQuat(float[] q1, float[] q2)
 	{
 		//could probably make this explicit instead of calling another function to save time?
-		return getMatrixFromQuat(sub(q1,q2));	
+		return getMatrixFromQuat(mul(q1,q2));	
 	}
 
 	public static String toString(float[] q)
