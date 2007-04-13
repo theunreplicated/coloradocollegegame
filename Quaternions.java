@@ -29,25 +29,23 @@ public class Quaternions
 	//(the quaternion which will allow a rotation FROM q1 TO q2)
 	//NOTE: returns quaternions which gets us TO arg1 FROM arg2)
 	//  require q to be a unit because it should be anyway (based on the game)
-	public static float[] sub(float[] q2, float[] q1)
+/*	public static float[] sub(float[] q2, float[] q1)
 	{
 		/* The explicit formula
 		return q1^-1 * q2; == (-1*q1.v,q1.w)*q2
-		
 		return mul(-q1,q2)
 		*/
 		
-		float[] q1i = {-1*q1[X], -1*q1[Y], -1*q1[Z], q1[W]};
 		
 		//simplified quaternion multiplication
-		/**/return new float[] {
+		/*return new float[] {
 			q1[W]*q2[X] - q1[X]*q2[W] - q1[Y]*q2[Z] + q1[Z]*q2[Y],
 			q1[W]*q2[Y] - q1[Y]*q2[W] - q1[Z]*q2[X] + q1[X]*q2[Z],
 			q1[W]*q2[Z] - q1[Z]*q2[W] - q1[X]*q2[Y] + q1[Y]*q2[X],
-			q1[W]*q2[W] + q1[X]*q2[X] + q1[Y]*q2[Y] + q1[Z]*q2[Z]};/**/
+			q1[W]*q2[W] + q1[X]*q2[X] + q1[Y]*q2[Y] + q1[Z]*q2[Z]};
 		
 	}
-
+*/
 	public static float[] inverse(float[] q)
 	{
 		return new float[] {-1*q[X], -1*q[Y], -1*q[Z], q[W]};	
@@ -155,12 +153,12 @@ public class Quaternions
 
 	//returns the rotation matrix that represents the rotation to Quaternions q1 from q2
 	//  require q to be a unit because it should be anyway (based on the game)
-	public static float[][] getMatrixFromQuat(float[] q1, float[] q2)
+/*	public static float[][] getMatrixFromQuat(float[] q1, float[] q2)
 	{
 		//could probably make this explicit instead of calling another function to save time?
 		return getMatrixFromQuat(mul(q1,q2));	
 	}
-
+*/
 	public static String toString(float[] q)
 	{
 		return "{"+q[X]+", "+q[Y]+", "+q[Z]+", "+q[W]+"}";
