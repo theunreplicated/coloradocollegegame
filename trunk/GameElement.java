@@ -13,6 +13,8 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	private float[] scale = new float[3];
 	private float[] boundingBox = new float[3];
 	private float boundingRadius;
+	
+	private float relevancy;
 
 	VirtualShape[] shapes = null;
 	private AttributesHashMap attributes = null;
@@ -33,6 +35,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		shapes = _shapes;
 		boundingBox = _boundingBox;
 		boundingRadius = VectorUtils.getContainingSphere(boundingBox);
+		relevancy = 2*boundingRadius; //for now
 		
 		attributes = _attributes;
 		/*initialize is depracated */
@@ -51,6 +54,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		System.arraycopy(original.shapes,0,shapes,0,original.shapes.length);
 		System.arraycopy(original.boundingBox,0,boundingBox,0,original.boundingBox.length);
 		boundingRadius = VectorUtils.getContainingSphere(boundingBox);
+		relevancy = 2*boundingRadius; //for now
 		if(original.attributes != null)
 			attributes = (AttributesHashMap) original.attributes.clone();
 		typeId = original.typeId;
@@ -188,6 +192,11 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		return boundingRadius;
 	}
 
+	public synchronized float getRelevancy()
+	{
+		return relevancy;	
+	}
+
 	
 	/************ 
 	 * Mutators *
@@ -242,6 +251,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		for( int i = 0 ; i < boundingBox.length; i++ )
 			boundingBox[i] *= delta[i];
 		boundingRadius = VectorUtils.getContainingSphere(boundingBox);
+		relevancy = 2*boundingRadius; //for now
 	}
 
 	//sets the boundingBox, for scaling (not sure if this is used or not)
@@ -249,6 +259,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	{
 		boundingBox = bb;
 		boundingRadius = VectorUtils.getContainingSphere(boundingBox);
+		relevancy = 2*boundingRadius; //for now
 	}
 
 
@@ -258,7 +269,8 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 
 	public synchronized boolean isRelevant(GameElement _element)
 	{
-		return true;
+		return VectorUtils.getDistSqr(position, _element.getPosition()) <= 
+				(relevancy+_element.getRelevancy())*(relevancy+_element.getRelevancy());
 	}
 
 	//this method will run a collision detection tree using other collision methods.
@@ -268,14 +280,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		if(VectorUtils.getDistSqr(position, _element.getPosition()) <= 
 			(boundingRadius+_element.getBoundingRadius())*(boundingRadius+_element.getBoundingRadius()))
 		{
-		/*//the old method
-			//uses OBBs in 3D to check
-			return VectorUtils.OBB3DIntersect(boundingBox, 
-						_element.getBoundingBox(), 
-						VectorUtils.sub(position, _element.getPosition()),
-						Quaternions.getMatrixFromQuat(facing, _element.getFacing()));
-						//Quaternions.getMatrixFromQuat(_element.getFacing(), facing));
-		*/
+
 			//testing stuff
 			/*float[] p = VectorUtils.sub(_element.getPosition(),position);
 			float[] pr = Quaternions.inverse(facing);
@@ -355,8 +360,8 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 				//get relative position/rotation
 				T = VectorUtils.sub(	VectorUtils.add(sposi,position), 
 							VectorUtils.add(ushapes[j].getPosition(), uposition));
-				R = Quaternions.getMatrixFromQuat(	Quaternions.mul(sface, facing), 
-									Quaternions.mul(ushapes[j].getFacing(), ufacing));	
+				R = Quaternions.getMatrixFromQuat(Quaternions.mul(Quaternions.mul(sface, facing), 
+										Quaternions.mul(ushapes[j].getFacing(), ufacing)));	
 								
 				//use VectorUtils to check for OBB collisions
 				if(VectorUtils.OBB3DIntersect(a,ushapes[j].getBoundingBox(), T, R)) //if collides
@@ -370,17 +375,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 			return collisions;
 	}
 
-	/*
-	public boolean isRelevant(float[] _position, float _radius)
-	{
-		float sum = (float)Math.pow(_position[0]-position[0],2);
-		for( int i = position.length-1;i > 0; i--)
-			sum += (float)Math.pow(_position[i]-position[i],2);
-
-		return ((float)Math.sqrt( sum ) - _radius - relevantRadius) < 0;
-	} */
-
-
+	
 	/*  Deprecated stuff*/
 	public synchronized int[][] getAbsoluteCoordinates()
 	{

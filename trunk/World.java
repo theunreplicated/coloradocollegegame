@@ -140,7 +140,7 @@ public class World
 		GameElement newElement = ef.getGameElement(_type);
 		newElement.id(_id);
 		newElement.setPosition(_pos);
-		if(_id < Constants.ELEMENT_ID_PADDING) //so that the avatars have different colors!
+		if(_id < Constants.ELEMENT_ID_PADDING+Constants.MAX_CONNECTIONS+1) //so that the avatars have different colors!
 			newElement.attribute("color",Constants.getColorByClientID(_id));
 
 		if(first == null)
