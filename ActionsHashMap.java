@@ -12,7 +12,7 @@ public class ActionsHashMap
 		actions = new HashMap<String,IncrementedArray<Action>>();
 	}
 
-	public void add(String name, GameElement[] nouns, Object[] parameters)
+	public void add(Object name, GameElement[] nouns, Object[] parameters)
 	{
 		IncrementedArray<Action> list;
 		Action a = actionFactory.getAction(name);
@@ -25,27 +25,27 @@ public class ActionsHashMap
 		else
 		{
 			list = new IncrementedArray<Action>(Constants.DEFAULT_ACTION_HASHMAP_ENTRY_SIZE);
-			actions.put(name, list);
+			actions.put(a.getName(), list);
 		}
 		list.add(a);
 	}
 
-	public void add(String name, GameElement[] nouns)
+	public void add(Object name, GameElement[] nouns)
 	{
 		add(name, nouns, null);
 	}
 
-	public void add(String name, Object[] parameters)
+	public void add(Object name, Object[] parameters)
 	{
 		add(name, null, parameters);
 	}
 
-	public void add(String name)
+	public void add(Object name)
 	{
 		add(name, null, null);
 	}
 
-	public boolean put(String name, GameElement[] nouns, Object[] parameters)
+	public boolean put(Object name, GameElement[] nouns, Object[] parameters)
 	{
 		if(actions.containsKey(name))
 			return false;
@@ -54,7 +54,7 @@ public class ActionsHashMap
 		return true;
 	}
 
-	public boolean put(String name, GameElement[] nouns)
+	public boolean put(Object name, GameElement[] nouns)
 	{
 		if(actions.containsKey(name))
 			return false;
@@ -63,7 +63,7 @@ public class ActionsHashMap
 		return true;
 	}
 
-	public boolean put(String name, Object[] parameters)
+	public boolean put(Object name, Object[] parameters)
 	{
 		if(actions.containsKey(name))
 			return false;
@@ -72,7 +72,7 @@ public class ActionsHashMap
 		return true;
 	}
 
-	public boolean put(String name)
+	public boolean put(Object name)
 	{
 		if(actions.containsKey(name))
 			return false;

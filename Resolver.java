@@ -5,19 +5,50 @@ public class Resolver
 	RuleSet rules;
 	RuleFactory ruleFactory;
 	ActionFactory actionFactory;
-	GameElement first;
 	HashMap<Integer,GameElement> elementsHash;
 	ScriptEngineManager manager;
-	World testWorld;
+	World world;
+	Logger myLogger;
 
-	public Resolver(World _world, RuleFactory _rf, ActionFactory _af)
+	public Resolver(World _world, RuleFactory _rf, ActionFactory _af, Logger _myLogger)
 	{
 		ruleFactory = _rf;
 		actionFactory = _af;
 		rules = _rf.getRuleSet("");
-		first = _world.getFirstElement();
 		elementsHash = _world.getElementsHash();
 		manager = new ScriptEngineManager();
+		world = _world;
+		myLogger = _myLogger;
+	}
+
+	public int parseOld(Object[] message)
+	{
+		switch(((Integer) message[0]).intValue())
+		{
+			case Constants.MOVE_TO:
+				world.setPosition( message, 1);
+				break;
+			case Constants.ROTATE_TO:
+				world.setFacing( message, 1);
+				break;
+			case Constants.ATTRIBUTE:
+				world.setAttribute( message, 1);
+				break;
+			case Constants.ADD_PLAYER:
+				world.addElement( message, 1);
+				break;
+			case Constants.REMOVE_PLAYER:
+				world.removeElement( message, 1 );
+				myLogger.message("Removing player: " + message[1] + "\n", false);
+				break;
+			case Constants.SEND_WORLD:
+				world.addMultipleElements( message, 1);
+				break;
+			default:
+				myLogger.message("Received unparsable message: " + message[0] + "\n", true);
+		}
+
+		return Constants.SUCCESS; //eventually every action in the world will return an int for whether or not it was a valid action
 	}
 
 	public int parse(Object[] _message)
@@ -39,35 +70,20 @@ public class Resolver
 		if(sentence.length > 1)
 		{
 			GameElement subject = elementsHash.get(sentence[1]);
+			GameElement first = world.getFirstElement();
 			GameElement currentElement = first;
 			do
 			{
 				/*find relevent ojects and get rules that apply to this sentence*/
-				if(subject.isRelevant(currentElement))
+				if(currentElement != subject && subject.isRelevant(currentElement))
 					relevantElements.add(currentElement);
+				System.out.println(currentElement.id()+"\n");
 			}
 			while( (currentElement=currentElement.next) != first );
 		}
 
 
-		System.out.println("***APPLICABLE RULES***");
-		for(Rule r : applicable)
-		{
-			System.out.println(r);
-		}
-		System.out.println("***SENTENCE***");
-		for(int i : sentence)
-		{
-			System.out.println(i);
-		}
-		System.out.println("***RELEVANT ELEMENTS***");
-
-		for(int i = relevantElements.length-1; i>=0; i--)
-		{
-			System.out.println(relevantElements.get(i));
-		}
-		return 1;
-		//return resolve(applicable,sentence,_message,relevantElements);
+		return resolve(applicable,sentence,_message,relevantElements);
 	}
 
 	@SuppressWarnings("fallthrough")
@@ -78,8 +94,8 @@ public class Resolver
 		GameElement subject = null, directObject = null, indirectObject = null;
 		GameElement[] other = null;
 		Integer status;
-		ArrayList<Action> actions = new ArrayList<Action>();
-		Action a = actionFactory.getAction(_sentence[0]);
+		ActionsHashMap myActions = new ActionsHashMap(actionFactory); 
+		ActionsHashMap actionsToSend = new ActionsHashMap(actionFactory);
 		
 		switch(_sentence.length)
 		{
@@ -97,8 +113,7 @@ public class Resolver
 
 		}
 
-		a.setNouns(new GameElement[]{subject,directObject,indirectObject});
-		actions.add(a);
+		myActions.add(new Integer(_sentence[0]),new GameElement[]{subject,directObject,indirectObject},message);
 
 		for(Rule rule : _rules)
 		{
@@ -111,11 +126,11 @@ public class Resolver
 				engine.put("other",other);
 				engine.put("relevant",_relevantElements);
 				engine.put("message",message);
-				engine.put("actions",actions);
-				engine.put("actionFactory",actionFactory);
+				engine.put("myActions",myActions);
+				engine.put("actionsToSend",actionsToSend);
 				engine.eval(rule.function());
-				status = (Integer) engine.get("status");
-				if(status != 0)
+				status = ((Double) engine.get("status")).intValue();
+				if(status != Constants.SUCCESS)
 					return status;
 			}
 			catch(ScriptException se)
@@ -124,6 +139,7 @@ public class Resolver
 			}
 
 		}
-		return 0;
+
+		return Constants.SUCCESS;
 	}
 }

@@ -28,6 +28,10 @@ public class IncrementedArray<T>
 		incrementSize = _incrementSize;
 	}
 
+	public T[] get()
+	{
+		return data;
+	}
 	public T get(int id)
 	{
 		return data[id];

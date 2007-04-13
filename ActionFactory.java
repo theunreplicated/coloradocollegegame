@@ -116,6 +116,14 @@ public class ActionFactory
 		return(getAction(defaultActionKeys[_actionTypeId-1]));
 	}
 
+	public Action getAction(Object _actionInfo)
+	{
+		if(_actionInfo instanceof String)
+			return getAction((String) _actionInfo);
+
+		return getAction(((Integer) _actionInfo).intValue());
+	}
+
 	public int getType(String _type)
 	{
 		return(defaultActions.get(_type).getId());

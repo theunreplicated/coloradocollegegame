@@ -12,23 +12,21 @@ public class ClientIO implements IO
 {
 	//global variables
 	public int id;
-	private Client myClient;
-														   //pressed
 	private Socket servConnectionIn;
 	private Socket servConnectionOut;
 	private ServerListenerThread serverListener;
 	private ObjectOutputStream oos;
 	private World myWorld;
+	private Resolver resolver;
 	private Logger myLogger;
 	private ClientInput input;
 	private Representation rep;
 
-	public ClientIO(Client _myClient, World _myWorld, String _server, int _port, Logger _logger )
+	public ClientIO(ClientInput _clientInput, Resolver _resolver, World _myWorld, String _server, int _port, Logger _logger )
 	{
-		myClient = _myClient;
 		myWorld = _myWorld;
+		resolver = _resolver;
 		myLogger = _logger;
-		input = new ClientInput(this,myLogger);
 		id = 0;
 		try
 		{
@@ -36,7 +34,7 @@ public class ClientIO implements IO
 			servConnectionIn = new Socket(InetAddress.getByName(_server), _port);
 			ObjectInputStream ois = new ObjectInputStream(servConnectionIn.getInputStream());
 			id = ois.readInt();
-			myClient.id = id;
+			_clientInput.setId(this,id);
 
 			// get the output stream
 			myLogger.message("Starting temporary server to get output stream...\n", false);
@@ -103,8 +101,8 @@ public class ClientIO implements IO
 	//move along the specified vector RELATIVE to current facing
 	public void moveSelf(float[] v)
 	{
-		myWorld.nudgeElement(myClient.id, Quaternions.rotatePoint(v,
-							myWorld.getElementFacing(myClient.id)));
+		myWorld.nudgeElement(id, Quaternions.rotatePoint(v,
+							myWorld.getElementFacing(id)));
 	}
 	
 	/**Do we want to add a method to move based on an int direction defined in Constants?**/
@@ -112,24 +110,24 @@ public class ClientIO implements IO
 	//move along the specified vector INDEPENDENT of current facing
 	public void moveSelfAbsolute(float[] v)
 	{
-		myWorld.nudgeElement(myClient.id, v);
+		myWorld.nudgeElement(id, v);
 	}
 	
 	//move along the specified vector relative to the camera's current facing
 	public void moveSelfRelativeCamera(float[] v)
 	{
 		//change this--how does ClientIO see the Representation?
-		myWorld.nudgeElement(myClient.id, v);
+		myWorld.nudgeElement(id, v);
 	}
 	
 	public void rotateSelf(float[] q)
 	{
-		myWorld.rotateElement(myClient.id, q);
+		myWorld.rotateElement(id, q);
 	}
 
 	public void changeAttribute(String k, Object v)
 	{
-		myWorld.attributeElement(myClient.id, k, v);
+		myWorld.attributeElement(id, k, v);
 	}
 
 	public ClientInput getClientInput()
@@ -156,7 +154,7 @@ public class ClientIO implements IO
 
 				while( (objectMessage = (Object[]) ois.readObject()) != null)
 				{
-					myWorld.parse(objectMessage);
+					resolver.parseOld(objectMessage);
 				}
 			}
 			catch(IOException ioe)

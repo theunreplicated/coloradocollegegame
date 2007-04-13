@@ -5,6 +5,9 @@ import java.awt.*;
 public class ClientInput implements KeyListener, MouseListener, MouseMotionListener
 {
 	private ClientIO myIO;
+	private Resolver resolver;
+	private ActionFactory actionFactory;
+	private int id;
 	private Logger myLogger;
 	private boolean[] modifiers = { false, false, false }; //indicate whether or not the shift,
 							       //ctrl and alt modifier keys are pressed
@@ -16,10 +19,17 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 	private int dx = 0; //change in position
 	private int dy = 0;
 
-	public ClientInput(ClientIO _cio,Logger _myLogger)
+	public ClientInput(Resolver _resolver, ActionFactory _actionFactory, Logger _myLogger)
 	{
-		myIO = _cio;
+		resolver = _resolver;
+		actionFactory = _actionFactory;
 		myLogger = _myLogger;
+	}
+
+	public void setId(ClientIO _myIO, int _id)
+	{
+		myIO = _myIO;
+		id = _id;
 	}
 
 	public void setRepresentation(Representation _rep)
@@ -49,6 +59,9 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 			
 			/*Position movement*/
 			case KeyEvent.VK_RIGHT:
+				/*resolver.parse(new Object[]{
+					new int[]{actionFactory.getType("move"),id},
+					Constants.VEC_POSX}); */
 				myIO.moveSelf(Constants.VEC_POSX);
 				//myIO.moveSelf(new float[] {1.0f, 0.0f, 0.0f});
 				break;
