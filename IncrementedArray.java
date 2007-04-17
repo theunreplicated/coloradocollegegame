@@ -1,4 +1,6 @@
-public class IncrementedArray<T>
+import java.io.Serializable;
+
+public class IncrementedArray<T> implements Serializable
 {
 	private int incrementSize;
 	private T[] data;
@@ -60,5 +62,14 @@ public class IncrementedArray<T>
 		}
 		System.arraycopy(_data.data,0,data,length,_data.length);
 		length += _data.length;
+	}
+
+	@SuppressWarnings("unchecked")
+	public T[] pack()
+	{
+		T[] tmp = (T[]) new Object[length];
+		System.arraycopy(data,0,tmp,0,length);
+		data = tmp;
+		return data;
 	}
 }

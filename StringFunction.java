@@ -1,7 +1,8 @@
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
+import java.io.Serializable;
 
-public class StringFunction
+public class StringFunction implements Serializable
 {
 	private String language;
 	private String function;

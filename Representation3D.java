@@ -26,9 +26,16 @@ public class Representation3D extends Applet implements Representation
 	BranchGroup scene; //the root of the scene--lets us add more elements
 	Canvas3D canvas3D;
 	ViewElementBranch veb;
+	int viewMode;
 	
 	//constructor
-	public Representation3D(Client _client, int viewMode)
+	public Representation3D(int _viewMode)
+	{
+		viewMode = _viewMode;
+	}
+
+	//initializor (all code previously in constructor)
+	public void initialize(World w, ClientInput ci, Logger myLogger)
 	{
 		setLayout(new BorderLayout()); //set the Applet's layout
 		GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration(); //how does SimpleUniverse want to draw stuff?
@@ -36,24 +43,18 @@ public class Representation3D extends Applet implements Representation
 		add("Center",canvas3D); //add the canvas to the Applet
 		Viewer viewer = new Viewer(canvas3D); //a Viewer to go with the canvas
 
-		//ClientInput stuff
-		ClientInput ci = _client.getClientInput();
-		
-		// Setting the Representation - a temporary solution for camera-relative movement -- Omer.
-		ci.setRepresentation(this);
-
-		canvas3D.setFocusable(true);
-		canvas3D.addKeyListener(ci);
-		canvas3D.addMouseListener(ci);
-		canvas3D.addMouseMotionListener(ci);
-
 		BranchGroup superRoot = new BranchGroup(); //the ultimate root of the entire scene. Created here so we can add stuff later	
 
 		scene = new BranchGroup();
 		scene.setCapability(Group.ALLOW_CHILDREN_WRITE); //let us modify the children at runtime
 		scene.setCapability(Group.ALLOW_CHILDREN_EXTEND); //allow us to add more Elements to the scene during runtime
 
-		elementStart = _client.getWorldElements(); //get the Elements to start building the tree
+		canvas3D.setFocusable(true);
+		canvas3D.addKeyListener(ci);
+		canvas3D.addMouseListener(ci);
+		canvas3D.addMouseMotionListener(ci);
+
+		elementStart = w.getFirstElement(); //get the Elements to start building the tree 
 		elementStart.attribute("isClient", true); //mark the first element as the Client (Representation-dependent attribute)
 		veb = createCamera(elementStart, scene, viewMode); //build the camera FIRST
 		ViewingPlatform vp = veb.getViewingPlatform();
@@ -75,8 +76,10 @@ public class Representation3D extends Applet implements Representation
 		superRoot.compile(); //let Java3D optimize the tree
 		simpleU.addBranchGraph(superRoot); //add the scene to the tree. THIS ALSO TELLS IT TO BEGIN RENDERING!
 
+		Frame f = new MainFrame(this,300,300); //run the applet inside a Frame
+
 		//a thread to notify us when something has changed
-		RepresentationListener rl = new RepresentationListener(this, elementStart, _client.getLogger());
+		RepresentationListener rl = new RepresentationListener(this, elementStart, myLogger);
 		rl.start();
 	}
 	
@@ -252,8 +255,9 @@ public class Representation3D extends Applet implements Representation
 	//this looks familiar...
 	public static void main(String[] args)
 	{
-		Client myClient = Client.initialize(args); //create a Client for the game
+		Representation3D me = new Representation3D(ViewElementBranch.OFFSET_VIEW);
 
-		Frame f = new MainFrame(new Representation3D(myClient, ViewElementBranch.OFFSET_VIEW),300,300); //run the applet inside a Frame
+		Client.initialize(args, me); //create a Client for the game
+
 	} 
 }

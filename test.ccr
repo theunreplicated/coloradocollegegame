@@ -4,8 +4,10 @@
 			<name>move to</name>
 			<inworld language="javascript">
 			<![CDATA[
-				var vector = paramaters[0];
+				var vector = argv.get(0);
+				print("Got Move To command for id(" + subject.id() + "): " + vector[0] + " " + vector[1] + " " + vector[2] + "\n");
 				subject.setPosition(vector);
+				subject.changed = true;
 			]]>
 			</inworld>
 			<inrepresentation language="javascript">
@@ -18,13 +20,14 @@
 			<name>move</name>
 			<inworld language="javascript">
 			<![CDATA[
-				var dvector = paramaters[0];
+				var dvector = argv.get(0);
 				var vector = subject.getPosition();
 				for(i = 0; i < dvector.length; i++)
 				{
 					vector[i] += dvector[i];
 				}
 				subject.setPosition(vector);
+				subject.changed = true;
 			]]>
 			</inworld>
 			<inrepresentation language="javascript">
@@ -39,13 +42,27 @@
 			<verb>move</verb>
 			<function language="javascript">
 			<![CDATA[
-				print("Hi!\n");
+				print("Hi from inside a javascript!\n");
 				for(var i = 0; i < relevant.length; i++)
 				{
 					print("Testing.... " + relevant.get(i).id() + " " + subject.id() + "\n");
 					if(relevant.get(i).isColliding(subject))
 						print("Collision!" + relevant.get(i).id() + " " + subject.id() + "\n");
 				}
+				var status = 0;
+				var a = myActions.get("move").get(0);
+				var parameters = new Array(1);
+
+				var dvector = argv[0];
+				var vector = subject.copyPosition();
+				for(i = 0; i < dvector.length; i++)
+				{
+					vector[i] += dvector[i];
+				}
+				parameters[0] = vector;
+
+
+				actionsToSend.add("move to", a.getNouns(), parameters);
 			]]>
 			</function>
 		</rule>

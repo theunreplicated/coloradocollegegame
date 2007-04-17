@@ -55,10 +55,10 @@ class ClientThread extends Thread {
 			serve.sendWorld(row);
 
 
-			Object[] objectMessage;
+			Object objectMessage;
 
 
-			while( (objectMessage = (Object[]) ois.readObject()) != null )
+			while( (objectMessage = ois.readObject()) != null )
 			{
 				serve.propagate(objectMessage, row);
 			}

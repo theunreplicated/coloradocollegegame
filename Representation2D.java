@@ -19,18 +19,17 @@ public class Representation2D extends JPanel implements Representation
 	BufferedImage virtualImage;
 	Graphics g;
 
-	public Representation2D(GameElement _first, ClientInput _ci)
+	public void initialize(World w, ClientInput ci, Logger myLogger)
 	{
-		first = _first;
+		first = w.getFirstElement();
 
 		// Setting the Representation - a temporary solution for camera-relative movement -- Omer.
-		_ci.setRepresentation(this);
 
 		this.setFocusable( true );
 		this.setPreferredSize(new Dimension(Constants.CANVAS_WIDTH, Constants.CANVAS_HEIGHT));
 
-		this.addMouseListener(_ci);
-		this.addKeyListener(_ci);
+		this.addMouseListener(ci);
+		this.addKeyListener(ci);
 
 		virtualImage = new BufferedImage(Constants.CANVAS_WIDTH, Constants.CANVAS_HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = virtualImage.getGraphics();
@@ -118,15 +117,16 @@ public class Representation2D extends JPanel implements Representation
 
 	public static void main(String args[])
 	{
-		Client myClient = Client.initialize(args);
-
-		Representation2D canvas = new Representation2D( myClient.getWorldElements() , myClient.getClientInput() );
+		Representation2D canvas = new Representation2D( );
+		Client.initialize(args, canvas);
 
 		JFrame frame = new JFrame();
 		frame.getContentPane().add( canvas );
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //for now. Need to send a nice close message	
 		frame.pack();
 		frame.setVisible( true ) ;
+
+
 
 	}
 }
