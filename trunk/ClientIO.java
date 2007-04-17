@@ -34,7 +34,6 @@ public class ClientIO implements IO
 			servConnectionIn = new Socket(InetAddress.getByName(_server), _port);
 			ObjectInputStream ois = new ObjectInputStream(servConnectionIn.getInputStream());
 			id = ois.readInt();
-			_clientInput.setId(this,id);
 
 			// get the output stream
 			myLogger.message("Starting temporary server to get output stream...\n", false);
@@ -48,7 +47,8 @@ public class ClientIO implements IO
 
 			myLogger.message("Connected as id: " + id + "\n", false);
 			myWorld.setIO(this);
-			myWorld.addElement(new Object[] {	id,
+
+			GameElement ge = myWorld.addElement(new Object[] {	id,
 								"R2",
 								new float[] {
 									Constants.INITIAL_X,
@@ -57,6 +57,7 @@ public class ClientIO implements IO
 										}
 									},
 								0);
+			_clientInput.setMe(this,ge);
 
 			serverListener = new ServerListenerThread(ois, myWorld);
 			serverListener.start();
@@ -94,7 +95,8 @@ public class ClientIO implements IO
 		}
 		catch( IOException ioe )
 		{
-			myLogger.message( "Failed to send to server: " + ioe.getMessage() + "\n", true );
+			myLogger.message( "Failed to send to server: " + ioe + "\n", true );
+			ioe.printStackTrace();
 		}
 	}
 
@@ -150,9 +152,9 @@ public class ClientIO implements IO
 		{
 			try
 			{
-				Object[] objectMessage;
+				Object objectMessage;
 
-				while( (objectMessage = (Object[]) ois.readObject()) != null)
+				while( (objectMessage = ois.readObject()) != null)
 				{
 					resolver.parseOld(objectMessage);
 				}

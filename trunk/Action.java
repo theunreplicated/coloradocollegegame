@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.Serializable;
 
 public class Action
 {
@@ -14,6 +15,13 @@ public class Action
 		name = _name;
 		worldFunction = _world;
 		repFunction = _rep;
+	}
+
+	public Action(String _name, StringFunction _world, StringFunction _rep, GameElement[] _nouns, IncrementedArray<Object> _parameters)
+	{
+		this(_name, _world, _rep);
+		parameters = _parameters;
+		nouns = _nouns;
 	}
 
 	public Action(Action a)
@@ -62,6 +70,10 @@ public class Action
 	public void parameters(Object[] _parameters)
 	{
 		parameters = new IncrementedArray<Object>(_parameters, Constants.DEFAULT_ACTION_PARAMETERS_SIZE);
+	}
+	public void parameters(IncrementedArray<Object> _parameters)
+	{
+		parameters = _parameters;
 	}
 
 	public boolean equals(String _name, GameElement[] _nouns, Object[] _parameters)

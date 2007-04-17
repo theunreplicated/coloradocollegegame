@@ -7,22 +7,26 @@ public class Client
 	ClientIO myIO;
 	World w;
 
-	public Client(String _server, int _port, boolean _verbose )
+	public Client(String _server, Representation _rep, int _port, boolean _verbose )
 	{
 		myLogger = new Logger( _verbose );
 
 		ElementFactory ef = new ElementFactory(myLogger);
 		ActionFactory af = new ActionFactory(myLogger);
 		RuleFactory rf = new RuleFactory(af,ef,myLogger);
+		RepresentationResolver repResolver = new RepresentationResolver(_rep);
 
 		w = new World(ef,myLogger);
-		Resolver r = new Resolver(w, rf, af,myLogger);
-		clientInput = new ClientInput(r,af,myLogger);
+		Resolver r = new Resolver(w, rf, af, repResolver, myLogger);
+		clientInput = new ClientInput(r,_rep,af,myLogger);
 
 		myIO = new ClientIO( clientInput , r, w , _server, _port, myLogger );
+		r.setIO(myIO);
+		myIO.setRepresentation(_rep);
+		_rep.initialize(w, clientInput, myLogger);
 	}
 
-	public static Client initialize(String args[])
+	public static void initialize(String args[], Representation rep)
 	{
 		boolean verbose = false;
 		int port = Constants.DEF_PORT;
@@ -73,29 +77,7 @@ public class Client
 			System.exit(0);
 		}
 
-		return ( new Client(server, port, verbose) ); 
-		
-
+		new Client(server, rep, port, verbose);
 	}
 
-	/* Depricated ( from when GameElements were stored in an array )
-	public GameElement[] getWorldElements()
-	{
-		return w.getElements();
-	} */
-
-	public GameElement getWorldElements()
-	{
-		return w.getFirstElement();
-	}
-
-	public ClientInput getClientInput()
-	{
-		return clientInput;
-	}
-
-	public Logger getLogger()
-	{
-		return myLogger;
-	}
 }

@@ -12,12 +12,9 @@ public class ActionsHashMap
 		actions = new HashMap<String,IncrementedArray<Action>>();
 	}
 
-	public void add(Object name, GameElement[] nouns, Object[] parameters)
+	public void add(Action a, Object name)
 	{
 		IncrementedArray<Action> list;
-		Action a = actionFactory.getAction(name);
-		a.setNouns(nouns);
-		a.parameters(parameters);
 		if(actions.containsKey(name))
 		{
 			list = actions.get(name);
@@ -28,6 +25,19 @@ public class ActionsHashMap
 			actions.put(a.getName(), list);
 		}
 		list.add(a);
+	}
+
+	public void add(Action a)
+	{
+		add(a,a.getName());
+	}
+
+	public void add(Object name, GameElement[] nouns, Object[] parameters)
+	{
+		Action a = actionFactory.getAction(name);
+		a.setNouns(nouns);
+		a.parameters(parameters);
+		add(a,name);
 	}
 
 	public void add(Object name, GameElement[] nouns)
@@ -43,6 +53,20 @@ public class ActionsHashMap
 	public void add(Object name)
 	{
 		add(name, null, null);
+	}
+
+	public boolean put(Action a, Object name)
+	{
+		if(actions.containsKey(name))
+			return false;
+		
+		add(a,name);
+		return true;
+	}
+
+	public boolean put(Action a)
+	{
+		return put(a, a.getName());
 	}
 
 	public boolean put(Object name, GameElement[] nouns, Object[] parameters)
@@ -118,13 +142,16 @@ public class ActionsHashMap
 	{
 
 		IncrementedArray<Action> allActions = new IncrementedArray<Action>(Constants.DEFAULT_ACTION_LIST_SIZE);
-		//IncrementedArray<Action> values = actions.get("move");
-		//for(int i = values.length-1; i >= 0; i--)
 		for(IncrementedArray<Action> values : actions.values())
 		{
 			allActions.add(values);
 		}
 		return allActions;
+	}
+
+	public int size()
+	{
+		return actions.size();
 	}
 
 }

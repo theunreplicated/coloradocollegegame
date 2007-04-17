@@ -4,12 +4,19 @@ public class Resolver
 {
 	RuleSet rules;
 	RuleFactory ruleFactory;
+	RepresentationResolver repResolver = null;
 	ActionFactory actionFactory;
 	HashMap<Integer,GameElement> elementsHash;
 	ScriptEngineManager manager;
 	World world;
+	IO io;
 	Logger myLogger;
 
+	public Resolver(World _world, RuleFactory _rf, ActionFactory _af, RepresentationResolver _repResolver, Logger _myLogger)
+	{
+		this(_world, _rf, _af, _myLogger);
+		repResolver = _repResolver;
+	}
 	public Resolver(World _world, RuleFactory _rf, ActionFactory _af, Logger _myLogger)
 	{
 		ruleFactory = _rf;
@@ -21,8 +28,21 @@ public class Resolver
 		myLogger = _myLogger;
 	}
 
-	public int parseOld(Object[] message)
+	public void setIO(IO _io)
 	{
+		io = _io;
+	}
+
+	public int parseOld(Object _message)
+	{
+		if(_message instanceof IncrementedArray)
+		{
+			parse(_message);
+			return Constants.SUCCESS;
+		}
+
+		Object[] message = (Object[]) _message;
+
 		switch(((Integer) message[0]).intValue())
 		{
 			case Constants.MOVE_TO:
@@ -51,25 +71,40 @@ public class Resolver
 		return Constants.SUCCESS; //eventually every action in the world will return an int for whether or not it was a valid action
 	}
 
-	public int parse(Object[] _message)
+	public int[] parse(Object _actions)
 	{
-		int[] sentence = (int[])_message[0];
+		IncrementedArray<WritableAction> actions = (IncrementedArray<WritableAction>) _actions;
+		//IncrementedArray<Action> actions = (IncrementedArray<Action>) _actions;
+		int[] results = new int[actions.length];
+
+		for(int i = 0; i < actions.length; i++)
+			results[i] = parse(actions.get(i).getAction(world,actionFactory));
+
+		return results;
+	}
+
+	public int parse(Action action)
+	{
+		GameElement[] nouns = action.getNouns();
 
 		int[] needles = new int[Constants.SENTENCE_LENGTH];
-		
-		needles[0] = sentence[0];
+		needles[0] = actionFactory.getType(action.getName());
 		System.out.print("Needles: " + needles[0] + ",");
-		for(int i = 1; i < sentence.length; i++)
+		if(nouns != null)
 		{
-			needles[i] = elementsHash.get(sentence[i]).getTypeId();
-			System.out.print(needles[i]+",");
+			for(int i = nouns.length-1; i >= 0; i--)
+			{
+				needles[i+1] = nouns[i].getTypeId();
+				System.out.print(needles[i+1]+",");
+			}
 		}
 		System.out.println();
+
 		Rule[] applicable = rules.getRules(needles);
 		IncrementedArray<GameElement> relevantElements = new IncrementedArray<GameElement>(Constants.DEFAULT_RELEVANT_SIZE);
-		if(sentence.length > 1)
+		if(nouns != null)
 		{
-			GameElement subject = elementsHash.get(sentence[1]);
+			GameElement subject = nouns[0];
 			GameElement first = world.getFirstElement();
 			GameElement currentElement = first;
 			do
@@ -83,37 +118,38 @@ public class Resolver
 		}
 
 
-		return resolve(applicable,sentence,_message,relevantElements);
+		return resolve(applicable,action,relevantElements);
 	}
 
 	@SuppressWarnings("fallthrough")
-	public int resolve( Rule[] _rules, int[] _sentence, Object[] _message, IncrementedArray<GameElement> _relevantElements)
+	public int resolve( Rule[] _rules, Action _action, IncrementedArray<GameElement> _relevantElements)
 	{
-		Object[] message = new Object[_message.length-1];
-		System.arraycopy(_message,0,message,0,message.length);
+		Object[] message = _action.parameters().pack();
+		GameElement[] nouns = _action.getNouns();
 		GameElement subject = null, directObject = null, indirectObject = null;
 		GameElement[] other = null;
-		Integer status;
+		int status;
 		ActionsHashMap myActions = new ActionsHashMap(actionFactory); 
 		ActionsHashMap actionsToSend = new ActionsHashMap(actionFactory);
 		
-		switch(_sentence.length)
+		if(nouns != null)
 		{
-			default:
-				other = new GameElement[_sentence.length-4];
-				System.arraycopy(_sentence,4,other,0,other.length);
-			case 4:
-				indirectObject = elementsHash.get(_sentence[3]);
-			case 3:
-				directObject = elementsHash.get(_sentence[2]);
-			case 2:
-				subject = elementsHash.get(_sentence[1]);
-				break;
-			case 1:
-
+			switch(nouns.length)
+			{
+				default:
+					other = new GameElement[nouns.length-3];
+					System.arraycopy(nouns,3,other,0,other.length);
+				case 3:
+					indirectObject = nouns[2];
+				case 2:
+					directObject = nouns[1];
+				case 1:
+					subject = nouns[0];
+					break;
+			}
 		}
 
-		myActions.add(new Integer(_sentence[0]),new GameElement[]{subject,directObject,indirectObject},message);
+		myActions.add(_action);
 
 		for(Rule rule : _rules)
 		{
@@ -125,7 +161,7 @@ public class Resolver
 				engine.put("indirectObject",indirectObject);
 				engine.put("other",other);
 				engine.put("relevant",_relevantElements);
-				engine.put("message",message);
+				engine.put("argv",message);
 				engine.put("myActions",myActions);
 				engine.put("actionsToSend",actionsToSend);
 				engine.eval(rule.function());
@@ -138,6 +174,70 @@ public class Resolver
 				System.out.println("Script error: " + se.getMessage());
 			}
 
+		}
+
+		System.out.println("Hi!");
+		IncrementedArray<Action> actionList = myActions.getAll();
+		for(int i = 0; i < actionList.length; i++)
+		{
+			_action = actionList.get(i);
+			if(_action.getWorldFunction() != null)
+			{
+				nouns = _action.getNouns();
+				if(nouns != null)
+				{
+					switch(nouns.length)
+					{
+						default:
+							other = new GameElement[nouns.length-3];
+							System.arraycopy(nouns,3,other,0,other.length);
+						case 3:
+							indirectObject = nouns[2];
+						case 2:
+							directObject = nouns[1];
+						case 1:
+							subject = nouns[0];
+							break;
+					}
+				}
+
+				StringFunction worldFunc = _action.getWorldFunction();
+				try {
+					ScriptEngine engine = manager.getEngineByName(worldFunc.getLanguage());
+					engine.put("subject",subject);
+					engine.put("directObject",directObject);
+					engine.put("indirectObject",indirectObject);
+					engine.put("other",other);
+					engine.put("argv",_action.parameters());
+					engine.eval(worldFunc.getFunction());
+				}
+				catch(ScriptException se)
+				{
+					System.out.println("Script error: " + se.getMessage());
+				}
+
+			}
+
+			if(_action.getRepFunction() != null && repResolver != null)
+			{
+				repResolver.resolve(_action);
+			}
+		}
+
+		System.out.println("About to notify Representation (id 17 is: " + world.getElementById(18).changed + ")");
+		synchronized(world.getFirstElement())
+		{
+			world.getFirstElement().notifyAll();
+		}
+		if(actionsToSend.size() > 0)
+		{
+			IncrementedArray<Action> act = actionsToSend.getAll();
+			IncrementedArray<WritableAction> write_act = new IncrementedArray<WritableAction>(act.length);
+			for(int i = 0; i < act.length; i++)
+			{
+				write_act.add(new WritableAction(act.get(i)));
+			}
+			io.send(write_act);
 		}
 
 		return Constants.SUCCESS;

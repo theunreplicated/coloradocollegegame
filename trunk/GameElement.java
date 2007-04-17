@@ -172,6 +172,13 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		return position;
 	}	
 
+	public synchronized float[] copyPosition()
+	{
+		float[] tmp = new float[position.length];
+		System.arraycopy(position,0,tmp,0,position.length);
+		return tmp;
+	}
+
 	public synchronized float[] getFacing()
 	{
 		return facing;

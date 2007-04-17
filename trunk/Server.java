@@ -32,6 +32,7 @@ public class Server implements IO
 		ActionFactory af = new ActionFactory(myLogger);
 		RuleFactory rf = new RuleFactory(af,ef,myLogger);
 		resolver = new Resolver(myWorld, rf, af,myLogger);
+		resolver.setIO(this);
 
 		myLogger.message("\n" + myWorld.toString(), false);
 
@@ -132,7 +133,7 @@ public class Server implements IO
 		synchronized(threads)
 		{
 			int i;
-			resolver.parseOld((Object[]) _message);
+			resolver.parseOld(_message);
 			for( i = ids.length - 1; i >= 0; i-- ) 
 			{
 				if( ids[i] >= 0 && _row != i )

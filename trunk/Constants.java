@@ -4,7 +4,7 @@ import org.w3c.dom.Element;
 
 public class Constants
 {
-	public static final int SUCCESS = 1; //won't compile without this guys... Remove it when you've removed the reference in World
+	public static final int SUCCESS = 0; //won't compile without this guys... Remove it when you've removed the reference in World
 
 	// server information
 	public static final int TIMEOUT = 3000; // maximum time for no communication: 3 seconds
