@@ -120,7 +120,7 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 			sroot.addChild(localg); //add the TransformGroup to the shape root node			
 		}
 		
-		//sroot.addChild(createBoundingBox(e)); //draw the bounding box for testing.
+		sroot.addChild(createBoundingBox(e)); //draw the bounding box for testing.
 										      		
 		broot.compile(); //let J3D optimize the branch
 	}//constructor
@@ -191,6 +191,38 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		NormalGenerator ng = new NormalGenerator();
 		Stripifier st = new Stripifier();
 	
+		
+		/*I think this stuff will be faster/cleaner/nicer*/
+		double[][] lrs = s.getLinearRings();
+		int len = 0; //total length
+		for(int i=0; i<lrs.length; i++) //calculate total length
+			len += lrs[i].length;
+
+		double[] pts = new double[len];
+		int[] stripcounts = new int[lrs.length]; //create the stripcounts array
+		int p = 0;
+		for(int i=0; i<lrs.length; i++)
+		{
+			stripcounts[i] = (lrs[i].length/3); //linearRings always have 3 points/coord
+
+			for(int j=0; j<lrs[i].length; j++)
+			{
+				pts[p] = lrs[i][j]; //fill the single array
+				p++;
+			}
+		}
+
+		GeometryInfo gi = new GeometryInfo(GeometryInfo.POLYGON_ARRAY);
+		gi.setCoordinates(pts); //set the geometry info
+		gi.setStripCounts(stripcounts); //set stripcount
+
+		ng.generateNormals(gi); //generate normals
+		st.stripify(gi); //convert to strips
+
+		bg.addChild(new Shape3D(gi.getGeometryArray(),a));
+		
+		
+		/*In case the stuff above doesn't work
 		//for linearRings
 		double[][] lrs = s.getLinearRings();
 		for(int i=0; i<lrs.length; i++)
@@ -207,7 +239,8 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 			bg.addChild(new Shape3D(gi.getGeometryArray(),a)); //add the polygon shape
 		}
 		//should add similar loops for other geometry
-		
+		*/	
+
 		return bg;	
 	}
 	
