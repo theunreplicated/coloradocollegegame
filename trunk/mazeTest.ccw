@@ -1992,7 +1992,7 @@
 <!-- MANUALLY ADDED MOVING MAZE WALL ELEMENTS -->
 <!-- attribute: moving -> 1=down(z), 2=right(x) -->
 
-<!--movable-->
+<!--movable
 	<element type="maze wall">
 		<position>-30.0</position>
 		<position>2.0</position>
@@ -2082,7 +2082,7 @@
 			<moving type="int">2</moving>
 		</attributes>
 	</element>
-<!--movables-->
+movables-->
 
 </world>
 

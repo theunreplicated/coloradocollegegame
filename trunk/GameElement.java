@@ -231,6 +231,8 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 			System.out.println("Bad Quaternion length. Bad!");
 		else
 			facing = Quaternions.mul(facing,q);
+
+		System.out.println("Facing length= "+Quaternions.getLength(facing));
 	}
 
 	//sets the facing to the specified Quaternion
@@ -288,47 +290,25 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 			(boundingRadius+_element.getBoundingRadius())*(boundingRadius+_element.getBoundingRadius()))
 		{
 
-			//testing stuff
-			/*float[] p = VectorUtils.sub(_element.getPosition(),position);
-			float[] pr = Quaternions.inverse(facing);
-			float[] t = Quaternions.rotatePoint(p,pr);
-			float[][] r = Quaternions.getMatrixFromQuat(facing, _element.getFacing());
-
-			if(VectorUtils.OBB3DIntersect(boundingBox, 
-						_element.getBoundingBox(), 
-						t,
-						r))
-			*/
-			
-			//WORKS in the XZ plane
+			//the arguements we're going to pass in
 			float[] a = boundingBox;
 			float[] b = _element.getBoundingBox();
-			float[] T = Quaternions.rotatePoint(VectorUtils.sub(_element.getPosition(), position), facing);
-			float[][] R = Quaternions.getMatrixFromQuat(Quaternions.mul(_element.getFacing(), facing ));
+			float[] T = Quaternions.rotatePoint(VectorUtils.sub(_element.getPosition(), position), Quaternions.inverse(facing));
+			float[][] R = Quaternions.getMatrixFromQuat(Quaternions.mul( Quaternions.inverse(facing), _element.getFacing() ));
 			
-			
-			/*float[] a = boundingBox;
-			float[] b = _element.getBoundingBox();
-			float[] T = VectorUtils.sub(_element.getPosition(), position);
-			float[] Ar = Quaternions.sub(new float[] {0,0,0,1},facing); //the rotation to return A to normal
-			float[] Ap = Quaternions.mul(Ar,facing); 
-			float[] Bp = Quaternions.mul(Ar,_element.getFacing());
-			float[][] R = Quaternions.getMatrixFromQuat(Quaternions.sub(Ap,Bp));
-			*/
-
-			//debug stuff
-			
-			//if(_element.id()==6110) //the wall we know about...
-			//	VectorUtils.printDebugInfo(a,b,T,R);
+			//debug stuff can go here
+			/*if(_element.id()==5110) //a wall we know about...
+			{
+				System.out.println(this +"\n");
+				System.out.println(_element+"\n");
+				VectorUtils.printDebugInfo(a,b,T,R);
+			}*/
 
 			if(VectorUtils.OBB3DIntersect(a,b,T,R))
 			{
-				//other debug stuff
-				/*VectorUtils.printDebugInfo(a,b,T,R);
-				System.out.println("Ar= "+Quaternions.toString(Ar));
-				System.out.println("Ap= "+Quaternions.toString(Ap));
-				System.out.println("Bp= "+Quaternions.toString(Bp));
-				*/
+				//other debug stuff can go here
+				//VectorUtils.printDebugInfo(a,b,T,R);
+
 				return true;
 			}
 			else

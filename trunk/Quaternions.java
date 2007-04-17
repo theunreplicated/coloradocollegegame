@@ -5,6 +5,9 @@
  A utility class of static method for using and manipulating Quaternions
  This way we have a class of our own methods instead of relying on Java3D's
  Quaternions are represented as float[] objects, with element order {x,y,z,w}
+	
+ NOTE: Optimizations demand that all quaternions given as arguments be unit quaternions.
+       But don't worry, because it should be anyway (based on the game).
 ***/
 
 public class Quaternions
@@ -18,34 +21,19 @@ public class Quaternions
 	public static float[] mul(float[] q1, float[] q2)
 	{
 		//simplified quaternion multiplication
-		return new float[] {
+		float[] q = new float[] {
 			q1[W]*q2[X] + q1[X]*q2[W] + q1[Y]*q2[Z] - q1[Z]*q2[Y],
 			q1[W]*q2[Y] + q1[Y]*q2[W] + q1[Z]*q2[X] - q1[X]*q2[Z],
 			q1[W]*q2[Z] + q1[Z]*q2[W] + q1[X]*q2[Y] - q1[Y]*q2[X],
 			q1[W]*q2[W] - q1[X]*q2[X] - q1[Y]*q2[Y] - q1[Z]*q2[Z]};
+
+		normalize(q); //normalize before we return, to combat roundoff error
+
+		return q;
+
 	}
 
-	//returns the difference between two quaternions 
-	//(the quaternion which will allow a rotation FROM q1 TO q2)
-	//NOTE: returns quaternions which gets us TO arg1 FROM arg2)
-	//  require q to be a unit because it should be anyway (based on the game)
-/*	public static float[] sub(float[] q2, float[] q1)
-	{
-		/* The explicit formula
-		return q1^-1 * q2; == (-1*q1.v,q1.w)*q2
-		return mul(-q1,q2)
-		*/
-		
-		
-		//simplified quaternion multiplication
-		/*return new float[] {
-			q1[W]*q2[X] - q1[X]*q2[W] - q1[Y]*q2[Z] + q1[Z]*q2[Y],
-			q1[W]*q2[Y] - q1[Y]*q2[W] - q1[Z]*q2[X] + q1[X]*q2[Z],
-			q1[W]*q2[Z] - q1[Z]*q2[W] - q1[X]*q2[Y] + q1[Y]*q2[X],
-			q1[W]*q2[W] + q1[X]*q2[X] + q1[Y]*q2[Y] + q1[Z]*q2[Z]};
-		
-	}
-*/
+	//returns the inverse of the given unit quaternion
 	public static float[] inverse(float[] q)
 	{
 		return new float[] {-1*q[X], -1*q[Y], -1*q[Z], q[W]};	
@@ -61,8 +49,13 @@ public class Quaternions
 		q[W] = (float)(q[W]/len);
 	}
 
+	//returns the length of the quaternion
+	public static double getLength(float[] q)
+	{
+		return Math.sqrt(q[X]*q[X] + q[Y]*q[Y] + q[Z]*q[Z] + q[W]*q[W]);
+	}
+
 	//rotates the given point by the given UNIT Quaternion, and returns the new point
-	//  require q to be a unit because it should be anyway (based on the game)
 	public static float[] rotatePoint(float[] p, float[] q)
 	{
 		/* The explicit formula
@@ -151,14 +144,7 @@ public class Quaternions
 					{2*(xz - wy), 2*(yz + wx), 1-2*(x2 + y2)}}; 
 	}
 
-	//returns the rotation matrix that represents the rotation to Quaternions q1 from q2
-	//  require q to be a unit because it should be anyway (based on the game)
-/*	public static float[][] getMatrixFromQuat(float[] q1, float[] q2)
-	{
-		//could probably make this explicit instead of calling another function to save time?
-		return getMatrixFromQuat(mul(q1,q2));	
-	}
-*/
+	//returns a String representation of the quaternion
 	public static String toString(float[] q)
 	{
 		return "{"+q[X]+", "+q[Y]+", "+q[Z]+", "+q[W]+"}";

@@ -80,13 +80,12 @@ public class Constants
 	
 	//Quaternion rotations for "cardinal rotation" (in 3D)--a rotation of 
 	// 15 degrees either clockwise or counterclockwise around a particular axis (looking down)
-	//NOTE: we may need to start calculating these directly.
-	public static final float[] QUAT_CLOX = {-0.13052619f, 0.0f, 0.0f, 0.9914449f};
-	public static final float[] QUAT_CCLX = {0.13052619f, 0.0f ,0.0f, 0.9914449f};
-	public static final float[] QUAT_CLOY = {0.0f, -0.13052619f, 0.0f, 0.9914449f};
-	public static final float[] QUAT_CCLY = {0.0f, 0.13052619f, 0.0f, 0.9914449f};
-	public static final float[] QUAT_CLOZ = {0.0f, 0.0f, -0.13052619f, 0.9914449f};
-	public static final float[] QUAT_CCLZ = {0.0f, 0.0f, 0.13052619f, 0.9914449f};
+	public static final float[] QUAT_CLOX = new float[] {(float)Math.sin(Math.PI/-24.0), 0, 0, (float)Math.cos(Math.PI/-24.0)};
+	public static final float[] QUAT_CCLX = new float[] {(float)Math.sin(Math.PI/24.0), 0, 0, (float)Math.cos(Math.PI/24.0)};
+	public static final float[] QUAT_CLOY = new float[] {0, (float)Math.sin(Math.PI/-24.0), 0, (float)Math.cos(Math.PI/-24.0)};
+	public static final float[] QUAT_CCLY = new float[] {0, (float)Math.sin(Math.PI/24.0), 0, (float)Math.cos(Math.PI/24.0)};
+	public static final float[] QUAT_CLOZ = new float[] {0, 0, (float)Math.sin(Math.PI/-24.0), (float)Math.cos(Math.PI/-24.0)};
+	public static final float[] QUAT_CCLZ = new float[] {0, 0, (float)Math.sin(Math.PI/24.0), (float)Math.cos(Math.PI/24.0)};
 	
 	// Keyboard stuff
 	public static final int SHIFT_KEY = 0;
