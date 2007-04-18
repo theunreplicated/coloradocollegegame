@@ -140,7 +140,7 @@ public class RuleFactory
 	public void addRuleToSet(String _setName, String _key, Rule _rule)
 	{
 		RuleSet set;
-		System.out.println("Adding rule with key " + _key);
+		myLogger.message("Adding rule with key " + _key + "\n", false);
 		if( (set = ruleSets.get(_setName)) != null)
 		{
 			set.addRule(_key,_rule);

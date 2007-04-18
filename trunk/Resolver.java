@@ -2,15 +2,15 @@ import java.util.*;
 import javax.script.*;
 public class Resolver
 {
-	RuleSet rules;
-	RuleFactory ruleFactory;
-	RepresentationResolver repResolver = null;
-	ActionFactory actionFactory;
-	HashMap<Integer,GameElement> elementsHash;
-	ScriptEngineManager manager;
-	World world;
-	IO io;
-	Logger myLogger;
+	private RuleSet rules;
+	private RuleFactory ruleFactory;
+	private RepresentationResolver repResolver = null;
+	private ActionFactory actionFactory;
+	private HashMap<Integer,GameElement> elementsHash;
+	private ScriptEngineManager manager;
+	private World world;
+	private IO io;
+	private Logger myLogger;
 
 	public Resolver(World _world, RuleFactory _rf, ActionFactory _af, RepresentationResolver _repResolver, Logger _myLogger)
 	{
@@ -26,6 +26,14 @@ public class Resolver
 		manager = new ScriptEngineManager();
 		world = _world;
 		myLogger = _myLogger;
+
+		// Add logger at global scope
+		manager.put("myLogger", myLogger);
+
+		// Add static stuff at global scope
+		manager.put("Constants", new Constants());
+		manager.put("Quaternions", new Quaternions());
+		manager.put("VectorUtils", new VectorUtils());
 	}
 
 	public void setIO(IO _io)
@@ -71,10 +79,16 @@ public class Resolver
 		return Constants.SUCCESS; //eventually every action in the world will return an int for whether or not it was a valid action
 	}
 
+	@SuppressWarnings("unchecked")
 	public int[] parse(Object _actions)
 	{
+		if(!(_actions instanceof IncrementedArray))
+		{
+			myLogger.message("Resolver parse received a bad message, ignoring: " + _actions + "\n", true);
+			return null;
+		}
+
 		IncrementedArray<WritableAction> actions = (IncrementedArray<WritableAction>) _actions;
-		//IncrementedArray<Action> actions = (IncrementedArray<Action>) _actions;
 		int[] results = new int[actions.length];
 
 		for(int i = 0; i < actions.length; i++)
@@ -89,16 +103,16 @@ public class Resolver
 
 		int[] needles = new int[Constants.SENTENCE_LENGTH];
 		needles[0] = actionFactory.getType(action.getName());
-		System.out.print("Needles: " + needles[0] + ",");
+		myLogger.message("Resolver parsing with needles: " + needles[0] + ",", false);
 		if(nouns != null)
 		{
 			for(int i = nouns.length-1; i >= 0; i--)
 			{
 				needles[i+1] = nouns[i].getTypeId();
-				System.out.print(needles[i+1]+",");
+				myLogger.message(needles[i+1]+",",false);
 			}
 		}
-		System.out.println();
+		myLogger.message("\n", false);
 
 		Rule[] applicable = rules.getRules(needles);
 		IncrementedArray<GameElement> relevantElements = new IncrementedArray<GameElement>(Constants.DEFAULT_RELEVANT_SIZE);
@@ -112,7 +126,6 @@ public class Resolver
 				/*find relevent ojects and get rules that apply to this sentence*/
 				if(currentElement != subject && subject.isRelevant(currentElement))
 					relevantElements.add(currentElement);
-				System.out.println(currentElement.id()+"\n");
 			}
 			while( (currentElement=currentElement.next) != first );
 		}
@@ -128,7 +141,7 @@ public class Resolver
 		GameElement[] nouns = _action.getNouns();
 		GameElement subject = null, directObject = null, indirectObject = null;
 		GameElement[] other = null;
-		int status;
+		int status = Constants.SUCCESS;
 		ActionsHashMap myActions = new ActionsHashMap(actionFactory); 
 		ActionsHashMap actionsToSend = new ActionsHashMap(actionFactory);
 		
@@ -165,18 +178,22 @@ public class Resolver
 				engine.put("myActions",myActions);
 				engine.put("actionsToSend",actionsToSend);
 				engine.eval(rule.function());
-				status = ((Double) engine.get("status")).intValue();
+				Object _status = engine.get("status");
+				if(_status instanceof Integer)
+					status = ((Integer) _status).intValue();
+				else if(_status instanceof Double)
+					status = ((Double) _status).intValue();
 				if(status != Constants.SUCCESS)
 					return status;
 			}
 			catch(ScriptException se)
 			{
-				System.out.println("Script error: " + se.getMessage());
+				myLogger.message("Script error: " + se.getMessage() + "\n",true);
 			}
 
 		}
 
-		System.out.println("Hi!");
+		myLogger.message("Resolver is starting to handle actions...\n", false);
 		IncrementedArray<Action> actionList = myActions.getAll();
 		for(int i = 0; i < actionList.length; i++)
 		{
@@ -208,12 +225,12 @@ public class Resolver
 					engine.put("directObject",directObject);
 					engine.put("indirectObject",indirectObject);
 					engine.put("other",other);
-					engine.put("argv",_action.parameters());
+					engine.put("argv",_action.parameters().pack());
 					engine.eval(worldFunc.getFunction());
 				}
 				catch(ScriptException se)
 				{
-					System.out.println("Script error: " + se.getMessage());
+					myLogger.message("Script error: " + se.getMessage() + "\n",true);
 				}
 
 			}
@@ -224,7 +241,6 @@ public class Resolver
 			}
 		}
 
-		System.out.println("About to notify Representation (id 17 is: " + world.getElementById(18).changed + ")");
 		synchronized(world.getFirstElement())
 		{
 			world.getFirstElement().notifyAll();

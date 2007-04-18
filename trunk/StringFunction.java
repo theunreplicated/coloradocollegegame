@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class StringFunction implements Serializable
 {
+	static final long serialVersionUID = 5708940171917759139L;
 	private String language;
 	private String function;
 

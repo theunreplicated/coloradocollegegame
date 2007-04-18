@@ -2,7 +2,7 @@ import java.io.Serializable;
 
 public class WritableAction implements Serializable
 {
-	
+	static final long serialVersionUID = 5401610720963064538L;
 	private int id;
 	private IncrementedArray<Object> parameters;
 	private int[] nouns;

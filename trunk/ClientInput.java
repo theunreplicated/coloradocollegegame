@@ -36,6 +36,7 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 	public void keyPressed(KeyEvent ke)
 	{
 		
+		Action a;
 		switch(ke.getKeyCode())
 		{
 			case KeyEvent.VK_C:
@@ -119,6 +120,34 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 				break;
 			case KeyEvent.VK_D:
 				myIO.rotateSelf(Constants.QUAT_CLOY);
+				break;
+
+			/*Intuitive 3D movement using the Resolver - Omer*/
+			case KeyEvent.VK_I:
+				a = actionFactory.getAction("move");
+				a.setNouns(new GameElement[]{me});
+				a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
+				a.parameters().add(Constants.VEC_NEGZ);
+				resolver.parse(a); 
+				break;
+			case KeyEvent.VK_K:
+				a = actionFactory.getAction("move");
+				a.setNouns(new GameElement[]{me});
+				a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
+				a.parameters().add(Constants.VEC_POSZ);
+				resolver.parse(a); 
+				break;
+			case KeyEvent.VK_J:
+				a = actionFactory.getAction("rotate");
+				a.setNouns(new GameElement[]{me});
+				a.parameters().add(Constants.QUAT_CCLY);
+				resolver.parse(a); 
+				break;
+			case KeyEvent.VK_L:
+				a = actionFactory.getAction("rotate");
+				a.setNouns(new GameElement[]{me});
+				a.parameters().add(Constants.QUAT_CLOY);
+				resolver.parse(a); 
 				break;
 
 			/*Camera stuff*/

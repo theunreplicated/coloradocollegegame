@@ -148,10 +148,10 @@ public class Server implements IO
 	// fix to handle synchronization
 	public void sendWorld(  int _row )
 	{
-		System.out.println("sendWorld!");
+		myLogger.message("Starting to send world to " + _row + "!\n",false);
 		threads[_row].send(new Object[]{ Constants.SEND_WORLD, myWorld.getElements() });
 		ids[_row] = _row + 1 + Constants.ELEMENT_ID_PADDING;
-		System.out.println("sendWorld!");
+		myLogger.message("finished sending world to " + _row + "!\n",false);
 	}
 
 	//creates a bunch of MovingElements

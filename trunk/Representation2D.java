@@ -102,6 +102,11 @@ public class Representation2D extends JPanel implements Representation
 		}
 	}
 
+	//an update method for updating a particular element's location
+	public void updateLocation(GameElement ge)
+	{
+	}
+
 	//an update method (not in use)
 	public void update()
 	{}
