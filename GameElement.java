@@ -319,6 +319,58 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 			return false;
 	}
 
+	//As above, but checks collisions while on a trajectory (or it will eventually).
+	public synchronized boolean isColliding(GameElement _element, float[] positionChange, float[] rotationChange)
+	{
+		float[] tposition; //temporary position
+		float[] tfacing; //temporary facing
+		
+		if(positionChange != null)
+			tposition = VectorUtils.add(position,positionChange);
+		else
+			tposition = position;
+			
+		if(rotationChange != null)
+			tfacing = Quaternions.mul(facing,rotationChange);
+		else
+			tfacing = facing;
+
+		//check bounding spheres
+		if(VectorUtils.getDistSqr(tposition, _element.getPosition()) <= 
+			(boundingRadius+_element.getBoundingRadius())*(boundingRadius+_element.getBoundingRadius()))
+		{
+
+			//the arguements we're going to pass in
+			float[] a = boundingBox;
+			float[] b = _element.getBoundingBox();
+			float[] T = Quaternions.rotatePoint(VectorUtils.sub(_element.getPosition(), tposition), Quaternions.inverse(tfacing));
+			float[][] R = Quaternions.getMatrixFromQuat(Quaternions.mul( Quaternions.inverse(tfacing), _element.getFacing() ));
+			
+			//debug stuff can go here
+			/*if(_element.id()==5110) //a wall we know about...
+			{
+				System.out.println(this +"\n");
+				System.out.println(_element+"\n");
+				VectorUtils.printDebugInfo(a,b,T,R);
+			}*/
+
+			if(VectorUtils.OBB3DIntersect(a,b,T,R))
+			{
+				//other debug stuff can go here
+				//VectorUtils.printDebugInfo(a,b,T,R);
+
+				return true;
+			}
+			else
+				return false;
+		
+		}
+		else
+			return false;
+	}
+	
+	
+
 	//Returns an ArrayList containing String[] pairs of the names of shapes which intersect between the two elements
 	//-NOTE: This hasn't been tested yet. It should work, but I'm too lazy to check.
 	//	 Also, this method is going to be pretty damn slow, and should rarely be called (and never without some filtering)
@@ -344,6 +396,9 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 			
 			for(int j=0; j<ushapes.length; j++) //for every Shape in you
 			{
+				//currently this does not use correct arguements for the collisions check.
+				//needs to be updated
+			
 				//get relative position/rotation
 				T = VectorUtils.sub(	VectorUtils.add(sposi,position), 
 							VectorUtils.add(ushapes[j].getPosition(), uposition));
