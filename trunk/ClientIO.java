@@ -107,8 +107,6 @@ public class ClientIO implements IO
 							myWorld.getElementFacing(id)));
 	}
 	
-	/**Do we want to add a method to move based on an int direction defined in Constants?**/
-	
 	//move along the specified vector INDEPENDENT of current facing
 	public void moveSelfAbsolute(float[] v)
 	{

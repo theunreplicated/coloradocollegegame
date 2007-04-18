@@ -195,11 +195,44 @@ public class Representation3D extends Applet implements Representation
 	
 
 	//an update method for updating a particular element's location
-	public void updateLocation(GameElement ge)
+	public void updateLocation(GameElement e)
 	{
+		ElementBranch bg = elementsToNodes.get(e); //get the corresponding GameElementBranch
+		if(bg != null) //just in case
+		{
+			bg.setTransform(e.getPosition(),e.getFacing(), e.getScale());
+		}
 	}
 
-	//an update method
+	//an update method for updating a particular element's presence in the game
+	public void updatePresence(GameElement e)
+	{
+		GameElement next;
+		synchronized(e)
+		{
+  			next = e.next; //in case someone else is accessing
+		}
+
+		ElementBranch bg = elementsToNodes.get(e); //fetch the branch
+		if(bg!=null) //if exists
+		{
+			if(next == null) //check if it shouldn't
+			{
+				bg.detach(); //remove branch from the tree
+			}
+		}
+		else //if it doesn't exist
+		{
+			if(next != null) //check if it should
+			{
+				GameElementBranch nbg = new GameElementBranch(e); //make a new branch for the element
+				elementsToNodes.put(e,nbg); //make a conversion entry so we can find the branch later
+				scene.addChild(nbg.getBranchScene()); //add the branch to the scene
+			}
+		}			
+	}
+
+	//an update method (for use with the notify() interface)
 	public void update()
 	{
 		//System.out.println("In update method:");
