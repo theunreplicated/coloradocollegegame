@@ -2,6 +2,7 @@ import java.io.Serializable;
 
 public class IncrementedArray<T> implements Serializable
 {
+	static final long serialVersionUID = 2368403357597384006L;
 	private int incrementSize;
 	private T[] data;
 	public int length;

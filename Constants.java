@@ -5,6 +5,7 @@ import org.w3c.dom.Element;
 public class Constants
 {
 	public static final int SUCCESS = 0; //won't compile without this guys... Remove it when you've removed the reference in World
+	public static final int ERROR = 1;
 
 	// server information
 	public static final int TIMEOUT = 3000; // maximum time for no communication: 3 seconds
@@ -69,6 +70,10 @@ public class Constants
 	public static final int MOVE_TO = 101;
 	public static final int ROTATE_TO = 202;
 	public static final int ATTRIBUTE = 303;
+
+	public static final short MOVE_ABSOLUTE = 0;
+	public static final short MOVE_RELATIVE_TO_FACING = 1;
+	public static final short MOVE_RELATIVE_TO_CAMERA = 2;
 
 	// Unit vectors for cardinal movement (in 3D)
 	public static final float[] VEC_POSX = {1.0f, 0.0f, 0.0f};

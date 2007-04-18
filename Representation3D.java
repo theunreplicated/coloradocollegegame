@@ -194,6 +194,11 @@ public class Representation3D extends Applet implements Representation
 	}
 	
 
+	//an update method for updating a particular element's location
+	public void updateLocation(GameElement ge)
+	{
+	}
+
 	//an update method
 	public void update()
 	{

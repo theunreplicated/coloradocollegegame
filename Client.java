@@ -14,7 +14,7 @@ public class Client
 		ElementFactory ef = new ElementFactory(myLogger);
 		ActionFactory af = new ActionFactory(myLogger);
 		RuleFactory rf = new RuleFactory(af,ef,myLogger);
-		RepresentationResolver repResolver = new RepresentationResolver(_rep);
+		RepresentationResolver repResolver = new RepresentationResolver(_rep, myLogger);
 
 		w = new World(ef,myLogger);
 		Resolver r = new Resolver(w, rf, af, repResolver, myLogger);

@@ -42,8 +42,6 @@ public class RuleSet
 			if( j != -1 )
 				continue;
 
-			System.out.println(ruleKey);
-
 			newRules = haystack.get(ruleKey);
 			if(newRules == null) continue;
 			if(newRules.length+numRules > rules.length)
