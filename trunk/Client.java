@@ -17,7 +17,7 @@ public class Client
 		RepresentationResolver repResolver = new RepresentationResolver(_rep, myLogger);
 
 		w = new World(ef,myLogger);
-		Resolver r = new Resolver(w, rf, af, repResolver, myLogger);
+		Resolver r = new Resolver(w, rf, af, ef, repResolver, myLogger);
 		clientInput = new ClientInput(r,_rep,af,myLogger);
 
 		myIO = new ClientIO( clientInput , r, w , _server, _port, myLogger );

@@ -31,7 +31,7 @@ public class Server implements IO
 
 		ActionFactory af = new ActionFactory(myLogger);
 		RuleFactory rf = new RuleFactory(af,ef,myLogger);
-		resolver = new Resolver(myWorld, rf, af,myLogger);
+		resolver = new Resolver(myWorld, rf, af, ef, myLogger);
 		resolver.setIO(this);
 
 		myLogger.message("\n" + myWorld.toString(), false);
