@@ -6,21 +6,23 @@ public class Resolver
 	private RuleFactory ruleFactory;
 	private RepresentationResolver repResolver = null;
 	private ActionFactory actionFactory;
+	private ElementFactory elementFactory;
 	private HashMap<Integer,GameElement> elementsHash;
 	private ScriptEngineManager manager;
 	private World world;
 	private IO io;
 	private Logger myLogger;
 
-	public Resolver(World _world, RuleFactory _rf, ActionFactory _af, RepresentationResolver _repResolver, Logger _myLogger)
+	public Resolver(World _world, RuleFactory _rf, ActionFactory _af, ElementFactory _ef, RepresentationResolver _repResolver, Logger _myLogger)
 	{
-		this(_world, _rf, _af, _myLogger);
+		this(_world, _rf, _af, _ef, _myLogger);
 		repResolver = _repResolver;
 	}
-	public Resolver(World _world, RuleFactory _rf, ActionFactory _af, Logger _myLogger)
+	public Resolver(World _world, RuleFactory _rf, ActionFactory _af, ElementFactory _ef, Logger _myLogger)
 	{
 		ruleFactory = _rf;
 		actionFactory = _af;
+		elementFactory = _ef;
 		rules = _rf.getRuleSet("");
 		elementsHash = _world.getElementsHash();
 		manager = new ScriptEngineManager();
@@ -141,9 +143,11 @@ public class Resolver
 		GameElement[] nouns = _action.getNouns();
 		GameElement subject = null, directObject = null, indirectObject = null;
 		GameElement[] other = null;
-		int status = Constants.SUCCESS;
+		int status;
+		IncrementedArray returnVals;
 		ActionsHashMap myActions = new ActionsHashMap(actionFactory); 
 		ActionsHashMap actionsToSend = new ActionsHashMap(actionFactory);
+		int i;
 		
 		if(nouns != null)
 		{
@@ -168,6 +172,7 @@ public class Resolver
 		{
 			try {
 				ScriptEngine engine = manager.getEngineByName(rule.language());
+				status = Constants.SUCCESS;
 				engine.put("owner",rule.owner());
 				engine.put("subject",subject);
 				engine.put("directObject",directObject);
@@ -177,6 +182,7 @@ public class Resolver
 				engine.put("argv",message);
 				engine.put("myActions",myActions);
 				engine.put("actionsToSend",actionsToSend);
+				engine.put("status",status);
 				engine.eval(rule.function());
 				Object _status = engine.get("status");
 				if(_status instanceof Integer)
@@ -195,7 +201,7 @@ public class Resolver
 
 		myLogger.message("Resolver is starting to handle actions...\n", false);
 		IncrementedArray<Action> actionList = myActions.getAll();
-		for(int i = 0; i < actionList.length; i++)
+		for(i = 0; i < actionList.length; i++)
 		{
 			_action = actionList.get(i);
 			if(_action.getWorldFunction() != null)
@@ -220,13 +226,75 @@ public class Resolver
 
 				StringFunction worldFunc = _action.getWorldFunction();
 				try {
+					returnVals = new IncrementedArray(Constants.DEFAULT_RETURN_VALS_LENGTH);
+					status = Constants.SUCCESS;
 					ScriptEngine engine = manager.getEngineByName(worldFunc.getLanguage());
 					engine.put("subject",subject);
 					engine.put("directObject",directObject);
 					engine.put("indirectObject",indirectObject);
 					engine.put("other",other);
 					engine.put("argv",_action.parameters().pack());
+					engine.put("returnVals",returnVals);
+					engine.put("status", status);
 					engine.eval(worldFunc.getFunction());
+					Object _status = engine.get("status");
+					if(_status instanceof Integer)
+						status = ((Integer) _status).intValue();
+					else if(_status instanceof Double)
+						status = ((Double) _status).intValue();
+					if(status == Constants.ADD_ELEMENTS)
+					{
+						GameElement newElement = null;
+						GameElement first = world.getFirstElement();
+						for(i = 0; i < returnVals.length; i++)
+						{
+							Object _message = returnVals.get(i);
+							if(_message instanceof Object[])
+							{
+								Object[] elementInfo = (Object[]) _message;
+								int start = 0;
+								int _id = ((Integer) elementInfo[start++]).intValue();
+								int _type;
+								if(elementInfo[start] instanceof String)
+								{
+									_type = elementFactory.getType((String) elementInfo[start++]);
+								}
+								else
+								{
+									_type = ((Integer) elementInfo[start++]).intValue();
+								}
+								float[] _pos = (float[]) elementInfo[start++];
+								newElement = elementFactory.getGameElement(_type);
+								newElement.id(_id);
+								newElement.setPosition(_pos);
+
+							}
+							else if(_message instanceof GameElement)
+							{
+								newElement = (GameElement) _message;
+							}
+
+							// this should eventually move to the Resolver
+							if(newElement.id() < Constants.ELEMENT_ID_PADDING+Constants.MAX_CONNECTIONS+1) //so that the avatars have different colors!
+								newElement.attribute("color",Constants.getColorByClientID(newElement.id()));
+
+							if(first == null)
+							{
+								first = newElement;
+								first.next = first.prev = first;
+								world.setFirstElement(first);
+							}
+							else
+							{
+								synchronized(first)
+								{
+									first.insertBefore(newElement);
+								}
+							}
+							myLogger.message("Putting element with id: " + newElement.id()+"\n",false);
+							elementsHash.put(newElement.id(),newElement);
+						}
+					}
 				}
 				catch(ScriptException se)
 				{
@@ -241,15 +309,11 @@ public class Resolver
 			}
 		}
 
-		synchronized(world.getFirstElement())
-		{
-			world.getFirstElement().notifyAll();
-		}
 		if(actionsToSend.size() > 0)
 		{
 			IncrementedArray<Action> act = actionsToSend.getAll();
 			IncrementedArray<WritableAction> write_act = new IncrementedArray<WritableAction>(act.length);
-			for(int i = 0; i < act.length; i++)
+			for(i = 0; i < act.length; i++)
 			{
 				write_act.add(new WritableAction(act.get(i)));
 			}

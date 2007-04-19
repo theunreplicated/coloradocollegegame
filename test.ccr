@@ -7,7 +7,6 @@
 				var vector = argv[0];
 				myLogger.message("Resolver got Move To command for id(" + subject.id() + "): " + vector[0] + " " + vector[1] + " " + vector[2] + "\n", false);
 				subject.setPosition(vector);
-				subject.changed = true;
 			]]>
 			</inworld>
 			<inrepresentation language="javascript">
@@ -33,7 +32,6 @@
 					vector[i] += dvector[i];
 				}
 				subject.setPosition(vector);
-				subject.changed = true;
 			]]>
 			</inworld>
 			<inrepresentation language="javascript">
@@ -49,7 +47,6 @@
 				var vector = argv[0];
 				myLogger.message("Resolver got Rotate To command for id(" + subject.id() + "): " + vector[0] + " " + vector[1] + " " + vector[2] + " " + vector[3] + "\n", false);
 				subject.setFacing(vector);
-				subject.changed = true;
 			]]>
 			</inworld>
 			<inrepresentation language="javascript">
@@ -65,12 +62,40 @@
 				var q = argv[0];
 				var facing = Quaternions.mul(subject.getFacing(),q);
 				subject.setFacing(facing);
-				subject.changed = true;
 			]]>
 			</inworld>
 			<inrepresentation language="javascript">
 			<![CDATA[
 				representation.updateLocation(subject);
+			]]>
+			</inrepresentation>
+		</action>
+		<action>
+			<name>remove element</name>
+			<inworld language="javascript">
+			<![CDATA[
+				myLogger.message("Resolver got Remove Element command for id " + subject.id() + "\n", false);
+				subject.next = subject.prev = null;
+			]]>
+			</inworld>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				representation.updatePresence(subject);
+			]]>
+			</inrepresentation>
+		</action>
+		<action>
+			<name>add element</name>
+			<inworld language="javascript">
+			<![CDATA[
+				// test stuff
+				status = Constants.ADD_ELEMENTS;
+				returnVals.add(argv);
+			]]>
+			</inworld>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				representation.updatePresence(argv[0]);
 			]]>
 			</inrepresentation>
 		</action>
@@ -81,11 +106,6 @@
 			<function language="javascript">
 			<![CDATA[
 				var status = Constants.SUCCESS;
-				for(var i = 0; i < relevant.length; i++)
-				{
-					if(relevant.get(i).isColliding(subject))
-						myLogger.message("Collision!" + relevant.get(i).id() + " " + subject.id() + "\n", true);
-				}
 				var a = myActions.get("move").get(0);
 				var parameters = new Array(1);
 
@@ -95,14 +115,27 @@
 				{
 					dvector = Quaternions.rotatePoint(dvector,subject.getFacing());
 				}
-				var vector = subject.copyPosition();
-				for(i = 0; i < dvector.length; i++)
+				for(var i = 0; i < relevant.length; i++)
 				{
-					vector[i] += dvector[i];
+					myLogger.message("Testing collisions for:" + relevant.get(i).id() + " and " + subject.id() + "\n", false);
+					if(subject.isColliding(relevant.get(i),dvector,null))
+					{
+						myLogger.message("Collision!" + relevant.get(i).id() + " " + subject.id() + "\n", false);
+						status = Constants.FAILED;
+						break;
+					}
 				}
-				parameters[0] = vector;
+				if(status == Constants.SUCCESS)
+				{
+					var vector = subject.copyPosition();
+					for(i = 0; i < dvector.length; i++)
+					{
+						vector[i] += dvector[i];
+					}
+					parameters[0] = vector;
 
-				actionsToSend.add("move to", a.getNouns(), parameters);
+					actionsToSend.add("move to", a.getNouns(), parameters);
+				}
 			]]>
 			</function>
 		</rule>
@@ -121,14 +154,51 @@
 				else
 				{
 
-					facing = Quaternions.mul(subject.getFacing(),q);
+					for(var i = 0; i < relevant.length; i++)
+					{
+						myLogger.message("Testing collisions for:" + relevant.get(i).id() + " and " + subject.id() + "\n", false);
+						if(subject.isColliding(relevant.get(i),null,q))
+						{
+							myLogger.message("Collision!" + relevant.get(i).id() + " " + subject.id() + "\n", false);
+							status = Constants.FAILED;
+							break;
+						}
+					}
+					if(status == Constants.SUCCESS)
+					{
+						facing = Quaternions.mul(subject.getFacing(),q);
 
-					myLogger.message("Facing length= "+Quaternions.getLength(facing)+"\n",false);
-					var a = myActions.get("rotate").get(0);
-					var parameters = new Array(1);
-					parameters[0] = facing;
+						myLogger.message("Facing length= "+Quaternions.getLength(facing)+"\n",false);
+						var a = myActions.get("rotate").get(0);
+						var parameters = new Array(1);
+						parameters[0] = facing;
 
-					actionsToSend.add("rotate to", a.getNouns(), parameters);
+						actionsToSend.add("rotate to", a.getNouns(), parameters);
+					}
+				}
+			]]>
+			</function>
+		</rule>
+		<rule>
+			<verb>remove element</verb>
+			<function language="javascript">
+			<![CDATA[
+				var status = Constants.SUCCESS;
+				if(argv.length > 0)
+				{
+					actionsToSend.add("remove element", subject);
+				}
+			]]>
+			</function>
+		</rule>
+		<rule>
+			<verb>add element</verb>
+			<function language="javascript">
+			<![CDATA[
+				if(argv[0] == true)
+				{
+					argv.shift();
+					actionsToSend.add("add element", argv);
 				}
 			]]>
 			</function>

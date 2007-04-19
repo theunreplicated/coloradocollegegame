@@ -44,6 +44,11 @@ public class World
 		return first;
 	}
 
+	public void setFirstElement(GameElement ge)
+	{
+		first = ge;
+	}
+
 	public String toString()
 	{
 		GameElement ge = first;
