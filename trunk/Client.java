@@ -1,4 +1,4 @@
-import javax.swing.*;
+import java.awt.Component;
 
 public class Client
 {
@@ -19,8 +19,8 @@ public class Client
 		w = new World(ef,myLogger);
 		Resolver r = new Resolver(w, rf, af, ef, myLogger);
 		clientInput = new ClientInput(r,_rep,af,myLogger);
-
-		myIO = new ClientIO( clientInput , r, w , _server, _port, myLogger );
+		
+		myIO = new ClientIO( r, _server, _port, myLogger );
 		r.setIO(myIO);
 		w.setIO(myIO); //depracated
 		int id = myIO.getId();
@@ -39,7 +39,17 @@ public class Client
 		myIO.startListening();
 		clientInput.setMe(ge);
 		r.setRepresentationResolver(repResolver);
-		_rep.initialize(w, clientInput, myLogger);
+		_rep.initialize(w, myLogger);
+
+		//set listeners for clientInput
+		Component comp = _rep.getComponent();
+		if(comp != null) //in case a Representation doesn't have a Component to listen on
+		{
+			comp.setFocusable(true);
+			comp.addKeyListener(clientInput);
+			comp.addMouseListener(clientInput);
+			comp.addMouseMotionListener(clientInput);		
+		}
 	}
 
 	public static void initialize(String args[], Representation rep)

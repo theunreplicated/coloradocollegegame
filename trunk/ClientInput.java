@@ -138,21 +138,7 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 				resolver.parse(a); 
 				break;
 
-			/*Intuitive 3D movement (I hope), though it is planar - Joel*/
-/*			case KeyEvent.VK_W:
-				myIO.moveSelf(Constants.VEC_NEGZ);
-				break;
-			case KeyEvent.VK_S:
-				myIO.moveSelf(Constants.VEC_POSZ);
-				break;
-			case KeyEvent.VK_A:
-				myIO.rotateSelf(Constants.QUAT_CCLY);	
-				break;
-			case KeyEvent.VK_D:
-				myIO.rotateSelf(Constants.QUAT_CLOY);
-				break;
-*/
-			/*Intuitive 3D movement using the Resolver - Omer*/
+			/*Intuitive (planar) 3D movement using the Resolver - Omer*/
 			case KeyEvent.VK_W:
 				a = actionFactory.getAction("move");
 				a.setNouns(new GameElement[]{me});
@@ -188,10 +174,12 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 				a.parameters().add(b);
 				resolver.parse(a);
 				break;
+
 			/*Camera stuff*/
 			case KeyEvent.VK_V:
 				rep.changeView();
 				break;
+
 			default:
 				myLogger.message("You typed: " + ke.getKeyChar() + " (" + ke.getKeyCode() + ")" + "\n", false);
 
@@ -224,6 +212,7 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 
 	//While mouseMotion would be awesome, I think it'll effectively spam the server.
 	//Maybe if we get it down to Representation-only (camera adjustments and stuff).
+	//Or if we had some kind of stop-timer on it so it doesn't go off as often--but even that could be nasty
 	public void mousePressed(MouseEvent me){}
 	public void mouseReleased(MouseEvent me){}
 	public void mouseDragged(MouseEvent me){}
