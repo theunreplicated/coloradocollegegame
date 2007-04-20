@@ -46,6 +46,7 @@ public class VectorUtils
 				    (v[X]*w[Y])-(v[Y]*w[X])};
 	}
 
+	//returns the square of the distance between two vectors
 	public static float getDistSqr(float[] v, float[] w)
 	{
 		return (v[X]-w[X])*(v[X]-w[X]) + (v[Y]-w[Y])*(v[Y]-w[Y]) + (v[Z]-w[Z])*(v[Z]-w[Z]);

@@ -16,15 +16,12 @@ public class ClientIO implements IO
 	private Socket servConnectionOut;
 	private ServerListenerThread serverListener;
 	private ObjectOutputStream oos;
-	private World myWorld;
 	private Resolver resolver;
 	private Logger myLogger;
-	private ClientInput input;
 	private ObjectInputStream ois = null;
 
-	public ClientIO(ClientInput _clientInput, Resolver _resolver, World _myWorld, String _server, int _port, Logger _logger )
+	public ClientIO(Resolver _resolver, String _server, int _port, Logger _logger )
 	{
-		myWorld = _myWorld;
 		resolver = _resolver;
 		myLogger = _logger;
 		id = 0;
@@ -77,41 +74,6 @@ public class ClientIO implements IO
 			myLogger.message( "Failed to send to server: " + ioe + "\n", true );
 			ioe.printStackTrace();
 		}
-	}
-
-	//move along the specified vector RELATIVE to current facing
-	public void moveSelf(float[] v)
-	{
-		myWorld.nudgeElement(id, Quaternions.rotatePoint(v,
-							myWorld.getElementFacing(id)));
-	}
-	
-	//move along the specified vector INDEPENDENT of current facing
-	public void moveSelfAbsolute(float[] v)
-	{
-		myWorld.nudgeElement(id, v);
-	}
-	
-	//move along the specified vector relative to the camera's current facing
-	public void moveSelfRelativeCamera(float[] v)
-	{
-		//change this--how does ClientIO see the Representation?
-		myWorld.nudgeElement(id, v);
-	}
-	
-	public void rotateSelf(float[] q)
-	{
-		myWorld.rotateElement(id, q);
-	}
-
-	public void changeAttribute(String k, Object v)
-	{
-		myWorld.attributeElement(id, k, v);
-	}
-
-	public ClientInput getClientInput()
-	{
-		return input;
 	}
 
 	private class ServerListenerThread extends Thread

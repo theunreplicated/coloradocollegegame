@@ -8,6 +8,7 @@ import java.awt.image.*;
  * The canvas is also loads the controller to listen for any keyboard
  * input or any mouse input. 
  */
+
 public class Representation2D extends JPanel implements Representation
 {
 	static final long serialVersionUID = -7743175550804657967L;
@@ -19,17 +20,11 @@ public class Representation2D extends JPanel implements Representation
 	BufferedImage virtualImage;
 	Graphics g;
 
-	public void initialize(World w, ClientInput ci, Logger myLogger)
+	public void initialize(World w, Logger myLogger)
 	{
 		first = w.getFirstElement();
 
-		// Setting the Representation - a temporary solution for camera-relative movement -- Omer.
-
-		this.setFocusable( true );
 		this.setPreferredSize(new Dimension(Constants.CANVAS_WIDTH, Constants.CANVAS_HEIGHT));
-
-		this.addMouseListener(ci);
-		this.addKeyListener(ci);
 
 		virtualImage = new BufferedImage(Constants.CANVAS_WIDTH, Constants.CANVAS_HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = virtualImage.getGraphics();
@@ -102,16 +97,18 @@ public class Representation2D extends JPanel implements Representation
 		}
 	}
 
+	//fetches the canvas we're drawing this on
+	public Component getComponent()
+	{
+		return this;
+	}
+
 	//an update method for updating a particular element's location
 	public void updateLocation(GameElement ge)
 	{}
 
 	//an update method for updating a particular element's presence in the game
 	public void updatePresence(GameElement ge)
-	{}
-
-	//an update method (not in use)
-	public void update()
 	{}
 
 	//cycles through the views (not in use)
@@ -125,16 +122,14 @@ public class Representation2D extends JPanel implements Representation
 
 	public static void main(String args[])
 	{
-		Representation2D canvas = new Representation2D( );
-		Client.initialize(args, canvas);
+		Representation2D me = new Representation2D( );
+
+		Client.initialize(args, me);
 
 		JFrame frame = new JFrame();
-		frame.getContentPane().add( canvas );
+		frame.getContentPane().add( me );
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //for now. Need to send a nice close message	
 		frame.pack();
 		frame.setVisible( true ) ;
-
-
-
 	}
 }

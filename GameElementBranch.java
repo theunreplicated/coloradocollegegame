@@ -6,6 +6,7 @@ import javax.media.j3d.*;
 import javax.vecmath.*;
 import java.awt.*;
 import com.sun.j3d.utils.image.*;
+import java.util.ArrayList;
 
 /***
  A class that represents a GameElement as a branch of the Java3D tree.
@@ -15,11 +16,16 @@ import com.sun.j3d.utils.image.*;
 
 public class GameElementBranch implements ElementBranch //it doesn't like if we extend BranchGroup, so just make that a member variable and fetch it later
 {
+	public static int A = 3; //for readability with color decomposition
+	public static int R = 0;
+	public static int G = 1;
+	public static int B = 2;
+
 	//member variables - anything we'd want to change later (Element level)
 	private TransformGroup coord; //transformed coordinates for this branch
-	//private Appearance appear; //an appearance node reference--doesn't mean anything at the moment
 	private BranchGroup broot; //the root of the branch.
-	
+	//private Appearance appear; //an appearance node reference--doesn't mean anything at the moment
+
 	//constructor
 	public GameElementBranch(GameElement e)
 	{
@@ -128,11 +134,6 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 	//defines the appearance node based on the given GameElement
 	public Appearance createAppearance(VirtualShape s, float[] defaultColor, String defaultTexture, TransparencyAttributes elementTransparency)
 	{
-		int A = 3; //for readability with color decomposition
-		int R = 0;
-		int G = 1;
-		int B = 2;
-		
 		Appearance a = new Appearance();
 		Material mat = new Material(); //use defaults
 		a.setMaterial(mat);
@@ -176,10 +177,6 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 			}
 		}		
 
-//		TextureAttributes texAttrib = new TextureAttributes();
-//		texAttrib.setTextureMode(TextureAttributes.REPLACE); //blend in with specified color--do we want this?
-//		a.setTextureAttributes(texAttrib);
-
 		return a; //return the Appearance
 	}
 
@@ -191,56 +188,31 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		NormalGenerator ng = new NormalGenerator();
 		Stripifier st = new Stripifier();
 	
+		ArrayList<VirtualKML.KMLGeometryCollection> geoms = s.getGeometryCollections();
 		
-		/*I think this stuff will be faster/cleaner/nicer*/
-		double[][] lrs = s.getLinearRings();
-		int len = 0; //total length
-		for(int i=0; i<lrs.length; i++) //calculate total length
-			len += lrs[i].length;
-
-		double[] pts = new double[len];
-		int[] stripcounts = new int[lrs.length]; //create the stripcounts array
-		int p = 0;
-		for(int i=0; i<lrs.length; i++)
+		VirtualKML.KMLGeometryCollection g;
+		for(int i=0; i<geoms.size(); i++)
 		{
-			stripcounts[i] = (lrs[i].length/3); //linearRings always have 3 points/coord
-
-			for(int j=0; j<lrs[i].length; j++)
-			{
-				pts[p] = lrs[i][j]; //fill the single array
-				p++;
-			}
+			g = geoms.get(i);
+			GeometryInfo gi = new GeometryInfo(GeometryInfo.POLYGON_ARRAY);
+			gi.setCoordinates(g.getPoints()); //set the geometry info
+			gi.setStripCounts(g.getStripCounts()); //set stripcount
+			
+			ng.generateNormals(gi); //generate normals
+			st.stripify(gi); //convert to strips
+			
+			Appearance na = new Appearance();
+			na.setTransparencyAttributes(a.getTransparencyAttributes()); //copy any information we want to propagate
+			Material mat = new Material();
+			int c = g.getColor();
+			//NOTE: color decomposition is backwards for KML!! Don't copy the below line to other places!
+			float[] kmlColor = new float[] {(c&0xff)/255f, ((c>>8)&0xff)/255f, ((c>>16)&0xff)/255f, ((c>>24)&0xff)/255f};
+			mat.setDiffuseColor(kmlColor[R],kmlColor[G],kmlColor[B]);
+			na.setMaterial(mat);
+			
+			bg.addChild(new Shape3D(gi.getGeometryArray(),na)); //add a new shape
 		}
-
-		GeometryInfo gi = new GeometryInfo(GeometryInfo.POLYGON_ARRAY);
-		gi.setCoordinates(pts); //set the geometry info
-		gi.setStripCounts(stripcounts); //set stripcount
-
-		ng.generateNormals(gi); //generate normals
-		st.stripify(gi); //convert to strips
-
-		bg.addChild(new Shape3D(gi.getGeometryArray(),a));
 		
-		
-		/*In case the stuff above doesn't work
-		//for linearRings
-		double[][] lrs = s.getLinearRings();
-		for(int i=0; i<lrs.length; i++)
-		{
- 			GeometryInfo gi = new GeometryInfo(GeometryInfo.POLYGON_ARRAY);
-   			gi.setCoordinates(lrs[i]); //set the geometry info
-		
-			int[] stripcounts = {lrs[i].length/3}; //create the stripcounts array--linearRings always have 3 points/coord
-			gi.setStripCounts(stripcounts);
-
-   			ng.generateNormals(gi); //generate normals
-  			st.stripify(gi); //convert to strips
-
-			bg.addChild(new Shape3D(gi.getGeometryArray(),a)); //add the polygon shape
-		}
-		//should add similar loops for other geometry
-		*/	
-
 		return bg;	
 	}
 	
@@ -275,44 +247,7 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		return q;	
 	}
 
-	//sets the translation transform of this element to vector p
-	public void setTranslation(float[] p)
-	{
-		Transform3D t = new Transform3D(); //a new Transform
-		coord.getTransform(t); //fill the transform with our current settings
-		t.setTranslation(new Vector3f(p)); //set the new translation
-		coord.setTransform(t); //set as our new state
-	}
-		
-	//sets the rotation transform of this element to Quaterion f
-	public void setRotation(float[] f)
-	{
-		Transform3D t = new Transform3D(); //a new Transform
-		coord.getTransform(t); //fill the transform with our current settings
-		t.setRotation(new Quat4f(f)); //set our current rotation
-		coord.setTransform(t);
-	}
-	
-	//sets the scale transform of this element to Quaterion f
-	public void setScale(float[] s)
-	{
-		Transform3D t = new Transform3D(); //a new Transform
-		coord.getTransform(t); //fill the transform with our current settings
-		t.setScale(new Vector3d((double)s[0], (double)s[1], (double)s[2])); //set our current scale
-		coord.setTransform(t);
-	}
-	
-
-	//sets the transform of this element to translation vector p and rotation Quaternion f	
-	//--holding onto this for now. I'm not sure if I'm going to want to keep it or not (probably not)
-/*	public void setTransform(float[] p, float[] f)
-	{
-		Transform3D t = new Transform3D(new Quat4f(f), new Vector3f(p), 1);
-		//t.setScale(new Vector3d(1.0d, 0.5d, 1.0d));
-		coord.setTransform(t);
-	}
-*/
-	//sets the transform of this element to translation vector p and rotation Quaternion f	
+	//sets the transform of this element to translation vector p and rotation Quaternion f and scale vector s
 	public void setTransform(float[] p, float[] f, float[] s)
 	{
 		Transform3D t = new Transform3D(new Quat4f(f), new Vector3f(p), 1);
@@ -320,19 +255,6 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		coord.setTransform(t);
 	}
 
-/*
-	//returns the Appearance node of this element
-	public Appearance getAppearance()
-	{
-		return appear;
-	}
-
-	//sets the Appearance node of this element
-	public void setAppearance(Appearance a)
-	{
-		appear = a;
-	}
-*/
 	//maybe also draw based on shapes?
 	public Shape3D createBoundingBox(GameElement e)
 	{
@@ -402,8 +324,4 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		return spinx; //return the "root" of this branch
 	}	
 	
-	//member functions
-		//gets/sets??
-			//If we make public, then Representation takes care of moving stuff. If we make private, then calls methods that move stuff.
-			//I think I like doing it privately--make take an extra step, but hides implementation (so can have only a single TransformGroup, for example)
 }

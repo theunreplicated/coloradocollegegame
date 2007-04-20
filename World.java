@@ -99,8 +99,6 @@ public class World
 		synchronized( first )
 		{
 			toRemove.removeFromList();
-			toRemove.changed = true;
-			first.notifyAll();
 		}
 	}
 
@@ -121,10 +119,6 @@ public class World
 		myLogger.message("Putting element with id: " + newElement.id()+"\n",false);
 		elements.put(newElement.id(),newElement);
 
-		synchronized( first )
-		{
-			first.notifyAll();
-		}
 		return newElement;
 	}
 
@@ -163,10 +157,6 @@ public class World
 		myLogger.message("Putting element with id: " + newElement.id()+"\n",false);
 		elements.put(_id,newElement);
 
-		synchronized( first )
-		{
-			first.notifyAll();
-		}
 		return newElement;
 	}
 
@@ -185,36 +175,17 @@ public class World
 		GameElement element = elements.get(_row);
 		element.nudge( _dpos );
 		
-	/**/	if(hasCollisions(element)) //if we caused a collision
-		{
-			float[] backup = new float[_dpos.length]; //get the reversion
-			for(int i=0; i<backup.length; i++)
-				backup[i] = -1*_dpos[i];
-			
-			element.nudge(backup); //undo the move
-			return false;
-		}	
-		else //let everybody know
-		{ /**/	
+		float[] position = element.getPosition();
 
-			float[] position = element.getPosition();
+		Object[] message = new Object[] {
+			Constants.MOVE_TO,
+			_row,
+			position
+		};
 
-			Object[] message = new Object[] {
-				Constants.MOVE_TO,
-				_row,
-				position
-			};
-
-
-			myIO.send(message);
-			myLogger.message( "nudge position: " + _row + " " + VectorUtils.toString(position)+"\n", false );
-			synchronized(first)
-			{
-				element.changed = true;
-				first.notifyAll();
-			}
-			return true;
-	/**/	}/**/
+		myIO.send(message);
+		myLogger.message( "nudge position: " + _row + " " + VectorUtils.toString(position)+"\n", false );
+		return true;
 	}
 
 	//a nudge method without testing collisions (for MovingElement demonstration)
@@ -235,11 +206,6 @@ public class World
 
 		myIO.send(message);
 		myLogger.message( "nudge position: " + _row + " " + VectorUtils.toString(position)+"\n", false );
-		synchronized(first)
-		{
-			element.changed = true;
-			first.notifyAll();
-		}
 		return true;
 	}
 
@@ -258,11 +224,6 @@ public class World
 		
 		myIO.send(message);
 		myLogger.message( "rotate facing: " + _row + " " + VectorUtils.toString(facing)+"\n", false );
-		synchronized(first)
-		{
-			element.changed = true;
-			first.notifyAll();
-		}
 		return true;
 	}
 
@@ -288,11 +249,6 @@ public class World
 		}
 		myIO.send(message);
 		myLogger.message( "set attribute: " + _row + " " + k + " -> " + v +"\n", false );
-		synchronized(first)
-		{
-			element.changed = true;
-			first.notifyAll();
-		}
 	}	
 
 	public void setPosition( Object[] _message, int _start)
@@ -302,11 +258,6 @@ public class World
 
 		element.setPosition( _pos );
 		myLogger.message( "move position: " + element.id() + " " + VectorUtils.toString(_pos)+"\n", false );
-		synchronized(first)
-		{
-			element.changed = true;
-			first.notifyAll();
-		}
 	}
 
 	public void setFacing( Object[] _message, int _start)
@@ -316,11 +267,6 @@ public class World
 
 		element.setFacing( _fac );
 		myLogger.message( "rotate facing: " + element.id() + " " + VectorUtils.toString(_fac)+"\n", false );
-		synchronized(first)
-		{
-			element.changed = true;
-			first.notifyAll();
-		}
 	}
 
 	public void setAttribute( Object[] _message, int _start)
@@ -339,11 +285,6 @@ public class World
 		}
 		element.attribute(k,v);
 		myLogger.message( "set attribute: " + element.id() + " " + k + " -> " + v +"\n", false );
-		synchronized(first)
-		{
-			element.changed = true;
-			first.notifyAll();
-		}
 	}
 	
 	//a TESTING method to check the world for a collision

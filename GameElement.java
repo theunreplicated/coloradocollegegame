@@ -3,7 +3,6 @@ import java.util.*;
 public class GameElement extends LinkedElement<GameElement> implements Serializable, Comparable
 { 
 	static final long serialVersionUID = -5470967480584428990L;
-	public boolean changed = true;
 	private int id;
 	int typeId;
 	int status;
@@ -236,8 +235,6 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 			System.out.println("Bad Quaternion length. Bad!");
 		else
 			facing = Quaternions.mul(facing,q);
-
-		System.out.println("Facing length= "+Quaternions.getLength(facing));
 	}
 
 	//sets the facing to the specified Quaternion

@@ -11,8 +11,6 @@ import javax.vecmath.*;
  This class can define a Client's GameElement which is either a first-person
  camera, a third-person element with a following camera, or a third-person
  element with a static camera (or hopefully any kind of camera we want).
- 
- Currently the methods are set to define a first-person camera.
 ***/
 
 public class ViewElementBranch implements ElementBranch
@@ -129,93 +127,6 @@ public class ViewElementBranch implements ElementBranch
 		return avatar;	
 	}
 
-	public void setTranslation(float[] p)
-	{
-		avatar.setTranslation(p); //always move the avatar Element
-
-		if(viewMode == FIRST_PERSON_VIEW)
-		{
-			Transform3D t = new Transform3D(); //a new Transform
-			coord.getTransform(t); //fill the transform with our current settings
-			t.setTranslation(new Vector3f(p)); //set the new translation
-			coord.setTransform(t); //set as our new state
-		}
-		else if(viewMode == OFFSET_VIEW)
-		{
-			//Do what here? We NEED facing and position to do an offset!
-				//which we can get from the AVATAR now. Fill in later	
-			/*
-			Transform3D t = new Transform3D(); //a new Transform
-			coord.getTransform(t); //fill the transform with our current settings
-			Vector3f pp = new Vector3f(p);
-			pp.add(new Vector3f(Quaternions.rotatePoint(OFFSET,f)));
-			t.setTranslation(pp); //set the new translation
-			coord.setTransform(t); //set as our new state
-			*/
-			
-		}
-		else
-		{
-			
-		}
-	}
-		
-	public void setRotation(float[] f)
-	{
-		avatar.setRotation(f); //always move the avatar Element 
-
-		if(viewMode == FIRST_PERSON_VIEW)
-		{
-			Transform3D t = new Transform3D(); //a new Transform
-			coord.getTransform(t); //fill the transform with our current settings
-			t.setRotation(new Quat4f(f)); //set our current rotation
-			coord.setTransform(t);
-		}
-		else if(viewMode == OFFSET_VIEW)
-		{
-			//Do what here? We NEED facing and position to do an offset!
-			
-			/*
-			Transform3D t = new Transform3D(); //a new Transform
-			coord.getTransform(t); //fill the transform with our current settings
-			Vector3f pp = new Vector3f(p);
-			pp.add(new Vector3f(Quaternions.rotatePoint(OFFSET,f)));
-			t.setTranslation(pp); //set the new translation
-			coord.setTransform(t); //set as our new state
-			*/
-		}
-		else
-		{
-			
-		}
-	}
-
-	public void setScale(float[] s)
-	{
-		avatar.setScale(s); //always move the avatar Element
-
-		if(viewMode == FIRST_PERSON_VIEW)
-		{
-			Transform3D t = new Transform3D(); //a new Transform
-			coord.getTransform(t); //fill the transform with our current settings
-			t.setScale(new Vector3d((double)s[0], (double)s[1], (double)s[2])); //set our current scale
-			coord.setTransform(t);
-		}
-		else if(viewMode == OFFSET_VIEW)
-		{
-			//should we have the offset be based on the scale? I think that's what it does atm
-			
-			Transform3D t = new Transform3D(); //a new Transform
-			coord.getTransform(t); //fill the transform with our current settings
-			t.setScale(new Vector3d((double)s[0], (double)s[1], (double)s[2])); //set our current scale
-			coord.setTransform(t);
-		}
-		else
-		{
-		
-		}
-	}
-	
 	public void setTransform(float[] p, float[] f, float[] s)
 	{
 		avatar.setTransform(p,f,s); //always move the avatar Element
@@ -253,17 +164,5 @@ public class ViewElementBranch implements ElementBranch
 	{
 		avatar.detach();
 	}
-	
-/*	
-	public void setAppearance(Appearance a)
-	{
-		avatar.setAppearance(a);	
-	}
-
-	public Appearance getAppearance()
-	{
-		return avatar.getAppearance();
-	}
-*/
 
 }

@@ -177,7 +177,6 @@
 					{
 						facing = Quaternions.mul(subject.getFacing(),q);
 
-						myLogger.message("Facing length= "+Quaternions.getLength(facing)+"\n",false);
 						var a = myActions.get("rotate").get(0);
 						var parameters = new Array(1);
 						parameters[0] = facing;

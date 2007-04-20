@@ -35,7 +35,7 @@ public class Representation3D extends Applet implements Representation
 	}
 
 	//initializor (all code previously in constructor)
-	public void initialize(World w, ClientInput ci, Logger myLogger)
+	public void initialize(World w, Logger myLogger)
 	{
 		setLayout(new BorderLayout()); //set the Applet's layout
 		GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration(); //how does SimpleUniverse want to draw stuff?
@@ -48,11 +48,6 @@ public class Representation3D extends Applet implements Representation
 		scene = new BranchGroup();
 		scene.setCapability(Group.ALLOW_CHILDREN_WRITE); //let us modify the children at runtime
 		scene.setCapability(Group.ALLOW_CHILDREN_EXTEND); //allow us to add more Elements to the scene during runtime
-
-		canvas3D.setFocusable(true);
-		canvas3D.addKeyListener(ci);
-		canvas3D.addMouseListener(ci);
-		canvas3D.addMouseMotionListener(ci);
 
 		elementStart = w.getFirstElement(); //get the Elements to start building the tree 
 		elementStart.attribute("isClient", true); //mark the first element as the Client (Representation-dependent attribute)
@@ -75,14 +70,8 @@ public class Representation3D extends Applet implements Representation
 		
 		superRoot.compile(); //let Java3D optimize the tree
 		simpleU.addBranchGraph(superRoot); //add the scene to the tree. THIS ALSO TELLS IT TO BEGIN RENDERING!
-
-		Frame f = new MainFrame(this,300,300); //run the applet inside a Frame
-
-		//a thread to notify us when something has changed
-		RepresentationListener rl = new RepresentationListener(this, elementStart, myLogger);
-		rl.start();
 	}
-	
+		
 	//creates a "view" or camera based on the given element
 	//  this will probably need to be argument based depending on what kind of camera we want
 	//  Also, this MUST be called BEFORE createSceneGraph() (I could probably make it explicit, but it doesn't seem as nice)
@@ -150,37 +139,6 @@ public class Representation3D extends Applet implements Representation
 		bg.addChild(backLight);			
 	}
 
-	//creates a Representation-level grid to display as the ground. For testing mostly
-	public Shape3D createGrid()
-	{
-		int gridSize = 40; //half-dimension size
-		int entries = 4*((2*gridSize)+1);
-		LineArray grid = new LineArray(entries, LineArray.COORDINATES | LineArray.COLOR_3);
-		
-		int index = 0;
-		for(int i=-gridSize; i<=gridSize; i++)
-		{
-			grid.setCoordinate(index, new Point3f(-gridSize-1.0f, -3.0f, i));
-			index++;
-			grid.setCoordinate(index, new Point3f( gridSize+1.0f, -3.0f, i));
-			index++; 
-		}
-		for(int i=-gridSize; i<=gridSize; i++)
-		{
-			grid.setCoordinate(index, new Point3f(i, -3.0f,-gridSize-1.0f));
-			index++;
-			grid.setCoordinate(index, new Point3f(i, -3.0f, gridSize+1.0f));
-			index++; 
-		}
-		
-		Color3f green = new Color3f(0.0f, 1.0f, 0.0f);
-		for(int i=0; i<entries; i++)
-			grid.setColor(i, green);	
-		
-		Shape3D gridShape = new Shape3D(grid);
-		return gridShape;
-	}
-
 	//cycles through the views
 	public void changeView()
 	{
@@ -192,7 +150,12 @@ public class Representation3D extends Applet implements Representation
 	{
 		veb.changeView(to);
 	}
-	
+
+	//a method to move the camera independent of the avatar. Not sure what arguments it will take yet
+	public void moveCamera()
+	{
+		
+	}
 
 	//an update method for updating a particular element's location
 	public void updateLocation(GameElement e)
@@ -232,63 +195,43 @@ public class Representation3D extends Applet implements Representation
 		}	
 	}
 
-	//an update method (for use with the notify() interface)
-	public void update()
+	//fetches the canvas we're drawing this on
+	public Component getComponent()
 	{
-		//System.out.println("In update method:");
-		
-		//Run through the HashMap to check if we need to trim the tree	
-		Iterator<GameElement> i = elementsToNodes.keySet().iterator(); //for looping the list
-		GameElement e;
-		while(i.hasNext())
-		{
-			e = i.next(); //get the next element
-
-			//System.out.println(elementsToNodes.get(e));
-						
-			if(e.next == null && e.prev == null) //if isn't attached to World's list
-			{
-				//delete Branch
-				ElementBranch bg = elementsToNodes.get(e); //fetch the branch
-				bg.detach(); //remove the branch from the tree
-				i.remove(); //remove the current element from the hashmap via the iterator
-			}
-		}	 
-		
-		//run through the World's list of elements to see if anything needs changing
-		ElementBranch bg;
-		e = elementStart;
-		do
-		{
-			if(e.changed)
-			{
-				bg = elementsToNodes.get(e); //get the corresponding GameElementBranch
-				
-				if(bg == null) //if element wasn't in the list
-				{
-					//add Branch
-					GameElementBranch nbg = new GameElementBranch(e); //make a new branch for the element
-					elementsToNodes.put(e,nbg); //make a conversion entry so we can find the branch later
-					scene.addChild(nbg.getBranchScene()); //add the branch to the scene
-				}
-				else //otherwise
-				{
-					//change branch
-					bg.setTransform(e.getPosition(),e.getFacing(), e.getScale());
-				}
-				
-				e.changed = false; //mark as unchanged
-			}
-						
-			e = e.next;
-		} while(e!=elementStart);
-	} //update
-
-	//fetches the canvas we're drawing this on, in case we want to embed in a different window
-	public Canvas3D getCanvas()
-	{
-		return canvas3D;	
+		return canvas3D;
 	}
+
+	//creates a Representation-level grid to display as the ground. For testing mostly
+	public Shape3D createGrid()
+	{
+		int gridSize = 40; //half-dimension size
+		int entries = 4*((2*gridSize)+1);
+		LineArray grid = new LineArray(entries, LineArray.COORDINATES | LineArray.COLOR_3);
+		
+		int index = 0;
+		for(int i=-gridSize; i<=gridSize; i++)
+		{
+			grid.setCoordinate(index, new Point3f(-gridSize-1.0f, -3.0f, i));
+			index++;
+			grid.setCoordinate(index, new Point3f( gridSize+1.0f, -3.0f, i));
+			index++; 
+		}
+		for(int i=-gridSize; i<=gridSize; i++)
+		{
+			grid.setCoordinate(index, new Point3f(i, -3.0f,-gridSize-1.0f));
+			index++;
+			grid.setCoordinate(index, new Point3f(i, -3.0f, gridSize+1.0f));
+			index++; 
+		}
+		
+		Color3f green = new Color3f(0.0f, 1.0f, 0.0f);
+		for(int i=0; i<entries; i++)
+			grid.setColor(i, green);	
+		
+		Shape3D gridShape = new Shape3D(grid);
+		return gridShape;
+	}
+
 
 	//this looks familiar...
 	public static void main(String[] args)
@@ -296,6 +239,7 @@ public class Representation3D extends Applet implements Representation
 		Representation3D me = new Representation3D(ViewElementBranch.OFFSET_VIEW);
 
 		Client.initialize(args, me); //create a Client for the game
-
+		
+		Frame f = new MainFrame(me,300,300); //run the applet inside a Frame
 	} 
 }
