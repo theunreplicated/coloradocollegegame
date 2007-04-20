@@ -9,15 +9,10 @@ public class Resolver
 	private ElementFactory elementFactory;
 	private HashMap<Integer,GameElement> elementsHash;
 	private ScriptEngineManager manager;
-	private World world;
+	public World world;
 	private IO io;
 	private Logger myLogger;
 
-	public Resolver(World _world, RuleFactory _rf, ActionFactory _af, ElementFactory _ef, RepresentationResolver _repResolver, Logger _myLogger)
-	{
-		this(_world, _rf, _af, _ef, _myLogger);
-		repResolver = _repResolver;
-	}
 	public Resolver(World _world, RuleFactory _rf, ActionFactory _af, ElementFactory _ef, Logger _myLogger)
 	{
 		ruleFactory = _rf;
@@ -36,8 +31,13 @@ public class Resolver
 		manager.put("Constants", new Constants());
 		manager.put("Quaternions", new Quaternions());
 		manager.put("VectorUtils", new VectorUtils());
+		manager.put("GameElement", GameElement.class);
 	}
 
+	public void setRepresentationResolver(RepresentationResolver _repResolver)
+	{
+		repResolver = _repResolver;
+	}
 	public void setIO(IO _io)
 	{
 		io = _io;
@@ -46,6 +46,11 @@ public class Resolver
 	public int parseOld(Object _message)
 	{
 		if(_message instanceof IncrementedArray)
+		{
+			parse(_message);
+			return Constants.SUCCESS;
+		}
+		if(_message instanceof Action)
 		{
 			parse(_message);
 			return Constants.SUCCESS;
@@ -264,17 +269,18 @@ public class Resolver
 									_type = ((Integer) elementInfo[start++]).intValue();
 								}
 								float[] _pos = (float[]) elementInfo[start++];
+								float[] _fac = (float[]) elementInfo[start++];
 								newElement = elementFactory.getGameElement(_type);
 								newElement.id(_id);
 								newElement.setPosition(_pos);
-
+								newElement.setFacing(_fac);
 							}
 							else if(_message instanceof GameElement)
 							{
 								newElement = (GameElement) _message;
 							}
 
-							// this should eventually move to the Resolver
+							// this should eventually move to the "add element" rule
 							if(newElement.id() < Constants.ELEMENT_ID_PADDING+Constants.MAX_CONNECTIONS+1) //so that the avatars have different colors!
 								newElement.attribute("color",Constants.getColorByClientID(newElement.id()));
 

@@ -4,7 +4,6 @@ import java.awt.*;
 
 public class ClientInput implements KeyListener, MouseListener, MouseMotionListener
 {
-	private ClientIO myIO;
 	private Resolver resolver;
 	private ActionFactory actionFactory;
 	private GameElement me;
@@ -27,9 +26,8 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 		myLogger = _myLogger;
 	}
 
-	public void setMe(ClientIO _myIO, GameElement _me)
+	public void setMe(GameElement _me)
 	{
-		myIO = _myIO;
 		me = _me;
 	}
 
@@ -55,40 +53,60 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 			
 			/*Position movement*/
 			case KeyEvent.VK_RIGHT:
-				/*Action a = actionFactory.getAction("move");
+				a = actionFactory.getAction("move");
 				a.setNouns(new GameElement[]{me});
+				a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
 				a.parameters().add(Constants.VEC_POSX);
-				resolver.parse(a); */
-				myIO.moveSelf(Constants.VEC_POSX);
-				//myIO.moveSelf(new float[] {1.0f, 0.0f, 0.0f});
+				resolver.parse(a); 
 				break;
 			case KeyEvent.VK_LEFT:
-				myIO.moveSelf(Constants.VEC_NEGX);
-				//myIO.moveSelf(new float[] {-1.0f, 0.0f, 0.0f});
+				a = actionFactory.getAction("move");
+				a.setNouns(new GameElement[]{me});
+				a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
+				a.parameters().add(Constants.VEC_NEGX);
+				resolver.parse(a); 
 				break;
 			case KeyEvent.VK_UP:
-				myIO.moveSelf(Constants.VEC_POSY);
-				//myIO.moveSelf(new float[] {0.0f, 1.0f, 0.0f});
+				a = actionFactory.getAction("move");
+				a.setNouns(new GameElement[]{me});
+				a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
+				a.parameters().add(Constants.VEC_POSY);
+				resolver.parse(a); 
 				break;
 			case KeyEvent.VK_DOWN:
-				myIO.moveSelf(Constants.VEC_NEGY);
-				//myIO.moveSelf(new float[] {0.0f, -1.0f, 0.0f});
+				a = actionFactory.getAction("move");
+				a.setNouns(new GameElement[]{me});
+				a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
+				a.parameters().add(Constants.VEC_NEGY);
+				resolver.parse(a); 
 				break;
 			case KeyEvent.VK_PAGE_UP:
-				myIO.moveSelf(Constants.VEC_NEGZ);
-				//myIO.moveSelf(new float[] {0.0f, 0.0f, 1.0f});
+				a = actionFactory.getAction("move");
+				a.setNouns(new GameElement[]{me});
+				a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
+				a.parameters().add(Constants.VEC_NEGZ);
+				resolver.parse(a); 
 				break;
 			case KeyEvent.VK_PAGE_DOWN:
-				myIO.moveSelf(Constants.VEC_POSZ);
-				//myIO.moveSelf(new float[] {0.0f, 0.0f, -1.0f});
+				a = actionFactory.getAction("move");
+				a.setNouns(new GameElement[]{me});
+				a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
+				a.parameters().add(Constants.VEC_POSZ);
+				resolver.parse(a); 
 				break;
 			
 			/*Rotation movement*/
 			case KeyEvent.VK_NUMPAD2: //spin counterclockwise around x
-				myIO.rotateSelf(Constants.QUAT_CLOX);
+				a = actionFactory.getAction("rotate");
+				a.setNouns(new GameElement[]{me});
+				a.parameters().add(Constants.QUAT_CLOX);
+				resolver.parse(a); 
 				break;
 			case KeyEvent.VK_NUMPAD4: //spin counterclockwise around y
-				myIO.rotateSelf(Constants.QUAT_CCLY);
+				a = actionFactory.getAction("rotate");
+				a.setNouns(new GameElement[]{me});
+				a.parameters().add(Constants.QUAT_CCLY);
+				resolver.parse(a); 
 				break;
 			case KeyEvent.VK_NUMPAD5: //return to center
 				System.out.println("Not yet implemented.");
@@ -96,20 +114,32 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 				//Is there anyway for ClientInput to set stuff back to default?
 				break;
 			case KeyEvent.VK_NUMPAD6: //spin clockwise around y
-				myIO.rotateSelf(Constants.QUAT_CLOY);
+				a = actionFactory.getAction("rotate");
+				a.setNouns(new GameElement[]{me});
+				a.parameters().add(Constants.QUAT_CLOY);
+				resolver.parse(a); 
 				break;
 			case KeyEvent.VK_NUMPAD7: //spin counterclockwise around z
-				myIO.rotateSelf(Constants.QUAT_CCLZ);
+				a = actionFactory.getAction("rotate");
+				a.setNouns(new GameElement[]{me});
+				a.parameters().add(Constants.QUAT_CCLZ);
+				resolver.parse(a); 
 				break;
 			case KeyEvent.VK_NUMPAD8: //spin clockwise around x
-				myIO.rotateSelf(Constants.QUAT_CCLX);
+				a = actionFactory.getAction("rotate");
+				a.setNouns(new GameElement[]{me});
+				a.parameters().add(Constants.QUAT_CCLX);
+				resolver.parse(a); 
 				break;
 			case KeyEvent.VK_NUMPAD9: //spin clockwise around z
-				myIO.rotateSelf(Constants.QUAT_CLOZ);
+				a = actionFactory.getAction("rotate");
+				a.setNouns(new GameElement[]{me});
+				a.parameters().add(Constants.QUAT_CLOZ);
+				resolver.parse(a); 
 				break;
 
 			/*Intuitive 3D movement (I hope), though it is planar - Joel*/
-			case KeyEvent.VK_W:
+/*			case KeyEvent.VK_W:
 				myIO.moveSelf(Constants.VEC_NEGZ);
 				break;
 			case KeyEvent.VK_S:
@@ -121,35 +151,43 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 			case KeyEvent.VK_D:
 				myIO.rotateSelf(Constants.QUAT_CLOY);
 				break;
-
+*/
 			/*Intuitive 3D movement using the Resolver - Omer*/
-			case KeyEvent.VK_I:
+			case KeyEvent.VK_W:
 				a = actionFactory.getAction("move");
 				a.setNouns(new GameElement[]{me});
 				a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
 				a.parameters().add(Constants.VEC_NEGZ);
 				resolver.parse(a); 
 				break;
-			case KeyEvent.VK_K:
+			case KeyEvent.VK_S:
 				a = actionFactory.getAction("move");
 				a.setNouns(new GameElement[]{me});
 				a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
 				a.parameters().add(Constants.VEC_POSZ);
 				resolver.parse(a); 
 				break;
-			case KeyEvent.VK_J:
+			case KeyEvent.VK_A:
 				a = actionFactory.getAction("rotate");
 				a.setNouns(new GameElement[]{me});
 				a.parameters().add(Constants.QUAT_CCLY);
 				resolver.parse(a); 
 				break;
-			case KeyEvent.VK_L:
+			case KeyEvent.VK_D:
 				a = actionFactory.getAction("rotate");
 				a.setNouns(new GameElement[]{me});
 				a.parameters().add(Constants.QUAT_CLOY);
 				resolver.parse(a); 
 				break;
-
+			case KeyEvent.VK_M:
+				a = actionFactory.getAction("add element");
+				GameElement b = new GameElement(resolver.world.getElementById(110));
+				b.nudge(Constants.VEC_POSZ);
+				b.id(3000);
+				a.parameters().add(true);
+				a.parameters().add(b);
+				resolver.parse(a);
+				break;
 			/*Camera stuff*/
 			case KeyEvent.VK_V:
 				rep.changeView();

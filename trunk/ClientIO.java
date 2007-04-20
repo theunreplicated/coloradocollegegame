@@ -20,7 +20,7 @@ public class ClientIO implements IO
 	private Resolver resolver;
 	private Logger myLogger;
 	private ClientInput input;
-	private Representation rep;
+	private ObjectInputStream ois = null;
 
 	public ClientIO(ClientInput _clientInput, Resolver _resolver, World _myWorld, String _server, int _port, Logger _logger )
 	{
@@ -32,7 +32,7 @@ public class ClientIO implements IO
 		{
 			myLogger.message("Connecting...\n", false);
 			servConnectionIn = new Socket(InetAddress.getByName(_server), _port);
-			ObjectInputStream ois = new ObjectInputStream(servConnectionIn.getInputStream());
+			ois = new ObjectInputStream(servConnectionIn.getInputStream());
 			id = ois.readInt();
 
 			// get the output stream
@@ -46,31 +46,8 @@ public class ClientIO implements IO
 			oos = new ObjectOutputStream(servConnectionOut.getOutputStream());
 
 			myLogger.message("Connected as id: " + id + "\n", false);
-			myWorld.setIO(this);
 
-			GameElement ge = myWorld.addElement(new Object[] {	id,
-								"R2",
-								new float[] {
-									Constants.INITIAL_X,
-									Constants.INITIAL_Y,
-									Constants.INITIAL_Z
-										}
-									},
-								0);
-			_clientInput.setMe(this,ge);
 
-			serverListener = new ServerListenerThread(ois, myWorld);
-			serverListener.start();
-
-			this.send(new Object[] {		Constants.ADD_PLAYER,
-								id,
-								"R2",
-								new float[] {
-									Constants.INITIAL_X,
-									Constants.INITIAL_Y,
-									Constants.INITIAL_Z
-										}
-								});
 		}
 		catch(IOException ioe)
 		{
@@ -78,12 +55,14 @@ public class ClientIO implements IO
 		}
 	}
 
-	// A temporary function to set the Representation, until we get a
-	// RepresentationResolver in place to handle user input that is based
-	// on or affects the Representation.
-	public void setRepresentation(Representation _rep)
+	public int getId()
 	{
-		rep = _rep;
+		return id;
+	}
+	public void startListening()
+	{
+			serverListener = new ServerListenerThread();
+			serverListener.start();
 	}
 
 	public void send( Object _message )
@@ -137,23 +116,16 @@ public class ClientIO implements IO
 
 	private class ServerListenerThread extends Thread
 	{
-		private ObjectInputStream ois;
-		private World myWorld;
-
-		public ServerListenerThread(ObjectInputStream _ois, World _myWorld)
-		{
-			ois = _ois;
-			myWorld = _myWorld;
-		}
-		
 		public void run()
 		{
 			try
 			{
 				Object objectMessage;
 
+				System.out.println("Starting to listen...");
 				while( (objectMessage = ois.readObject()) != null)
 				{
+					System.out.println("Recieved message...");
 					resolver.parseOld(objectMessage);
 				}
 			}

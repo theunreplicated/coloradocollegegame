@@ -75,7 +75,7 @@
 			<inworld language="javascript">
 			<![CDATA[
 				myLogger.message("Resolver got Remove Element command for id " + subject.id() + "\n", false);
-				subject.next = subject.prev = null;
+				subject.removeFromList();
 			]]>
 			</inworld>
 			<inrepresentation language="javascript">
@@ -89,8 +89,17 @@
 			<inworld language="javascript">
 			<![CDATA[
 				// test stuff
+				if(argv[0].getClass() == GameElement)
+				{
+					returnVals.add(argv[0]);
+					myLogger.message("Received a GameElement to add!\n", false);
+				}
+				else
+				{
+					returnVals.add(argv);
+					myLogger.message("Received something with which to build a GameElement!\n", false);
+				}
 				status = Constants.ADD_ELEMENTS;
-				returnVals.add(argv);
 			]]>
 			</inworld>
 			<inrepresentation language="javascript">
@@ -186,7 +195,8 @@
 				var status = Constants.SUCCESS;
 				if(argv.length > 0)
 				{
-					actionsToSend.add("remove element", subject);
+					var a = myActions.get("remove element").get(0);
+					actionsToSend.add("remove element", a.getNouns());
 				}
 			]]>
 			</function>
@@ -197,7 +207,9 @@
 			<![CDATA[
 				if(argv[0] == true)
 				{
-					argv.shift();
+					argv[0] = argv[1];
+					argv[1] = false;
+					argv[0].attribute("write through", true);
 					actionsToSend.add("add element", argv);
 				}
 			]]>

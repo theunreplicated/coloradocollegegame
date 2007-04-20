@@ -11,7 +11,7 @@ public class RepresentationResolver
 		myLogger = _myLogger;
 		manager = new ScriptEngineManager();
 
-		// Add logger at global scope
+		// Add logger and representation at global scope
 		manager.put("myLogger", myLogger);
 		manager.put("representation", rep);
 	}

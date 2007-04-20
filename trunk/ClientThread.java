@@ -52,11 +52,11 @@ class ClientThread extends Thread {
 				}
 			}
 			ObjectInputStream ois = new ObjectInputStream(clientIn.getInputStream());
-			serve.sendWorld(row);
-
-
 			Object objectMessage;
+			objectMessage = ois.readObject(); // first, receive the new player's element
+			serve.sendWorld(row); // then send them the world
 
+			serve.propagate(objectMessage, row); // then add the element for everyone else
 
 			while( (objectMessage = ois.readObject()) != null )
 			{
@@ -78,10 +78,9 @@ class ClientThread extends Thread {
 		}
 		catch(Exception e)
 		{
-			myLogger.message("Error...\n", true);
+			myLogger.message("ClientThread: Other error for row " + row + ": " + e.getMessage() + "\n", true);
 		}
-		serve.propagate( new Object[]{ Constants.REMOVE_PLAYER, id } , row );
-		serve.removeThread( row );
+		serve.removeThread( row, id );
 	}
 
 	public void send( Object _message )

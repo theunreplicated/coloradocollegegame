@@ -112,6 +112,11 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		attributes.put(_key,_value);
 	}
 
+	public synchronized Object removeAttribute(String _key)
+	{
+		return attributes.remove(_key);
+	}
+
 
 	/************* 
 	 * Accessors *
