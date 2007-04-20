@@ -7,7 +7,9 @@ KML (keynote markup language) is the XML-type document tree that stores the coor
 
 The information that will be needed for creating an element/object from the KML files are found in the following locations: 
 
-please note that the style tags have not been implemented yet. 
+*UPDATE 4/20:* Style tags have now been implemented (at least partially). The style tags are found in the top level of the kml, and are referenced in the geometry using the styleUrl tag.
+
+For details, it's best to (try to) parse the code or to look at the kml reference at [http://earth.google.com/kml/kml_tags_21.html http://earth.google.com/kml/kml_tags_21.html]
 
 kml
 
