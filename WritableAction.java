@@ -5,16 +5,19 @@ public class WritableAction implements Serializable
 	static final long serialVersionUID = 5401610720963064538L;
 	private int id;
 	private IncrementedArray<Object> parameters;
-	private int[] nouns;
+	private int[] nouns = null;
 
 	public WritableAction(Action _action)
 	{
 		id = _action.getId();
 		GameElement[] _nouns = _action.getNouns();
-		nouns = new int[_nouns.length];
-		for(int i = _nouns.length-1; i >= 0; i--)
+		if(_nouns != null)
 		{
-			nouns[i] = _nouns[i].id();
+			nouns = new int[_nouns.length];
+			for(int i = _nouns.length-1; i >= 0; i--)
+			{
+				nouns[i] = _nouns[i].id();
+			}
 		}
 
 		IncrementedArray<Object> _parameters = _action.parameters();
@@ -24,7 +27,17 @@ public class WritableAction implements Serializable
 			Object o = _parameters.get(i);
 			if(o instanceof GameElement)
 			{
-				parameters.add(Constants.UNIQUE_GE_PREFIX + ((GameElement) o).id());
+				GameElement ge = (GameElement) o;
+				if(ge.attribute("write through") != null)
+				{
+					ge.removeAttribute("write through");
+					parameters.add(ge);
+				}
+				else
+				{
+					System.out.println("Adding " +Constants.UNIQUE_GE_PREFIX + ge.id());
+					parameters.add(Constants.UNIQUE_GE_PREFIX + ge.id());
+				}
 			}
 			else
 			{
@@ -37,10 +50,14 @@ public class WritableAction implements Serializable
 	public Action getAction(World w, ActionFactory af)
 	{
 		Action a = af.getAction(id);
-		GameElement[] _nouns = new GameElement[nouns.length];
-		for(int i = nouns.length-1; i >= 0; i--)
+		if(nouns != null)
 		{
-			_nouns[i] = w.getElementById(nouns[i]);
+			GameElement[] _nouns = new GameElement[nouns.length];
+			for(int i = nouns.length-1; i >= 0; i--)
+			{
+				_nouns[i] = w.getElementById(nouns[i]);
+			}
+			a.setNouns(_nouns);
 		}
 
 		IncrementedArray<Object> _parameters = new IncrementedArray<Object>(parameters.length);
@@ -52,13 +69,13 @@ public class WritableAction implements Serializable
 				if( ( (String) o).startsWith(Constants.UNIQUE_GE_PREFIX))
 				{
 					String id =((String) o).substring(Constants.UNIQUE_GE_PREFIX.length()); 
+					System.out.println("Getting " + id);
 					_parameters.add(w.getElementById(Integer.parseInt(id)));
 					continue;
 				}
 			}
 			_parameters.add(o);
 		}
-		a.setNouns(_nouns);
 		a.parameters(_parameters);
 		return a;
 	}

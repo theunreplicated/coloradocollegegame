@@ -17,12 +17,28 @@ public class Client
 		RepresentationResolver repResolver = new RepresentationResolver(_rep, myLogger);
 
 		w = new World(ef,myLogger);
-		Resolver r = new Resolver(w, rf, af, ef, repResolver, myLogger);
+		Resolver r = new Resolver(w, rf, af, ef, myLogger);
 		clientInput = new ClientInput(r,_rep,af,myLogger);
 
 		myIO = new ClientIO( clientInput , r, w , _server, _port, myLogger );
 		r.setIO(myIO);
-		myIO.setRepresentation(_rep);
+		w.setIO(myIO); //depracated
+		int id = myIO.getId();
+		Action a = af.getAction("add element");
+		GameElement ge = ef.getGameElement("R2");
+		ge.id(id);
+		ge.setPosition(new float[]{
+				Constants.INITIAL_X,
+				Constants.INITIAL_Y,
+				Constants.INITIAL_Z
+			});
+
+		a.parameters().add(true); // yes, we want to pass this to the server
+		a.parameters().add(ge);
+		r.parse(a);
+		myIO.startListening();
+		clientInput.setMe(ge);
+		r.setRepresentationResolver(repResolver);
 		_rep.initialize(w, clientInput, myLogger);
 	}
 

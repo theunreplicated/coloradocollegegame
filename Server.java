@@ -15,7 +15,8 @@ public class Server implements IO
 	private int[] ids = new int[Constants.MAX_CONNECTIONS];
 	private World myWorld;
 	private Resolver resolver;
-	public Logger myLogger;
+	private ActionFactory actionFactory;
+	private Logger myLogger;
 	
 	//an array of MovingElement references so we can start/stop them all at once.
 	//could change this later
@@ -29,9 +30,9 @@ public class Server implements IO
 		wf.fillWorld(myWorld);
 		myWorld.setIO(this);
 
-		ActionFactory af = new ActionFactory(myLogger);
-		RuleFactory rf = new RuleFactory(af,ef,myLogger);
-		resolver = new Resolver(myWorld, rf, af, ef, myLogger);
+		actionFactory = new ActionFactory(myLogger);
+		RuleFactory rf = new RuleFactory(actionFactory,ef,myLogger);
+		resolver = new Resolver(myWorld, rf, actionFactory, ef, myLogger);
 		resolver.setIO(this);
 
 		myLogger.message("\n" + myWorld.toString(), false);
@@ -103,12 +104,16 @@ public class Server implements IO
 		}
 	}
 	
-	public void removeThread( int _row )
+	public void removeThread( int _row, int _id )
 	{
+		Action a = actionFactory.getAction("remove element");
+		a.setNouns(new GameElement[]{myWorld.getElementById(_id)});
+		a.parameters().add("true");
 		synchronized(threads)
 		{
 			ids[_row] = -1;
 		}
+		resolver.parse(a);
 	}
 
 	public void send( Object _message)
@@ -149,7 +154,17 @@ public class Server implements IO
 	public void sendWorld(  int _row )
 	{
 		myLogger.message("Starting to send world to " + _row + "!\n",false);
-		threads[_row].send(new Object[]{ Constants.SEND_WORLD, myWorld.getElements() });
+		GameElement[] _elements = myWorld.getElements();
+		IncrementedArray<WritableAction> _actions = new IncrementedArray<WritableAction>(_elements.length);
+		Action a;
+		for(GameElement ge : _elements)
+		{
+			ge.attribute("write through", true);
+			a = actionFactory.getAction("add element");
+			a.parameters().add(ge);
+			_actions.add(new WritableAction(a));
+		}
+		threads[_row].send(_actions);
 		ids[_row] = _row + 1 + Constants.ELEMENT_ID_PADDING;
 		myLogger.message("finished sending world to " + _row + "!\n",false);
 	}

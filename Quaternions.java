@@ -10,6 +10,7 @@
        But don't worry, because it should be anyway (based on the game).
 ***/
 
+
 public class Quaternions
 {
 	public static final int X = 0; //for readable indexing

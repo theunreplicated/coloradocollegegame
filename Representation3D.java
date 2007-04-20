@@ -229,7 +229,7 @@ public class Representation3D extends Applet implements Representation
 				elementsToNodes.put(e,nbg); //make a conversion entry so we can find the branch later
 				scene.addChild(nbg.getBranchScene()); //add the branch to the scene
 			}
-		}			
+		}	
 	}
 
 	//an update method (for use with the notify() interface)
