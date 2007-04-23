@@ -24,7 +24,6 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 	//member variables - anything we'd want to change later (Element level)
 	private TransformGroup coord; //transformed coordinates for this branch
 	private BranchGroup broot; //the root of the branch.
-	//private Appearance appear; //an appearance node reference--doesn't mean anything at the moment
 
 	//constructor
 	public GameElementBranch(GameElement e)
@@ -45,10 +44,7 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		if(e.attribute("color") != null) //if a color is specified
 		{
 			int c = (Integer)e.attribute("color");
-			defaultColor = new float[] {	((c>>16)&0xff)/255f, 
-							((c>>8)&0xff)/255f, 
-							(c&0xff)/255f,
-							((c>>24)&0xff)/255f};
+			defaultColor = new float[] {((c>>16)&0xff)/255f, ((c>>8)&0xff)/255f, (c&0xff)/255f, ((c>>24)&0xff)/255f};
 		}
 		else
 			defaultColor = new float[] {0f,0f,1f,1f}; //blue and opaque for default
@@ -59,11 +55,7 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		//transparency
 		TransparencyAttributes elementTransparency;
 		if(e.attribute("transparency") != null)
-		{
-			elementTransparency = new TransparencyAttributes(
-							TransparencyAttributes.NICEST,
-							(Float)e.attribute("transparency"));
-		}
+			elementTransparency = new TransparencyAttributes(TransparencyAttributes.NICEST, (Float)e.attribute("transparency"));
 		else
 			elementTransparency = null;
 
@@ -112,7 +104,7 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 			}
 			else if(s instanceof VirtualKML)
 			{
-				//make the primitive
+				//make the "primitive"
 				p = createKMLShape((VirtualKML)s, shapeAppearance);
 			}
 
@@ -136,9 +128,8 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 	{
 		Appearance a = new Appearance();
 		Material mat = new Material(); //use defaults
-		a.setMaterial(mat);
-		a.setTransparencyAttributes(elementTransparency);
-
+ 		a.setMaterial(mat);
+				
 		//color
 		int c = s.getColor();
 		float[] shapeColor = new float[] {((c>>16)&0xff)/255f, ((c>>8)&0xff)/255f, (c&0xff)/255f, ((c>>24)&0xff)/255f};
@@ -148,6 +139,7 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 			(shapeColor[A]*shapeColor[R]) + (temp*defaultColor[R]),
 			(shapeColor[A]*shapeColor[G]) + (temp*defaultColor[G]),
 			(shapeColor[A]*shapeColor[B]) + (temp*defaultColor[B])); //alpha blending!
+		//mat.setSpecularColor(new Color3f(0.5f,0.5f,0.5f)); //try a grey specularity
 	
 		//texture
 		if(defaultTexture != null) //first assign an element texture (if possible)
@@ -176,6 +168,9 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 				System.out.println("Failed to load texture image: "+s.getTexture());
 			}
 		}		
+	
+		//transparency
+		a.setTransparencyAttributes(elementTransparency);
 
 		return a; //return the Appearance
 	}
@@ -202,13 +197,16 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 			st.stripify(gi); //convert to strips
 			
 			Appearance na = new Appearance();
-			na.setTransparencyAttributes(a.getTransparencyAttributes()); //copy any information we want to propagate
+
 			Material mat = new Material();
 			int c = g.getColor();
 			//NOTE: color decomposition is backwards for KML!! Don't copy the below line to other places!
 			float[] kmlColor = new float[] {(c&0xff)/255f, ((c>>8)&0xff)/255f, ((c>>16)&0xff)/255f, ((c>>24)&0xff)/255f};
 			mat.setDiffuseColor(kmlColor[R],kmlColor[G],kmlColor[B]);
+			mat.setSpecularColor(new Color3f(0.5f,0.5f,0.5f));
+
 			na.setMaterial(mat);
+			na.setTransparencyAttributes(a.getTransparencyAttributes()); //copy any information we want to propagate
 			
 			bg.addChild(new Shape3D(gi.getGeometryArray(),na)); //add a new shape
 		}
