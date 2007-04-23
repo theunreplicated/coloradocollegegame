@@ -72,19 +72,24 @@ public class Representation3D extends Applet implements Representation
 		simpleU.addBranchGraph(superRoot); //add the scene to the tree. THIS ALSO TELLS IT TO BEGIN RENDERING!
 	}
 		
-	//creates a "view" or camera based on the given element
-	//  this will probably need to be argument based depending on what kind of camera we want
-	//  Also, this MUST be called BEFORE createSceneGraph() (I could probably make it explicit, but it doesn't seem as nice)
-	public ViewElementBranch createCamera(GameElement e, BranchGroup vscene, int viewMode)
+	//creates an returns a "view" or camera based on the given element
+	private ViewElementBranch createCamera(GameElement e, BranchGroup vscene, int viewMode)
 	{
-		ViewElementBranch _veb = new ViewElementBranch(e,viewMode); //Create the camera (effectively)
-		elementsToNodes.put(e,_veb); //add it to the hashmap!
-		_veb.createAvatar(vscene); //create the Avatar (adding it to the scene)
+		ElementBranch geb = elementsToNodes.get(e);
+		if(geb != null) //check if we already added this element
+		{ 
+			elementsToNodes.remove(e); //remove the camera-less element
+			geb.detach(); //remove branch from the tree
+		}
+
+		ViewElementBranch _veb = new ViewElementBranch(e,vscene,viewMode); //create the camera (effectively)
+		elementsToNodes.put(e,_veb); //add the camera to the hashmap
+		//_veb.attachAvatar(vscene); //add the avatar to the scene
 		return _veb;
 	}
 
 	//create the bulk of the Java3D tree based on e, attaching it to gscene
-	public void createSceneGraph(GameElement e, BranchGroup gscene)
+	private void createSceneGraph(GameElement e, BranchGroup gscene)
 	{
 		GameElement first = e; //for looping
 		do
@@ -104,7 +109,7 @@ public class Representation3D extends Applet implements Representation
 	}
 	
 	//create and return a background for the world
-	public BranchGroup createBackground()
+	private BranchGroup createBackground()
 	{
 		BranchGroup root = new BranchGroup(); // a root node for the background
 		
@@ -118,7 +123,7 @@ public class Representation3D extends Applet implements Representation
 
 	//add default lighting to the BranchGroup
 	//currently light bounds are HUGE for testing
-	public void addDefaultLights(BranchGroup bg)
+	private void addDefaultLights(BranchGroup bg)
 	{
 		DirectionalLight keyLight = new DirectionalLight(true,
 			new Color3f(1.0f, 1.0f, 1.0f), 
@@ -139,13 +144,13 @@ public class Representation3D extends Applet implements Representation
 		bg.addChild(backLight);			
 	}
 
-	//cycles through the views
+	//cycles through the views - pass to the camera
 	public void changeView()
 	{
 		veb.changeView();
 	}
 	
-	//changes to the specified view
+	//changes to the specified view - pass to the camera
 	public void changeView(int to)
 	{
 		veb.changeView(to);
@@ -181,6 +186,7 @@ public class Representation3D extends Applet implements Representation
 		{
 			if(next == null) //check if it shouldn't
 			{
+				elementsToNodes.remove(e); //remove from the hash
 				bg.detach(); //remove branch from the tree
 			}
 		}
@@ -202,7 +208,7 @@ public class Representation3D extends Applet implements Representation
 	}
 
 	//creates a Representation-level grid to display as the ground. For testing mostly
-	public Shape3D createGrid()
+	private Shape3D createGrid()
 	{
 		int gridSize = 40; //half-dimension size
 		int entries = 4*((2*gridSize)+1);
