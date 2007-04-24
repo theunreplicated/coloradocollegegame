@@ -322,18 +322,20 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	}
 
 	//As above, but checks collisions while on a trajectory (or it will eventually).
-	public synchronized boolean isColliding(GameElement _element, float[] positionChange, float[] rotationChange)
+	public synchronized boolean isColliding(GameElement _element, float[] newPosition, float[] newRotation)
 	{
 		float[] tposition; //temporary position
 		float[] tfacing; //temporary facing
 		
-		if(positionChange != null)
-			tposition = VectorUtils.add(position,positionChange);
+		if(newPosition != null)
+			tposition = newPosition;
+		//	tposition = VectorUtils.add(position,positionChange);
 		else
 			tposition = position;
 			
-		if(rotationChange != null)
-			tfacing = Quaternions.mul(facing,rotationChange);
+		if(newRotation != null)
+			tfacing = newRotation;
+		//	tfacing = Quaternions.mul(facing,rotationChange);
 		else
 			tfacing = facing;
 

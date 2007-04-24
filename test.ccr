@@ -124,10 +124,15 @@
 				{
 					dvector = Quaternions.rotatePoint(dvector,subject.getFacing());
 				}
+				var vector = subject.copyPosition();
+				for(i = 0; i < dvector.length; i++)
+				{
+					vector[i] += dvector[i];
+				}
 				for(var i = 0; i < relevant.length; i++)
 				{
 					myLogger.message("Testing collisions for:" + relevant.get(i).id() + " and " + subject.id() + "\n", false);
-					if(subject.isColliding(relevant.get(i),dvector,null))
+					if(subject.isColliding(relevant.get(i),vector,null))
 					{
 						myLogger.message("Collision!" + relevant.get(i).id() + " " + subject.id() + "\n", false);
 						status = Constants.FAILED;
@@ -136,11 +141,6 @@
 				}
 				if(status == Constants.SUCCESS)
 				{
-					var vector = subject.copyPosition();
-					for(i = 0; i < dvector.length; i++)
-					{
-						vector[i] += dvector[i];
-					}
 					parameters[0] = vector;
 
 					actionsToSend.add("move to", a.getNouns(), parameters);
@@ -162,11 +162,12 @@
 				}
 				else
 				{
+					facing = Quaternions.mul(subject.getFacing(),q);
 
 					for(var i = 0; i < relevant.length; i++)
 					{
 						myLogger.message("Testing collisions for:" + relevant.get(i).id() + " and " + subject.id() + "\n", false);
-						if(subject.isColliding(relevant.get(i),null,q))
+						if(subject.isColliding(relevant.get(i),null,facing))
 						{
 							myLogger.message("Collision!" + relevant.get(i).id() + " " + subject.id() + "\n", false);
 							status = Constants.FAILED;
@@ -175,7 +176,6 @@
 					}
 					if(status == Constants.SUCCESS)
 					{
-						facing = Quaternions.mul(subject.getFacing(),q);
 
 						var a = myActions.get("rotate").get(0);
 						var parameters = new Array(1);

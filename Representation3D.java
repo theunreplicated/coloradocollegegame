@@ -105,7 +105,7 @@ public class Representation3D extends Applet implements Representation
 		} while(e != first);
 	
 		//Representation-level objects
-		gscene.addChild(createGrid());
+		gscene.addChild(createGrid(40)); //could automatically determine the size of the proper grid if we wanted
 	}
 	
 	//create and return a background for the world
@@ -144,6 +144,12 @@ public class Representation3D extends Applet implements Representation
 		bg.addChild(backLight);			
 	}
 
+	//fetches the canvas we're drawing this on
+	public Component getComponent()
+	{
+		return canvas3D;
+	}
+
 	//cycles through the views - pass to the camera
 	public void changeView()
 	{
@@ -156,10 +162,16 @@ public class Representation3D extends Applet implements Representation
 		veb.changeView(to);
 	}
 
-	//a method to move the camera independent of the avatar. Not sure what arguments it will take yet
-	public void moveCamera()
+	//CHANGES the position of the camera BY the specified translation and rotation
+	public void adjustCamera(float[] translation, float[] rotation)
 	{
-		
+		veb.transformCamera(translation, rotation);	
+	}
+
+	//SETS the position of the camera TO the specified translation and rotation
+	public void setCamera(float[] translation, float[] rotation)
+	{
+		veb.setCameraTransform(translation, rotation);
 	}
 
 	//an update method for updating a particular element's location
@@ -201,16 +213,23 @@ public class Representation3D extends Applet implements Representation
 		}	
 	}
 
-	//fetches the canvas we're drawing this on
-	public Component getComponent()
+	//returns the position of the camera
+	public float[] getCameraPosition()
 	{
-		return canvas3D;
+		Vector3f v = veb.getTranslation();
+		return new float[] {v.x,v.y,v.z};
 	}
 
-	//creates a Representation-level grid to display as the ground. For testing mostly
-	private Shape3D createGrid()
+	//returns the facing of the camera
+	public float[] getCameraFacing()
 	{
-		int gridSize = 40; //half-dimension size
+		Quat4f q = veb.getRotation();	
+		return new float[] {q.x,q.y,q.z,q.w};
+	}
+	
+	//creates a Representation-level grid to display as the ground. For testing mostly
+	private Shape3D createGrid(int gridSize)
+	{
 		int entries = 4*((2*gridSize)+1);
 		LineArray grid = new LineArray(entries, LineArray.COORDINATES | LineArray.COLOR_3);
 		
