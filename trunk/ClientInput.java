@@ -12,6 +12,7 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 							       //ctrl and alt modifier keys are pressed
 
 	private Representation rep = null;
+	
 	//for mouse movement - do what exactly?
 	private int mx = 0; //"old" position
 	private int my = 0;
@@ -53,32 +54,61 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 			
 			/*Position movement*/
 			case KeyEvent.VK_RIGHT:
-				a = actionFactory.getAction("move");
-				a.setNouns(new GameElement[]{me});
-				a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
-				a.parameters().add(Constants.VEC_POSX);
-				resolver.parse(a); 
+				if(modifiers[Constants.ALT_KEY])
+				{
+					rep.adjustCamera(Quaternions.rotatePoint(Constants.VEC_POSX,rep.getCameraFacing()), null);
+				}
+				else
+				{
+					a = actionFactory.getAction("move");
+					a.setNouns(new GameElement[]{me});
+					a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
+					a.parameters().add(Constants.VEC_POSX);
+					resolver.parse(a); 
+				}
 				break;
 			case KeyEvent.VK_LEFT:
-				a = actionFactory.getAction("move");
-				a.setNouns(new GameElement[]{me});
-				a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
-				a.parameters().add(Constants.VEC_NEGX);
-				resolver.parse(a); 
+				if(modifiers[Constants.ALT_KEY])
+				{
+					rep.adjustCamera(Quaternions.rotatePoint(Constants.VEC_NEGX,rep.getCameraFacing()), null);
+				}
+				else
+				{
+
+					a = actionFactory.getAction("move");
+					a.setNouns(new GameElement[]{me});
+					a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
+					a.parameters().add(Constants.VEC_NEGX);
+					resolver.parse(a); 
+				}
 				break;
 			case KeyEvent.VK_UP:
-				a = actionFactory.getAction("move");
-				a.setNouns(new GameElement[]{me});
-				a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
-				a.parameters().add(Constants.VEC_POSY);
-				resolver.parse(a); 
+				if(modifiers[Constants.ALT_KEY])
+				{
+					rep.adjustCamera(Quaternions.rotatePoint(Constants.VEC_POSY,rep.getCameraFacing()), null);
+				}
+				else
+				{
+					a = actionFactory.getAction("move");
+					a.setNouns(new GameElement[]{me});
+					a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
+					a.parameters().add(Constants.VEC_POSY);
+					resolver.parse(a); 
+				}
 				break;
 			case KeyEvent.VK_DOWN:
-				a = actionFactory.getAction("move");
-				a.setNouns(new GameElement[]{me});
-				a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
-				a.parameters().add(Constants.VEC_NEGY);
-				resolver.parse(a); 
+				if(modifiers[Constants.ALT_KEY])
+				{
+					rep.adjustCamera(Quaternions.rotatePoint(Constants.VEC_NEGY,rep.getCameraFacing()), null);
+				}
+				else
+				{
+					a = actionFactory.getAction("move");
+					a.setNouns(new GameElement[]{me});
+					a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
+					a.parameters().add(Constants.VEC_NEGY);
+					resolver.parse(a); 
+				}
 				break;
 			case KeyEvent.VK_PAGE_UP:
 				a = actionFactory.getAction("move");
@@ -191,13 +221,13 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 		switch(ke.getKeyCode())
 		{
 			case KeyEvent.VK_SHIFT:
-				modifiers[Constants.SHIFT_KEY] = true;
+				modifiers[Constants.SHIFT_KEY] = false;
 				break;
 			case KeyEvent.VK_ALT:
-				modifiers[Constants.ALT_KEY] = true;
+				modifiers[Constants.ALT_KEY] = false;
 				break;
 			case KeyEvent.VK_CONTROL:
-				modifiers[Constants.CTRL_KEY] = true;
+				modifiers[Constants.CTRL_KEY] = false;
 				break;
 			default:
 		}

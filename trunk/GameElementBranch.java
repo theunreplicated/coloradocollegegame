@@ -232,7 +232,7 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		Transform3D t = new Transform3D(); //a new Transform
 		coord.getTransform(t); //fill the transform with our current settings
 		Vector3f v = new Vector3f();
-		t.get(new Quat4f(), v);
+		t.get(v);
 		return v;	
 	}
 	
@@ -241,7 +241,7 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		Transform3D t = new Transform3D(); //a new Transform
 		coord.getTransform(t); //fill the transform with our current settings
 		Quat4f q = new Quat4f();
-		t.get(q, new Vector3f());
+		t.get(q);
 		return q;	
 	}
 
@@ -250,6 +250,12 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 	{
 		Transform3D t = new Transform3D(new Quat4f(f), new Vector3f(p), 1);
 		t.setScale(new Vector3d((double)s[0], (double)s[1], (double)s[2])); //set our current scale
+		coord.setTransform(t);
+	}
+
+	//sets the transform of this element to the specified Transform3D
+	public void setTransform(Transform3D t)
+	{
 		coord.setTransform(t);
 	}
 

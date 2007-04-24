@@ -119,6 +119,19 @@ public class Representation2D extends JPanel implements Representation
 	public void changeView(int to)
 	{}
 
+	//CHANGES the position of the camera BY the specified translation and rotation
+	public void adjustCamera(float[] translation, float[] rotation)
+	{}
+
+	//SETS the position of the camera TO the specified translation and rotation
+	public void setCamera(float[] translation, float[] rotation)
+	{}
+	
+	public float[] getCameraPosition()
+	{return null;}
+	
+	public float[] getCameraFacing()
+	{return null;}
 
 	public static void main(String args[])
 	{
