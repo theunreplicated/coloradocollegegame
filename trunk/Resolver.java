@@ -7,7 +7,6 @@ public class Resolver
 	private RepresentationResolver repResolver = null;
 	private ActionFactory actionFactory;
 	private ElementFactory elementFactory;
-	private HashMap<Integer,GameElement> elementsHash;
 	private ScriptEngineManager manager;
 	public World world;
 	private IO io;
@@ -19,7 +18,6 @@ public class Resolver
 		actionFactory = _af;
 		elementFactory = _ef;
 		rules = _rf.getRuleSet("");
-		elementsHash = _world.getElementsHash();
 		manager = new ScriptEngineManager();
 		world = _world;
 		myLogger = _myLogger;
@@ -41,49 +39,6 @@ public class Resolver
 	public void setIO(IO _io)
 	{
 		io = _io;
-	}
-
-	public int parseOld(Object _message)
-	{
-		if(_message instanceof IncrementedArray)
-		{
-			parse(_message);
-			return Constants.SUCCESS;
-		}
-		if(_message instanceof Action)
-		{
-			parse(_message);
-			return Constants.SUCCESS;
-		}
-
-		Object[] message = (Object[]) _message;
-
-		switch(((Integer) message[0]).intValue())
-		{
-			case Constants.MOVE_TO:
-				world.setPosition( message, 1);
-				break;
-			case Constants.ROTATE_TO:
-				world.setFacing( message, 1);
-				break;
-			case Constants.ATTRIBUTE:
-				world.setAttribute( message, 1);
-				break;
-			case Constants.ADD_PLAYER:
-				world.addElement( message, 1);
-				break;
-			case Constants.REMOVE_PLAYER:
-				world.removeElement( message, 1 );
-				myLogger.message("Removing player: " + message[1] + "\n", false);
-				break;
-			case Constants.SEND_WORLD:
-				world.addMultipleElements( message, 1);
-				break;
-			default:
-				myLogger.message("Received unparsable message: " + message[0] + "\n", true);
-		}
-
-		return Constants.SUCCESS; //eventually every action in the world will return an int for whether or not it was a valid action
 	}
 
 	@SuppressWarnings("unchecked")
@@ -284,21 +239,7 @@ public class Resolver
 							if(newElement.id() < Constants.ELEMENT_ID_PADDING+Constants.MAX_CONNECTIONS+1) //so that the avatars have different colors!
 								newElement.attribute("color",Constants.getColorByClientID(newElement.id()));
 
-							if(first == null)
-							{
-								first = newElement;
-								first.next = first.prev = first;
-								world.setFirstElement(first);
-							}
-							else
-							{
-								synchronized(first)
-								{
-									first.insertBefore(newElement);
-								}
-							}
-							myLogger.message("Putting element with id: " + newElement.id()+"\n",false);
-							elementsHash.put(newElement.id(),newElement);
+							world.addElement(newElement);
 						}
 					}
 				}

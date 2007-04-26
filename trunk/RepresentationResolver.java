@@ -14,6 +14,7 @@ public class RepresentationResolver
 		// Add logger and representation at global scope
 		manager.put("myLogger", myLogger);
 		manager.put("representation", rep);
+		manager.put("Quaternions", new Quaternions());
 	}
 
 	public void resolve(Action _action)

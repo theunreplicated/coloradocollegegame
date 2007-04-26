@@ -108,6 +108,23 @@
 			]]>
 			</inrepresentation>
 		</action>
+		<!-- Representation-only actions -->
+		<action>
+			<name>rotate camera</name>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				representation.adjustCamera(Quaternions.rotatePoint(argv[0],representation.getCameraFacing()), null);
+			]]>
+			</inrepresentation>
+		</action>
+		<action>
+			<name>change view</name>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				representation.changeView();
+			]]>
+			</inrepresentation>
+		</action>
 	</actions>
 	<rules>
 		<rule>
