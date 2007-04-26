@@ -2,7 +2,7 @@
 //@author Joel Ross
 
 import javax.media.j3d.BranchGroup;
-import javax.media.j3d.Appearance;
+//import javax.media.j3d.Appearance;//needed?
 
 /***
  An interface for J3D Representation versions of Elements (of all kinds... stuff, really).

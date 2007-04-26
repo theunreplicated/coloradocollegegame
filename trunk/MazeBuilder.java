@@ -11,7 +11,7 @@
  **/
  
 import java.util.*;
-import java.awt.*;
+//import java.awt.*;//needed?
 
 public class MazeBuilder
 {

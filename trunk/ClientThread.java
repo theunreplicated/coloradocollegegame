@@ -6,7 +6,7 @@ class ClientThread extends Thread {
 	private Socket clientOut;
 	private Socket clientIn;
 	private int id, row;
-	private boolean verbose;
+	//private boolean verbose;//needed?
 	private ObjectOutputStream oos;
 	private Logger myLogger;
 

@@ -2,7 +2,7 @@
 //@author Joel Ross
 
 import com.sun.j3d.utils.universe.*;
-import com.sun.j3d.utils.geometry.*;
+//import com.sun.j3d.utils.geometry.*;//needed?
 import javax.media.j3d.*;
 import javax.vecmath.*;
 
