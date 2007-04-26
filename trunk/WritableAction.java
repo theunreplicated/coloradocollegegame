@@ -35,7 +35,6 @@ public class WritableAction implements Serializable
 				}
 				else
 				{
-					System.out.println("Adding " +Constants.UNIQUE_GE_PREFIX + ge.id());
 					parameters.add(Constants.UNIQUE_GE_PREFIX + ge.id());
 				}
 			}

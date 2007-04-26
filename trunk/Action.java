@@ -1,8 +1,9 @@
 import java.util.*;
 import java.io.Serializable;
 
-public class Action
+public class Action implements Serializable
 {
+	static final long serialVersionUID = -8189706777622619530L;
 	private String name;
 	private int id;
 	private StringFunction worldFunction;

@@ -88,7 +88,6 @@
 			<name>add element</name>
 			<inworld language="javascript">
 			<![CDATA[
-				// test stuff
 				if(argv[0].getClass() == GameElement)
 				{
 					returnVals.add(argv[0]);
@@ -99,6 +98,21 @@
 					returnVals.add(argv);
 					myLogger.message("Received something with which to build a GameElement!\n", false);
 				}
+				status = Constants.ADD_ELEMENTS;
+			]]>
+			</inworld>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				representation.updatePresence(argv[0]);
+			]]>
+			</inrepresentation>
+		</action>
+		<action>
+			<name>receive world</name>
+			<inworld language="javascript">
+			<![CDATA[
+				for(var i = 0; i < argv.length; i++)
+				returnVals.add(argv[i]);
 				status = Constants.ADD_ELEMENTS;
 			]]>
 			</inworld>
