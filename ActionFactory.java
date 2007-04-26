@@ -48,7 +48,7 @@ public class ActionFactory
 			Element actions_list, action, name;
 			NodeList actions, worldNodeList, repNodeList;
 			StringFunction worldFunc, repFunc;
-			int i, j, k;
+			int i;
 			
 			for(File file : files)
 			{

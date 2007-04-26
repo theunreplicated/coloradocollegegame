@@ -1,5 +1,5 @@
-import java.awt.Color;
-import java.io.*;
+//import java.awt.Color;//needed?
+//import java.io.*;//needed?
 import org.w3c.dom.Element;
 
 public class Constants

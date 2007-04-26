@@ -312,7 +312,7 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		Transform3D xAxis = new Transform3D(); //another change in the coordinate system
 		xAxis.rotZ(Math.PI/4.0d); //make xAxis actually change the y-axis (the default) into the x-axis by rotating around the z-axis
 		Alpha rotationAlpha = new Alpha(-1, 6000); //create an Alpha (timer)
-		Alpha rotationAlpha2 = new Alpha(-1, 9000); //create a slower Alpha (timer)
+		//Alpha rotationAlpha2 = new Alpha(-1, 9000); //create a slower Alpha (timer)//needed?
 		//create rotation behaviors. Everytime Alpha fires, they rotate the given coordinate system around the give axis
 		RotationInterpolator rotator = new RotationInterpolator(rotationAlpha, spinx, yAxis, 0.0f, (float)Math.PI*2.0f);
 		RotationInterpolator rotator2 = new RotationInterpolator(rotationAlpha, spiny, xAxis, 0.0f, (float)Math.PI*2.0f);

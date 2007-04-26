@@ -1,9 +1,9 @@
-import java.util.*;
+//import java.util.*;//needed?
 import javax.script.*;
 public class Resolver
 {
 	private RuleSet rules;
-	private RuleFactory ruleFactory;
+	//private RuleFactory ruleFactory;//needed?
 	private RepresentationResolver repResolver = null;
 	private ActionFactory actionFactory;
 	private ElementFactory elementFactory;
@@ -14,7 +14,7 @@ public class Resolver
 
 	public Resolver(World _world, RuleFactory _rf, ActionFactory _af, ElementFactory _ef, Logger _myLogger)
 	{
-		ruleFactory = _rf;
+		//ruleFactory = _rf;//needed?
 		actionFactory = _af;
 		elementFactory = _ef;
 		rules = _rf.getRuleSet("");
@@ -208,7 +208,7 @@ public class Resolver
 					if(status == Constants.ADD_ELEMENTS)
 					{
 						GameElement newElement = null;
-						GameElement first = world.getFirstElement();
+						//GameElement first = world.getFirstElement();//needed?
 						for(i = 0; i < returnVals.length; i++)
 						{
 							Object _message = returnVals.get(i);

@@ -1,5 +1,5 @@
 import org.w3c.dom.*;
-import javax.xml.parsers.*;
+//import javax.xml.parsers.*;//needed?
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.io.Serializable;
@@ -108,6 +108,7 @@ public class VirtualKML extends VirtualShape //A shape built from a Google Sketc
 	//Allows us to specify color, and should hopefully clean up GameElementBranch a lot
 	public class KMLGeometryCollection implements Serializable
 	{
+		private static final long serialVersionUID = 6668838693851582639L;
 		//is there anything else we want to store? Other style stuff maybe?
 		private double[] points; //an array of doubles, every 3 entries of which are a point in the geometry
 		private int[] stripCounts; //an array of the number of points in each polygon.

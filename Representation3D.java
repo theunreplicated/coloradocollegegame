@@ -3,11 +3,10 @@
 
 import java.applet.Applet;
 import java.awt.*;
-import java.awt.event.*;
 import java.util.*;
-import com.sun.j3d.utils.applet.MainFrame;
+//import com.sun.j3d.utils.applet.MainFrame;//needed
 import com.sun.j3d.utils.universe.*;
-import com.sun.j3d.utils.geometry.*;
+//import com.sun.j3d.utils.geometry.*;//needed
 import javax.media.j3d.*;
 import javax.vecmath.*;
 
@@ -265,6 +264,6 @@ public class Representation3D extends Applet implements Representation
 
 		Client.initialize(args, me); //create a Client for the game
 		
-		Frame f = new MainFrame(me,300,300); //run the applet inside a Frame
+		//Frame f = new MainFrame(me,300,300); //run the applet inside a Frame //needed?
 	} 
 }
