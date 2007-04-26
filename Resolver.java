@@ -46,6 +46,9 @@ public class Resolver
 	{
 		if(!(_actions instanceof IncrementedArray))
 		{
+			if(_actions instanceof Action)
+				return new int[]{parse((Action) _actions)};
+
 			myLogger.message("Resolver parse received a bad message, ignoring: " + _actions + "\n", true);
 			return null;
 		}

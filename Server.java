@@ -39,7 +39,7 @@ public class Server implements IO
 		createMovingObjects(); //moved into it's own method for easy portability
 
 		for( int i = ids.length - 1; i >= 0; i-- )
-			ids[i] = -1;
+			ids[i] = Constants.CONNECTION_FREE;
 		ServerSocket serve = null;
 		Socket connection = null;
 
@@ -82,7 +82,7 @@ public class Server implements IO
 			int i;
 			for( i = ids.length - 1; i >= 0; i-- ) 
 			{
-				if( ids[i] < 0 )
+				if( ids[i] == Constants.CONNECTION_FREE )
 				{
 
 					/* For an explanation of ELEMENT_ID_PADDING and id strategies
@@ -92,6 +92,7 @@ public class Server implements IO
 					myLogger.message( "Creating client connection thread in row " + i + " (id is: " + ids[i] + ")\n", false );
 					threads[i] = new ClientThread(this, _conn, i + 1 + Constants.ELEMENT_ID_PADDING, i, myLogger);
 					threads[i].start();
+					ids[i] = Constants.CONNECTION_PENDING;
 					
 					return;
 				}
@@ -110,7 +111,7 @@ public class Server implements IO
 		a.parameters().add("true");
 		synchronized(threads)
 		{
-			ids[_row] = -1;
+			ids[_row] = Constants.CONNECTION_FREE;
 		}
 		resolver.parse(a);
 	}
@@ -154,16 +155,12 @@ public class Server implements IO
 	{
 		myLogger.message("Starting to send world to " + _row + "!\n",false);
 		GameElement[] _elements = myWorld.getElements();
-		IncrementedArray<WritableAction> _actions = new IncrementedArray<WritableAction>(_elements.length);
-		Action a;
+
+		Action a = actionFactory.getAction("receive world"); // tell the client to receive the world
 		for(GameElement ge : _elements)
-		{
-			ge.attribute("write through", true);
-			a = actionFactory.getAction("add element");
 			a.parameters().add(ge);
-			_actions.add(new WritableAction(a));
-		}
-		threads[_row].send(_actions);
+
+		threads[_row].send(a);
 		ids[_row] = _row + 1 + Constants.ELEMENT_ID_PADDING;
 		myLogger.message("finished sending world to " + _row + "!\n",false);
 	}

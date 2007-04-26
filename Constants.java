@@ -12,6 +12,8 @@ public class Constants
 	// server information
 	public static final int TIMEOUT = 3000; // maximum time for no communication: 3 seconds
 	public static final int MAX_CONNECTIONS = 8;
+	public static final short CONNECTION_FREE = -2;
+	public static final short CONNECTION_PENDING = -1;
 	public static final int ELEMENT_ID_PADDING = (int)Math.pow(10,(Constants.MAX_CONNECTIONS+"").length());
 	/* Element ids guaranteed to be unique and also to be able to
 	 * generate other unique ids easily. ELEMENT_ID_PADDING is:
