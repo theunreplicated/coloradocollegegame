@@ -28,7 +28,6 @@ public class Server implements IO
 		myLogger = _logger;
 		myWorld = new World(ef, myLogger);
 		wf.fillWorld(myWorld);
-		myWorld.setIO(this);
 
 		actionFactory = new ActionFactory(myLogger);
 		RuleFactory rf = new RuleFactory(actionFactory,ef,myLogger);
@@ -138,7 +137,7 @@ public class Server implements IO
 		synchronized(threads)
 		{
 			int i;
-			resolver.parseOld(_message);
+			resolver.parse(_message);
 			for( i = ids.length - 1; i >= 0; i-- ) 
 			{
 				if( ids[i] >= 0 && _row != i )
@@ -186,7 +185,7 @@ public class Server implements IO
 				if((Integer)e.attribute("moving")==1)
 				{
 					//create down-moving wall
-					movers.add(new MovingElement(myWorld,e, new Object[]{
+					movers.add(new MovingElement(resolver,actionFactory,e, new Object[]{
 						new Object[]{ Constants.MOVE_TO, new float[]{0.0f,0.0f,10.0f}},
 						new Object[]{ Constants.MOVE_TO, new float[]{0.0f,0.0f,-10.0f}}
 							},5000+rmod,myLogger)); 
@@ -194,7 +193,7 @@ public class Server implements IO
 				else if((Integer)e.attribute("moving")==2)
 				{
 					//create right-moving wall
-					movers.add(new MovingElement(myWorld,e, new Object[]{
+					movers.add(new MovingElement(resolver,actionFactory,e, new Object[]{
 						new Object[]{ Constants.MOVE_TO, new float[]{10.0f,0.0f,0.0f}},
 						new Object[]{ Constants.MOVE_TO, new float[]{-10.0f,0.0f,0.0f}}
 							},5000+rmod,myLogger)); 
@@ -211,7 +210,6 @@ public class Server implements IO
 		for(int i=0; i<movers.size(); i++)
 			movers.get(i).start();
 	}
-	
 
 	public static void main(String args[])
 	{

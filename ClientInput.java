@@ -11,7 +11,7 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 	private boolean[] modifiers = { false, false, false }; //indicate whether or not the shift,
 							       //ctrl and alt modifier keys are pressed
 
-	private Representation rep = null;
+	private RepresentationResolver repResolver = null;
 	
 	//for mouse movement - do what exactly?
 	private int mx = 0; //"old" position
@@ -19,10 +19,10 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 	private int dx = 0; //change in position
 	private int dy = 0;
 
-	public ClientInput(Resolver _resolver, Representation _rep, ActionFactory _actionFactory, Logger _myLogger)
+	public ClientInput(Resolver _resolver, RepresentationResolver _repResolver, ActionFactory _actionFactory, Logger _myLogger)
 	{
 		resolver = _resolver;
-		rep = _rep;
+		repResolver = _repResolver;
 		actionFactory = _actionFactory;
 		myLogger = _myLogger;
 	}
@@ -56,7 +56,10 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 			case KeyEvent.VK_RIGHT:
 				if(modifiers[Constants.ALT_KEY])
 				{
-					rep.adjustCamera(Quaternions.rotatePoint(Constants.VEC_POSX,rep.getCameraFacing()), null);
+					a = actionFactory.getAction("rotate camera");
+					a.parameters().add(Constants.VEC_POSX);
+					repResolver.resolve(a);
+					//rep.adjustCamera(Quaternions.rotatePoint(Constants.VEC_POSX,rep.getCameraFacing()), null);
 				}
 				else
 				{
@@ -70,7 +73,10 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 			case KeyEvent.VK_LEFT:
 				if(modifiers[Constants.ALT_KEY])
 				{
-					rep.adjustCamera(Quaternions.rotatePoint(Constants.VEC_NEGX,rep.getCameraFacing()), null);
+					a = actionFactory.getAction("rotate camera");
+					a.parameters().add(Constants.VEC_NEGX);
+					repResolver.resolve(a);
+					//rep.adjustCamera(Quaternions.rotatePoint(Constants.VEC_NEGX,rep.getCameraFacing()), null);
 				}
 				else
 				{
@@ -85,7 +91,10 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 			case KeyEvent.VK_UP:
 				if(modifiers[Constants.ALT_KEY])
 				{
-					rep.adjustCamera(Quaternions.rotatePoint(Constants.VEC_POSY,rep.getCameraFacing()), null);
+					a = actionFactory.getAction("rotate camera");
+					a.parameters().add(Constants.VEC_POSY);
+					repResolver.resolve(a);
+					//rep.adjustCamera(Quaternions.rotatePoint(Constants.VEC_POSY,rep.getCameraFacing()), null);
 				}
 				else
 				{
@@ -99,7 +108,10 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 			case KeyEvent.VK_DOWN:
 				if(modifiers[Constants.ALT_KEY])
 				{
-					rep.adjustCamera(Quaternions.rotatePoint(Constants.VEC_NEGY,rep.getCameraFacing()), null);
+					a = actionFactory.getAction("rotate camera");
+					a.parameters().add(Constants.VEC_NEGY);
+					repResolver.resolve(a);
+					//rep.adjustCamera(Quaternions.rotatePoint(Constants.VEC_NEGY,rep.getCameraFacing()), null);
 				}
 				else
 				{
@@ -207,7 +219,9 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 
 			/*Camera stuff*/
 			case KeyEvent.VK_V:
-				rep.changeView();
+				a = actionFactory.getAction("change view");
+				repResolver.resolve(a);
+				//rep.changeView();
 				break;
 
 			default:

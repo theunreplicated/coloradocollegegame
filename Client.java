@@ -18,11 +18,10 @@ public class Client
 
 		w = new World(ef,myLogger);
 		Resolver r = new Resolver(w, rf, af, ef, myLogger);
-		clientInput = new ClientInput(r,_rep,af,myLogger);
+		clientInput = new ClientInput(r,repResolver,af,myLogger);
 		
 		myIO = new ClientIO( r, _server, _port, myLogger );
 		r.setIO(myIO);
-		w.setIO(myIO); //depracated
 		int id = myIO.getId();
 		Action a = af.getAction("add element");
 		GameElement ge = ef.getGameElement("R2");
