@@ -3,10 +3,11 @@
 
 import java.applet.Applet;
 import java.awt.*;
+//import java.awt.event.*;//never used
 import java.util.*;
-//import com.sun.j3d.utils.applet.MainFrame;//needed
+//import com.sun.j3d.utils.applet.MainFrame;//never used
 import com.sun.j3d.utils.universe.*;
-//import com.sun.j3d.utils.geometry.*;//needed
+//import com.sun.j3d.utils.geometry.*;//never used
 import javax.media.j3d.*;
 import javax.vecmath.*;
 

@@ -1,4 +1,4 @@
-//import java.awt.event.*;//needed
+//import java.awt.event.*;//never used
 import java.net.*;
 import java.io.*;
 

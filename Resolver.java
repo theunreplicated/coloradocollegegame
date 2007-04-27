@@ -1,9 +1,9 @@
-//import java.util.*;//needed?
+//import java.util.*;//never used
 import javax.script.*;
 public class Resolver
 {
 	private RuleSet rules;
-	//private RuleFactory ruleFactory;//needed?
+	private RuleFactory ruleFactory;//never read locally
 	private RepresentationResolver repResolver = null;
 	private ActionFactory actionFactory;
 	private ElementFactory elementFactory;
@@ -14,7 +14,7 @@ public class Resolver
 
 	public Resolver(World _world, RuleFactory _rf, ActionFactory _af, ElementFactory _ef, Logger _myLogger)
 	{
-		//ruleFactory = _rf;//needed?
+		ruleFactory = _rf;
 		actionFactory = _af;
 		elementFactory = _ef;
 		rules = _rf.getRuleSet("");
