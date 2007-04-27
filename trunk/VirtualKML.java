@@ -1,5 +1,5 @@
 import org.w3c.dom.*;
-//import javax.xml.parsers.*;//needed?
+//import javax.xml.parsers.*;//never used
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.io.Serializable;

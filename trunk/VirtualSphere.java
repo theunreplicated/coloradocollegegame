@@ -1,5 +1,5 @@
 import org.w3c.dom.*;
-//import javax.xml.parsers.*;//needed?
+//import javax.xml.parsers.*;//never used
 
 public class VirtualSphere extends VirtualShape
 {

@@ -1,4 +1,4 @@
-//import java.util.*;//needed?
+//import java.util.*;//never used
 import java.io.File;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;

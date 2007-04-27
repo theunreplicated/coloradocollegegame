@@ -1,6 +1,6 @@
-//import javax.swing.*;//needed
+//import javax.swing.*;//never used
 import java.awt.event.*;
-//import java.awt.*;//needed
+//import java.awt.*;//never used
 
 public class ClientInput implements KeyListener, MouseListener, MouseMotionListener
 {
@@ -13,13 +13,11 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 
 	private RepresentationResolver repResolver = null;
 	
-	//for mouse movement - do what exactly? //needed?
-	/*
-	private int mx = 0; //"old" position
-	private int my = 0;
-	private int dx = 0; //change in position
-	private int dy = 0;
-	//*/
+	//for mouse movement - do what exactly?
+	private int mx = 0; //"old" position //never read locally
+	private int my = 0; //never read locally
+	private int dx = 0; //change in position //never read locally
+	private int dy = 0; //never read locally
 
 	public ClientInput(Resolver _resolver, RepresentationResolver _repResolver, ActionFactory _actionFactory, Logger _myLogger)
 	{

@@ -45,8 +45,8 @@ public class ElementFactory
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc;
-			Element element, name, shape, newAttribute, attributesElement;//"plural" needed?
-			NodeList elements, spheres, cylinders, boxes, cones, kmz, kmzUrls, boundsNodes, attributesNodes;//"facingNodes" needed?
+			Element element, name, plural, shape, newAttribute, attributesElement;//"plural" is never read
+			NodeList elements, spheres, cylinders, boxes, cones, kmz, kmzUrls, facingNodes, boundsNodes, attributesNodes;//"facingNodes" is never read
 			Node tmpNode;
 			VirtualShape[] shapes;
 			int i, j, k;
@@ -91,7 +91,7 @@ public class ElementFactory
 					}
 					
 					name = (Element) element.getElementsByTagName("name").item(0);
-					//plural = (Element) element.getElementsByTagName("plural").item(0);//needed?
+					plural = (Element) element.getElementsByTagName("plural").item(0);
 					shape = (Element) element.getElementsByTagName("shapes").item(0);
 					spheres = shape.getElementsByTagName("sphere");
 					cylinders = shape.getElementsByTagName("cylinder");

@@ -1,3 +1,4 @@
+//import java.util.Collection;//never used
 import java.util.HashMap;
 
 public class ActionsHashMap

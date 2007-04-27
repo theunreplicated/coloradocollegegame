@@ -355,6 +355,6 @@ public class Server implements IO
 			wf = new WorldFactory(worldFiles, ef, myLogger);
 		else
 			wf = new WorldFactory(dataDir, worldExt, ef, myLogger);
-		//Server s = new Server(wf, ef, myLogger , port);//needed?
+		Server s = new Server(wf, ef, myLogger , port);// "s" is never read
 	}
 }

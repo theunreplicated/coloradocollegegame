@@ -1,4 +1,4 @@
-//import javax.xml.parsers.*;//needed?
+//import javax.xml.parsers.*;//never used
 import org.w3c.dom.*;
 import java.io.Serializable;
 

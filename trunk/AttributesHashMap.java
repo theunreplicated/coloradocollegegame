@@ -28,7 +28,7 @@ public class AttributesHashMap extends HashMap<String, Object> implements Serial
 	private synchronized void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException
 	{
 		int size = in.readInt();
-		//Map.Entry<String,Object> entry;//needed?
+		Map.Entry<String,Object> entry;//"entry" is never read
 		String key;
 		Object value;
 		for(int i = size-1; i >= 0; i--)
