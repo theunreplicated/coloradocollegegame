@@ -3,11 +3,9 @@
 
 import java.applet.Applet;
 import java.awt.*;
-//import java.awt.event.*;//never used
 import java.util.*;
-//import com.sun.j3d.utils.applet.MainFrame;//never used
+import com.sun.j3d.utils.applet.MainFrame;
 import com.sun.j3d.utils.universe.*;
-//import com.sun.j3d.utils.geometry.*;//never used
 import javax.media.j3d.*;
 import javax.vecmath.*;
 
@@ -84,7 +82,6 @@ public class Representation3D extends Applet implements Representation
 
 		ViewElementBranch _veb = new ViewElementBranch(e,vscene,viewMode); //create the camera (effectively)
 		elementsToNodes.put(e,_veb); //add the camera to the hashmap
-		//_veb.attachAvatar(vscene); //add the avatar to the scene
 		return _veb;
 	}
 
@@ -216,15 +213,13 @@ public class Representation3D extends Applet implements Representation
 	//returns the position of the camera
 	public float[] getCameraPosition()
 	{
-		Vector3f v = veb.getTranslation();
-		return new float[] {v.x,v.y,v.z};
+		return veb.getTranslation();
 	}
 
 	//returns the facing of the camera
 	public float[] getCameraFacing()
 	{
-		Quat4f q = veb.getRotation();	
-		return new float[] {q.x,q.y,q.z,q.w};
+		return veb.getRotation();
 	}
 	
 	//creates a Representation-level grid to display as the ground. For testing mostly
@@ -257,6 +252,12 @@ public class Representation3D extends Applet implements Representation
 		return gridShape;
 	}
 
+	//a method for printing out J3D info
+	public String getJ3DInfo()
+	{
+		//fill this in. VirtualUniverse.getProperties() will tell us about OpenGL vs Direct3D, etc		
+		return "";
+	}
 
 	//this looks familiar...
 	public static void main(String[] args)
@@ -265,6 +266,6 @@ public class Representation3D extends Applet implements Representation
 
 		Client.initialize(args, me); //create a Client for the game
 		
-		//Frame f = new MainFrame(me,300,300); //run the applet inside a Frame //needed?
+		new MainFrame(me,300,300); //run the applet inside a Frame
 	} 
 }

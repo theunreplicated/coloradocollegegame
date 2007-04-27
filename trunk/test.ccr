@@ -122,15 +122,31 @@
 			]]>
 			</inrepresentation>
 		</action>
-		<!-- Representation-only actions -->
+
+	<!-- Representation-only actions -->
+		<action>
+			<name>move camera</name>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				var type = argv[0];
+				var dvector = argv[1];
+				if(type == Constants.MOVE_RELATIVE_TO_FACING)
+				{
+					dvector = Quaternions.rotatePoint(dvector,representation.getCameraFacing());
+				}
+				representation.adjustCamera(dvector,null);
+			]]>
+			</inrepresentation>
+		</action>
 		<action>
 			<name>rotate camera</name>
 			<inrepresentation language="javascript">
 			<![CDATA[
-				representation.adjustCamera(Quaternions.rotatePoint(argv[0],representation.getCameraFacing()), null);
+				representation.adjustCamera(null, argv[0]);
 			]]>
 			</inrepresentation>
-		</action>
+		</action>	
+
 		<action>
 			<name>change view</name>
 			<inrepresentation language="javascript">

@@ -1,5 +1,4 @@
 import org.w3c.dom.*;
-//import javax.xml.parsers.*;//never used
 
 public class VirtualCone extends VirtualShape
 {

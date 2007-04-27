@@ -1,6 +1,4 @@
-//import javax.swing.*;//never used
 import java.awt.event.*;
-//import java.awt.*;//never used
 
 public class ClientInput implements KeyListener, MouseListener, MouseMotionListener
 {
@@ -14,10 +12,10 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 	private RepresentationResolver repResolver = null;
 	
 	//for mouse movement - do what exactly?
-	private int mx = 0; //"old" position //never read locally
-	private int my = 0; //never read locally
-	private int dx = 0; //change in position //never read locally
-	private int dy = 0; //never read locally
+	private int mx = 0; //position of last event
+	private int my = 0; 
+	private int dx = 0; //position of new event
+	private int dy = 0; 
 
 	public ClientInput(Resolver _resolver, RepresentationResolver _repResolver, ActionFactory _actionFactory, Logger _myLogger)
 	{
@@ -56,10 +54,12 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 			case KeyEvent.VK_RIGHT:
 				if(modifiers[Constants.ALT_KEY])
 				{
+					//a = actionFactory.getAction("move camera");
+					//a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
+					//a.parameters().add(Constants.VEC_POSX);
 					a = actionFactory.getAction("rotate camera");
-					a.parameters().add(Constants.VEC_POSX);
+					a.parameters().add(Constants.QUAT_CLOY);
 					repResolver.resolve(a);
-					//rep.adjustCamera(Quaternions.rotatePoint(Constants.VEC_POSX,rep.getCameraFacing()), null);
 				}
 				else
 				{
@@ -73,10 +73,12 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 			case KeyEvent.VK_LEFT:
 				if(modifiers[Constants.ALT_KEY])
 				{
+					//a = actionFactory.getAction("move camera");
+					//a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
+					//a.parameters().add(Constants.VEC_NEGX);
 					a = actionFactory.getAction("rotate camera");
-					a.parameters().add(Constants.VEC_NEGX);
+					a.parameters().add(Constants.QUAT_CCLY);
 					repResolver.resolve(a);
-					//rep.adjustCamera(Quaternions.rotatePoint(Constants.VEC_NEGX,rep.getCameraFacing()), null);
 				}
 				else
 				{
@@ -91,10 +93,12 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 			case KeyEvent.VK_UP:
 				if(modifiers[Constants.ALT_KEY])
 				{
+					//a = actionFactory.getAction("move camera");
+					//a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
+					//a.parameters().add(Constants.VEC_POSY);
 					a = actionFactory.getAction("rotate camera");
-					a.parameters().add(Constants.VEC_POSY);
+					a.parameters().add(Constants.QUAT_CCLX);
 					repResolver.resolve(a);
-					//rep.adjustCamera(Quaternions.rotatePoint(Constants.VEC_POSY,rep.getCameraFacing()), null);
 				}
 				else
 				{
@@ -108,10 +112,12 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 			case KeyEvent.VK_DOWN:
 				if(modifiers[Constants.ALT_KEY])
 				{
+					//a = actionFactory.getAction("move camera");
+					//a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
+					//a.parameters().add(Constants.VEC_NEGY);
 					a = actionFactory.getAction("rotate camera");
-					a.parameters().add(Constants.VEC_NEGY);
+					a.parameters().add(Constants.QUAT_CCLY);
 					repResolver.resolve(a);
-					//rep.adjustCamera(Quaternions.rotatePoint(Constants.VEC_NEGY,rep.getCameraFacing()), null);
 				}
 				else
 				{
@@ -221,7 +227,6 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 			case KeyEvent.VK_V:
 				a = actionFactory.getAction("change view");
 				repResolver.resolve(a);
-				//rep.changeView();
 				break;
 
 			default:
@@ -249,7 +254,7 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 
 	public void keyTyped(KeyEvent ke){}
 	
-	public void mouseClicked(MouseEvent me)
+	public void mouseClicked(MouseEvent e)
 	{
 		myLogger.message("Mouse Clicked!\n", false);
 	}
@@ -257,11 +262,47 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 	//While mouseMotion would be awesome, I think it'll effectively spam the server.
 	//Maybe if we get it down to Representation-only (camera adjustments and stuff).
 	//Or if we had some kind of stop-timer on it so it doesn't go off as often--but even that could be nasty
-	public void mousePressed(MouseEvent me){}
-	public void mouseReleased(MouseEvent me){}
-	public void mouseDragged(MouseEvent me){}
+	public void mousePressed(MouseEvent e)
+	{
+		mx = e.getX();
+		my = e.getY();
+	}
+	
+	public void mouseReleased(MouseEvent e)
+	{
+		//do we need to reset these?
+		mx = 0;
+		my = 0;
+		dx = 0;
+		dy = 0;
+	}
+	
+	public void mouseDragged(MouseEvent e)
+	{
+		//System.out.println("mouseDragged!");
+		dx = e.getX();
+		dy = e.getY();
+		
+		//for calculating the quaternion
+		double ex = Math.toRadians((dy-my)/2)/2.0; //convert degrees to rotate to radians
+		double ey = Math.toRadians((dx-mx)/2)/2.0; 
+		double sx = Math.sin(ex);
+		double sy = Math.sin(ey);
+		double cx = Math.cos(ex);
+		double cy = Math.cos(ey);
+		float[] q = new float[] {(float)(sx*cy), (float)(cx*sy), (float)(-1*sx*sy), (float)(cx*cy)};
+		
+		Action a = actionFactory.getAction("rotate camera");
+		a.parameters().add(q);
+		//a.parameters().add( new float[] {(float)(sx*cy), (float)(cx*sy), (float)(-1*sx*sy), (float)(cx*cy)} );
+		repResolver.resolve(a);
 
-	public void mouseEntered(MouseEvent me){}
-	public void mouseExited(MouseEvent me){}
-	public void mouseMoved(MouseEvent me) {}
+		//prepare for the next event
+		mx = dx;
+		my = dy;
+	}
+
+	public void mouseEntered(MouseEvent e){}
+	public void mouseExited(MouseEvent e){}
+	public void mouseMoved(MouseEvent e) {}
 }

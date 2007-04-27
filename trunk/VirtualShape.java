@@ -1,5 +1,4 @@
 import org.w3c.dom.*;
-//import javax.xml.parsers.*;//never used
 import java.io.Serializable;
 
 public class VirtualShape implements Serializable
