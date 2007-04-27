@@ -2,7 +2,6 @@
 //@author Joel Ross
 
 import com.sun.j3d.utils.universe.*;
-//import com.sun.j3d.utils.geometry.*;//never used
 import javax.media.j3d.*;
 import javax.vecmath.*;
 
@@ -54,11 +53,16 @@ public class ViewElementBranch implements ElementBranch
 		else if(viewMode == INDEPENDENT_VIEW)
 		{
 			//start us where?
-			posi = new Transform3D(new Quat4f(Constants.DEFAULT_FACING), new Vector3f(0f,0f,5f), 1);
+			posi = new Transform3D(new Quat4f(Constants.DEFAULT_FACING), new Vector3f(OFFSET), 1);
+		}
+		else if(viewMode == FOLLOWING_VIEW)
+		{
+			//start us where?
+			posi = new Transform3D(new Quat4f(Constants.DEFAULT_FACING), new Vector3f(OFFSET), 1);
 		}
 		else
 		{
-			posi = new Transform3D(new Quat4f(Constants.DEFAULT_FACING), new Vector3f(0f,0f,5f), 1);
+			posi = new Transform3D(new Quat4f(Constants.DEFAULT_FACING), new Vector3f(OFFSET), 1);
 		}
 		coord.setTransform(posi); //set our transform group to the default position
 
@@ -89,7 +93,7 @@ public class ViewElementBranch implements ElementBranch
 
 			Transform3D t = new Transform3D(); //a new Transform
 			coord.getTransform(t); //fill the transform with our current settings
-			t.setTranslation(avatar.getTranslation()); //set to our avatar's translation
+			t.setTranslation(new Vector3f(avatar.getTranslation())); //set to our avatar's translation
 			coord.setTransform(t); //set as our new state
 		}
 		else if(to == OFFSET_VIEW)
@@ -100,11 +104,10 @@ public class ViewElementBranch implements ElementBranch
 
 			Transform3D t = new Transform3D(); //a new Transform
 			coord.getTransform(t); //fill the transform with our current settings
-			Vector3f pp = avatar.getTranslation(); //get the avatar's current translation
-			float[] f = new float[4];
-			avatar.getRotation().get(f); //get a float[] of the avatar's rotation
-			pp.add(new Vector3f(Quaternions.rotatePoint(OFFSET,f))); //add the spun offset to the translation
-			t.setTranslation(pp); //set the new translation
+			float[] p = avatar.getTranslation(); //get the avatar's current translation
+			float[] f = avatar.getRotation(); //get the avatar's current rotation
+			p = VectorUtils.add(p, Quaternions.rotatePoint(OFFSET,f));
+			t.setTranslation(new Vector3f(p)); //set the new translation
 			coord.setTransform(t); //set as our new state
 		}
 		else if(to == INDEPENDENT_VIEW)
@@ -119,12 +122,41 @@ public class ViewElementBranch implements ElementBranch
 
 				Vector3f trans = new Vector3f();
 				t.get(trans);
-				trans.add(new Vector3f(0,0,5f)); //offset the old translation some (so camera isn't inside the element)
+				trans.add(new Vector3f(OFFSET)); //offset the old translation some (so camera isn't inside the element)
 				
 				t.setTranslation(trans); //reset the translation
 				coord.setTransform(t); //set as our new state
 			}
 			//otherwise do nothing?
+		}
+		else if(to == FOLLOWING_VIEW)
+		{
+			viewMode = INDEPENDENT_VIEW;
+			if(!avatar.getBranchScene().isLive()) //if is NOT attached
+			{
+				attachAvatar();	//add the avatar			
+	
+				Transform3D t = new Transform3D(); //a new Transform
+				coord.getTransform(t); //fill the transform with our current settings
+
+				Vector3f trans = new Vector3f();
+				t.get(trans);
+				trans.add(new Vector3f(OFFSET)); //offset the old translation some (so camera isn't inside the element)
+				
+				t.setTranslation(trans); //reset the translation
+				coord.setTransform(t); //set as our new state
+			}
+			else
+			{
+				//move to offset	
+				Transform3D t = new Transform3D(); //a new Transform
+				coord.getTransform(t); //fill the transform with our current settings
+				float[] p = avatar.getTranslation(); //get the avatar's current translation
+				float[] f = avatar.getRotation(); //get the avatar's current rotation
+				p = VectorUtils.add(p, Quaternions.rotatePoint(OFFSET,f));
+				t.setTranslation(new Vector3f(p)); //set the new translation
+				coord.setTransform(t); //set as our new state
+			}
 		}
 		//add support for other views
 	}
@@ -176,6 +208,14 @@ public class ViewElementBranch implements ElementBranch
 		{
 			//do nothing. Camera is moved independently from the avatar
 		}
+		else if(viewMode == FOLLOWING_VIEW)
+		{
+			//fill this in!	
+		
+			//move with avatar for now. Later we'll probably want to try and move back towards center 
+						
+		}
+
 		
 		//now the least amount of time POSSIBLE between camera and avatar moves
 		if(t != null)
@@ -188,28 +228,73 @@ public class ViewElementBranch implements ElementBranch
 	//moves the camera by the specified amounts
 	public void transformCamera(float[] d, float[] q)
 	{
+		Transform3D t = new Transform3D(); //a new Transform
+		coord.getTransform(t); //fill the transform with our current settings
+
+		Quat4f rot = new Quat4f();
+		Vector3f trans = new Vector3f();
+
+		//fetch our old values
+		t.get(trans);
+		t.get(rot);
+		
+		System.out.println("rot(pre)="+rot);
+		if(Float.isNaN(rot.x))
+		{
+			System.out.println(t);
+		}
+
+	/*
+		rot(pre)=(NaN, NaN, NaN, NaN)
+		-1.0000362396240234, 0.0, -1.6123201930895448E-5, 0.0
+		0.0, 1.0, 0.0, 12.0
+		1.6123201930895448E-5, 0.0, -1.0000362396240234, 5.0
+		0.0, 0.0, 0.0, 1.0
+	*/
+
+
+	try{
+
 		if(viewMode == INDEPENDENT_VIEW)
 		{
-			Transform3D t = new Transform3D(); //a new Transform
-			coord.getTransform(t); //fill the transform with our current settings
-			
+
 			if(d != null)
 			{
-				Vector3f trans = new Vector3f();
-				t.get(trans);
 				trans.add(new Vector3f(d)); //move our translation by amount specified
-				t.setTranslation(trans);
 			}
+			
 			if(q != null)
 			{
-				Quat4f rot = new Quat4f();
-				t.get(rot);
 				rot.mul(new Quat4f(q)); //spin our rotation by amount specified
-				t.setRotation(rot);
 			}
 
+			t = new Transform3D(rot,trans,1);
+			t.normalize();
 			coord.setTransform(t);		
-		}			
+		System.out.println("rot(pos)="+rot);
+
+
+		}
+		else if(viewMode == FOLLOWING_VIEW)
+		{
+			//fill this in!	
+		
+			//move AROUND the avatar?
+		}
+
+	}
+	catch(Exception e)
+	{
+		System.out.println("Exception: "+e);
+		System.out.println("q= "+Quaternions.toString(q));
+		//System.out.println("rot="+rot);
+		System.out.println("transform="+t);
+		Vector3d s = new Vector3d();
+		t.getScale(s);
+		System.out.println("scale="+s);
+	}
+
+
 	}
 	
 	//sets the camera to the specified coordinates
@@ -220,24 +305,30 @@ public class ViewElementBranch implements ElementBranch
 			Transform3D t = new Transform3D(new Quat4f(q), new Vector3f(d), 1);
 			coord.setTransform(t);
 		}
+		else if(viewMode == FOLLOWING_VIEW)
+		{
+			//fill this in!	
+			
+			//set as above, but facing towards the avatar
+		}
 	}
 
-	public Vector3f getTranslation()
+	public float[] getTranslation()
 	{
 		Transform3D t = new Transform3D(); //a new Transform
 		coord.getTransform(t); //fill the transform with our current settings
 		Vector3f v = new Vector3f();
 		t.get(v);
-		return v;	
+		return new float[] {v.x, v.y, v.z};	
 	}
 	
-	public Quat4f getRotation()
+	public float[] getRotation()
 	{
 		Transform3D t = new Transform3D(); //a new Transform
 		coord.getTransform(t); //fill the transform with our current settings
 		Quat4f q = new Quat4f();
 		t.get(q);
-		return q;	
+		return new float[] {q.x, q.y, q.z, q.w};	
 	}
 
 	/**

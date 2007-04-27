@@ -11,10 +11,12 @@ public class RepresentationResolver
 		myLogger = _myLogger;
 		manager = new ScriptEngineManager();
 
-		// Add logger and representation at global scope
+		// Add logger and representation at global scope, plus static stuff
 		manager.put("myLogger", myLogger);
 		manager.put("representation", rep);
+		manager.put("Constants", new Constants());
 		manager.put("Quaternions", new Quaternions());
+		manager.put("VectorUtils", new VectorUtils());
 	}
 
 	public void resolve(Action _action)
@@ -53,6 +55,9 @@ public class RepresentationResolver
 		catch(ScriptException se)
 		{
 			myLogger.message("Script error: " + se.getMessage() + "\n",true);
+
+			System.out.println("error in RepResolver");
+			System.out.println(_action);
 		}
 	}
 }

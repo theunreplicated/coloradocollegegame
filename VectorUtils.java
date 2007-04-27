@@ -6,7 +6,6 @@
  I'm currently assuming 3-dimensional vectors for optimization.
 ***/
 
-
 public class VectorUtils
 {
 	public static final short X = 0; //for readable indexing (sometimes)

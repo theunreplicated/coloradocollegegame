@@ -227,22 +227,22 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 		broot.detach();
 	}
 
-	public Vector3f getTranslation()
+	public float[]  getTranslation()
 	{
 		Transform3D t = new Transform3D(); //a new Transform
 		coord.getTransform(t); //fill the transform with our current settings
 		Vector3f v = new Vector3f();
 		t.get(v);
-		return v;	
+		return new float[] {v.x, v.y, v.z};	
 	}
 	
-	public Quat4f getRotation()
+	public float[] getRotation()
 	{
 		Transform3D t = new Transform3D(); //a new Transform
 		coord.getTransform(t); //fill the transform with our current settings
 		Quat4f q = new Quat4f();
 		t.get(q);
-		return q;	
+		return new float[] {q.x, q.y, q.z, q.w};	
 	}
 
 	//sets the transform of this element to translation vector p and rotation Quaternion f and scale vector s

@@ -125,6 +125,24 @@ public class Quaternions
 			(float)(cx*cy*cz + sx*sy*sz)};
 	}
 
+	//returns a Quaternion from an array of Euler angles (XYZ order),
+	// taking in double precision angles to avoid casting elsewhere
+	public static float[] getQuatFromEuler(double[] e)
+	{
+		double sx = Math.sin(e[X]/2.0);
+		double sy = Math.sin(e[Y]/2.0);
+		double sz = Math.sin(e[Z]/2.0);
+		double cx = Math.cos(e[X]/2.0);
+		double cy = Math.cos(e[Y]/2.0);
+		double cz = Math.cos(e[Z]/2.0);
+		
+		return new float[] {
+			(float)(sx*cy*cz - cx*sy*sz),
+			(float)(cx*sy*cz - sx*cy*sz),
+ 			(float)(cx*cy*sz - sx*sy*cz),
+			(float)(cx*cy*cz + sx*sy*sz)};
+	}
+
 	//returns a rotation matrix from the given Quaternion
 	public static float[][] getMatrixFromQuat(float[] q)
 	{
