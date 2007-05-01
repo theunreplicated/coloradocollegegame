@@ -31,6 +31,12 @@ public class VectorUtils
 		return new float[] {v[X]-w[X], v[Y]-w[Y], v[Z]-w[Z]};
 	}
 
+	//returns the product of a vector and a scalar
+	public static float[] mul(float s, float[] v)
+	{
+		return new float[] {s*v[X], s*v[Y], s*v[Z]};
+	}
+
 	//returns the dot product of two 3D vectors
 	public static float dot(float[] v, float[] w)
 	{

@@ -221,7 +221,8 @@ public class Representation3D extends Applet implements Representation
 	{
 		return veb.getRotation();
 	}
-	
+
+//replace this with a texturemap or something. May help with speed issues some	
 	//creates a Representation-level grid to display as the ground. For testing mostly
 	private Shape3D createGrid(int gridSize)
 	{
