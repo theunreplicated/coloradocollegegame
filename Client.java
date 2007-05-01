@@ -37,8 +37,8 @@ public class Client
 		r.parse(a);
 		myIO.startListening();
 		clientInput.setMe(ge);
-		r.setRepresentationResolver(repResolver);
 		_rep.initialize(w, myLogger);
+		r.setRepresentationResolver(repResolver);
 
 		//set listeners for clientInput
 		Component comp = _rep.getComponent();
