@@ -373,7 +373,34 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 			return false;
 	}
 	
-	
+	//Returns how far along the given vector the element can move without colliding with the
+	// given element. Returns a number [0,1] where 0 is no movement and 1 is the entire vector.
+	// Thus a legal movement would be this scalar multiplied by the desired vector.
+	public synchronized float findMovableDistance(GameElement _element, float[] D)
+	{
+		float[] A = position;
+		float[] B = _element.getPosition();
+		float BRS2 = (boundingRadius+_element.getBoundingRadius())*(boundingRadius+_element.getBoundingRadius());
+
+	System.out.println("column= "+VectorUtils.toString(B));
+		/**check using BoundingSphere**/
+		//fill this in
+		
+		float a = (D[X]*D[X] + D[Y]*D[Y] + D[Z]*D[Z]);
+		float b2 = D[X]*(A[X]-B[Y]) + D[Y]*(A[Y]-B[Y]) + D[Z]*(A[Z]-B[Z]);
+		float c = A[X]*A[X] + A[Y]*A[Y] + A[Z]*A[Z] + B[X]*B[X] + B[Y]*B[Y] + B[Z]*B[Z] 
+			  - 2*(A[X]*B[X] + A[Y]*B[Y] + A[Z]*B[Z]) - BRS2;
+	System.out.println("b2= "+b2);	
+		
+		float v = (-1*b2 + (float)Math.sqrt((b2*b2)-(a*c)))/a;
+		float v2 = (-1*b2 - (float)Math.sqrt((b2*b2)-(a*c)))/a;
+
+		System.out.println("v="+v);
+		System.out.println("v2="+v2);
+		
+		return 0; //for now
+	}
+
 
 	//Returns an ArrayList containing String[] pairs of the names of shapes which intersect between the two elements
 	//-NOTE: This hasn't been tested yet. It should work, but I'm too lazy to check.

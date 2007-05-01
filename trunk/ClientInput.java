@@ -11,7 +11,7 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 
 	private RepresentationResolver repResolver = null;
 	
-	//for mouse movement - do what exactly?
+	//for mouse movement
 	private int mx = 0; //position of last event
 	private int my = 0; 
 	private int dx = 0; //position of new event

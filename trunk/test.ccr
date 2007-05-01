@@ -191,17 +191,17 @@
 				for(var i = 0; i < relevant.length; i++)
 				{
 					myLogger.message("Testing collisions for:" + relevant.get(i).id() + " and " + subject.id() + "\n", false);
-
+	subject.findMovableDistance(relevant.get(i),dvector);
 					if(subject.isColliding(relevant.get(i),vector,null))
 					{
 						myLogger.message("Collision!" + relevant.get(i).id() + " " + subject.id() + "\n", false);
-						var s_weight = subject.paramaters("weight");
-						var r_weight = relevant.get(i).parameters("weight");
-						if(r_weight > s_weight)
-						{
+						//var s_weight = subject.paramaters("weight");
+						//var r_weight = relevant.get(i).parameters("weight");
+						//if(r_weight > s_weight)
+						//{
 							status = Constants.FAILED;
 							break;
-						}
+						//}
 					}
 				}
 				if(status == Constants.SUCCESS)
