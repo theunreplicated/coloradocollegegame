@@ -139,6 +139,7 @@ public class Constants
 	public static final short DEFAULT_ACTION_LIST_SIZE = 20;
 	public static final short DEFAULT_RETURN_VALS_LENGTH = 5;
 	public static final short SENTENCE_LENGTH = 4;
+	public static final short SLEEP_TIME = 20;
 	
 	/* Depricated
 	public static byte[] toByteArray(Object _message)

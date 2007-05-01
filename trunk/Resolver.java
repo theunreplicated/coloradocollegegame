@@ -1,6 +1,6 @@
 //import java.util.*;//never used
 import javax.script.*;
-public class Resolver
+public class Resolver extends Thread
 {
 	private RuleSet rules;
 	private RuleFactory ruleFactory;//never read locally
@@ -11,6 +11,7 @@ public class Resolver
 	public World world;
 	private IO io;
 	private Logger myLogger;
+	private LinkedAction first = null;
 
 	public Resolver(World _world, RuleFactory _rf, ActionFactory _af, ElementFactory _ef, Logger _myLogger)
 	{
@@ -39,6 +40,29 @@ public class Resolver
 	public void setIO(IO _io)
 	{
 		io = _io;
+	}
+
+	public void run()
+	{
+		while(true)
+		{
+			if(first == null)
+			{
+				try
+				{
+					Thread.sleep(Constants.SLEEP_TIME);
+				}
+				catch(InterruptedException ie)
+				{
+					myLogger.message("Resolver interrupted. Quitting.\n", false);
+					return;
+				}
+			}
+			LinkedAction action = first;
+			first = first.next;
+			action.removeFromList();
+			parse(action.get());
+		}
 	}
 
 	@SuppressWarnings("unchecked")
