@@ -5,8 +5,10 @@
 			<inworld language="javascript">
 			<![CDATA[
 				var vector = argv[0];
+				var velocity = argv[1];
 				myLogger.message("Resolver got Move To command for id(" + subject.id() + "): " + vector[0] + " " + vector[1] + " " + vector[2] + "\n", false);
 				subject.setPosition(vector);
+				subject.attribute('velocity',velocity);
 			]]>
 			</inworld>
 			<inrepresentation language="javascript">
@@ -20,7 +22,68 @@
 			<inworld language="javascript">
 			<![CDATA[
 				var type = argv[0];
-				var dvector = argv[1];
+
+				var dvector = new Array(argv[1].length);
+				var velocity;
+				if( !subject.attribute('velocity') )
+				{
+					velocity = java.lang.reflect.Array.newInstance(java.lang.Double, dvector.length);
+					for(var i = 0; i < dvector.length; i++)
+					{
+						velocity[i] = 0;
+					}
+				}
+				else
+					velocity = subject.attribute('velocity');
+
+				for( var i = 0; i < dvector.length; i++)
+				{
+					if(argv[1][i] != 0)
+					{
+						if(argv[1][i] > 0)
+						{
+							if(velocity[i] >= 0)
+							{
+								velocity[i]++;
+							}
+							else
+							{
+								velocity[i] = 0;
+							}
+						}
+						else
+						{
+							if(velocity[i] <= 0)
+							{
+								velocity[i]--;
+							}
+							else
+							{
+								velocity[i] = 0;
+							}
+						}
+					}
+					else
+					{
+						velocity[i] = 0;
+					}
+				}
+
+				subject.attribute('velocity', velocity);
+
+				for( var i = 0; i < argv[1].length; i++ )
+				{
+					var vel = new Number(velocity[i]);
+					if(vel >= 0)
+					{
+						dvector[i] = (Math.log(vel+1));
+					}
+					else
+					{
+						dvector[i] = -1 * (Math.log(-1*vel+1));
+					}
+				}
+
 				if(type == Constants.MOVE_RELATIVE_TO_FACING)
 				{
 					dvector = Quaternions.rotatePoint(dvector,subject.getFacing());
@@ -47,6 +110,7 @@
 				var vector = argv[0];
 				myLogger.message("Resolver got Rotate To command for id(" + subject.id() + "): " + vector[0] + " " + vector[1] + " " + vector[2] + " " + vector[3] + "\n", false);
 				subject.setFacing(vector);
+				subject.removeAttribute('velocity');
 			]]>
 			</inworld>
 			<inrepresentation language="javascript">
@@ -62,6 +126,7 @@
 				var q = argv[0];
 				var facing = Quaternions.mul(subject.getFacing(),q);
 				subject.setFacing(facing);
+				subject.removeAttribute('velocity');
 			]]>
 			</inworld>
 			<inrepresentation language="javascript">
@@ -75,7 +140,8 @@
 			<inworld language="javascript">
 			<![CDATA[
 				myLogger.message("Resolver got Remove Element command for id " + subject.id() + "\n", false);
-				subject.removeFromList();
+				returnVals.add(subject);
+				status = Constants.REMOVE_ELEMENTS;
 			]]>
 			</inworld>
 			<inrepresentation language="javascript">
@@ -175,10 +241,69 @@
 			<![CDATA[
 				var status = Constants.SUCCESS;
 				var a = myActions.get("move").get(0);
-				var parameters = new Array(1);
+				var parameters = new Array(2);
 
 				var type = argv[0];
-				var dvector = argv[1];
+
+				var dvector = new Array(argv[1].length);
+				var velocity;
+				if( !subject.attribute('velocity') )
+				{
+					velocity = java.lang.reflect.Array.newInstance(java.lang.Double, dvector.length);
+					for(var i = 0; i < dvector.length; i++)
+					{
+						velocity[i] = 0;
+					}
+				}
+				else
+					velocity = subject.attribute('velocity');
+
+				for( var i = 0; i < dvector.length; i++)
+				{
+					if(argv[1][i] != 0)
+					{
+						if(argv[1][i] > 0)
+						{
+							if(velocity[i] > 0)
+							{
+								velocity[i]++;
+							}
+							else
+							{
+								velocity[i] = 0;
+							}
+						}
+						else
+						{
+							if(velocity[i] > 0)
+							{
+								velocity[i] = 0;
+							}
+							else
+							{
+								velocity[i]--;
+							}
+						}
+					}
+					else
+					{
+						velocity[i] = 0;
+					}
+				}
+
+				for( var i = 0; i < argv[1].length; i++ )
+				{
+					var vel = new Number(velocity[i]);
+					if(vel >= 0)
+					{
+						dvector[i] = (Math.log(vel+1));
+					}
+					else
+					{
+						dvector[i] = -1 * (Math.log(-1*vel+1));
+					}
+				}
+
 				if(type == Constants.MOVE_RELATIVE_TO_FACING)
 				{
 					dvector = Quaternions.rotatePoint(dvector,subject.getFacing());
@@ -190,23 +315,19 @@
 				}
 				for(var i = 0; i < relevant.length; i++)
 				{
-					myLogger.message("Testing collisions for:" + relevant.get(i).id() + " and " + subject.id() + "\n", false);
 	subject.findMovableDistance(relevant.get(i),dvector);
 					if(subject.isColliding(relevant.get(i),vector,null))
 					{
 						myLogger.message("Collision!" + relevant.get(i).id() + " " + subject.id() + "\n", false);
-						//var s_weight = subject.paramaters("weight");
-						//var r_weight = relevant.get(i).parameters("weight");
-						//if(r_weight > s_weight)
-						//{
-							status = Constants.FAILED;
-							break;
-						//}
+						subject.removeAttribute("velocity");
+						status = Constants.FAILED;
+						break;
 					}
 				}
 				if(status == Constants.SUCCESS)
 				{
 					parameters[0] = vector;
+					parameters[1] = velocity;
 
 					actionsToSend.add("move to", a.getNouns(), parameters);
 				}

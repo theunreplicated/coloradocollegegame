@@ -24,6 +24,9 @@
 				<scale>.1</scale>
 			</kmz>
 		</shapes>
+		<attributes>
+			<mass type="int">120</mass>
+		</attributes>
 	</element>
 
 	<element>
@@ -41,6 +44,9 @@
 				<scale>.1</scale>
 			</kmz>
 		</shapes>
+		<attributes>
+			<mass type="int">10</mass>
+		</attributes>
 	</element>
 
 	<element>
@@ -58,6 +64,9 @@
 				<scale>.1</scale>
 			</kmz>
 		</shapes>
+		<attributes>
+			<mass type="int">190</mass>
+		</attributes>
 	</element>
 
 </element_types>

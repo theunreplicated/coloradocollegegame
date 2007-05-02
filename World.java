@@ -86,4 +86,10 @@ public class World
 
 		return newElement;
 	}
+
+	public void removeElement(GameElement ge)
+	{
+		elements.remove(ge.id());
+		ge.removeFromList();
+	}
 }
