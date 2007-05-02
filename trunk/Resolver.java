@@ -234,7 +234,6 @@ public class Resolver extends Thread
 					if(status == Constants.ADD_ELEMENTS)
 					{
 						GameElement newElement = null;
-						//GameElement first = world.getFirstElement();//needed?
 						for(i = 0; i < returnVals.length; i++)
 						{
 							Object _message = returnVals.get(i);
@@ -269,6 +268,14 @@ public class Resolver extends Thread
 								newElement.attribute("color",Constants.getColorByClientID(newElement.id()));
 
 							world.addElement(newElement);
+						}
+					}
+					else if(status == Constants.REMOVE_ELEMENTS)
+					{
+						for(i = 0; i < returnVals.length; i++)
+						{
+							Object _message = returnVals.get(i);
+							world.removeElement((GameElement) _message);
 						}
 					}
 				}

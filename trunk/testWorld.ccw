@@ -4,7 +4,7 @@
 		<position>3</position>
 		<position>7.5</position>
 	</element>
-	<element type="big pillar">
+	<element type="ball">
 		<position>7.5</position>
 		<position>3</position>
 		<position>-7.5</position>

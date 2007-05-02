@@ -20,6 +20,9 @@
 				<radius>1</radius>
 			</sphere>
 		</shapes>
+		<attributes>
+			<mass type="int">2</mass>
+		</attributes>
 	</element>
 
 	<element>
@@ -70,6 +73,9 @@
 				<facing>0</facing>
 			</cone>
 		</shapes>
+		<attributes>
+			<mass type="int">4</mass>
+		</attributes>
 	</element>
 
 	<element>
@@ -130,6 +136,7 @@
 			<color type="hex32">ff0000ff</color>
 			<texture type="String">textures/smoke01.jpg</texture>	
 			<transparency type="float">0.3</transparency>
+			<mass type="int">100000000</mass>
 		</attributes>
 	</element>
 
@@ -181,6 +188,7 @@
 		<attributes>
 			<color type="hex32">ff646464</color>
 			<!--<texture type="String">textures/smoke01.jpg</texture>-->	
+			<mass type="int">100000000</mass>
 		</attributes>
 	</element>
 
@@ -202,6 +210,7 @@
 			<color type="hex32">ffffff00</color>
 			<texture type="String">textures/smoke01.jpg</texture>	
 			<transparency type="float">0.3</transparency>
+			<mass type="int">100000000</mass>
 		</attributes>
 	</element>
 
@@ -220,6 +229,9 @@
 				<scale>3</scale>
 			</kmz>
 		</shapes>
+		<attributes>
+			<mass type="int">100000000</mass>
+		</attributes>
 	</element>
 
 	<element>
@@ -260,6 +272,9 @@
 				<facing>90</facing>
 			</cylinder>
 		</shapes>
+		<attributes>
+			<mass type="int">12</mass>
+		</attributes>
 	</element>
 
 </element_types>

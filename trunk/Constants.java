@@ -6,6 +6,7 @@ public class Constants
 	public static final int ERROR = 1;
 	public static final int FAILED = 2;
 	public static final int ADD_ELEMENTS = 3;
+	public static final int REMOVE_ELEMENTS = 4;
 
 	// server information
 	public static final int TIMEOUT = 3000; // maximum time for no communication: 3 seconds
