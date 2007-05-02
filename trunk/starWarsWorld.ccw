@@ -1,0 +1,52 @@
+<!--
+This World is designed to show off a few of the different Star Wars elements
+imported from SketchUp, the big pillars have been removed to make finding the 
+fun Star Wars stuff easier. 
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Please Note showing this will eat memory so use the -Xmx<MemorySize>m to 
+increase the size of the memory. <MemorySize> is some integer greater than 
+64MB, reccomended 256MB+ to properly show off all the polygons without 
+crashing the JVM.
+
+By default this and sw.ccel will be commented out, minus R2 to prevent crashes. 
+-->
+
+<world>
+	<!--<element type="millenium falcon">
+		<position>10</position>
+		<position>3</position>
+		<position>10</position>
+	</element>-->
+	
+	<!--<element type="atst">
+		<position>-10</position>
+		<position>3</position>
+		<position>10</position>
+	</element>-->
+	
+	<!--<element type="atat">
+		<position>10</position>
+		<position>3</position>
+		<position>-10</position>
+	</element>-->
+	
+	<!--<element type="ywing">
+		<position>-10</position>
+		<position>3</position>
+		<position>-10</position>
+	</element>-->
+	
+	<!--<element type="xwing">
+		<position>-5</position>
+		<position>3</position>
+		<position>-5</position>
+	</element>-->
+	
+	<element type="R2">
+		<position>0</position>
+		<position>3</position>
+		<position>0</position>
+	</element>
+</world>
+
