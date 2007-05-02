@@ -9,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -18,8 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-
-import com.sun.j3d.utils.applet.MainFrame;
 
 /**
  * This class is designed to start either a Server or a Client with 
@@ -73,9 +71,7 @@ public class StartUp extends JPanel
 	String[] varsClient = {"-h","-v","-s","-p"};
 	String[] varsServer = {"-h","-v","-p","-dir","-eext",
 			"-wext","-efiles","-wfiles"};
-	String[] arguments = new String[12];
-	//Representation3D rep3d;
-	Server server; 
+	public String[] arguments = new String[15]; 
 	
 	public StartUp()
 	{
@@ -91,7 +87,7 @@ public class StartUp extends JPanel
 		JTabbedPane tabbedPane = new JTabbedPane();
         GridBagConstraints c = new GridBagConstraints();
 		
-		setPreferredSize(new Dimension(825,410));
+		setPreferredSize(new Dimension(625,330));
 		setBackground(Color.white);
 		setFocusable(true); //for keyboard focus
 		
@@ -425,49 +421,58 @@ public class StartUp extends JPanel
 	
 	public void actionPerformed(ActionEvent e) 
 	{
+		Runtime runtime = Runtime.getRuntime();
 		if (e.getSource()==clientBtn)
 		{
 			String inPortValC = String.valueOf(inPortC.getText());
 			String inServerValC = String.valueOf(inServerC.getText());
 			
+			arguments[0]="java";
+			arguments[1]="-Xmx256m";
+			arguments[2]="Representation3D";
+			
 			if (verboseC==true)
-				arguments[0]="-v";
+				arguments[3]="-v";
 			else if (verboseC==false)
-				arguments[0]="";
+				arguments[3]="";
 			
 			if (portC==true)
 			{
-				arguments[1]="-p";
-				arguments[2]=inPortValC;
+				arguments[4]="-p";
+				arguments[5]=inPortValC;
 			}
 			else if (portC==false)
 			{
-				arguments[1]="";
-				arguments[2]="";
+				arguments[4]="";
+				arguments[5]="";
 			}
 			
 			if (serverC==true)
 			{
-				arguments[2]="-s";
-				arguments[3]=inServerValC;
+				arguments[6]="-s";
+				arguments[7]=inServerValC;
 			}
 			else if (serverC==false)
 			{
-				arguments[2]="-s";
-				arguments[3]="localhost";
+				arguments[6]="-s";
+				arguments[7]="localhost";
 			}
 			
 			// empty arguments
-			arguments[4]="";
-			arguments[5]="";
-			arguments[6]="";
-			arguments[7]="";
 			arguments[8]="";
 			arguments[9]="";
 			arguments[10]="";
 			arguments[11]="";
+			arguments[12]="";
+			arguments[13]="";
+			arguments[14]="";
 			
-			startClient(arguments);
+			try {
+				runtime.exec(arguments);
+			} catch (IOException ioe) {
+				System.out.println("Cant start CLIENT. \n" +
+						"Error: "+ioe.getMessage());
+			}
 		}
 		else if (e.getSource()==serverBtn)
 		{
@@ -478,84 +483,93 @@ public class StartUp extends JPanel
 			String inEfilesValS = String.valueOf(efilesInS.getText());
 			String inWfilesValS = String.valueOf(wfilesInS.getText());
 			
+			arguments[0]="java";
+			arguments[1]="-Xmx256m";
+			arguments[2]="Server";
+			
 			if (verboseS==true)
-				arguments[0]="-v";
+				arguments[3]="-v";
 			else if (verboseS==false)
-				arguments[0]="";
+				arguments[3]="";
 			
 			if (portS==true)
 			{
-				arguments[1]="-p";
-				arguments[2]=inPortValS;
+				arguments[4]="-p";
+				arguments[5]=inPortValS;
 				System.out.println(inPortValS);
 			}
 			else if (portS==false)
 			{
-				arguments[1]="";
-				arguments[2]="";
+				arguments[4]="";
+				arguments[5]="";
 			}
 
 			if (dirS==true)
 			{
-				arguments[2]="-dir";
-				arguments[3]=inDirValS;
+				arguments[6]="-dir";
+				arguments[7]=inDirValS;
 				System.out.println(inDirValS);
 			}
 			else if (dirS==false)
-			{
-				arguments[2]="";
-				arguments[3]="";
-			}
-			
-			if (eextS==true)
-			{
-				arguments[4]="-eext";
-				arguments[5]=inEextValS;
-				System.out.println(inEextValS);
-			}
-			else if (eextS==false)
-			{
-				arguments[4]="";
-				arguments[5]="";
-			}
-			
-			if (wextS==true)
-			{
-				arguments[6]="-wext";
-				arguments[7]=inWextValS;
-				System.out.println(inWextValS);
-			}
-			else if (wextS==false)
 			{
 				arguments[6]="";
 				arguments[7]="";
 			}
 			
+			if (eextS==true)
+			{
+				arguments[7]="-eext";
+				arguments[8]=inEextValS;
+				System.out.println(inEextValS);
+			}
+			else if (eextS==false)
+			{
+				arguments[7]="";
+				arguments[8]="";
+			}
+			
+			if (wextS==true)
+			{
+				arguments[9]="-wext";
+				arguments[10]=inWextValS;
+				System.out.println(inWextValS);
+			}
+			else if (wextS==false)
+			{
+				arguments[9]="";
+				arguments[10]="";
+			}
+			
 			if (efilesS==true)
 			{
-				arguments[8]="-efiles";
-				arguments[9]=inEfilesValS;
+				arguments[11]="-efiles";
+				arguments[12]=inEfilesValS;
 				System.out.println(inEfilesValS);
 			}
 			else if (efilesS==false)
 			{
-				arguments[8]="";
-				arguments[9]="";
+				arguments[11]="";
+				arguments[12]="";
 			}
 			
 			if (wfilesS==true)
 			{
-				arguments[10]="-wfiles";
-				arguments[11]=inWfilesValS;
+				arguments[13]="-wfiles";
+				arguments[14]=inWfilesValS;
 				System.out.println(inWfilesValS);
 			}
 			else if (wfilesS==false)
 			{
-				arguments[10]="";
-				arguments[11]="";
+				arguments[13]="";
+				arguments[14]="";
 			}
 			
-			startServer(arguments);
+			try {
+				runtime.exec(arguments);
+			} catch (IOException ioe) {
+				System.out.println("Cant start CLIENT. \n" +
+						"Error: "+ioe.getMessage());
+			}
 		}
 		else 
 			System.out.println("NOT A VALID BUTTON COMMAND");
@@ -616,178 +630,6 @@ public class StartUp extends JPanel
 	        	wfilesS = false;
         }
 	} // item state changed
-
-	public static void startServer(String[] args)
-	{
-		/**
-		 * I COPIED THIS CODE DIRECTLY FROM Server.Main(String[] args)
-		 */
-		// Take user input.
-		// Options:
-		//  -p <port> 
-		//  -verbose
-		//  -dir <datadir>
-		//  -eext <elementext>
-		//  -wext <worldext>
-		//  -wfiles <worldfile> [worldfile [worldfile [...]]]
-		//  -efiles <elementfile> [elementfile [elementfile [...]]]
-		int port = Constants.DEF_PORT;
-		boolean verbose = false;
-		File dataDir = new File(Constants.DEFAULT_DATA_DIR);
-		String elementExt = Constants.ELEMENT_LIST_EXTENSION;
-		String worldExt = Constants.WORLD_EXTENSION;
-		File[] worldFiles = null;
-		File[] elementFiles = null;
-		for(int i=0; i < args.length; i++)
-		{
-			if(args[i].equalsIgnoreCase("-v"))
-			{
-				verbose = true;
-				continue;
-			}
-			if(args[i].equalsIgnoreCase("-dir"))
-			{
-				if(args.length == i)
-				{
-					System.err.println("Bad usage of -dir option. Syntax: -dir <directory>");
-					System.exit(1);
-				}
-				dataDir = new File(args[++i]);
-				continue;
-			}
-			if(args[i].equalsIgnoreCase("-eext"))
-			{
-				if(args.length == i)
-				{
-					System.err.println("Bad usage of -eext option. Syntax: -eext <element file ext>");
-					System.exit(1);
-				}
-				elementExt = args[++i];
-				continue;
-			}
-			if(args[i].equalsIgnoreCase("-wext"))
-			{
-				if(args.length == i)
-				{
-					System.err.println("Bad usage of -wext option. Syntax: -wext <world file ext>");
-					System.exit(1);
-				}
-				worldExt = args[++i];
-				continue;
-			}
-			if(args[i].equalsIgnoreCase("-wfiles"))
-			{
-				if(args.length == i)
-				{
-					System.err.println(
-	"Bad usage of -wfiles option. Syntax: -wfiles <world file> [world file [world file [...]]]");
-					System.exit(1);
-				}
-				File[] tmpFiles = new File[args.length];
-
-				// We assume that there will be at least _one_ file.
-				tmpFiles[0] = new File(args[i+1]);
-				int j = 1;
-				while(args.length > i+j+1 && !args[i+j+1].startsWith("-"))
-				{
-					tmpFiles[j] = new File(args[i+j+1]);
-					j++;
-				}
-				worldFiles = new File[j];
-				System.arraycopy(tmpFiles,0,worldFiles,0,j);
-				i+=j;
-				continue;
-			}
-			if(args[i].equalsIgnoreCase("-efiles"))
-			{
-				if(args.length == i)
-				{
-					System.err.println(
-	"Bad usage of -efiles option. Syntax: -efiles <element file> [element file [element file [...]]]");
-					System.exit(1);
-				}
-				File[] tmpFiles = new File[args.length];
-
-				// We assume that there will be at least _one_ file.
-				tmpFiles[0] = new File(args[i+1]);
-				int j = 1;
-				while(args.length > i+j+1 && !args[i+j+1].startsWith("-"))
-				{
-					tmpFiles[j] = new File(args[i+j+1]);
-					j++;
-				}
-				elementFiles = new File[j];
-				System.arraycopy(tmpFiles,0,elementFiles,0,j);
-				i+=j;
-				continue;
-			}
-			if(args[i].equalsIgnoreCase("-p"))
-			{
-				if(args.length == i)
-				{
-					System.err.println("Bad usage of -p option. Syntax: -p <port>");
-					System.exit(1);
-				}
-				try
-				{
-					port = Integer.parseInt(args[++i]);
-					if(port > Constants.MAX_PORT || port < Constants.MIN_PORT)
-						port = Constants.DEF_PORT;
-				}
-				catch(NumberFormatException nfe)
-				{
-					port = Constants.DEF_PORT;
-				}
-				continue;
-			}
-			if(args[i].equalsIgnoreCase("-help") || args[i].equalsIgnoreCase("-h"))
-			{
-				System.out.println("Syntax: java Server [options]");
-				System.out.println("Options:");
-				System.out.println(" -h\t\tPrint this help screen");
-				System.out.println(" -v\t\tRun in verbose mode");
-				System.out.println(" -p <port>\tRun on port # <port>");
-				System.out.println(" -dir <dir>\tLook for data files in directory <dir>");
-				System.out.println(
-		" -eext <ext>\tLook in data dir for Element List files that have extension <ext>");
-				System.out.println(
-		" -wext <ext>\tLook in data dir for World files that have extension <ext>");
-				System.out.println(
-		" -efiles <file> [file [file [...]]]\tOnly look for elements in the files specified");
-				System.out.println(
-		" -wfiles <file> [file [file [...]]]\tBuild the world only out of the files specified");
-				System.exit(0);
-			}
-			System.err.println("Bad argument (ignoring): " + args[i]);
-		}
-
-		Logger myLogger = new Logger( verbose);
-		ElementFactory ef;
-		WorldFactory wf;
-		if(elementFiles != null)
-			ef = new ElementFactory(elementFiles, myLogger);
-		else
-			ef = new ElementFactory(dataDir, elementExt, myLogger);
-
-		if(worldFiles != null)
-			wf = new WorldFactory(worldFiles, ef, myLogger);
-		else
-			wf = new WorldFactory(dataDir, worldExt, ef, myLogger);
-		//Server s = new Server(wf, ef, myLogger , port);// "s" is never read
-		new Server(wf, ef, myLogger , port);
-	} // Start Server
-	
-	public static void startClient(String[] args)
-	{
-		/**
-		 * COPIED FROM Representation3D.main(String[] args)
-		 */
-		Representation3D me = new Representation3D(ViewElementBranch.OFFSET_VIEW);
-
-		Client.initialize(args, me); //create a Client for the game
-		
-		new MainFrame(me,300,300); //run the applet inside a Frame
-	} // Sart Client
 	
 	public static void main(String[] args) 
 	{

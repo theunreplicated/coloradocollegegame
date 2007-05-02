@@ -69,4 +69,64 @@
 		</attributes>
 	</element>
 
+	<!--<element>
+		<name>atst</name>
+		<plural>Oh Noes!!</plural>
+		<shapes>
+			<kmz>
+				<name>kmz model</name>
+				<url>kmz/atst.kmz</url>
+				<facing>-90</facing>
+				<facing>0</facing>
+				<facing>0</facing>
+				<scale>.5</scale>
+				<scale>.5</scale>
+				<scale>.5</scale>
+			</kmz>
+		</shapes>
+		<attributes>
+			<mass type="int">120</mass>
+		</attributes>
+	</element>-->
+
+	<!--<element>
+		<name>atat</name>
+		<plural>Oh Noes!!</plural>
+		<shapes>
+			<kmz>
+				<name>kmz model</name>
+				<url>kmz/atat.kmz</url>
+				<facing>-90</facing>
+				<facing>0</facing>
+				<facing>0</facing>
+				<scale>.1</scale>
+				<scale>.1</scale>
+				<scale>.1</scale>
+			</kmz>
+		</shapes>
+		<attributes>
+			<mass type="int">230</mass>
+		</attributes>
+	</element>-->
+
+	<!--<element>
+		<name>ywing</name>
+		<plural>ywings</plural>
+		<shapes>
+			<kmz>
+				<name>kmz model</name>
+				<url>kmz/ywing.kmz</url>
+				<facing>-90</facing>
+				<facing>0</facing>
+				<facing>0</facing>
+				<scale>.1</scale>
+				<scale>.1</scale>
+				<scale>.1</scale>
+			</kmz>
+		</shapes>
+		<attributes>
+			<mass type="int">130</mass>
+		</attributes>
+	</element>-->
+
 </element_types>
