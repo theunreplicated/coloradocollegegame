@@ -236,7 +236,7 @@ public class VectorUtils
 //	hash that value and a flag for that axis to change
 
 		float[] vs = new float[30]; //stores the different v values
-		float[] cs = new float[30]; //stores the change flags at the corresponding index
+		int[] cs = new int[30]; //stores the change flags at the corresponding index
 
 		float t;
 		float v;
@@ -506,26 +506,26 @@ public class VectorUtils
 //	if ==0, then we have no separating axis and we collided. Set as v (if less than 1) and return.
 		int curState = initialState;
 		System.out.println(Integer.toBinaryString(curState));
-		for(int i=0; i<entriesCount; i++)
+		for(int j=0; j<entriesCount; j++)
 		{
-			System.out.println(vs[i]);
-			curState ^= cs[i];
+			System.out.println(vs[j]);
+			curState ^= cs[j];
 			System.out.println(Integer.toBinaryString(curState));
 			if(curState == 0)
 			{
-				v = vs[i]
+				v = vs[j];
 				//check if we have other changes on this time stamp
-				i++;
-				while(vs[i] = v)
+				j++;
+				while(vs[j] == v)
 				{
-					curState ^ cs[i]
-					i++;
+					curState ^= cs[j];
+					j++;
 				}
 				if(curState == 0)
 					//return Math.min(v,1); //is necessary?
 					return v;
 				else
-					i--; //counter the end of loop increment
+					j--; //counter the end of loop increment
 			}
 		}	
 
