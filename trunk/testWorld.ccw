@@ -1,5 +1,20 @@
 <world>
-	<element type="big pillar">
+	<!--<element type="grid">
+		<position>0</position>
+		<position>-3</position>
+		<position>0</position>
+		<scale>40</scale>
+		<scale>1</scale>
+   		<scale>40</scale>
+	</element>-->
+
+	<element type="ball">
+		<position>0</position>
+		<position>0</position>
+		<position>0</position>
+	</element>
+
+<!--	<element type="big pillar">
 		<position>7.5</position>
 		<position>3</position>
 		<position>7.5</position>
@@ -8,26 +23,18 @@
 		<position>7.5</position>
 		<position>3</position>
 		<position>-7.5</position>
-		<attributes>
-			<friendly type="String">yes</friendly>
-		</attributes>
 	</element>
 	<element type="big pillar">
 		<position>-7.5</position>
 		<position>3</position>
 		<position>7.5</position>
-		<attributes>
-			<friendly type="String">yes</friendly>
-		</attributes>
 	</element>
 	<element type="big pillar">
 		<position>-7.5</position>
 		<position>3</position>
 		<position>-7.5</position>
-		<attributes>
-			<friendly type="String">yes</friendly>
-		</attributes>
-	</element>
+	</element>-->
+
 
 	<!--<element type="millenium falcon">
 		<position>0</position>

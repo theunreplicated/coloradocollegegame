@@ -235,6 +235,28 @@
 	</element>
 
 	<element>
+		<name>grid</name>
+		<plural>grids</plural>
+		<shapes>
+			<box>
+				<name>wall</name>
+				<position>0</position>
+				<position>0</position>
+				<position>0</position>
+				<dimension>1</dimension>
+				<dimension>.00000001</dimension>
+				<dimension>1</dimension>				
+			</box>
+		</shapes>
+		<attributes>
+			<texture type="String">textures/grid.gif</texture>	
+			<color type="hex32">ff000000</color>
+			<mass type="int">100000000</mass>
+		</attributes>
+	
+	</element>
+
+	<element>
 		<name>glasses</name>
 		<plural>pairs of glasses</plural>
 		<shapes>

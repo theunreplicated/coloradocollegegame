@@ -34,7 +34,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		shapes = _shapes;
 		boundingBox = _boundingBox;
 		boundingRadius = VectorUtils.getContainingSphere(boundingBox);
-		relevancy = 2*boundingRadius; //for now
+		relevancy = 10*boundingRadius; //for now
 		
 		attributes = _attributes;
 		/*initialize is depracated */
@@ -53,7 +53,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		System.arraycopy(original.shapes,0,shapes,0,original.shapes.length);
 		System.arraycopy(original.boundingBox,0,boundingBox,0,original.boundingBox.length);
 		boundingRadius = VectorUtils.getContainingSphere(boundingBox);
-		relevancy = 2*boundingRadius; //for now
+		relevancy = 10*boundingRadius; //for now
 		if(original.attributes != null)
 			attributes = (AttributesHashMap) original.attributes.clone();
 		typeId = original.typeId;
@@ -216,7 +216,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	//changes position by a vector
 	public synchronized void nudge( float[] delta )
 	{
-		float[] tmp = new float[position.length];
+		float[] tmp = new float[position.length]; //why are we using a temp variable here? Is this method even called?
 		for( int i = 0 ; i < position.length; i++ )
 			tmp[i] = position[i]+delta[i];
 		position = tmp;
@@ -262,7 +262,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		for( int i = 0 ; i < boundingBox.length; i++ )
 			boundingBox[i] *= delta[i];
 		boundingRadius = VectorUtils.getContainingSphere(boundingBox);
-		relevancy = 2*boundingRadius; //for now
+		relevancy = 10*boundingRadius; //for now
 	}
 
 	//sets the boundingBox, for scaling (not sure if this is used or not)
@@ -270,7 +270,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	{
 		boundingBox = bb;
 		boundingRadius = VectorUtils.getContainingSphere(boundingBox);
-		relevancy = 2*boundingRadius; //for now
+		relevancy = 10*boundingRadius; //for now
 	}
 
 
@@ -380,25 +380,35 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	{
 		float[] A = position;
 		float[] B = _element.getPosition();
-		float BRS2 = (boundingRadius+_element.getBoundingRadius())*(boundingRadius+_element.getBoundingRadius());
 
-	System.out.println("column= "+VectorUtils.toString(B));
+		float[][] Arot = Quaternions.getMatrixFromQuat(Quaternions.inverse(facing));
+		float[] a = boundingBox;
+		float[] b = _element.getBoundingBox();
+		float[][] R = Quaternions.getMatrixFromQuat(Quaternions.mul( Quaternions.inverse(facing), _element.getFacing() ));
+
+		float v = VectorUtils.OBB3DIntersect(A,B,D,Arot,a,b,R);
+		System.out.println("v="+v+"\n");
+		return v;
+
 		/**check using BoundingSphere**/
-		//fill this in
-		
+/* //this is working...
+		float BRS2 = (boundingRadius+_element.getBoundingRadius())*(boundingRadius+_element.getBoundingRadius());
 		float a = (D[X]*D[X] + D[Y]*D[Y] + D[Z]*D[Z]);
-		float b2 = D[X]*(A[X]-B[Y]) + D[Y]*(A[Y]-B[Y]) + D[Z]*(A[Z]-B[Z]);
+		float b2 = D[X]*(A[X]-B[X]) + D[Y]*(A[Y]-B[Y]) + D[Z]*(A[Z]-B[Z]);
 		float c = A[X]*A[X] + A[Y]*A[Y] + A[Z]*A[Z] + B[X]*B[X] + B[Y]*B[Y] + B[Z]*B[Z] 
 			  - 2*(A[X]*B[X] + A[Y]*B[Y] + A[Z]*B[Z]) - BRS2;
-	System.out.println("b2= "+b2);	
-		
-		float v = (-1*b2 + (float)Math.sqrt((b2*b2)-(a*c)))/a;
-		float v2 = (-1*b2 - (float)Math.sqrt((b2*b2)-(a*c)))/a;
 
-		System.out.println("v="+v);
-		System.out.println("v2="+v2);
+		float dis = (b2*b2)-(a*c);
+		if(dis <= 0) //if negative discriminant, then we won't collide ever
+			return 1;
 		
-		return 0; //for now
+		float v = (-1*b2 - (float)Math.sqrt(dis))/a;
+
+		if(v <= 0) // if negative, then we are already colliding
+			return 0;
+		else
+			return Math.min(v, 1.0f); //return a piece of our magnitude
+*/
 	}
 
 

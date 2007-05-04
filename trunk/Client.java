@@ -24,7 +24,7 @@ public class Client
 		r.setIO(myIO);
 		int id = myIO.getId();
 		Action a = af.getAction("add element");
-		GameElement ge = ef.getGameElement("R2");
+		GameElement ge = ef.getGameElement("face");
 		ge.id(id);
 		ge.setPosition(new float[]{
 				Constants.INITIAL_X,
