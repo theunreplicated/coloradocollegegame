@@ -67,7 +67,7 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 					a.setNouns(new GameElement[]{me});
 					a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
 					a.parameters().add(Constants.VEC_POSX);
-					resolver.parse(a); 
+					resolver.addAction(a); 
 				}
 				break;
 			case KeyEvent.VK_LEFT:
@@ -87,7 +87,7 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 					a.setNouns(new GameElement[]{me});
 					a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
 					a.parameters().add(Constants.VEC_NEGX);
-					resolver.parse(a); 
+					resolver.addAction(a); 
 				}
 				break;
 			case KeyEvent.VK_UP:
@@ -106,7 +106,7 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 					a.setNouns(new GameElement[]{me});
 					a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
 					a.parameters().add(Constants.VEC_POSY);
-					resolver.parse(a); 
+					resolver.addAction(a); 
 				}
 				break;
 			case KeyEvent.VK_DOWN:
@@ -125,7 +125,7 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 					a.setNouns(new GameElement[]{me});
 					a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
 					a.parameters().add(Constants.VEC_NEGY);
-					resolver.parse(a); 
+					resolver.addAction(a); 
 				}
 				break;
 			case KeyEvent.VK_PAGE_UP:
@@ -133,14 +133,14 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 				a.setNouns(new GameElement[]{me});
 				a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
 				a.parameters().add(Constants.VEC_NEGZ);
-				resolver.parse(a); 
+				resolver.addAction(a); 
 				break;
 			case KeyEvent.VK_PAGE_DOWN:
 				a = actionFactory.getAction("move");
 				a.setNouns(new GameElement[]{me});
 				a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
 				a.parameters().add(Constants.VEC_POSZ);
-				resolver.parse(a); 
+				resolver.addAction(a); 
 				break;
 			
 			/*Rotation movement*/
@@ -148,13 +148,13 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 				a = actionFactory.getAction("rotate");
 				a.setNouns(new GameElement[]{me});
 				a.parameters().add(Constants.QUAT_CLOX);
-				resolver.parse(a); 
+				resolver.addAction(a); 
 				break;
 			case KeyEvent.VK_NUMPAD4: //spin counterclockwise around y
 				a = actionFactory.getAction("rotate");
 				a.setNouns(new GameElement[]{me});
 				a.parameters().add(Constants.QUAT_CCLY);
-				resolver.parse(a); 
+				resolver.addAction(a); 
 				break;
 			case KeyEvent.VK_NUMPAD5: //return to center
 				System.out.println("Not yet implemented.");
@@ -165,25 +165,25 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 				a = actionFactory.getAction("rotate");
 				a.setNouns(new GameElement[]{me});
 				a.parameters().add(Constants.QUAT_CLOY);
-				resolver.parse(a); 
+				resolver.addAction(a); 
 				break;
 			case KeyEvent.VK_NUMPAD7: //spin counterclockwise around z
 				a = actionFactory.getAction("rotate");
 				a.setNouns(new GameElement[]{me});
 				a.parameters().add(Constants.QUAT_CCLZ);
-				resolver.parse(a); 
+				resolver.addAction(a); 
 				break;
 			case KeyEvent.VK_NUMPAD8: //spin clockwise around x
 				a = actionFactory.getAction("rotate");
 				a.setNouns(new GameElement[]{me});
 				a.parameters().add(Constants.QUAT_CCLX);
-				resolver.parse(a); 
+				resolver.addAction(a); 
 				break;
 			case KeyEvent.VK_NUMPAD9: //spin clockwise around z
 				a = actionFactory.getAction("rotate");
 				a.setNouns(new GameElement[]{me});
 				a.parameters().add(Constants.QUAT_CLOZ);
-				resolver.parse(a); 
+				resolver.addAction(a); 
 				break;
 
 			/*Intuitive (planar) 3D movement using the Resolver - Omer*/
@@ -192,26 +192,26 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 				a.setNouns(new GameElement[]{me});
 				a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
 				a.parameters().add(Constants.VEC_NEGZ);
-				resolver.parse(a); 
+				resolver.addAction(a); 
 				break;
 			case KeyEvent.VK_S:
 				a = actionFactory.getAction("move");
 				a.setNouns(new GameElement[]{me});
 				a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
 				a.parameters().add(Constants.VEC_POSZ);
-				resolver.parse(a); 
+				resolver.addAction(a); 
 				break;
 			case KeyEvent.VK_A:
 				a = actionFactory.getAction("rotate");
 				a.setNouns(new GameElement[]{me});
 				a.parameters().add(Constants.QUAT_CCLY);
-				resolver.parse(a); 
+				resolver.addAction(a); 
 				break;
 			case KeyEvent.VK_D:
 				a = actionFactory.getAction("rotate");
 				a.setNouns(new GameElement[]{me});
 				a.parameters().add(Constants.QUAT_CLOY);
-				resolver.parse(a); 
+				resolver.addAction(a); 
 				break;
 			case KeyEvent.VK_M:
 				a = actionFactory.getAction("add element");
@@ -220,7 +220,7 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 				b.id(3000);
 				a.parameters().add(true);
 				a.parameters().add(b);
-				resolver.parse(a);
+				resolver.addAction(a);
 				break;
 
 			/*Camera stuff*/

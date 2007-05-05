@@ -87,7 +87,7 @@ public class ClientIO implements IO
 				while( (objectMessage = ois.readObject()) != null)
 				{
 					System.out.println("Recieved message...");
-					resolver.parse(objectMessage);
+					resolver.addAction(objectMessage);
 				}
 			}
 			catch(IOException ioe)

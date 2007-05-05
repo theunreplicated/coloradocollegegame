@@ -1,4 +1,4 @@
-//import java.util.*;//never used
+import java.util.Date;
 import java.io.Serializable;
 
 public class Action implements Serializable
@@ -10,6 +10,8 @@ public class Action implements Serializable
 	private StringFunction repFunction;
 	private IncrementedArray<Object> parameters = null;
 	private GameElement[] nouns = null;
+	private Action toSend;
+	private long sleepTime = 0;
 
 	public Action(String _name, StringFunction _world, StringFunction _rep)
 	{
@@ -123,5 +125,28 @@ public class Action implements Serializable
 		
 		return stringAction;
 	}
+	public Action getToSend()
+	{
+		return toSend;
+	}
+	
+	public void setToSend(Action _toSend)
+	{
+		toSend = _toSend;
+	}
 
+	public long getSleepTime()
+	{
+		return sleepTime;
+	}
+
+	public void setSleepTime(long _time)
+	{
+		sleepTime = _time;
+	}
+
+	public void setSleepTime(Date _time)
+	{
+		sleepTime = _time.getTime();
+	}
 }
