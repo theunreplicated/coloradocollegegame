@@ -1,3 +1,4 @@
+/* Moving Elements are officially depricated! We can now handle them entirely with actions.*/
 public class MovingElement extends Thread
 {
 	private Resolver r;
@@ -31,17 +32,19 @@ public class MovingElement extends Thread
 					a.setNouns(new GameElement[]{me});
 					a.parameters().add(Constants.MOVE_ABSOLUTE);
 					a.parameters().add((float[]) command[1]);
-					if(r.parse(a) != Constants.SUCCESS)
+					r.addAction(a);
+					//if(r.parse(a) != Constants.SUCCESS)
 					//if(w.nudgeInternal(me.id(), (float[]) command[1]))
-						command_id = (command_id+1)%commands.length;
+					//	command_id = (command_id+1)%commands.length;
 					break;
 				case Constants.ROTATE_TO:
 					a = actionFactory.getAction("rotate");
 					a.setNouns(new GameElement[]{me});
 					a.parameters().add((float[]) command[1]);
-					if(r.parse(a) != Constants.SUCCESS)
+					r.addAction(a);
+					//if(r.parse(a) != Constants.SUCCESS)
 					//if(w.rotateElement(me.id(), (float[]) command[1]))
-						command_id = (command_id+1)%commands.length;
+					//	command_id = (command_id+1)%commands.length;
 					break;
 				default:
 					myLogger.message("Moving thread for GameElement " + me.id() + " received unparsable message: " + command[0] + "\n", true);

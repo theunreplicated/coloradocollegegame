@@ -1,4 +1,4 @@
-//import java.util.*;//never used
+import java.util.Date;
 import javax.script.*;
 public class Resolver extends Thread
 {
@@ -11,7 +11,7 @@ public class Resolver extends Thread
 	public World world;
 	private IO io;
 	private Logger myLogger;
-	private LinkedAction first = null;
+	private ElementStack<Action> actionStack;
 
 	public Resolver(World _world, RuleFactory _rf, ActionFactory _af, ElementFactory _ef, Logger _myLogger)
 	{
@@ -22,15 +22,18 @@ public class Resolver extends Thread
 		manager = new ScriptEngineManager();
 		world = _world;
 		myLogger = _myLogger;
+		actionStack = new ElementStack<Action>();
 
 		// Add logger at global scope
 		manager.put("myLogger", myLogger);
 
-		// Add static stuff at global scope
+		// Add other useful stuff at global scope
 		manager.put("Constants", new Constants());
 		manager.put("Quaternions", new Quaternions());
 		manager.put("VectorUtils", new VectorUtils());
 		manager.put("GameElement", GameElement.class);
+		manager.put("actionStack", actionStack);
+		manager.put("actionFactory", actionFactory);
 	}
 
 	public void setRepresentationResolver(RepresentationResolver _repResolver)
@@ -44,9 +47,10 @@ public class Resolver extends Thread
 
 	public void run()
 	{
+		Action a;
 		while(true)
 		{
-			if(first == null)
+			while( (a = actionStack.pop()) == null)
 			{
 				try
 				{
@@ -58,22 +62,59 @@ public class Resolver extends Thread
 					return;
 				}
 			}
-			LinkedAction action = first;
-			first = first.next;
-			action.removeFromList();
-			parse(action.get());
+			long now = (new Date()).getTime();
+			long sleepTime = a.getSleepTime();
+			if(sleepTime > now)
+			{
+				long untilNextAction = sleepTime - now;
+				Action _a;
+				addAction(a);
+				while( (_a = actionStack.pop()) != a)
+				{
+					sleepTime = _a.getSleepTime();
+					if(sleepTime > now)
+					{
+						if(sleepTime - now < untilNextAction)
+						{
+							untilNextAction = sleepTime - now;
+						}
+						addAction(_a);
+					}
+					else
+					{
+						sleepTime = 0;
+						a = _a;
+						break;
+					}
+				}
+				if(sleepTime != 0)
+				{
+					try
+					{
+						Thread.sleep(sleepTime);
+						continue;
+					}
+					catch(InterruptedException ie)
+					{
+						myLogger.message("Resolver interrupted. Quitting.\n", false);
+						return;
+					}
+				}
+			}
+			myLogger.message("Resolver running on action " + a.getName(), false);
+			parse(a);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public int[] parse(Object _actions)
+	private int[] parse(Object _actions)
 	{
 		if(!(_actions instanceof IncrementedArray))
 		{
 			if(_actions instanceof Action)
 				return new int[]{parse((Action) _actions)};
 
-			myLogger.message("Resolver parse received a bad message, ignoring: " + _actions + "\n", true);
+			myLogger.message("OLD Resolver parse received a bad message, ignoring: " + _actions + "\n", true);
 			return null;
 		}
 
@@ -86,7 +127,7 @@ public class Resolver extends Thread
 		return results;
 	}
 
-	public int parse(Action action)
+	private int parse(Action action)
 	{
 		GameElement[] nouns = action.getNouns();
 
@@ -160,6 +201,7 @@ public class Resolver extends Thread
 			try {
 				ScriptEngine engine = manager.getEngineByName(rule.language());
 				status = Constants.SUCCESS;
+				engine.put("action",_action);
 				engine.put("owner",rule.owner());
 				engine.put("subject",subject);
 				engine.put("directObject",directObject);
@@ -167,8 +209,6 @@ public class Resolver extends Thread
 				engine.put("other",other);
 				engine.put("relevant",_relevantElements);
 				engine.put("argv",message);
-				engine.put("myActions",myActions);
-				engine.put("actionsToSend",actionsToSend);
 				engine.put("status",status);
 				engine.eval(rule.function());
 				Object _status = engine.get("status");
@@ -278,6 +318,15 @@ public class Resolver extends Thread
 							world.removeElement((GameElement) _message);
 						}
 					}
+					else if(status == Constants.HANDLE_AGAIN)
+					{
+						addAction(_action);
+					}
+
+					if(_action.getToSend() != null)
+					{
+						actionsToSend.add(_action.getToSend());
+					}
 				}
 				catch(ScriptException se)
 				{
@@ -307,5 +356,31 @@ public class Resolver extends Thread
 		}
 
 		return Constants.SUCCESS;
+	}
+
+	public void addAction(Action a)
+	{
+		actionStack.unshift(a);
+	}
+
+	@SuppressWarnings("unchecked")
+	public void addAction(Object _actions)
+	{
+		if(!(_actions instanceof IncrementedArray))
+		{
+			if(_actions instanceof Action)
+			{
+				addAction((Action) _actions);
+				return;
+			}
+
+			myLogger.message("NEW Resolver parse received a bad message, ignoring: " + _actions + "\n", true);
+			return;
+		}
+
+		IncrementedArray<WritableAction> actions = (IncrementedArray<WritableAction>) _actions;
+		for(int i = 0; i < actions.length; i++)
+			addAction(actions.get(i).getAction(world,actionFactory));
+
 	}
 }

@@ -246,7 +246,7 @@
 			<function language="javascript">
 			<![CDATA[
 				var status = Constants.SUCCESS;
-				var a = myActions.get("move").get(0);
+				//var a = myActions.get("move").get(0);
 				var parameters = new Array(2);
 
 				var type = argv[0];
@@ -327,7 +327,7 @@
 				}
 				for(var i = 0; i < relevant.length; i++)
 				{
-	subject.findMovableDistance(relevant.get(i),dvector);
+	//subject.findMovableDistance(relevant.get(i),dvector);
 					if(subject.isColliding(relevant.get(i),vector,null))
 					{
 						myLogger.message("Collision!" + relevant.get(i).id() + " " + subject.id() + "\n", false);
@@ -341,7 +341,12 @@
 					parameters[0] = vector;
 					parameters[1] = velocity;
 
-					actionsToSend.add("move to", a.getNouns(), parameters);
+					var _action = actionFactory.getAction("move to");
+					_action.setNouns(action.getNouns());
+					_action.parameters(parameters);
+					action.setToSend(_action);	
+
+					//actionsToSend.add("move to", a.getNouns(), parameters);
 				}
 			]]>
 			</function>
@@ -375,11 +380,15 @@
 					if(status == Constants.SUCCESS)
 					{
 
-						var a = myActions.get("rotate").get(0);
+						//var a = myActions.get("rotate").get(0);
 						var parameters = new Array(1);
 						parameters[0] = facing;
 
-						actionsToSend.add("rotate to", a.getNouns(), parameters);
+						var _action = actionFactory.getAction("rotate to");
+						_action.setNouns(action.getNouns());
+						_action.parameters(parameters);
+						action.setToSend(_action);	
+						//actionsToSend.add("rotate to", a.getNouns(), parameters);
 					}
 				}
 			]]>
@@ -392,8 +401,11 @@
 				var status = Constants.SUCCESS;
 				if(argv.length > 0)
 				{
-					var a = myActions.get("remove element").get(0);
-					actionsToSend.add("remove element", a.getNouns());
+					//var a = myActions.get("remove element").get(0);
+					var _action = actionFactory.getAction("remove element");
+					_action.setNouns(action.getNouns());
+					action.setToSend(_action);	
+					//actionsToSend.add("remove element", a.getNouns());
 				}
 			]]>
 			</function>
@@ -407,7 +419,10 @@
 					argv[0] = argv[1];
 					argv[1] = false;
 					argv[0].attribute("write through", true);
-					actionsToSend.add("add element", argv);
+					var _action = actionFactory.getAction("add element");
+					_action.parameters(argv);
+					action.setToSend(_action);	
+					//actionsToSend.add("add element", argv);
 				}
 			]]>
 			</function>

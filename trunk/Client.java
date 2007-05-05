@@ -19,6 +19,7 @@ public class Client
 		w = new World(ef,myLogger);
 		Resolver r = new Resolver(w, rf, af, ef, myLogger);
 		clientInput = new ClientInput(r,repResolver,af,myLogger);
+		r.start();
 		
 		myIO = new ClientIO( r, _server, _port, myLogger );
 		r.setIO(myIO);
@@ -34,7 +35,7 @@ public class Client
 
 		a.parameters().add(true); // yes, we want to pass this to the server
 		a.parameters().add(ge);
-		r.parse(a);
+		r.addAction(a);
 		myIO.startListening();
 		clientInput.setMe(ge);
 		_rep.initialize(w, myLogger);
