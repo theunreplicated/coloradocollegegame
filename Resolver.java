@@ -106,6 +106,7 @@ public class Resolver extends Thread
 		}
 	}
 
+  /* depracated 
 	@SuppressWarnings("unchecked")
 	private int[] parse(Object _actions)
 	{
@@ -126,116 +127,148 @@ public class Resolver extends Thread
 
 		return results;
 	}
+	*/
 
 	private int parse(Action action)
 	{
-		GameElement[] nouns = action.getNouns();
-
-		int[] needles = new int[Constants.SENTENCE_LENGTH];
-		needles[0] = actionFactory.getType(action.getName());
-		myLogger.message("Resolver parsing with needles: " + needles[0] + ",", false);
-		if(nouns != null)
+		IncrementedArray<Action> _actions = action.getDependentActions();
+		Action[] actions = new Action[_actions.length+1];
+		actions[0] = action;
+		if(_actions.length != 0)
 		{
-			for(int i = nouns.length-1; i >= 0; i--)
+			for(int i = 1; i < actions.length; i++)
 			{
-				needles[i+1] = nouns[i].getTypeId();
-				myLogger.message(needles[i+1]+",",false);
+				actions[i] = _actions.get(i-1);
 			}
 		}
-		myLogger.message("\n", false);
-
-		Rule[] applicable = rules.getRules(needles);
-		IncrementedArray<GameElement> relevantElements = new IncrementedArray<GameElement>(Constants.DEFAULT_RELEVANT_SIZE);
-		if(nouns != null)
+		Rule[][] applicable = new Rule[actions.length][];
+		IncrementedArray<GameElement>[] relevantElements = new IncrementedArray[actions.length];
+		GameElement[][] nouns = new GameElement[actions.length][];
+		for(int i = 0; i < actions.length; i++)
 		{
-			GameElement subject = nouns[0];
-			GameElement first = world.getFirstElement();
-			GameElement currentElement = first;
-			do
+			nouns[i] = actions[i].getNouns();
+
+			int[] needles = new int[Constants.SENTENCE_LENGTH];
+			needles[0] = actionFactory.getType(actions[i].getName());
+			myLogger.message("Resolver parsing with needles: " + needles[0] + ",", false);
+			if(nouns[i] != null)
 			{
-				/*find relevent ojects and get rules that apply to this sentence*/
-				if(currentElement != subject && subject.isRelevant(currentElement))
-					relevantElements.add(currentElement);
+				for(int j = nouns[i].length-1; j >= 0; j--)
+				{
+					needles[j+1] = nouns[i][j].getTypeId();
+					myLogger.message(needles[j+1]+",",false);
+				}
 			}
-			while( (currentElement=currentElement.next) != first );
+			myLogger.message("\n", false);
+
+			applicable[i] = rules.getRules(needles);
+			relevantElements[i] = new IncrementedArray<GameElement>(Constants.DEFAULT_RELEVANT_SIZE);
+			if(nouns[i] != null)
+			{
+				GameElement first = world.getFirstElement();
+				GameElement currentElement = first;
+				do
+				{
+						GameElement subject = nouns[i][0];
+						/*find relevent ojects and get rules that apply to this sentence*/
+						if(currentElement != subject && subject.isRelevant(currentElement))
+							relevantElements[i].add(currentElement);
+				}
+				while( (currentElement = currentElement.next) != first);
+			}
 		}
-
-
-		return resolve(applicable,action,relevantElements);
+		return resolve(applicable,actions,relevantElements);
 	}
 
 	@SuppressWarnings("fallthrough")
-	public int resolve( Rule[] _rules, Action _action, IncrementedArray<GameElement> _relevantElements)
+	public int resolve( Rule[][] _rules, Action[] _actions, IncrementedArray<GameElement>[] _relevantElements)
 	{
-		Object[] message = _action.parameters().pack();
-		GameElement[] nouns = _action.getNouns();
-		GameElement subject = null, directObject = null, indirectObject = null;
-		GameElement[] other = null;
-		int status;
-		IncrementedArray returnVals;
-		ActionsHashMap myActions = new ActionsHashMap(actionFactory); 
 		ActionsHashMap actionsToSend = new ActionsHashMap(actionFactory);
+		IncrementedArray returnVals;
+		int status;
 		int i;
-		
-		if(nouns != null)
+		Action _action;
+		Object[] message;
+		GameElement[] nouns, other;
+		GameElement subject, directObject, indirectObject;
+		boolean runAgain = false;
+		for(i = 0; i < _actions.length; i++)
 		{
-			switch(nouns.length)
+			_action = _actions[i];
+			message = _action.parameters().pack();
+			nouns = _action.getNouns();
+			subject = directObject = indirectObject = null;
+			other = null;
+		
+			if(nouns != null)
 			{
-				default:
-					other = new GameElement[nouns.length-3];
-					System.arraycopy(nouns,3,other,0,other.length);
-				case 3:
-					indirectObject = nouns[2];
-				case 2:
-					directObject = nouns[1];
-				case 1:
-					subject = nouns[0];
-					break;
+				switch(nouns.length)
+				{
+					default:
+						other = new GameElement[nouns.length-3];
+						System.arraycopy(nouns,3,other,0,other.length);
+					case 3:
+						indirectObject = nouns[2];
+					case 2:
+						directObject = nouns[1];
+					case 1:
+						subject = nouns[0];
+						break;
+				}
+			}
+
+			for(Rule rule : _rules[i])
+			{
+				try {
+					ScriptEngine engine = manager.getEngineByName(rule.language());
+					status = Constants.SUCCESS;
+					engine.put("action",_action);
+					engine.put("owner",rule.owner());
+					engine.put("subject",subject);
+					engine.put("directObject",directObject);
+					engine.put("indirectObject",indirectObject);
+					engine.put("other",other);
+					engine.put("relevant",_relevantElements[i]);
+					engine.put("argv",message);
+					engine.put("status",status);
+					engine.eval(rule.function());
+					Object _status = engine.get("status");
+					if(_status instanceof Integer)
+						status = ((Integer) _status).intValue();
+					else if(_status instanceof Double)
+						status = ((Double) _status).intValue();
+					if(status == Constants.NEW_DEPENDENCY)
+					{
+						_actions[0].getDependentActions().add(_action.getDependentActions());
+						_action.clearDependentActions();
+						runAgain = true;
+					}
+					else if(status != Constants.SUCCESS)
+						return status;
+				}
+				catch(ScriptException se)
+				{
+					myLogger.message("Script error: " + se.getMessage() + "\n",true);
+					System.out.println("error in Resolver (1)");
+					System.out.println(se);
+				}
 			}
 		}
-
-		myActions.add(_action);
-
-		for(Rule rule : _rules)
+		if(runAgain)
 		{
-			try {
-				ScriptEngine engine = manager.getEngineByName(rule.language());
-				status = Constants.SUCCESS;
-				engine.put("action",_action);
-				engine.put("owner",rule.owner());
-				engine.put("subject",subject);
-				engine.put("directObject",directObject);
-				engine.put("indirectObject",indirectObject);
-				engine.put("other",other);
-				engine.put("relevant",_relevantElements);
-				engine.put("argv",message);
-				engine.put("status",status);
-				engine.eval(rule.function());
-				Object _status = engine.get("status");
-				if(_status instanceof Integer)
-					status = ((Integer) _status).intValue();
-				else if(_status instanceof Double)
-					status = ((Double) _status).intValue();
-				if(status != Constants.SUCCESS)
-					return status;
-			}
-			catch(ScriptException se)
-			{
-				myLogger.message("Script error: " + se.getMessage() + "\n",true);
-				System.out.println("error in Resolver (1)");
-				System.out.println(se);
-			}
-
+			actionStack.push(_actions[0]);
+			return Constants.NEW_DEPENDENCY;
 		}
 
 		myLogger.message("Resolver is starting to handle actions...\n", false);
-		IncrementedArray<Action> actionList = myActions.getAll();
-		for(i = 0; i < actionList.length; i++)
+		for(i = 0; i < _actions.length; i++)
 		{
-			_action = actionList.get(i);
+			_action = _actions[i];
 			if(_action.getWorldFunction() != null)
 			{
 				nouns = _action.getNouns();
+				other = null;
+				subject = directObject = indirectObject = null;
 				if(nouns != null)
 				{
 					switch(nouns.length)
@@ -266,6 +299,7 @@ public class Resolver extends Thread
 					engine.put("returnVals",returnVals);
 					engine.put("status", status);
 					engine.eval(worldFunc.getFunction());
+					_action.setLastRun(new Date());
 					Object _status = engine.get("status");
 					if(_status instanceof Integer)
 						status = ((Integer) _status).intValue();

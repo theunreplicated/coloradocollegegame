@@ -8,6 +8,7 @@ public class Constants
 	public static final int ADD_ELEMENTS = 3;
 	public static final int REMOVE_ELEMENTS = 4;
 	public static final int HANDLE_AGAIN = 5;
+	public static final int NEW_DEPENDENCY = 6;
 
 	// server information
 	public static final int TIMEOUT = 3000; // maximum time for no communication: 3 seconds
@@ -139,6 +140,7 @@ public class Constants
 	public static final short DEFAULT_ACTION_HASHMAP_ENTRY_SIZE = 2;
 	public static final short DEFAULT_ACTION_PARAMETERS_SIZE = 2;
 	public static final short DEFAULT_ACTION_LIST_SIZE = 20;
+	public static final short DEFAULT_ACTION_DEPENDENT_SIZE = 1;
 	public static final short DEFAULT_RETURN_VALS_LENGTH = 5;
 	public static final short SENTENCE_LENGTH = 4;
 	public static final short SLEEP_TIME = 20;

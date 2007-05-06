@@ -68,7 +68,6 @@ public class WritableAction implements Serializable
 				if( ( (String) o).startsWith(Constants.UNIQUE_GE_PREFIX))
 				{
 					String id =((String) o).substring(Constants.UNIQUE_GE_PREFIX.length()); 
-					System.out.println("Getting " + id);
 					_parameters.add(w.getElementById(Integer.parseInt(id)));
 					continue;
 				}

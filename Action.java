@@ -11,7 +11,9 @@ public class Action implements Serializable
 	private IncrementedArray<Object> parameters = null;
 	private GameElement[] nouns = null;
 	private Action toSend;
-	private long sleepTime = 0;
+	private int delay = 0;
+	private long lastRun = 0;
+	private IncrementedArray<Action> dependentActions = null;
 
 	public Action(String _name, StringFunction _world, StringFunction _rep)
 	{
@@ -25,6 +27,7 @@ public class Action implements Serializable
 		this(_name, _world, _rep);
 		parameters = _parameters;
 		nouns = _nouns;
+		dependentActions = new IncrementedArray<Action>(Constants.DEFAULT_ACTION_DEPENDENT_SIZE);
 	}
 
 	public Action(Action a)
@@ -34,6 +37,7 @@ public class Action implements Serializable
 		worldFunction = a.getWorldFunction();
 		repFunction = a.getRepFunction();
 		parameters = new IncrementedArray<Object>(Constants.DEFAULT_ACTION_PARAMETERS_SIZE);
+		dependentActions = new IncrementedArray<Action>(Constants.DEFAULT_ACTION_DEPENDENT_SIZE);
 	}
 
 	public String getName()
@@ -137,16 +141,36 @@ public class Action implements Serializable
 
 	public long getSleepTime()
 	{
-		return sleepTime;
+		return lastRun + delay;
 	}
 
-	public void setSleepTime(long _time)
+	public void setLastRun(Date _lastRun)
 	{
-		sleepTime = _time;
+		lastRun = _lastRun.getTime();
 	}
 
-	public void setSleepTime(Date _time)
+	public int getDelay()
 	{
-		sleepTime = _time.getTime();
+		return delay;
+	}
+
+	public void setdelay(int _time)
+	{
+		delay = _time;
+	}
+
+	public void addDependentAction(Action _action)
+	{
+		dependentActions.add(_action);
+	}
+
+	public void clearDependentActions()
+	{
+		dependentActions = new IncrementedArray<Action>(Constants.DEFAULT_ACTION_DEPENDENT_SIZE);
+	}
+
+	public IncrementedArray<Action> getDependentActions()
+	{
+		return dependentActions;
 	}
 }
