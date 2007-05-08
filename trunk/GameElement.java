@@ -324,6 +324,9 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	//As above, but checks collisions while on a trajectory (or it will eventually).
 	public synchronized boolean isColliding(GameElement _element, float[] newPosition, float[] newRotation)
 	{
+		//System.out.println(this);
+		//System.out.println(_element);
+
 		float[] tposition; //temporary position
 		float[] tfacing; //temporary facing
 		
@@ -351,7 +354,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 			float[][] R = Quaternions.getMatrixFromQuat(Quaternions.mul( Quaternions.inverse(tfacing), _element.getFacing() ));
 			
 			//debug stuff can go here
-			/*if(_element.id()==5110) //a wall we know about...
+			/*if(_element.id()==5110) //a wall we know about in the maze...
 			{
 				System.out.println(this +"\n");
 				System.out.println(_element+"\n");
@@ -373,7 +376,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 			return false;
 	}
 	
-	//Returns how far along the given vector the element can move without colliding with the
+	//Determines how far along the given vector the element can move without colliding with the
 	// given element. Returns a number [0,1] where 0 is no movement and 1 is the entire vector.
 	// Thus a legal movement would be this scalar multiplied by the desired vector.
 	public synchronized float findMovableDistance(GameElement _element, float[] D)
@@ -385,13 +388,15 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		float[] a = boundingBox;
 		float[] b = _element.getBoundingBox();
 		float[][] R = Quaternions.getMatrixFromQuat(Quaternions.mul( Quaternions.inverse(facing), _element.getFacing() ));
-
+		
 		float v = VectorUtils.OBB3DIntersect(A,B,D,Arot,a,b,R);
-		System.out.println("v="+v+"\n");
-		return v;
 
-		/**check using BoundingSphere**/
-/* //this is working...
+		System.out.println("method's v="+v+"\n");
+
+		return v;
+		//return Math.min(v,1.0f); //unless the OBB3DIntersect method only returns [0,1]
+		
+		/**The same check, but checks for collisions between the BoundingSphere**
 		float BRS2 = (boundingRadius+_element.getBoundingRadius())*(boundingRadius+_element.getBoundingRadius());
 		float a = (D[X]*D[X] + D[Y]*D[Y] + D[Z]*D[Z]);
 		float b2 = D[X]*(A[X]-B[X]) + D[Y]*(A[Y]-B[Y]) + D[Z]*(A[Z]-B[Z]);
@@ -408,7 +413,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 			return 0;
 		else
 			return Math.min(v, 1.0f); //return a piece of our magnitude
-*/
+		**/
 	}
 
 
