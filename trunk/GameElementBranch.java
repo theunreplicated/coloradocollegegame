@@ -300,6 +300,7 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 
 	//This is just for fun.
 	//@param a J3D Node (could be anything) to attach to the end of the transform.
+	//@return the transform with the attached behavior
 	public TransformGroup createSpinningBehavior(Node arg)
 	{
 		TransformGroup spinx = new TransformGroup(); //a node for a coordinate system transformation (also the root)
