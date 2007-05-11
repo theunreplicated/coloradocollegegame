@@ -21,42 +21,12 @@
 			<![CDATA[
 				var type = argv[0];
 				var dvector = argv[1];
-			myLogger.message("dvectorM={"+dvector[0]+","+dvector[1]+","+dvector[2]+"}\n",true);
-				if(type == Constants.MOVE_RELATIVE_TO_FACING)
-				{
-					dvector = Quaternions.rotatePoint(dvector,subject.getFacing());
-				}
-
-		//Now with dynamic collision detection!
-		/*		var v = 1;
-				for(var i = 0; i < relevant.length; i++)
-				{
-					myLogger.message("Testing collisions for:" + relevant.get(i).id() + " and " + subject.id() + "\n", false);
-	
-					var vt = subject.findMovableDistance(relevant.get(i),dvector);
-			//		myLogger.message("vt="+vt+"\n",true);
-					if(vt < v)
-						v = vt;
-			//		myLogger.message("v="+v+"\n",true);
-				}
-			//	myLogger.message("final v="+v+"\n",true);
-				
-				var lvector;
-				if(v == 1)
-					lvector = dvector;
-				else
-					lvector = VectorUtils.mul(v,dvector);
-			//	myLogger.message("lvector={"+lvector[0]+","+lvector[1]+","+lvector[2]+"}\n",true);
-				var vector = subject.copyPosition();
-			//	myLogger.message("vectorB={"+vector[0]+","+vector[1]+","+vector[2]+"}\n",true);
-				for(i = 0; i < lvector.length; i++)
-				{
-					vector[i] += lvector[i];
-				}
-			//	myLogger.message("vectorA={"+vector[0]+","+vector[1]+","+vector[2]+"}\n",true);
-		*/
-			
-
+			//	myLogger.message("dvectorM={"+dvector[0]+","+dvector[1]+","+dvector[2]+"}\n",true);
+			//why are we doing this here? Shouldn't this be handled by the rules? Not doing it twice will save time
+			//	if(type == Constants.MOVE_RELATIVE_TO_FACING)
+			//	{
+			//		dvector = Quaternions.rotatePoint(dvector,subject.getFacing());
+			//	}
 				var vector = subject.getPosition();
 				for(i = 0; i < dvector.length; i++)
 				{
@@ -222,10 +192,8 @@
 					myLogger.message("Testing collisions for:" + relevant.get(i).id() + " and " + subject.id() + "\n", false);
 	
 					var vt = subject.findMovableDistance(relevant.get(i),dvector);
-			//		myLogger.message("vt="+vt+"\n",true);
 					if(vt < v)
 						v = vt;
-			//		myLogger.message("v="+v+"\n",true);
 				}
 			//	myLogger.message("final v="+v+"\n",true);
 				
@@ -237,12 +205,13 @@
 			//	myLogger.message("lvector={"+lvector[0]+","+lvector[1]+","+lvector[2]+"}\n",true);
 
 				var vector = subject.copyPosition();
-				myLogger.message("vectorB={"+vector[0]+","+vector[1]+","+vector[2]+"}\n",true);
 				for(i = 0; i < lvector.length; i++)
 				{
 					vector[i] += lvector[i];
 				}
-				myLogger.message("vectorA={"+vector[0]+","+vector[1]+","+vector[2]+"}\n",true);
+				
+				argv[1] = lvector;
+				action.parameters(argv);
 
 			/*	var vector = subject.copyPosition();
 				for(i = 0; i < dvector.length; i++)
@@ -271,8 +240,8 @@
 				if(status == Constants.SUCCESS)
 				{
 					var parameters = new Array(1);
-				myLogger.message("vectorP={"+vector[0]+","+vector[1]+","+vector[2]+"}\n",true);
 
+					//could speed this up so we're not calculating twice?
 					parameters[0] = vector;
 
 					var _action = actionFactory.getAction("move to");

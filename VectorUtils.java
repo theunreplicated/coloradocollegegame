@@ -389,6 +389,10 @@ public class VectorUtils
 		//Arrays.sort(vs,0,numEntries); //Quicksort shouldn't be faster
 		InsertionSort(vs,0,numEntries); //sort the entries (using our own method!)
 
+	//	System.out.println("vs:");			
+	//	for(int j=0; j<numEntries; j++)
+	//		System.out.println(vs[j]);
+
 		float vmin = Float.NEGATIVE_INFINITY; //initial values
 		float vmax = Float.POSITIVE_INFINITY;
 		int vminI = 0; //the index of vmin
@@ -398,25 +402,25 @@ public class VectorUtils
 		for(int j=0; j<numEntries; j++) //count up through the vs
 		{
 			T = new float[] {(vs[j]*TcoX + TplX), 
-						 (vs[j]*TcoY + TplY), 
-						 (vs[j]*TcoZ + TplZ)};
+					 (vs[j]*TcoY + TplY), 
+					 (vs[j]*TcoZ + TplZ)};
 
 			//check if is colliding
-			if(Math.abs(T[X]) > AxRight); //Ax face
-			else if(Math.abs(T[Y]) > AyRight); //Ay face
-			else if(Math.abs(T[Z]) > AzRight); //Az face
-			else if(Math.abs(T[X]*R[X][X] + T[Y]*R[Y][X] + T[Z]*R[Z][X]) > BxRight); //Bx face
-			else if(Math.abs(T[X]*R[X][Y] + T[Y]*R[Y][Y] + T[Z]*R[Z][Y]) > ByRight); //By face
-			else if(Math.abs(T[X]*R[X][Z] + T[Y]*R[Y][Z] + T[Z]*R[Z][Z]) > BzRight); //Bz face
-			else if(Math.abs(T[Z]*R[Y][X] - T[Y]*R[Z][X]) > AxBxRight); //Ax X Bx
-			else if(Math.abs(T[Z]*R[Y][Y] - T[Y]*R[Z][Y]) > AxByRight); //Ax X By
-			else if(Math.abs(T[Z]*R[Y][Z] - T[Y]*R[Z][Z]) > AxBzRight); //Ax X Bz
-			else if(Math.abs(T[X]*R[Z][X] - T[Z]*R[X][X]) > AyBxRight); //Ay X Bx
-			else if(Math.abs(T[X]*R[Z][Y] - T[Z]*R[X][Y]) > AyByRight); //Ay X By
-			else if(Math.abs(T[X]*R[Z][Z] - T[Z]*R[X][Z]) > AyBzRight); //Ay X Bz
-			else if(Math.abs(T[Y]*R[X][X] - T[X]*R[Y][X]) > AzBxRight); //Az X Bx
-			else if(Math.abs(T[Y]*R[X][Y] - T[X]*R[Y][Y]) > AzByRight); //Az X By
-			else if(Math.abs(T[Y]*R[X][Z] - T[X]*R[Y][Z]) > AzBzRight); //Az X Bz
+			if(Math.abs(T[X]) > AxRight);//{System.out.println("break on Ax");} //Ax face
+			else if(Math.abs(T[Y]) > AyRight);//{System.out.println("break on Ay");} //Ay face
+			else if(Math.abs(T[Z]) > AzRight);//{System.out.println("break on Az");} //Az face
+			else if(Math.abs(T[X]*R[X][X] + T[Y]*R[Y][X] + T[Z]*R[Z][X]) > BxRight);//{System.out.println("break on Bx");} //Bx face
+			else if(Math.abs(T[X]*R[X][Y] + T[Y]*R[Y][Y] + T[Z]*R[Z][Y]) > ByRight);//{System.out.println("break on By");} //By face
+			else if(Math.abs(T[X]*R[X][Z] + T[Y]*R[Y][Z] + T[Z]*R[Z][Z]) > BzRight);//{System.out.println("break on Bz");} //Bz face
+			else if(Math.abs(T[Z]*R[Y][X] - T[Y]*R[Z][X]) > AxBxRight);//{System.out.println("break on AxBx");} //Ax X Bx
+			else if(Math.abs(T[Z]*R[Y][Y] - T[Y]*R[Z][Y]) > AxByRight);//{System.out.println("break on AxBy");} //Ax X By
+			else if(Math.abs(T[Z]*R[Y][Z] - T[Y]*R[Z][Z]) > AxBzRight);//{System.out.println("break on AxBz");} //Ax X Bz
+			else if(Math.abs(T[X]*R[Z][X] - T[Z]*R[X][X]) > AyBxRight);//{System.out.println("break on AyBx");} //Ay X Bx
+			else if(Math.abs(T[X]*R[Z][Y] - T[Z]*R[X][Y]) > AyByRight);//{System.out.println("break on AyBy");} //Ay X By
+			else if(Math.abs(T[X]*R[Z][Z] - T[Z]*R[X][Z]) > AyBzRight);//{System.out.println("break on AyBz");} //Ay X Bz
+			else if(Math.abs(T[Y]*R[X][X] - T[X]*R[Y][X]) > AzBxRight);//{System.out.println("break on AzBx");} //Az X Bx
+			else if(Math.abs(T[Y]*R[X][Y] - T[X]*R[Y][Y]) > AzByRight);//{System.out.println("break on AzBy");} //Az X By
+			else if(Math.abs(T[Y]*R[X][Z] - T[X]*R[Y][Z]) > AzBzRight);//{System.out.println("break on AzBz");} //Az X Bz
 			else //we've found a collision, and it is the lowest because we're sorted
 			{
 				vmin = vs[j]; //set vmin
@@ -424,6 +428,8 @@ public class VectorUtils
 				j = numEntries; //break out
 			}
 		}		
+
+	//	System.out.println("vmin= "+vmin);
 
 		if(Float.isInfinite(vmin)) //we never collide, can break out a little early
 			return 1;
@@ -434,8 +440,8 @@ public class VectorUtils
 		for(int j=numEntries-1; j>=vminI; j--) //count down through the entries
 		{
 			T = new float[] {(vs[j]*TcoX + TplX), 
-						 (vs[j]*TcoY + TplY), 
-						 (vs[j]*TcoZ + TplZ)};
+					 (vs[j]*TcoY + TplY), 
+					 (vs[j]*TcoZ + TplZ)};
 
 			//check if is colliding
 			if(Math.abs(T[X]) > AxRight); //Ax face
@@ -460,13 +466,11 @@ public class VectorUtils
 			}
 		}		
 		
-		System.out.println("vmin= "+vmin);
-		System.out.println("vmax= "+vmax);
+	//	System.out.println("vmax= "+vmax);
 
-		if(vmax < 0) //collision ends behind
+		if(vmax < 0.000001f) //collision ends behind - using a threshold to avoid faceplant bug
 			return 1;
-		if(vmax == 0 && vmin < 0) //collision is behind
-			return 1;
+		
 		return 0; //collision is ahead--don't move!	
 			
 
@@ -484,6 +488,14 @@ public class VectorUtils
 	public static float OBB3DIntersect(float[] A, float[] B, float[] aD, float[] bD, float[][] Arot, float[] a, float[] b, float[][] R)
 	{
 		//fill this method in, someday.
+		//it uses the same structure as above, but will have to solve for v differently.
+		//  T = Arot*(B-A)
+		//  T = Arot*(B'-A')
+		//	A' = A + v*aD
+		//	B' = B + v*bD
+		//  T = Arot*( (B + v*bD) - (A + v*aD) )
+		//  T = Arot*( B-A + v(bD-aD) )
+		//  T = v*(Arot*(bD-aD)) + (Arot*(B-A)) //final, I think
 		
 		return -1;
 	}
@@ -676,7 +688,7 @@ public class VectorUtils
 
 	/***Matrix functions I don't expect to use***/
 
-	//returns the product of two 3x3 matrixes together (m*n)
+	//returns the product of two 3x3 matrixes (m*n)
 	public static float[][] mul(float[][] m, float[][] n)
 	{
 		return new float[][] 

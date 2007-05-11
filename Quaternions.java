@@ -49,7 +49,7 @@ public class Quaternions
 		q[W] = (float)(q[W]/len);
 	}
 
-	//returns the length of the quaternion
+	//returns the length of the quaternion (in double precision)
 	public static double getLength(float[] q)
 	{
 		return Math.sqrt(q[X]*q[X] + q[Y]*q[Y] + q[Z]*q[Z] + q[W]*q[W]);

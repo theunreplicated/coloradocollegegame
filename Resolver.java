@@ -250,7 +250,6 @@ public class Resolver extends Thread
 				{
 					myLogger.message("Script error: " + se.getMessage() + "\n",true);
 					System.out.println("error in Resolver (1)");
-					System.out.println(se);
 				}
 			}
 		}
@@ -366,7 +365,6 @@ public class Resolver extends Thread
 				{
 					myLogger.message("Script error: " + se.getMessage() + "\n",true);
 					System.out.println("error in Resolver (2)");
-					System.out.println(se);
 
 				}
 
