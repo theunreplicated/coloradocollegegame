@@ -36,8 +36,9 @@ public class Client
 		a.parameters().add(true); // yes, we want to pass this to the server
 		a.parameters().add(ge);
 		r.addAction(a);
-		myIO.startListening();
 		clientInput.setMe(ge);
+		myIO.startListening();
+
 		_rep.initialize(w, myLogger);
 		r.setRepresentationResolver(repResolver);
 

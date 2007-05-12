@@ -213,6 +213,8 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 				a.parameters().add(Constants.QUAT_CLOY);
 				resolver.addAction(a); 
 				break;
+
+			/*Testing element addition: make*/
 			case KeyEvent.VK_M:
 				a = actionFactory.getAction("add element");
 				GameElement b = new GameElement(resolver.world.getElementById(110));
@@ -222,6 +224,15 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 				a.parameters().add(b);
 				resolver.addAction(a);
 				break;
+
+			/*Testing delayed actions with: jump*/
+			case KeyEvent.VK_J:
+				a = actionFactory.getAction("jump");
+				a.setNouns(new GameElement[]{me});
+				a.parameters().add(0);
+				resolver.addAction(a);
+				break;
+
 
 			/*Camera stuff*/
 			case KeyEvent.VK_V:

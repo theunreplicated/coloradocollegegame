@@ -82,16 +82,19 @@ public class Resolver extends Thread
 					}
 					else
 					{
-						sleepTime = 0;
+						untilNextAction = 0;
 						a = _a;
 						break;
 					}
 				}
-				if(sleepTime != 0)
+				if(untilNextAction != 0)
 				{
+					actionStack.unshift(a);
 					try
 					{
-						Thread.sleep(sleepTime);
+						if(untilNextAction > Constants.SLEEP_TIME);
+							untilNextAction = Constants.SLEEP_TIME;
+						Thread.sleep(untilNextAction);
 						continue;
 					}
 					catch(InterruptedException ie)
@@ -101,33 +104,10 @@ public class Resolver extends Thread
 					}
 				}
 			}
-			myLogger.message("Resolver running on action " + a.getName(), false);
+			myLogger.message("Resolver running on action " + a.getName() + "\n", false);
 			parse(a);
 		}
 	}
-
-  /* depracated 
-	@SuppressWarnings("unchecked")
-	private int[] parse(Object _actions)
-	{
-		if(!(_actions instanceof IncrementedArray))
-		{
-			if(_actions instanceof Action)
-				return new int[]{parse((Action) _actions)};
-
-			myLogger.message("OLD Resolver parse received a bad message, ignoring: " + _actions + "\n", true);
-			return null;
-		}
-
-		IncrementedArray<WritableAction> actions = (IncrementedArray<WritableAction>) _actions;
-		int[] results = new int[actions.length];
-
-		for(int i = 0; i < actions.length; i++)
-			results[i] = parse(actions.get(i).getAction(world,actionFactory));
-
-		return results;
-	}
-	*/
 
 	private int parse(Action action)
 	{
@@ -249,7 +229,7 @@ public class Resolver extends Thread
 				catch(ScriptException se)
 				{
 					myLogger.message("Script error: " + se.getMessage() + "\n",true);
-					System.out.println("error in Resolver (1)");
+					myLogger.message("Error in Resolver (rules)\n",true);
 				}
 			}
 		}
@@ -353,6 +333,11 @@ public class Resolver extends Thread
 					}
 					else if(status == Constants.HANDLE_AGAIN)
 					{
+						Object ret_value = returnVals.get(0);
+						if(ret_value instanceof Integer)
+							_action.setDelay(((Integer) ret_value).intValue());
+						else if(ret_value instanceof Double)
+							_action.setDelay(((Double) ret_value).intValue());
 						addAction(_action);
 					}
 
@@ -364,8 +349,7 @@ public class Resolver extends Thread
 				catch(ScriptException se)
 				{
 					myLogger.message("Script error: " + se.getMessage() + "\n",true);
-					System.out.println("error in Resolver (2)");
-
+					myLogger.message("Error in Resolver (actions)\n",true);
 				}
 
 			}
