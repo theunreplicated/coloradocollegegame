@@ -48,6 +48,7 @@ public class ClientIO implements IO
 		catch(IOException ioe)
 		{
 			myLogger.message( "Failed to connect to server: " + ioe.getMessage() + "\n" , true );
+			System.exit(0);
 		}
 	}
 
@@ -58,6 +59,7 @@ public class ClientIO implements IO
 	public void startListening()
 	{
 			serverListener = new ServerListenerThread();
+			serverListener.listenOnce(); // listen for the world
 			serverListener.start();
 	}
 
@@ -77,26 +79,51 @@ public class ClientIO implements IO
 
 	private class ServerListenerThread extends Thread
 	{
+		public void listenOnce()
+		{
+			try
+			{
+				Object objectMessage;
+
+				myLogger.message("Starting to listen (once)...\n", false);
+				objectMessage = ois.readObject();
+				myLogger.message("Recieved message (once)...\n", false);
+				resolver.addAction(objectMessage);
+			}
+			catch(IOException ioe)
+			{
+				myLogger.message( "Error while listening for server input: " + ioe.getMessage() + "\n", true );
+				System.exit(0);
+			}
+			catch(ClassNotFoundException cnfe)
+			{
+				myLogger.message( "Error while listening for server input (class not found): " + cnfe + "\n", true );
+				System.exit(0);
+			}
+
+		}
 		public void run()
 		{
 			try
 			{
 				Object objectMessage;
 
-				System.out.println("Starting to listen...");
+				myLogger.message("Starting to listen...\n", false);
 				while( (objectMessage = ois.readObject()) != null)
 				{
-					System.out.println("Recieved message...");
+					myLogger.message("Recieved message...\n", false);
 					resolver.addAction(objectMessage);
 				}
 			}
 			catch(IOException ioe)
 			{
 				myLogger.message( "Error while listening for server input: " + ioe.getMessage() + "\n", true );
+				System.exit(0);
 			}
 			catch(ClassNotFoundException cnfe)
 			{
 				myLogger.message( "Error while listening for server input (class not found): " + cnfe + "\n", true );
+				System.exit(0);
 			}
 		}
 

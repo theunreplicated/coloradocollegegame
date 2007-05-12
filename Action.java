@@ -154,7 +154,7 @@ public class Action implements Serializable
 		return delay;
 	}
 
-	public void setdelay(int _time)
+	public void setDelay(int _time)
 	{
 		delay = _time;
 	}

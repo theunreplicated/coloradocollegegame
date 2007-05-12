@@ -50,4 +50,15 @@ public class ElementStack<K>
 		return popped.get();
 	}
 
+	public synchronized int size()
+	{
+		int i = 0;
+		if(first == null)  return 0;
+		LinkedHolder<K> current = first;
+		do
+		{
+			i++;
+		}while( (current = current.next) != first);
+		return i; 
+	}
 }
