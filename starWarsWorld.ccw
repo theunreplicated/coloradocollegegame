@@ -9,39 +9,39 @@ increase the size of the memory. <MemorySize> is some integer greater than
 64MB, reccomended 256MB+ to properly show off all the polygons without 
 crashing the JVM.
 
-By default this and sw.ccel will be commented out, minus R2 to prevent crashes. 
+By default sw.ccel will be commented out, minus R2 & xwing to prevent crashes. 
 -->
 
 <world>
-	<!--<element type="millenium falcon">
+	<element type="millenium falcon">
 		<position>10</position>
 		<position>3</position>
 		<position>10</position>
-	</element>-->
+	</element>
 	
-	<!--<element type="atst">
+	<element type="atst">
 		<position>-10</position>
 		<position>3</position>
 		<position>10</position>
-	</element>-->
+	</element>
 	
-	<!--<element type="atat">
+	<element type="atat">
 		<position>10</position>
 		<position>3</position>
 		<position>-10</position>
-	</element>-->
+	</element>
 	
-	<!--<element type="ywing">
+	<element type="ywing">
 		<position>-10</position>
 		<position>3</position>
 		<position>-10</position>
-	</element>-->
+	</element>
 	
-	<!--<element type="xwing">
+	<element type="xwing">
 		<position>-5</position>
 		<position>3</position>
 		<position>-5</position>
-	</element>-->
+	</element>
 	
 	<element type="R2">
 		<position>0</position>
@@ -49,4 +49,3 @@ By default this and sw.ccel will be commented out, minus R2 to prevent crashes.
 		<position>0</position>
 	</element>
 </world>
-

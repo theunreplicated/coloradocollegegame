@@ -1,7 +1,14 @@
+import java.awt.BorderLayout;
+import java.awt.Menu;
+import java.awt.MenuBar;
+import java.awt.MenuItem;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Random;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class Server implements IO
 {
@@ -356,6 +363,40 @@ public class Server implements IO
 			wf = new WorldFactory(worldFiles, ef, myLogger);
 		else
 			wf = new WorldFactory(dataDir, worldExt, ef, myLogger);
-		Server s = new Server(wf, ef, myLogger , port);// "s" is never read
+
+		// MAKES THIS A CLOSEABLE WINDOW
+		JFrame window = new JFrame();
+		window.setVisible(true);
+		window.setTitle("CC Game - Server");
+		window.setSize(1,1);
+
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+
+		JPanel canvasFrame = new JPanel();
+		panel.add(canvasFrame, BorderLayout.CENTER);
+		
+		//menu bar
+		MenuBar menuBar;
+        Menu menu;
+        MenuItem menuItem;
+        
+        //Create the menu bar.
+        menuBar = new MenuBar();
+        menu = new Menu("File");
+        menuBar.add(menu);
+        menuItem = new MenuItem("PLEASE hit the \"X\" to close the server");
+        menu.add(menuItem);
+        window.setMenuBar(menuBar);
+        
+        // CLOSE THE WINDOW WITH THE "X"
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.add(panel);
+		window.pack();
+		window.setSize(225, 50);
+		window.setResizable(true);
+		
+		//Server s = new Server(wf, ef, myLogger , port);// "s" is never read
+		new Server(wf, ef, myLogger , port);
 	}
 }

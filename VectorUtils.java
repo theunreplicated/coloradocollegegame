@@ -1,8 +1,8 @@
 //VectorUtils.java
 //@author Joel Ross
 
-import java.util.HashMap;
-import java.util.Arrays;
+//import java.util.HashMap;//never used
+//import java.util.Arrays;//never used
 
 /***
  A static utility class for working with vectors (float precision).
