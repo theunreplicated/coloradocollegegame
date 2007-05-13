@@ -122,6 +122,9 @@ public class Resolver extends Thread
 			}
 		}
 		Rule[][] applicable = new Rule[actions.length][];
+		//"new incrementedArray[actions.length]" 
+		//Type safety: The expression of Type IncrementedArray[] needs unchecked Conversion  
+		//to conform to incrementedArray<GameElement>[]
 		IncrementedArray<GameElement>[] relevantElements = new IncrementedArray[actions.length];
 		GameElement[][] nouns = new GameElement[actions.length][];
 		for(int i = 0; i < actions.length; i++)

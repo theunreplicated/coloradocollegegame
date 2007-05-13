@@ -69,7 +69,7 @@
 		</attributes>
 	</element>
 
-	<!--<element>
+	<element>
 		<name>atst</name>
 		<plural>Oh Noes!!</plural>
 		<shapes>
@@ -87,9 +87,9 @@
 		<attributes>
 			<mass type="int">120</mass>
 		</attributes>
-	</element>-->
+	</element>
 
-	<!--<element>
+	<element>
 		<name>atat</name>
 		<plural>Oh Noes!!</plural>
 		<shapes>
@@ -99,17 +99,17 @@
 				<facing>-90</facing>
 				<facing>0</facing>
 				<facing>0</facing>
-				<scale>.1</scale>
-				<scale>.1</scale>
-				<scale>.1</scale>
+				<scale>2</scale>
+				<scale>2</scale>
+				<scale>2</scale>
 			</kmz>
 		</shapes>
 		<attributes>
 			<mass type="int">230</mass>
 		</attributes>
-	</element>-->
+	</element>
 
-	<!--<element>
+	<element>
 		<name>ywing</name>
 		<plural>ywings</plural>
 		<shapes>
@@ -127,6 +127,6 @@
 		<attributes>
 			<mass type="int">130</mass>
 		</attributes>
-	</element>-->
+	</element>
 
 </element_types>

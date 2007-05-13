@@ -58,6 +58,11 @@ public class ElementStack<K>
 		do
 		{
 			i++;
+			/**
+			 * current.next
+			 * Type safety: The expression of tyhpe LinkedHolder needs 
+			 * unchecked conversion to conform to LinkedHolder<K>
+			 */
 		}while( (current = current.next) != first);
 		return i; 
 	}
