@@ -29,15 +29,15 @@ public class Server implements IO
 	//could change this later
 	private ArrayList<MovingElement> movers = new ArrayList<MovingElement>(); 
 	
-	public Server(WorldFactory wf, ElementFactory ef, Logger _logger ,int _port)
+	public Server(WorldFactory wf, ElementFactory ef, File _dataDir, Logger _logger ,int _port)
 	{
 
 		myLogger = _logger;
 		myWorld = new World(ef, myLogger);
 		wf.fillWorld(myWorld);
 
-		actionFactory = new ActionFactory(myLogger);
-		RuleFactory rf = new RuleFactory(actionFactory,ef,myLogger);
+		actionFactory = new ActionFactory(_dataDir, myLogger);
+		RuleFactory rf = new RuleFactory(_dataDir, actionFactory, ef, myLogger);
 		resolver = new Resolver(myWorld, rf, actionFactory, ef, myLogger);
 		resolver.start();
 		resolver.setIO(this);
@@ -97,7 +97,7 @@ public class Server implements IO
 					 * in general, please see the long comment in Constants.java
 					 * where ELMENT_ID_PADDING is declared.
 					 */
-					myLogger.message( "Creating client connection thread in row " + i + " (id is: " + ids[i] + ")\n", false );
+					myLogger.message( "Creating client connection thread in row " + i + "\n", false );
 					threads[i] = new ClientThread(this, _conn, i + 1 + Constants.ELEMENT_ID_PADDING, i, myLogger);
 					threads[i].start();
 					ids[i] = Constants.CONNECTION_PENDING;
@@ -234,14 +234,14 @@ public class Server implements IO
 		String worldExt = Constants.WORLD_EXTENSION;
 		File[] worldFiles = null;
 		File[] elementFiles = null;
+		boolean gui = true;
 		for(int i=0; i < args.length; i++)
 		{
 			if(args[i].equalsIgnoreCase("-v"))
 			{
 				verbose = true;
-				continue;
 			}
-			if(args[i].equalsIgnoreCase("-dir"))
+			else if(args[i].equalsIgnoreCase("-dir"))
 			{
 				if(args.length == i)
 				{
@@ -249,9 +249,8 @@ public class Server implements IO
 					System.exit(1);
 				}
 				dataDir = new File(args[++i]);
-				continue;
 			}
-			if(args[i].equalsIgnoreCase("-eext"))
+			else if(args[i].equalsIgnoreCase("-eext"))
 			{
 				if(args.length == i)
 				{
@@ -259,9 +258,8 @@ public class Server implements IO
 					System.exit(1);
 				}
 				elementExt = args[++i];
-				continue;
 			}
-			if(args[i].equalsIgnoreCase("-wext"))
+			else if(args[i].equalsIgnoreCase("-wext"))
 			{
 				if(args.length == i)
 				{
@@ -269,9 +267,8 @@ public class Server implements IO
 					System.exit(1);
 				}
 				worldExt = args[++i];
-				continue;
 			}
-			if(args[i].equalsIgnoreCase("-wfiles"))
+			else if(args[i].equalsIgnoreCase("-wfiles"))
 			{
 				if(args.length == i)
 				{
@@ -291,9 +288,8 @@ public class Server implements IO
 				worldFiles = new File[j];
 				System.arraycopy(tmpFiles,0,worldFiles,0,j);
 				i+=j;
-				continue;
 			}
-			if(args[i].equalsIgnoreCase("-efiles"))
+			else if(args[i].equalsIgnoreCase("-efiles"))
 			{
 				if(args.length == i)
 				{
@@ -313,9 +309,8 @@ public class Server implements IO
 				elementFiles = new File[j];
 				System.arraycopy(tmpFiles,0,elementFiles,0,j);
 				i+=j;
-				continue;
 			}
-			if(args[i].equalsIgnoreCase("-p"))
+			else if(args[i].equalsIgnoreCase("-p"))
 			{
 				if(args.length == i)
 				{
@@ -332,14 +327,18 @@ public class Server implements IO
 				{
 					port = Constants.DEF_PORT;
 				}
-				continue;
 			}
-			if(args[i].equalsIgnoreCase("-help") || args[i].equalsIgnoreCase("-h"))
+			else if(args[i].equalsIgnoreCase("-t"))
+			{
+				gui = false;
+			}
+			else if(args[i].equalsIgnoreCase("-help") || args[i].equalsIgnoreCase("-h"))
 			{
 				System.out.println("Syntax: java Server [options]");
 				System.out.println("Options:");
 				System.out.println(" -h\t\tPrint this help screen");
 				System.out.println(" -v\t\tRun in verbose mode");
+				System.out.println(" -t\t\tRun in text mode");
 				System.out.println(" -p <port>\tRun on port # <port>");
 				System.out.println(" -dir <dir>\tLook for data files in directory <dir>");
 				System.out.println(" -eext <ext>\tLook in data dir for Element List files that have extension <ext>");
@@ -348,7 +347,10 @@ public class Server implements IO
 				System.out.println(" -wfiles <file> [file [file [...]]]\tBuild the world only out of the files specified");
 				System.exit(0);
 			}
-			System.err.println("Bad argument (ignoring): " + args[i]);
+			else
+			{
+				System.err.println("Bad argument (ignoring): " + args[i]);
+			}
 		}
 
 		Logger myLogger = new Logger( verbose);
@@ -364,39 +366,46 @@ public class Server implements IO
 		else
 			wf = new WorldFactory(dataDir, worldExt, ef, myLogger);
 
-		// MAKES THIS A CLOSEABLE WINDOW
-		JFrame window = new JFrame();
-		window.setVisible(true);
-		window.setTitle("CC Game - Server");
-		window.setSize(1,1);
+		/* The GUI is optional so that it is easier to start the server
+		 * from a distance (e.g., using SSH).
+		 * - Omer.
+		 */
+		if(gui)
+		{
+			// MAKES THIS A CLOSEABLE WINDOW
+			JFrame window = new JFrame();
+			window.setVisible(true);
+			window.setTitle("CC Game - Server");
+			window.setSize(1,1);
 
-		JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout());
+			JPanel panel = new JPanel();
+			panel.setLayout(new BorderLayout());
 
-		JPanel canvasFrame = new JPanel();
-		panel.add(canvasFrame, BorderLayout.CENTER);
-		
-		//menu bar
-		MenuBar menuBar;
-        Menu menu;
-        MenuItem menuItem;
-        
-        //Create the menu bar.
-        menuBar = new MenuBar();
-        menu = new Menu("File");
-        menuBar.add(menu);
-        menuItem = new MenuItem("PLEASE hit the \"X\" to close the server");
-        menu.add(menuItem);
-        window.setMenuBar(menuBar);
-        
-        // CLOSE THE WINDOW WITH THE "X"
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.add(panel);
-		window.pack();
-		window.setSize(225, 50);
-		window.setResizable(true);
+			JPanel canvasFrame = new JPanel();
+			panel.add(canvasFrame, BorderLayout.CENTER);
+			
+			//menu bar
+			MenuBar menuBar;
+					Menu menu;
+					MenuItem menuItem;
+					
+					//Create the menu bar.
+					menuBar = new MenuBar();
+					menu = new Menu("File");
+					menuBar.add(menu);
+					menuItem = new MenuItem("PLEASE hit the \"X\" to close the server");
+					menu.add(menuItem);
+					window.setMenuBar(menuBar);
+					
+					// CLOSE THE WINDOW WITH THE "X"
+					window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			window.add(panel);
+			window.pack();
+			window.setSize(225, 50);
+			window.setResizable(true);
+		}
 		
 		//Server s = new Server(wf, ef, myLogger , port);// "s" is never read
-		new Server(wf, ef, myLogger , port);
+		new Server(wf, ef, dataDir, myLogger , port);
 	}
 }

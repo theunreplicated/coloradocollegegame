@@ -19,6 +19,7 @@ public class RepresentationResolver
 		manager.put("VectorUtils", new VectorUtils());
 	}
 
+	@SuppressWarnings("fallthrough")
 	public void resolve(Action _action)
 	{
 		GameElement[] nouns = _action.getNouns();

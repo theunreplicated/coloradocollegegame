@@ -92,7 +92,7 @@ public class Resolver extends Thread
 					actionStack.unshift(a);
 					try
 					{
-						if(untilNextAction > Constants.SLEEP_TIME);
+						if(untilNextAction > Constants.SLEEP_TIME)
 							untilNextAction = Constants.SLEEP_TIME;
 						Thread.sleep(untilNextAction);
 						continue;
@@ -109,6 +109,7 @@ public class Resolver extends Thread
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private int parse(Action action)
 	{
 		IncrementedArray<Action> _actions = action.getDependentActions();

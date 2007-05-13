@@ -25,9 +25,21 @@ class ClientThread extends Thread {
 		try
 		{
 			oos = new ObjectOutputStream(clientOut.getOutputStream());
+
+			/* Get the input port by creating a new serversocket with a unique
+			 * port bound to it.
+			 */
+			ServerSocket inputSocketGetter = new ServerSocket(0);
+			int inputPort = inputSocketGetter.getLocalPort();
+			myLogger.message("Input socket port for client " + id + " is: " + inputPort + "\n", false);
+			oos.writeInt( inputPort );
+			oos.flush();
+			clientIn = inputSocketGetter.accept();
+			inputSocketGetter.close();
+
 			oos.writeInt( id );
 			oos.flush();
-
+			/*
 			int wait = 0;
 			while(wait < Constants.TIMEOUT && clientIn == null)
 			{
@@ -51,6 +63,7 @@ class ClientThread extends Thread {
 					clientIn = null;
 				}
 			}
+			*/
 			ObjectInputStream ois = new ObjectInputStream(clientIn.getInputStream());
 			Object objectMessage;
 			objectMessage = ois.readObject(); // first, receive the new player's element
