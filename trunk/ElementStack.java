@@ -50,6 +50,8 @@ public class ElementStack<K>
 		return popped.get();
 	}
 
+
+	@SuppressWarnings("unchecked")
 	public synchronized int size()
 	{
 		int i = 0;
@@ -63,7 +65,7 @@ public class ElementStack<K>
 			 * Type safety: The expression of tyhpe LinkedHolder needs 
 			 * unchecked conversion to conform to LinkedHolder<K>
 			 */
-		}while( (current = current.next) != first);
+		}while( (current = (LinkedHolder<K>) current.next) != first);
 		return i; 
 	}
 }

@@ -29,16 +29,48 @@ public class ClientIO implements IO
 			myLogger.message("Connecting...\n", false);
 			servConnectionIn = new Socket(InetAddress.getByName(_server), _port);
 			ois = new ObjectInputStream(servConnectionIn.getInputStream());
-			id = ois.readInt();
+			int outputPort = ois.readInt();
+			myLogger.message("Output port is: " + outputPort + "\n", false);
 
 			// get the output stream
+			int wait = 0;
+			while(wait < Constants.TIMEOUT && servConnectionOut == null)
+			{
+				try	
+				{
+					myLogger.message("ClientIO trying to connect to: " + servConnectionIn.getInetAddress() + ":" + (servConnectionIn.getLocalPort()+1)+"\n",false);
+					servConnectionOut = new Socket(InetAddress.getByName(_server), outputPort);
+				}
+				catch(IOException ioe)
+				{
+					myLogger.message("ClientIO could not get output stream from server... waiting a bit longer\n", false);
+					try
+					{
+						Thread.sleep(1000);
+					}
+					catch(InterruptedException ie)
+					{
+						myLogger.message("ClientIO interrupted while waiting to get output stream for server\n", true);
+					}
+					wait += 1000;
+					servConnectionOut = null;
+				}
+			}
+			if(servConnectionOut == null)
+			{
+				myLogger.message("Failed to get output stream from server... Quitting.\n",true);
+				System.exit(0);
+			}
+
+			id = ois.readInt();
+/*
 			myLogger.message("Starting temporary server to get output stream...\n", false);
 			ServerSocket serve = new ServerSocket(_port+1);
 			servConnectionOut = serve.accept();
 
 			myLogger.message("Stopping temporary server with which we got an output stream...\n", false);
 			serve.close();
-
+*/
 			oos = new ObjectOutputStream(servConnectionOut.getOutputStream());
 
 			myLogger.message("Connected as id: " + id + "\n", false);

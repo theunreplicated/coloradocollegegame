@@ -1,4 +1,5 @@
 import java.awt.Component;
+import java.io.File;
 
 public class Client
 {
@@ -7,17 +8,16 @@ public class Client
 	ClientIO myIO;
 	World w;
 
-	public Client(String _server, Representation _rep, int _port, boolean _verbose )
+	public Client(String _server, Representation _rep, ElementFactory _ef, File _dataDir, int _port, boolean _verbose )
 	{
 		myLogger = new Logger( _verbose );
 
-		ElementFactory ef = new ElementFactory(myLogger);
-		ActionFactory af = new ActionFactory(myLogger);
-		RuleFactory rf = new RuleFactory(af,ef,myLogger);
+		ActionFactory af = new ActionFactory(_dataDir, myLogger);
+		RuleFactory rf = new RuleFactory(_dataDir, af, _ef, myLogger);
 		RepresentationResolver repResolver = new RepresentationResolver(_rep, myLogger);
 
-		w = new World(ef,myLogger);
-		Resolver r = new Resolver(w, rf, af, ef, myLogger);
+		w = new World(_ef,myLogger);
+		Resolver r = new Resolver(w, rf, af, _ef, myLogger);
 		clientInput = new ClientInput(r,repResolver,af,myLogger);
 		r.start();
 		
@@ -25,7 +25,7 @@ public class Client
 		r.setIO(myIO);
 		int id = myIO.getId();
 		Action a = af.getAction("add element");
-		GameElement ge = ef.getGameElement("face");
+		GameElement ge = _ef.getGameElement("face");
 		ge.id(id);
 		ge.setPosition(new float[]{
 				Constants.INITIAL_X,
@@ -55,10 +55,21 @@ public class Client
 
 	public static void initialize(String args[], Representation rep)
 	{
-		boolean verbose = false;
+		// Take user input.
+		// Options:
+		//  -p <port> 
+		//  -verbose
+		//  -dir <datadir>
+		//  -eext <elementext>
+		//  -efiles <elementfile> [elementfile [elementfile [...]]]
 		int port = Constants.DEF_PORT;
+		boolean verbose = false;
 		String server = Constants.DEF_SERVER;
 		int i;
+		File dataDir = new File(Constants.DEFAULT_DATA_DIR);
+		String elementExt = Constants.ELEMENT_LIST_EXTENSION;
+		File[] elementFiles = null;
+
 		for(i = 0; i < args.length; i++)
 		{
 			if(args[i].equalsIgnoreCase("-v"))
@@ -68,6 +79,45 @@ public class Client
 			else if(args[i].equalsIgnoreCase("-s"))
 			{
 				server = args[++i];
+			}
+			else if(args[i].equalsIgnoreCase("-dir"))
+			{
+				if(args.length == i)
+				{
+					System.err.println("Bad usage of -dir option. Syntax: -dir <directory>");
+					System.exit(1);
+				}
+				dataDir = new File(args[++i]);
+			}
+			else if(args[i].equalsIgnoreCase("-eext"))
+			{
+				if(args.length == i)
+				{
+					System.err.println("Bad usage of -eext option. Syntax: -eext <element file ext>");
+					System.exit(1);
+				}
+				elementExt = args[++i];
+			}
+			else if(args[i].equalsIgnoreCase("-efiles"))
+			{
+				if(args.length == i)
+				{
+					System.err.println("Bad usage of -efiles option. Syntax: -efiles <element file> [element file [element file [...]]]");
+					System.exit(1);
+				}
+				File[] tmpFiles = new File[args.length];
+
+				// We assume that there will be at least _one_ file.
+				tmpFiles[0] = new File(args[i+1]);
+				int j = 1;
+				while(args.length > i+j+1 && !args[i+j+1].startsWith("-"))
+				{
+					tmpFiles[j] = new File(args[i+j+1]);
+					j++;
+				}
+				elementFiles = new File[j];
+				System.arraycopy(tmpFiles,0,elementFiles,0,j);
+				i+=j;
 			}
 			else if(args[i].equalsIgnoreCase("-p"))
 			{
@@ -94,7 +144,14 @@ public class Client
 				System.out.println(" -v\t\tRun in verbose mode");
 				System.out.println(" -s <domain>\tRun on server at domain <domain>");
 				System.out.println(" -p <port>\tRun on port # <port>");
+				System.out.println(" -dir <dir>\tLook for data files in directory <dir>");
+				System.out.println(" -eext <ext>\tLook in data dir for Element List files that have extension <ext>");
+				System.out.println(" -efiles <file> [file [file [...]]]\tOnly look for elements in the files specified");
 				System.exit(0);
+			}
+			else
+			{
+				System.err.println("Bad argument (ignoring): " + args[i]);
 			}
 		}
 
@@ -104,7 +161,14 @@ public class Client
 			System.exit(0);
 		}
 
-		new Client(server, rep, port, verbose);
+		Logger myLogger = new Logger( verbose);
+		ElementFactory ef;
+		if(elementFiles != null)
+			ef = new ElementFactory(elementFiles, myLogger);
+		else
+			ef = new ElementFactory(dataDir, elementExt, myLogger);
+
+		new Client(server, rep, ef, dataDir, port, verbose);
 	}
 
 }
