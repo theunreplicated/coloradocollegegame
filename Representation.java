@@ -12,4 +12,5 @@ public interface Representation
 	public float[] getCameraFacing();
 	public void updateLocation(GameElement ge);
 	public void updatePresence(GameElement ge);
+	public void displayMessage(String message, int flags);
 }
