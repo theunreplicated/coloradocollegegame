@@ -895,6 +895,6 @@ public class StartUp extends JPanel
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.add(panel);
 		window.pack();
-		window.setResizable(false);
+		window.setResizable(true);
 	}//main
 }//class
