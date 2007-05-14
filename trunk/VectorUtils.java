@@ -1,9 +1,6 @@
 //VectorUtils.java
 //@author Joel Ross
 
-//import java.util.HashMap;//never used
-//import java.util.Arrays;//never used
-
 /***
  A static utility class for working with vectors (float precision).
  I'm currently assuming 3-dimensional vectors for optimization.

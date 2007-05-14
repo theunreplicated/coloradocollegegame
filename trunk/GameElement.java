@@ -391,7 +391,7 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		
 		float v = VectorUtils.OBB3DIntersect(A,B,D,Arot,a,b,R);
 
-		System.out.println("method's v="+v+"\n");
+		//System.out.println("method's v="+v+"\n");
 
 		return v;
 		//return Math.min(v,1.0f); //unless the OBB3DIntersect method only returns [0,1]
