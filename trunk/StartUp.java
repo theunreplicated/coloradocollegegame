@@ -18,7 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-
 /**
  * This class is designed to start either a Server or a Client with 
  * set variables passed in a GUI enviornment versus the command-line.
@@ -27,13 +26,13 @@ import javax.swing.JTextField;
  * with the console, or report it in some way by using StartUp 
  * 
  * @author Guillermo Mendez-Kestler
- * @version 1.5
+ * @version 2
  */
 public class StartUp extends JPanel 
-implements ActionListener, ItemListener
+			implements ActionListener, ItemListener
 {
 	// Global Variables
-	private static final long serialVersionUID = -4262492391092098134L;
+	private static final long serialVersionUID = -4220168158330567279L;
 	// TAB NAMES
 	final static String CLIENTPANEL = "CLIENT";
 	final static String SERVERPANEL = "SERVER";
@@ -102,7 +101,7 @@ implements ActionListener, ItemListener
 		// Set the default location of each item to the West
 		c.anchor=GridBagConstraints.WEST;
 
-		setPreferredSize(new Dimension(555,210));
+		setPreferredSize(new Dimension(565,220));
 		setBackground(Color.white);
 		setFocusable(true); //for keyboard focus
 
@@ -550,6 +549,16 @@ implements ActionListener, ItemListener
 
 	} // StartUp Contstructor
 
+	/**
+	 * When either the CLIENT button or the SERVER button are pressed
+	 * the arguments previously selected are passed to exec and a new 
+	 * process of either client or server is created. 
+	 * 
+	 * By default the amount of memory given to both either the client 
+	 * or the server is 512MB. SO the minimum requirements are 512MB. 
+	 * This amount is only necessary when importing high triangle counts 
+	 * from SketchUp. 
+	 */
 	public void actionPerformed(ActionEvent e) 
 	{
 		Runtime runtime = Runtime.getRuntime();
@@ -557,9 +566,8 @@ implements ActionListener, ItemListener
 		arguments[1]="-Xmx512m";
 
 		/*
-		 * CLIENT BUTTON!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		 * CLIENT BUTTON
 		 */
-
 		if (e.getSource()==clientBtn)
 		{
 			String inPortValC = String.valueOf(inPortC.getText());
@@ -664,9 +672,8 @@ implements ActionListener, ItemListener
 		}
 
 		/*
-		 * SERVER BUTTON!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		 * SERVER BUTTON
 		 */
-
 		else if (e.getSource()==serverBtn)
 		{
 			String inPortValS = String.valueOf(inPortS.getText());
@@ -786,6 +793,11 @@ implements ActionListener, ItemListener
 			System.out.println("NOT A VALID BUTTON COMMAND");
 	} // actionPerformed
 
+	/**
+	 * This changes which item is selected for options other than
+	 * the default options. It can go both ways of selecting or 
+	 * deselecting. 
+	 */
 	public void itemStateChanged(ItemEvent e)
 	{
 		Object source = e.getItemSelectable();
@@ -858,6 +870,12 @@ implements ActionListener, ItemListener
 		}
 	} // item state changed
 
+	/**
+	 * The main method that creates the canvas and places the 
+	 * StartUp items inside a window. 
+	 * 
+	 * @param args There are no paramaters for this program
+	 */
 	public static void main(String[] args) 
 	{
 		StartUp theCanvas = new StartUp();
