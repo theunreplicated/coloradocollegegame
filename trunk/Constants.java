@@ -137,6 +137,7 @@ public class Constants
 	// resolver stuff
 	public static final short DEFAULT_RELEVANT_SIZE = 20;
 	public static final short DEFAULT_RULE_ARRAY_SIZE = 20;
+	public static final short DEFAULT_ACTIONS_TO_SEND = 1;
 	public static final short DEFAULT_ACTION_HASHMAP_ENTRY_SIZE = 2;
 	public static final short DEFAULT_ACTION_PARAMETERS_SIZE = 2;
 	public static final short DEFAULT_ACTION_LIST_SIZE = 20;
