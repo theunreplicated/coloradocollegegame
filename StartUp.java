@@ -41,54 +41,62 @@ implements ActionListener, ItemListener
 	final static String SERVERHELP = "SERVER HELP";
 	final static String CONSOLE = "CONSOLE";
 	// CLIENT HELP
-	final static String CLIENTHELP0 = "Client Options:";
-	final static String CLIENTHELP1 = "Print this help screen";
-	final static String CLIENTHELP2 = "Run in verbose mode";
-	final static String CLIENTHELP3 = "Run on server at domain <domain>";
-	final static String CLIENTHELP4 = "Run on port # <port>";
+	final static String CLIENTOPTS = "Client Options:";
+	final static String DOMAIN = "Run on server at domain <domain>";
 	// SERVER HELP
-	final static String SERVERHELP0 = "Server Options:";
-	final static String SERVERHELP1 = "Print this help screen";
-	final static String SERVERHELP2 = "Run in verbose mode";
-	final static String SERVERHELP3 = "Run on port # <port>";
-	final static String SERVERHELP4 = "Look for data files in directory <dir>";
-	final static String SERVERHELP5 = 
-		"Look in data dir for Element List files that have extension <ext>";
-	final static String SERVERHELP6 = 
+	final static String SERVEROPTS = "Server Options:";
+	final static String WEXT = 
 		"Look in data dir for World files that have extension <ext>";
-	final static String SERVERHELP7 = 
-		"Only look for elements in the files specified";
-	final static String SERVERHELP8 = 
+	final static String WFILES = 
 		"Build the world only out of the files specified";
+	final static String TEXT = "Run in text mode";
+	// CLIENT/SERVER SHARED 
+	final static String HELP = "Print this help screen";
+	final static String VERBOSE = "Run in verbose mode";
+	final static String PORT = "Run on port # <port>";
+	final static String DIR = "Look for data files in directory <dir>";
+	final static String EEXT = 
+		"Look in data dir for Element List files that have extension <ext>";
+	final static String EFILES = 
+		"Only look for elements in the files specified";
+	
+	
 	// BUTTONS, CHECK BOXES, and TEXT FILEDS
 	JButton serverBtn, clientBtn;
-	JCheckBox verbChkBoxC, portChkBoxC, serverChkBoxC, 
-	verbChkBoxS, portChkBoxS, dirChkBoxS, eextChkBoxS, 
-	wextChkBoxS, efilesChkBoxS, wfilesChkBoxS;
-	JTextField inPortC, inServerC, inPortS, dirInS, eextInS, 
-	wextInS, efilesInS, wfilesInS;
+	JCheckBox verbChkBoxC, serverChkBoxC, portChkBoxC, 
+		dirChkBoxC, eextChkBoxC, efilesChkBoxC,  
+		verbChkBoxS, textChkBoxS, portChkBoxS, dirChkBoxS, 
+		eextChkBoxS,wextChkBoxS, efilesChkBoxS, wfilesChkBoxS;
+	JTextField inServerC, inPortC, dirInC, eextInC, efilesInC, 
+		inPortS, dirInS, eextInS, wextInS, efilesInS, wfilesInS;
 
 	// Variables needed
-	boolean verboseC=false, portC=false, serverC=false, 
-	verboseS=false, portS=false, dirS=false, eextS=false,
-	wextS=false, efilesS=false, wfilesS=false;
+	boolean verboseC=false, serverC=false, portC=false, dirC=false, 
+		eextC=false, efilesC=false, verboseS=false, textS=false, 
+		portS=false, dirS=false, eextS=false, wextS=false, 
+		efilesS=false, wfilesS=false;
 	int portCNum, portSNum;
 	String serverIP, dir, eext, wext, efiles, wfiles;
-	String[] varsClient = {"-h","-v","-s","-p"};
-	String[] varsServer = {"-h","-v","-p","-dir","-eext",
-			"-wext","-efiles","-wfiles"};
-	public String[] arguments = new String[17]; 
+	String[] varsClient = {"-h","-v","-s","-p","-dir",
+			"-eext","-efiles"};
+	String[] varsServer = {"-h","-v","-t","-p","-dir",
+			"-eext","-wext","-efiles","-wfiles"};
+	public String[] arguments = new String[18]; 
 
 	public StartUp()
 	{
 		// GUI Variables
-		JLabel verbLabelC, portLabelC, serverLabelC, verbLabelS, 
-		portLabelS, dirLabelS, eextLabelS, wextLabelS, 
-		efilesLabelS, wfilesLabelS, cNotes0, cNotes1, cNotes2, 
-		cNotes3, cNotes4, cNotes01, cNotes02, cNotes03, cNotes04, 
-		sNotes0, sNotes1, sNotes2, sNotes3, sNotes4, sNotes5, 
-		sNotes6, sNotes7, sNotes8, sNotes01, sNotes02, sNotes03, 
-		sNotes04, sNotes05, sNotes06, sNotes07, sNotes08;
+		JLabel verbLabelC, serverLabelC, portLabelC, dirLabelC, 
+			eextLabelC, efilesLabelC, verbLabelS, textLabelS, 
+			portLabelS, dirLabelS, eextLabelS, wextLabelS, 
+			efilesLabelS, wfilesLabelS, cNotes0, cNotes1, 
+			cNotes2, cNotes3, cNotes4, cNotes5, cNotes6, 
+			cNotes7, cNotes01, cNotes02, cNotes03, cNotes04, 
+			cNotes05, cNotes06, cNotes07, sNotes0, sNotes1, 
+			sNotes2, sNotes3, sNotes4, sNotes5, sNotes6, 
+			sNotes7, sNotes8, sNotes9, sNotes01, sNotes02, 
+			sNotes03, sNotes04, sNotes05, sNotes06, sNotes07, 
+			sNotes08, sNotes09;
 		JTabbedPane tabbedPane = new JTabbedPane();
 		GridBagConstraints c = new GridBagConstraints();
 		// Set the default location of each item to the West
@@ -112,26 +120,12 @@ implements ActionListener, ItemListener
 		Panel serverHelp = new Panel();
 		serverHelp.setLayout(new GridBagLayout());
 
-		// Client Panels
-		Panel clientPanelM = new Panel();
-		clientPanelM.setLayout(new BorderLayout());
+		// Client/Server Panels
+		Panel clientPanel = new Panel();
+		clientPanel.setLayout(new GridBagLayout());
 
-		Panel clientPanelR = new Panel();
-		clientPanelR.setLayout(new GridBagLayout());
-
-		Panel clientPanelS = new Panel();
-		clientPanelS.setLayout(new GridBagLayout());
-
-		// Server Panels
-		Panel serverPanelM = new Panel();
-		serverPanelM.setLayout(new BorderLayout());
-
-		Panel serverPanelR = new Panel();
-		serverPanelR.setLayout(new GridBagLayout());
-
-		Panel serverPanelS = new Panel();
-		serverPanelS.setLayout(new GridBagLayout());
-
+		Panel serverPanel = new Panel();
+		serverPanel.setLayout(new GridBagLayout());
 		/**
 		 * CLIENT PANEL
 		 */
@@ -140,50 +134,104 @@ implements ActionListener, ItemListener
 		c.gridx = 0;
 		c.gridy = 0;
 		serverChkBoxC.setSelected(false);
-		clientPanelR.add(serverChkBoxC, c);
+		clientPanel.add(serverChkBoxC, c);
 		serverChkBoxC.addItemListener(this);
 
 		serverLabelC = new JLabel("Connect to Server IP:  ");
 		c.gridx = 1;
 		c.gridy = 0;
-		clientPanelR.add(serverLabelC, c);
+		clientPanel.add(serverLabelC, c);
 
 		inServerC = new JTextField("", 15);
 		c.gridx = 2;
 		c.gridy = 0;
-		clientPanelR.add(inServerC, c);
+		clientPanel.add(inServerC, c);
 
 		// Client Port
 		portChkBoxC= new JCheckBox("");
 		c.gridx = 0;
 		c.gridy = 1;
 		portChkBoxC.setSelected(false);
-		clientPanelR.add(portChkBoxC, c);
+		clientPanel.add(portChkBoxC, c);
 		portChkBoxC.addItemListener(this);
 
 		portLabelC = new JLabel("Server Port #:");
 		c.gridx = 1;
 		c.gridy = 1;
-		clientPanelR.add(portLabelC, c);
+		clientPanel.add(portLabelC, c);
 
 		inPortC = new JTextField("", 5);
 		c.gridx = 2;
 		c.gridy = 1;
 		c.anchor=GridBagConstraints.WEST;
-		clientPanelR.add(inPortC, c);
+		clientPanel.add(inPortC, c);
+		
+		// Client Directory
+		dirChkBoxC= new JCheckBox("");
+		c.gridx=0;
+		c.gridy=2;
+		dirChkBoxC.setSelected(false);
+		clientPanel.add(dirChkBoxC, c);
+		dirChkBoxC.addItemListener(this);
+
+		dirLabelC = new JLabel("Data Files in Directory:");
+		c.gridx=1;
+		c.gridy=2;
+		clientPanel.add(dirLabelC, c);
+
+		dirInC = new JTextField("", 30);
+		c.gridx=2;
+		c.gridy=2;
+		clientPanel.add(dirInC, c);
+
+		// Client Element List Files.<EXT>
+		eextChkBoxC= new JCheckBox("");
+		c.gridx=0;
+		c.gridy=3;
+		eextChkBoxC.setSelected(false);
+		clientPanel.add(eextChkBoxC, c);
+		eextChkBoxC.addItemListener(this);
+
+		eextLabelC = new JLabel("Element List Files with Extension: ");
+		c.gridx=1;
+		c.gridy=3;
+		clientPanel.add(eextLabelC, c);
+
+		eextInC = new JTextField("", 4);
+		c.gridx=2;
+		c.gridy=3;
+		clientPanel.add(eextInC, c);
+
+		// Client Element Files
+		efilesChkBoxC= new JCheckBox("");
+		c.gridx=0;
+		c.gridy=4;
+		efilesChkBoxC.setSelected(false);
+		clientPanel.add(efilesChkBoxC, c);
+		efilesChkBoxC.addItemListener(this);
+
+		efilesLabelC = new JLabel("Elements in File:");
+		c.gridx=1;
+		c.gridy=4;
+		clientPanel.add(efilesLabelC, c);
+
+		efilesInC = new JTextField("", 30);
+		c.gridx=2;
+		c.gridy=4;
+		clientPanel.add(efilesInC, c);
 
 		// Client Verbose Mode
 		verbChkBoxC = new JCheckBox("");
 		c.gridx = 0;
-		c.gridy = 2;
+		c.gridy = 5;
 		verbChkBoxC.setSelected(false);
-		clientPanelR.add(verbChkBoxC, c);
+		clientPanel.add(verbChkBoxC, c);
 		verbChkBoxC.addItemListener(this);
 
 		verbLabelC = new JLabel("Client Verbose Mode");
 		c.gridx = 1;
-		c.gridy = 2;
-		clientPanelR.add(verbLabelC, c);
+		c.gridy = 5;
+		clientPanel.add(verbLabelC, c);
 
 		/**
 		 * SERVER PANEL
@@ -193,121 +241,134 @@ implements ActionListener, ItemListener
 		c.gridx=0;
 		c.gridy=0;
 		portChkBoxS.setSelected(false);
-		serverPanelR.add(portChkBoxS, c);
+		serverPanel.add(portChkBoxS, c);
 		portChkBoxS.addItemListener(this);
 
 		portLabelS = new JLabel("Set Server to Port #:");
 		c.gridx=1;
 		c.gridy=0;
-		serverPanelR.add(portLabelS, c);
+		serverPanel.add(portLabelS, c);
 
 		inPortS = new JTextField("", 5);
 		c.gridx=2;
 		c.gridy=0;
-		serverPanelR.add(inPortS, c);
+		serverPanel.add(inPortS, c);
 
 		// Server Directory
 		dirChkBoxS= new JCheckBox("");
 		c.gridx=0;
 		c.gridy=1;
 		dirChkBoxS.setSelected(false);
-		serverPanelR.add(dirChkBoxS, c);
+		serverPanel.add(dirChkBoxS, c);
 		dirChkBoxS.addItemListener(this);
 
 		dirLabelS = new JLabel("Data Files in Directory:");
 		c.gridx=1;
 		c.gridy=1;
-		serverPanelR.add(dirLabelS, c);
+		serverPanel.add(dirLabelS, c);
 
 		dirInS = new JTextField("", 30);
 		c.gridx=2;
 		c.gridy=1;
-		serverPanelR.add(dirInS, c);
+		serverPanel.add(dirInS, c);
 
 		// Server Element List Files.<EXT>
 		eextChkBoxS= new JCheckBox("");
 		c.gridx=0;
 		c.gridy=2;
 		eextChkBoxS.setSelected(false);
-		serverPanelR.add(eextChkBoxS, c);
+		serverPanel.add(eextChkBoxS, c);
 		eextChkBoxS.addItemListener(this);
 
 		eextLabelS = new JLabel("Element List Files with Extension: ");
 		c.gridx=1;
 		c.gridy=2;
-		serverPanelR.add(eextLabelS, c);
+		serverPanel.add(eextLabelS, c);
 
 		eextInS = new JTextField("", 4);
 		c.gridx=2;
 		c.gridy=2;
-		serverPanelR.add(eextInS, c);
+		serverPanel.add(eextInS, c);
 
 		// Server World Files.<EXT>
 		wextChkBoxS= new JCheckBox("");
 		c.gridx=0;
 		c.gridy=3;
 		wextChkBoxS.setSelected(false);
-		serverPanelR.add(wextChkBoxS, c);
+		serverPanel.add(wextChkBoxS, c);
 		wextChkBoxS.addItemListener(this);
 
 		wextLabelS = new JLabel("World Files with Extension:");
 		c.gridx=1;
 		c.gridy=3;
-		serverPanelR.add(wextLabelS, c);
+		serverPanel.add(wextLabelS, c);
 
 		wextInS = new JTextField("", 4);
 		c.gridx=2;
 		c.gridy=3;
-		serverPanelR.add(wextInS, c);
+		serverPanel.add(wextInS, c);
 
 		// Server Element Files
 		efilesChkBoxS= new JCheckBox("");
 		c.gridx=0;
 		c.gridy=4;
 		efilesChkBoxS.setSelected(false);
-		serverPanelR.add(efilesChkBoxS, c);
+		serverPanel.add(efilesChkBoxS, c);
 		efilesChkBoxS.addItemListener(this);
 
 		efilesLabelS = new JLabel("Elements in File:");
 		c.gridx=1;
 		c.gridy=4;
-		serverPanelR.add(efilesLabelS, c);
+		serverPanel.add(efilesLabelS, c);
 
 		efilesInS = new JTextField("", 30);
 		c.gridx=2;
 		c.gridy=4;
-		serverPanelR.add(efilesInS, c);
+		serverPanel.add(efilesInS, c);
 
 		// Server World Files
 		wfilesChkBoxS= new JCheckBox("");
 		c.gridx=0;
 		c.gridy=5;
 		wfilesChkBoxS.setSelected(false);
-		serverPanelR.add(wfilesChkBoxS, c);
+		serverPanel.add(wfilesChkBoxS, c);
 		wfilesChkBoxS.addItemListener(this);
 
 		wfilesLabelS = new JLabel("World in File:");
 		c.gridx=1;
 		c.gridy=5;
-		serverPanelR.add(wfilesLabelS, c);
+		serverPanel.add(wfilesLabelS, c);
 
 		wfilesInS = new JTextField("", 30);
 		c.gridx=2;
 		c.gridy=5;
-		serverPanelR.add(wfilesInS, c);
+		serverPanel.add(wfilesInS, c);
 
 		// Server Verbose Mode
 		verbChkBoxS = new JCheckBox("");
 		c.gridx=0;
 		c.gridy=6;
 		verbChkBoxS.setSelected(false);
-		serverPanelR.add(verbChkBoxS, c);
+		serverPanel.add(verbChkBoxS, c);
 		verbChkBoxS.addItemListener(this);
 
 		verbLabelS = new JLabel("Server Verbose Mode");
 		c.gridx=1;
 		c.gridy=6;
-		serverPanelR.add(verbLabelS, c);
+		serverPanel.add(verbLabelS, c);
+
+		// Server Text Mode
+		textChkBoxS = new JCheckBox("");
+		c.gridx=0;
+		c.gridy=7;
+		textChkBoxS.setSelected(false);
+		serverPanel.add(textChkBoxS, c);
+		textChkBoxS.addItemListener(this);
+
+		textLabelS = new JLabel("Server Text Mode");
+		c.gridx=1;
+		c.gridy=7;
+		serverPanel.add(textLabelS, c);
 
 		/**
 		 * BUTTONS
@@ -315,16 +376,17 @@ implements ActionListener, ItemListener
 		 * Sets the grid to the bottom center for the buttons
 		 */
 		c.anchor=GridBagConstraints.CENTER;
-		c.gridx=0;
-		c.gridy=1;
 
 		clientBtn = new JButton("Start Client");
-		clientPanelS.add(clientBtn, c);
+		c.gridx=2;
+		c.gridy=5;
+		clientPanel.add(clientBtn, c);
 		clientBtn.addActionListener(this);
-		clientBtn.setMaximumSize(new Dimension(100, 100));
 
 		serverBtn = new JButton("Start Server");
-		serverPanelS.add(serverBtn, c);
+		c.gridx=2;
+		c.gridy=7;
+		serverPanel.add(serverBtn, c);
 		serverBtn.addActionListener(this);
 
 		/**
@@ -332,7 +394,7 @@ implements ActionListener, ItemListener
 		 */
 		c.anchor = GridBagConstraints.WEST;
 		// Client Notes
-		cNotes0 = new JLabel(CLIENTHELP0);
+		cNotes0 = new JLabel(CLIENTOPTS);
 		c.gridx = 0;
 		c.gridy = 0;
 		clientHelp.add(cNotes0, c);
@@ -340,7 +402,7 @@ implements ActionListener, ItemListener
 		c.gridx = 0;
 		c.gridy = 1;
 		clientHelp.add(cNotes01, c);
-		cNotes1 = new JLabel(CLIENTHELP1);
+		cNotes1 = new JLabel(HELP);
 		c.gridx = 1;
 		c.gridy = 1;
 		clientHelp.add(cNotes1, c);
@@ -348,7 +410,7 @@ implements ActionListener, ItemListener
 		c.gridx = 0;
 		c.gridy = 2;
 		clientHelp.add(cNotes02, c);
-		cNotes2 = new JLabel(CLIENTHELP2);
+		cNotes2 = new JLabel(VERBOSE);
 		c.gridx = 1;
 		c.gridy = 2;
 		clientHelp.add(cNotes2, c);
@@ -356,7 +418,7 @@ implements ActionListener, ItemListener
 		c.gridx = 0;
 		c.gridy = 3;
 		clientHelp.add(cNotes03, c);
-		cNotes3 = new JLabel(CLIENTHELP3);
+		cNotes3 = new JLabel(DOMAIN);
 		c.gridx = 1;
 		c.gridy = 3;
 		clientHelp.add(cNotes3, c);
@@ -364,16 +426,37 @@ implements ActionListener, ItemListener
 		c.gridx = 0;
 		c.gridy = 4;
 		clientHelp.add(cNotes04, c);
-		cNotes4 = new JLabel(CLIENTHELP4);
+		cNotes4 = new JLabel(PORT);
 		c.gridx = 1;
 		c.gridy = 4;
 		clientHelp.add(cNotes4, c);
-		c.gridx=0;
-		c.gridy=0;
-		clientPanelS.add(clientHelp, c);
+		cNotes05 = new JLabel("-dir <dir>");
+		c.gridx = 0;
+		c.gridy = 5;
+		clientHelp.add(cNotes05, c);
+		cNotes5 = new JLabel(DIR);
+		c.gridx = 1;
+		c.gridy = 5;
+		clientHelp.add(cNotes5, c);
+		cNotes06 = new JLabel("-eext <ext>");
+		c.gridx = 0;
+		c.gridy = 6;
+		clientHelp.add(cNotes06, c);
+		cNotes6 = new JLabel(EEXT);
+		c.gridx = 1;
+		c.gridy = 6;
+		clientHelp.add(cNotes6, c);
+		cNotes07 = new JLabel("-efiles <file> [file [file [...]]]   ");
+		c.gridx = 0;
+		c.gridy = 7;
+		clientHelp.add(cNotes07, c);
+		cNotes7 = new JLabel(EFILES);
+		c.gridx = 1;
+		c.gridy = 7;
+		clientHelp.add(cNotes7, c);
 
 		// Server Notes
-		sNotes0 = new JLabel(SERVERHELP0);
+		sNotes0 = new JLabel(SERVEROPTS);
 		c.gridx = 0;
 		c.gridy = 0;
 		serverHelp.add(sNotes0, c);
@@ -381,7 +464,7 @@ implements ActionListener, ItemListener
 		c.gridx = 0;
 		c.gridy = 1;
 		serverHelp.add(sNotes01, c);
-		sNotes1 = new JLabel(SERVERHELP1);
+		sNotes1 = new JLabel(HELP);
 		c.gridx = 1;
 		c.gridy = 1;
 		serverHelp.add(sNotes1, c);
@@ -389,75 +472,77 @@ implements ActionListener, ItemListener
 		c.gridx = 0;
 		c.gridy = 2;
 		serverHelp.add(sNotes02, c);
-		sNotes2 = new JLabel(SERVERHELP2);
+		sNotes2 = new JLabel(VERBOSE);
 		c.gridx = 1;
 		c.gridy = 2;
 		serverHelp.add(sNotes2, c);
-		sNotes03 = new JLabel("-p <port>");
+		sNotes03 = new JLabel("-t");
 		c.gridx = 0;
 		c.gridy = 3;
 		serverHelp.add(sNotes03, c);
-		sNotes3 = new JLabel(SERVERHELP3);
+		sNotes3 = new JLabel(TEXT);
 		c.gridx = 1;
 		c.gridy = 3;
 		serverHelp.add(sNotes3, c);
-		sNotes04 = new JLabel("-dir <dir>");
+		sNotes04 = new JLabel("-p <port>");
 		c.gridx = 0;
 		c.gridy = 4;
 		serverHelp.add(sNotes04, c);
-		sNotes4 = new JLabel(SERVERHELP4);
+		sNotes4 = new JLabel(PORT);
 		c.gridx = 1;
 		c.gridy = 4;
 		serverHelp.add(sNotes4, c);
-		sNotes05 = new JLabel("-eext <ext>");
+		sNotes05 = new JLabel("-dir <dir>");
 		c.gridx = 0;
 		c.gridy = 5;
 		serverHelp.add(sNotes05, c);
-		sNotes5 = new JLabel(SERVERHELP5);
+		sNotes5 = new JLabel(DIR);
 		c.gridx = 1;
 		c.gridy = 5;
 		serverHelp.add(sNotes5, c);
-		sNotes06 = new JLabel("-wext <ext>");
+		sNotes06 = new JLabel("-eext <ext>");
 		c.gridx = 0;
 		c.gridy = 6;
 		serverHelp.add(sNotes06, c);
-		sNotes6 = new JLabel(SERVERHELP6);
+		sNotes6 = new JLabel(EEXT);
 		c.gridx = 1;
 		c.gridy = 6;
 		serverHelp.add(sNotes6, c);
-		sNotes07 = new JLabel("-efiles <file> [file [file [...]]]   ");
+		sNotes07 = new JLabel("-wext <ext>");
 		c.gridx = 0;
 		c.gridy = 7;
 		serverHelp.add(sNotes07, c);
-		sNotes7 = new JLabel(SERVERHELP7);
+		sNotes7 = new JLabel(WEXT);
 		c.gridx = 1;
 		c.gridy = 7;
 		serverHelp.add(sNotes7, c);
-		sNotes08 = new JLabel("-wfiles <file> [file [file [...]]]  ");
+		sNotes08 = new JLabel("-efiles <file> [file [file [...]]]   ");
 		c.gridx = 0;
 		c.gridy = 8;
 		serverHelp.add(sNotes08, c);
-		sNotes8 = new JLabel(SERVERHELP8);
+		sNotes8 = new JLabel(EFILES);
 		c.gridx = 1;
 		c.gridy = 8;
 		serverHelp.add(sNotes8, c);
+		sNotes09 = new JLabel("-wfiles <file> [file [file [...]]]  ");
+		c.gridx = 0;
+		c.gridy = 9;
+		serverHelp.add(sNotes09, c);
+		sNotes9 = new JLabel(WFILES);
+		c.gridx = 1;
+		c.gridy = 9;
+		serverHelp.add(sNotes9, c);
 		c.gridx = 0;
 		c.gridy = 1;
-		serverPanelS.add(serverHelp, c);
+		//serverPanelS.add(serverHelp, c);
 
 		/**
 		 * ADDING THE PANELS TO THE FRAME
 		 */
-		clientPanelM.add(clientPanelR, BorderLayout.CENTER);
-		clientPanelM.add(clientPanelS, BorderLayout.SOUTH);
-
-		serverPanelM.add(serverPanelR, BorderLayout.CENTER);
-		serverPanelM.add(serverPanelS, BorderLayout.SOUTH);
-
 		mainPanel.add(tabbedPane, BorderLayout.CENTER);
 		// ORDER MATTERS HERE
-		tabbedPane.addTab(CLIENTPANEL, clientPanelM);
-		tabbedPane.addTab(SERVERPANEL, serverPanelM);
+		tabbedPane.addTab(CLIENTPANEL, clientPanel);
+		tabbedPane.addTab(SERVERPANEL, serverPanel);
 		tabbedPane.addTab(CLIENTHELP, clientHelp);
 		tabbedPane.addTab(SERVERHELP, serverHelp);
 
@@ -479,6 +564,9 @@ implements ActionListener, ItemListener
 		{
 			String inPortValC = String.valueOf(inPortC.getText());
 			String inServerValC = String.valueOf(inServerC.getText());
+			String inDirValC = String.valueOf(dirInC.getText());
+			String inEextValC = String.valueOf(eextInC.getText());
+			String inEfilesValC = String.valueOf(efilesInC.getText());
 
 			arguments[2]="-splash:images/DukeTakesOff.gif";
 			arguments[3]="Representation3D";
@@ -510,17 +598,57 @@ implements ActionListener, ItemListener
 				arguments[8]="localhost";
 			}
 
+			if (dirC==true)
+			{
+				arguments[9]="-dir";
+				arguments[10]=inDirValC;
+			}
+			else if (dirC==false)
+			{
+				arguments[9]="";
+				arguments[10]="";
+			}
+
+			if (eextC==true)
+			{
+				arguments[11]="-eext";
+				arguments[12]=inEextValC;
+			}
+			else if (eextC==false)
+			{
+				arguments[11]="";
+				arguments[12]="";
+			}
+
+			if (efilesC==true)
+			{
+				arguments[13]="-efiles";
+				arguments[14]=inEfilesValC;
+			}
+			else if (efilesC==false)
+			{
+				arguments[13]="";
+				arguments[14]="";
+			}
+
 			// empty arguments to prevent crashes with exec
-			for (int temp=9;temp<arguments.length;temp++)
+			for (int temp=15;temp<arguments.length;temp++)
 			{
 				arguments[temp]="";
 			}
 			
 			System.out.println("Starting CLIENT with the following commands: ");
-			for (int tmp=0;tmp<9;tmp++)
+			int temps=1;
+			for (int tmp=4;tmp<=14;tmp++)
 			{
-				System.out.println(tmp+": "+arguments[tmp]);
+				if (arguments[tmp]!="")
+				{
+					System.out.println("\t"+temps+": "+arguments[tmp]);
+					temps++;
+				}
 			}
+			if (temps==1)
+				System.out.println("\tDefault Options Selected");
 
 			// will get to the console later
 			//(new Thread(new Console())).start();
@@ -548,103 +676,102 @@ implements ActionListener, ItemListener
 			String inEfilesValS = String.valueOf(efilesInS.getText());
 			String inWfilesValS = String.valueOf(wfilesInS.getText());
 			
-			arguments[2]="-splash:images/server.gif";
 			arguments[3]="Server";
 
-			int i=4, a=i, b=i;
-
 			if (verboseS==true)
-				arguments[a]="-v";
+				arguments[4]="-v";
 			else if (verboseS==false)
-				arguments[a]="";
+				arguments[4]="";
+			
+			if (textS==true)
+			{
+				arguments[2]="";
+				arguments[5]="-t";
+			}
+			else if (textS==false)
+			{
+				arguments[2]="-splash:images/server.gif";
+				arguments[5]="";
+			}
 
-			a=i+1;
-			b=i+2;
 			if (portS==true)
 			{
-				arguments[a]="-p";
-				arguments[b]=inPortValS;
-				System.out.println(inPortValS);
+				arguments[6]="-p";
+				arguments[7]=inPortValS;
 			}
 			else if (portS==false)
 			{
-				arguments[a]="";
-				arguments[b]="";
-				System.out.println(arguments[i+1]);
-				System.out.println(arguments[i+2]);
+				arguments[6]="";
+				arguments[7]="";
 			}
 
-			a=i+3;
-			b=i+4;
 			if (dirS==true)
 			{
-				arguments[a]="-dir";
-				arguments[b]=inDirValS;
-				System.out.println(inDirValS);
+				arguments[8]="-dir";
+				arguments[9]=inDirValS;
 			}
 			else if (dirS==false)
 			{
-				arguments[a]="";
-				arguments[b]="";
+				arguments[8]="";
+				arguments[9]="";
 			}
 
-			a=i+5;
-			b=i+6;
 			if (eextS==true)
 			{
-				arguments[a]="-eext";
-				arguments[b]=inEextValS;
+				arguments[10]="-eext";
+				arguments[11]=inEextValS;
 			}
 			else if (eextS==false)
 			{
-				arguments[a]="";
-				arguments[b]="";
+				arguments[10]="";
+				arguments[11]="";
 			}
 
-			a=i+7;
-			b=i+8;
 			if (wextS==true)
 			{
-				arguments[a]="-wext";
-				arguments[b]=inWextValS;
+				arguments[12]="-wext";
+				arguments[13]=inWextValS;
 			}
 			else if (wextS==false)
 			{
-				arguments[a]="";
-				arguments[b]="";
+				arguments[12]="";
+				arguments[13]="";
 			}
 
-			a=i+9;
-			b=i+10;
 			if (efilesS==true)
 			{
-				arguments[a]="-efiles";
-				arguments[b]=inEfilesValS;
+				arguments[14]="-efiles";
+				arguments[15]=inEfilesValS;
 			}
 			else if (efilesS==false)
 			{
-				arguments[a]="";
-				arguments[b]="";
+				arguments[14]="";
+				arguments[15]="";
 			}
 
-			a=i+11;
-			b=i+12;
 			if (wfilesS==true)
 			{
-				arguments[a]="-wfiles";
-				arguments[b]=inWfilesValS;
+				arguments[16]="-wfiles";
+				arguments[17]=inWfilesValS;
 			}
 			else if (wfilesS==false)
 			{
-				arguments[a]="";
-				arguments[b]="";
+				arguments[16]="";
+				arguments[17]="";
 			}
 
 			System.out.println("Starting SERVER with the following commands: ");
-			for (int tmp=0;tmp<arguments.length;tmp++)
+			int temps=1;
+			for (int tmp=4;tmp<arguments.length;tmp++)
 			{
-				System.out.println(tmp+": "+arguments[tmp]);
+				if (arguments[tmp]!="")
+				{
+					System.out.println("\t"+temps+": "+arguments[tmp]);
+					temps++;
+				}
 			}
+			if (temps==1)
+				System.out.println("\tDefault Options Selected");
 			
 			// TRYING TO START THE SERVER
 			try {
@@ -667,13 +794,21 @@ implements ActionListener, ItemListener
 			// Client Options
 			if (source==verbChkBoxC)
 				verboseC = true;
-			else if (source==portChkBoxC)
-				portC = true;
 			else if (source==serverChkBoxC)
 				serverC = true;
+			else if (source==portChkBoxC)
+				portC = true;
+			else if (source==dirChkBoxC)
+				dirC = true;
+			else if (source==eextChkBoxC)
+				eextC = true;
+			else if (source==efilesChkBoxC)
+				efilesC = true;
 			// Server Options
 			else if (source==verbChkBoxS)
 				verboseS = true;
+			else if (source==textChkBoxS)
+				textS = true;
 			else if (source==portChkBoxS)
 				portS = true;
 			else if (source==dirChkBoxS)
@@ -693,13 +828,21 @@ implements ActionListener, ItemListener
 			// Client Options
 			if (source==verbChkBoxC)
 				verboseC = false;
-			else if (source==portChkBoxC)
-				portC = false;
 			else if (source==serverChkBoxC)
 				serverC = false;
+			else if (source==portChkBoxC)
+				portC = false;
+			else if (source==dirChkBoxC)
+				dirC = false;
+			else if (source==eextChkBoxC)
+				eextC = false;
+			else if (source==efilesChkBoxC)
+				efilesC = false;
 			// Server Options
 			else if (source==verbChkBoxS)
 				verboseS = false;
+			else if (source==textChkBoxS)
+				textS = false;
 			else if (source==portChkBoxS)
 				portS = false;
 			else if (source==dirChkBoxS)
