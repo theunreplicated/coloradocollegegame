@@ -8,6 +8,8 @@ import com.sun.j3d.utils.applet.MainFrame;
 import com.sun.j3d.utils.universe.*;
 import javax.media.j3d.*;
 import javax.vecmath.*;
+import com.sun.j3d.utils.geometry.Text2D;
+import javax.swing.JOptionPane;
 
 /***
  A 3D Representation of the game using the Java3D API
@@ -22,6 +24,7 @@ public class Representation3D extends Applet implements Representation
 	
 	GameElement elementStart; //for checking the list
 	BranchGroup scene; //the root of the scene--lets us add more elements
+	BranchGroup bbroot; //where to attach the messages
 	Canvas3D canvas3D;
 	ViewElementBranch veb;
 	int viewMode;
@@ -51,14 +54,31 @@ public class Representation3D extends Applet implements Representation
 		elementStart.attribute("isClient", true); //mark the first element as the Client (Representation-dependent attribute)
 		veb = createCamera(elementStart, scene, viewMode); //build the camera FIRST
 		ViewingPlatform vp = veb.getViewingPlatform();
+		TransformGroup vpt = vp.getMultiTransformGroup().getTransformGroup(0);
+		//cameraRoot = new BranchGroup(); //do we need this reference?
+		//vpt.addChild(cameraRoot);
 		
 		/*tie the lighting to the camera, so that objects are always lit as if from the front.*/
-		TransformGroup vpt = vp.getMultiTransformGroup().getTransformGroup(0);
 		BranchGroup candleStick = new BranchGroup();
 		addDefaultLights(candleStick);
 		vpt.addChild(candleStick);
 		//addDefaultLights(superRoot); //add default lighting to world--doesn't move
 
+		/*create the bulletin board*/
+		bbroot = new BranchGroup();
+		bbroot.setCapability(Group.ALLOW_CHILDREN_WRITE);
+		bbroot.setCapability(Group.ALLOW_CHILDREN_EXTEND);
+		Transform3D bbt = new Transform3D();
+		//bbt.setTranslation(new Vector3f(-.3f,.25f,-.75f)); //sized for 300x300
+		bbt.setTranslation(new Vector3f(-.3f,.15f,-.75f)); //sized for fullscreen
+		TransformGroup bbtg = new TransformGroup(bbt);
+		bbtg.addChild(bbroot);
+		vpt.addChild(bbtg);
+		BranchGroup wrapper = new BranchGroup(); //a placeholder, containing nothing
+		wrapper.setCapability(BranchGroup.ALLOW_DETACH);
+		bbroot.addChild(wrapper);
+		
+		
 		createSceneGraph(elementStart, scene); //initialize the scene based on the Client's world
 		superRoot.addChild(scene); //add the scene to the tree
 
@@ -221,6 +241,22 @@ public class Representation3D extends Applet implements Representation
 	{
 		return veb.getRotation();
 	}
+
+	public void displayMessage(String msg, int flags)
+	{
+		if(flags==1) //Option 1: a simple JOptionPane to show the message
+			JOptionPane.showMessageDialog(null,msg,"Message",JOptionPane.PLAIN_MESSAGE);
+		else //Option 2: Create and add a Text2D object
+		{
+			bbroot.removeChild(0);
+			BranchGroup wrapper = new BranchGroup();
+			wrapper.setCapability(BranchGroup.ALLOW_DETACH);
+			Text2D nbb = new Text2D(msg, new Color3f(1,1,1), "Arial", 9, 0);  
+			wrapper.addChild(nbb);
+			bbroot.addChild(wrapper);
+		}	
+	}
+
 
 //replace this with a texturemap or something. May help with speed issues some	
 	//creates a Representation-level grid to display as the ground. For testing mostly

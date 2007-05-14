@@ -133,6 +133,11 @@ public class Representation2D extends JPanel implements Representation
 	public float[] getCameraFacing()
 	{return null;}
 
+	public void displayMessage(String msg, int flags)
+	{
+		JOptionPane.showMessageDialog(null,msg,"Message",JOptionPane.PLAIN_MESSAGE);
+	}
+
 	public static void main(String args[])
 	{
 		Representation2D me = new Representation2D( );

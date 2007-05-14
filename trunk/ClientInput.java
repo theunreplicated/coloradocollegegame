@@ -61,12 +61,19 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 					a.parameters().add(Constants.QUAT_CLOY);
 					repResolver.resolve(a);
 				}
-				else
+				else if(modifiers[Constants.CTRL_KEY])
 				{
 					a = actionFactory.getAction("move");
 					a.setNouns(new GameElement[]{me});
 					a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
 					a.parameters().add(Constants.VEC_POSX);
+					resolver.addAction(a); 
+				}
+				else
+				{
+					a = actionFactory.getAction("rotate");
+					a.setNouns(new GameElement[]{me});
+					a.parameters().add(Constants.QUAT_CLOY);
 					resolver.addAction(a); 
 				}
 				break;
@@ -80,13 +87,20 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 					a.parameters().add(Constants.QUAT_CCLY);
 					repResolver.resolve(a);
 				}
-				else
+				else if(modifiers[Constants.CTRL_KEY])
 				{
 
 					a = actionFactory.getAction("move");
 					a.setNouns(new GameElement[]{me});
 					a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
 					a.parameters().add(Constants.VEC_NEGX);
+					resolver.addAction(a); 
+				}
+				else
+				{
+					a = actionFactory.getAction("rotate");
+					a.setNouns(new GameElement[]{me});
+					a.parameters().add(Constants.QUAT_CCLY);
 					resolver.addAction(a); 
 				}
 				break;
@@ -100,12 +114,20 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 					a.parameters().add(Constants.QUAT_CCLX);
 					repResolver.resolve(a);
 				}
-				else
+				else if(modifiers[Constants.CTRL_KEY])
 				{
 					a = actionFactory.getAction("move");
 					a.setNouns(new GameElement[]{me});
 					a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
 					a.parameters().add(Constants.VEC_POSY);
+					resolver.addAction(a); 
+				}
+				else
+				{
+					a = actionFactory.getAction("move");
+					a.setNouns(new GameElement[]{me});
+					a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
+					a.parameters().add(Constants.VEC_NEGZ);
 					resolver.addAction(a); 
 				}
 				break;
@@ -119,12 +141,20 @@ public class ClientInput implements KeyListener, MouseListener, MouseMotionListe
 					a.parameters().add(Constants.QUAT_CCLY);
 					repResolver.resolve(a);
 				}
-				else
+				else if(modifiers[Constants.CTRL_KEY])
 				{
 					a = actionFactory.getAction("move");
 					a.setNouns(new GameElement[]{me});
 					a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
 					a.parameters().add(Constants.VEC_NEGY);
+					resolver.addAction(a); 
+				}
+				else
+				{
+					a = actionFactory.getAction("move");
+					a.setNouns(new GameElement[]{me});
+					a.parameters().add(Constants.MOVE_RELATIVE_TO_FACING);
+					a.parameters().add(Constants.VEC_POSZ);
 					resolver.addAction(a); 
 				}
 				break;
