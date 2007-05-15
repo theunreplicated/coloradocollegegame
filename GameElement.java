@@ -61,6 +61,11 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 		initialize(position, 10, 10);
 	}
 
+	public String getType()
+	{
+		return(type);
+	}
+
 	public void setTypeId(int _id)
 	{
 		typeId = _id;
@@ -109,6 +114,16 @@ public class GameElement extends LinkedElement<GameElement> implements Serializa
 	public synchronized void attribute(String _key , Object _value)
 	{
 		attributes.put(_key,_value);
+	}
+
+	public synchronized Integer incrementAttribute(String _key)
+	{
+		if(attributes.get(_key) == null)
+		{
+			attributes.put(_key, 1);
+			return 1;
+		}
+		return (Integer) attributes.put(_key, ((Integer) attributes.get(_key))+1);
 	}
 
 	public synchronized Object removeAttribute(String _key)

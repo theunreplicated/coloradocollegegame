@@ -8,7 +8,13 @@
    		<scale>40</scale>
 	</element>-->
 
-	<element type="ball">
+	<element type="pot of gold">
+		<position>0</position>
+		<position>5</position>
+		<position>0</position>
+	</element>
+
+	<element type="pot of gold">
 		<position>0</position>
 		<position>0</position>
 		<position>0</position>

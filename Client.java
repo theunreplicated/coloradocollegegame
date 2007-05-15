@@ -8,7 +8,7 @@ public class Client
 	ClientIO myIO;
 	World w;
 
-	public Client(String _server, Representation _rep, ElementFactory _ef, File _dataDir, int _port, boolean _verbose )
+	public Client(String _server, Representation _rep, ElementFactory _ef, File _dataDir, String _name, int _port, boolean _verbose )
 	{
 		myLogger = new Logger( _verbose );
 
@@ -24,8 +24,11 @@ public class Client
 		myIO = new ClientIO( r, _server, _port, myLogger );
 		r.setIO(myIO);
 		int id = myIO.getId();
+		if(_name == null)
+			_name = "player " + id;
 		Action a = af.getAction("add element");
 		GameElement ge = _ef.getGameElement("face");
+		ge.attribute("name",_name);
 		ge.id(id);
 		ge.setPosition(new float[]{
 				Constants.INITIAL_X,
@@ -57,7 +60,9 @@ public class Client
 	{
 		// Take user input.
 		// Options:
+		//  -s <server>
 		//  -p <port> 
+		//  -n <name>
 		//  -verbose
 		//  -dir <datadir>
 		//  -eext <elementext>
@@ -69,12 +74,17 @@ public class Client
 		File dataDir = new File(Constants.DEFAULT_DATA_DIR);
 		String elementExt = Constants.ELEMENT_LIST_EXTENSION;
 		File[] elementFiles = null;
+		String name = null;
 
 		for(i = 0; i < args.length; i++)
 		{
 			if(args[i].equalsIgnoreCase("-v"))
 			{
 				verbose = true;
+			}
+			else if(args[i].equalsIgnoreCase("-n"))
+			{
+				name = args[++i];
 			}
 			else if(args[i].equalsIgnoreCase("-s"))
 			{
@@ -143,6 +153,7 @@ public class Client
 				System.out.println(" -h\t\tPrint this help screen");
 				System.out.println(" -v\t\tRun in verbose mode");
 				System.out.println(" -s <domain>\tRun on server at domain <domain>");
+				System.out.println(" -n <name>\tSet your name (default is 'player <id>')");
 				System.out.println(" -p <port>\tRun on port # <port>");
 				System.out.println(" -dir <dir>\tLook for data files in directory <dir>");
 				System.out.println(" -eext <ext>\tLook in data dir for Element List files that have extension <ext>");
@@ -168,7 +179,7 @@ public class Client
 		else
 			ef = new ElementFactory(dataDir, elementExt, myLogger);
 
-		new Client(server, rep, ef, dataDir, port, verbose);
+		new Client(server, rep, ef, dataDir, name, port, verbose);
 	}
 
 }

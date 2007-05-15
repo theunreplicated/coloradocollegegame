@@ -9,6 +9,7 @@ public class Constants
 	public static final int REMOVE_ELEMENTS = 4;
 	public static final int HANDLE_AGAIN = 5;
 	public static final int NEW_DEPENDENCY = 6;
+	public static final int QUIT = 7;
 
 	// server information
 	public static final int TIMEOUT = 3000; // maximum time for no communication: 3 seconds

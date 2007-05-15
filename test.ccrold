@@ -1,0 +1,385 @@
+<resolver>
+	<actions>
+		<action>
+			<name>move to</name>
+			<inworld language="javascript">
+			<![CDATA[
+				var vector = argv[0];
+				myLogger.message("Resolver got Move To command for id(" + subject.id() + "): " + vector[0] + " " + vector[1] + " " + vector[2] + "\n", false);
+				subject.setPosition(vector);
+			]]>
+			</inworld>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				representation.updateLocation(subject);
+			]]>
+			</inrepresentation>
+		</action>
+		<action>
+			<name>move</name>
+			<inworld language="javascript">
+			<![CDATA[
+				var type = argv[0];
+				var dvector = argv[1];
+			//	myLogger.message("dvectorM={"+dvector[0]+","+dvector[1]+","+dvector[2]+"}\n",true);
+			//why are we doing this here? Shouldn't this be handled by the rules? Not doing it twice will save time
+			//	if(type == Constants.MOVE_RELATIVE_TO_FACING)
+			//	{
+			//		dvector = Quaternions.rotatePoint(dvector,subject.getFacing());
+			//	}
+				var vector = subject.getPosition();
+				for(i = 0; i < dvector.length; i++)
+				{
+					vector[i] += dvector[i];
+				}
+				subject.setPosition(vector);
+			
+			]]>
+			</inworld>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				representation.updateLocation(subject);
+			]]>
+			</inrepresentation>
+		</action>
+		<action>
+			<name>jump</name>
+			<inworld language="javascript">
+			<![CDATA[
+				var state = argv[0];
+				if(state == 0)
+				{
+					var vector = subject.getPosition();
+					vector[1]++;
+					subject.setPosition(vector);
+					status = Constants.HANDLE_AGAIN;
+					returnVals.add(1000);
+					argv[0] = 1;
+				}
+				else
+				{
+					var vector = subject.getPosition();
+					vector[1]--;
+					subject.setPosition(vector);
+				}
+			]]>
+			</inworld>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				representation.updateLocation(subject);
+			]]>
+			</inrepresentation>
+		</action>
+		<action>
+			<name>rotate to</name>
+			<inworld language="javascript">
+			<![CDATA[
+				var vector = argv[0];
+				myLogger.message("Resolver got Rotate To command for id(" + subject.id() + "): " + vector[0] + " " + vector[1] + " " + vector[2] + " " + vector[3] + "\n", false);
+				subject.setFacing(vector);
+			]]>
+			</inworld>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				representation.updateLocation(subject);
+			]]>
+			</inrepresentation>
+		</action>
+		<action>
+			<name>rotate</name>
+			<inworld language="javascript">
+			<![CDATA[
+				var q = argv[0];
+				var facing = Quaternions.mul(subject.getFacing(),q);
+				subject.setFacing(facing);
+			]]>
+			</inworld>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				representation.updateLocation(subject);
+			]]>
+			</inrepresentation>
+		</action>
+		<action>
+			<name>remove element</name>
+			<inworld language="javascript">
+			<![CDATA[
+				myLogger.message("Resolver got Remove Element command for id " + subject.id() + "\n", false);
+				status = Constants.REMOVE_ELEMENTS;
+				returnVals.add(subject);
+			]]>
+			</inworld>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				representation.updatePresence(subject);
+			]]>
+			</inrepresentation>
+		</action>
+		<action>
+			<name>add element</name>
+			<inworld language="javascript">
+			<![CDATA[
+				if(argv[0].getClass() == GameElement)
+				{
+					returnVals.add(argv[0]);
+					myLogger.message("Received a GameElement to add!\n", false);
+				}
+				else
+				{
+					returnVals.add(argv);
+					myLogger.message("Received something with which to build a GameElement!\n", false);
+				}
+				status = Constants.ADD_ELEMENTS;
+			]]>
+			</inworld>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				if(argv == null)
+				{
+					myLogger.message("Problem in 'add element' -> argv is null\n", true);
+				}
+				else if(argv[0] == null)
+				{
+					myLogger.message("Problem in 'add element' -> argv[0] is null\n", true);
+				}
+				if(representation == null)
+				{
+					myLogger.message("Problem in 'add element' -> representation is null\n", true);
+				}
+				representation.updatePresence(argv[0]);
+			]]>
+			</inrepresentation>
+		</action>
+		<action>
+			<name>receive world</name>
+			<inworld language="javascript">
+			<![CDATA[
+				for(var i = 0; i < argv.length; i++)
+					returnVals.add(argv[i]);
+				status = Constants.ADD_ELEMENTS;
+			]]>
+			</inworld>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				for(var i = 0; i < argv.length; i++)
+				{
+					representation.updatePresence(argv[i]);
+				}
+			]]>
+			</inrepresentation>
+		</action>
+
+	<!-- Representation-only actions -->
+		<action>
+			<name>move camera</name>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				var type = argv[0];
+				var dvector = argv[1];
+				if(type == Constants.MOVE_RELATIVE_TO_FACING)
+				{
+					dvector = Quaternions.rotatePoint(dvector,representation.getCameraFacing());
+				}
+				representation.adjustCamera(dvector,null);
+			]]>
+			</inrepresentation>
+		</action>
+		<action>
+			<name>rotate camera</name>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				representation.adjustCamera(null, argv[0]);
+			]]>
+			</inrepresentation>
+		</action>	
+
+		<action>
+			<name>change view</name>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				representation.changeView();
+			]]>
+			</inrepresentation>
+		</action>
+	</actions>
+	<rules>
+		<rule>
+			<verb>move</verb>
+			<function language="javascript">
+			<![CDATA[
+				var status = Constants.SUCCESS;
+				//var a = myActions.get("move").get(0);
+				//var parameters = new Array(1);
+
+				var type = argv[0];
+				var dvector = argv[1];
+				if(type == Constants.MOVE_RELATIVE_TO_FACING)
+				{
+					dvector = Quaternions.rotatePoint(dvector,subject.getFacing());
+				}
+			
+				var v = 1;
+				for(var i = 0; i < relevant.length; i++)
+				{
+					myLogger.message("Testing collisions for:" + relevant.get(i).id() + " and " + subject.id() + "\n", false);
+	
+					var vt = subject.findMovableDistance(relevant.get(i),dvector);
+					if(vt < v)
+						v = vt;
+				}
+			//	myLogger.message("final v="+v+"\n",true);
+				
+				var lvector;
+				if(v == 1)
+					lvector = dvector;
+				else
+					lvector = VectorUtils.mul(v,dvector);
+			//	myLogger.message("lvector={"+lvector[0]+","+lvector[1]+","+lvector[2]+"}\n",true);
+
+				var vector = subject.copyPosition();
+				for(i = 0; i < lvector.length; i++)
+				{
+					vector[i] += lvector[i];
+				}
+				
+				argv[1] = lvector;
+				action.parameters(argv);
+
+			/*	var vector = subject.copyPosition();
+				for(i = 0; i < dvector.length; i++)
+				{
+					vector[i] += dvector[i];
+				}
+				for(var i = 0; i < relevant.length; i++)
+				{
+		
+					myLogger.message("Testing collisions for:" + relevant.get(i).id() + " and " + subject.id() + "\n", false);
+
+					if(subject.isColliding(relevant.get(i),vector,null))
+					{
+						myLogger.message("Collision!" + relevant.get(i).id() + " " + subject.id() + "\n", false);
+						//var s_weight = subject.paramaters("weight");
+						//var r_weight = relevant.get(i).parameters("weight");
+						//if(r_weight > s_weight)
+						//{
+							status = Constants.FAILED;
+							break;
+						//}
+					}
+				}
+			*/
+				
+				if(status == Constants.SUCCESS)
+				{
+					var parameters = new Array(1);
+
+					//could speed this up so we're not calculating twice?
+					parameters[0] = vector;
+
+					var _action = actionFactory.getAction("move to");
+					_action.setNouns(action.getNouns());
+					_action.parameters(parameters);
+					action.setToSend(_action);	
+				}
+			]]>
+			</function>
+		</rule>
+		<rule>
+			<verb>jump</verb>
+			<function language="javascript">
+			<![CDATA[
+				var parameters = new Array(1);
+
+				var vector = subject.copyPosition();
+				if(argv[0] == 0)
+					vector[1]++;
+				else
+					vector[1]--;
+				//could speed this up so we're not calculating twice?
+				parameters[0] = vector;
+
+				var _action = actionFactory.getAction("move to");
+				_action.setNouns(action.getNouns());
+				_action.parameters(parameters);
+				action.setToSend(_action);	
+			]]>
+			</function>
+		</rule>
+		<rule>
+			<verb>rotate</verb>
+			<function language="javascript">
+			<![CDATA[
+				var status = Constants.SUCCESS;
+				var q = argv[0];
+
+				if(q.length != 4)
+				{
+					myLogger.message("Bad Quaternion length. Bad!\n", true);
+					status = Constants.ERROR;
+				}
+				else
+				{
+					facing = Quaternions.mul(subject.getFacing(),q);
+
+					for(var i = 0; i < relevant.length; i++)
+					{
+						myLogger.message("Testing collisions for:" + relevant.get(i).id() + " and " + subject.id() + "\n", false);
+						if(subject.isColliding(relevant.get(i),null,facing))
+						{
+							myLogger.message("Collision!" + relevant.get(i).id() + " " + subject.id() + "\n", false);
+							status = Constants.FAILED;
+							break;
+						}
+					}
+					if(status == Constants.SUCCESS)
+					{
+
+						//var a = myActions.get("rotate").get(0);
+						var parameters = new Array(1);
+						parameters[0] = facing;
+
+						var _action = actionFactory.getAction("rotate to");
+						_action.setNouns(action.getNouns());
+						_action.parameters(parameters);
+						action.setToSend(_action);	
+						//actionsToSend.add("rotate to", a.getNouns(), parameters);
+					}
+				}
+			]]>
+			</function>
+		</rule>
+		<rule>
+			<verb>remove element</verb>
+			<function language="javascript">
+			<![CDATA[
+				var status = Constants.SUCCESS;
+				if(argv.length > 0)
+				{
+					//var a = myActions.get("remove element").get(0);
+					var _action = actionFactory.getAction("remove element");
+					_action.setNouns(action.getNouns());
+					action.setToSend(_action);	
+					//actionsToSend.add("remove element", a.getNouns());
+				}
+			]]>
+			</function>
+		</rule>
+		<rule>
+			<verb>add element</verb>
+			<function language="javascript">
+			<![CDATA[
+				if(argv[0] == true)
+				{
+					argv[0] = argv[1];
+					argv[1] = false;
+					argv[0].attribute("write through", true);
+					var _action = actionFactory.getAction("add element");
+					_action.parameters(argv);
+					action.setToSend(_action);	
+					//actionsToSend.add("add element", argv);
+				}
+			]]>
+			</function>
+		</rule>
+	</rules>
+</resolver>
