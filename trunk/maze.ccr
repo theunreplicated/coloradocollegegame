@@ -105,7 +105,8 @@
 			<inworld language="javascript">
 			<![CDATA[
 				myLogger.message("Resolver got Remove Element command for id " + subject.id() + "\n", false);
-				subject.removeFromList();
+				status = Constants.REMOVE_ELEMENTS;
+				returnVals.add(subject);
 			]]>
 			</inworld>
 			<inrepresentation language="javascript">
@@ -167,6 +168,165 @@
 			]]>
 			</inrepresentation>
 		</action>
+		<action>
+			<name>win</name>
+			<inworld language="javascript">
+			<![CDATA[
+				var state = argv[0];
+				if(state == 0)
+				{
+					status = Constants.HANDLE_AGAIN;
+					returnVals.add(1000);
+				}
+				if(state == 1)
+				{
+					status = Constants.QUIT;
+				}
+			]]>
+			</inworld>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				var state = argv[0];
+				if(state == 0)
+				{
+					representation.displayMessage("You found all the pots of gold!", 0);
+					argv[0] = 1;
+				}
+				else
+				{
+					representation.displayMessage("",0);
+				}
+
+			]]>
+			</inrepresentation>
+		</action>
+		<action>
+			<name>lose</name>
+			<inworld language="javascript">
+			<![CDATA[
+				var state = argv[0];
+				if(state < 3)
+				{
+					status = Constants.HANDLE_AGAIN;
+					returnVals.add(1000);
+					argv[0]++;
+				}
+				if(state == 3)
+				{
+					status = Constants.QUIT;
+				}
+			]]>
+			</inworld>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				var state = argv[0];
+				if(state == 1)
+				{
+					representation.displayMessage(subject.attribute("name") + " has found all the pots!", 0);
+				}
+				else if(state == 2)
+				{
+					representation.displayMessage("You lose!", 0);
+				}
+				else if(state == 3)
+				{
+					representation.displayMessage("You lose! Loser.", 0);
+				}
+				else
+				{
+					representation.displayMessage("",0);
+				}
+
+			]]>
+			</inrepresentation>
+		</action>
+		<action>
+			<name>found pot</name>
+			<inworld language="javascript">
+			<![CDATA[
+				var state = argv[0];
+				var pot_string = argv[1];
+				if(state == 0)
+				{
+					if(subject.attribute(pot_string) == null)
+					{
+						subject.incrementAttribute("pot count");
+						subject.attribute(pot_string,true);
+						status = Constants.HANDLE_AGAIN;
+						returnVals.add(1000);
+					}
+					else
+					{
+						argv[0] = 2;
+					}
+				}
+			]]>
+			</inworld>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				var state = argv[0];
+				if(state == 0)
+				{
+					var num = subject.attribute("pot count");
+					if(num == 1)
+						representation.displayMessage("You have found 1 pot of gold!", 0);
+					else
+						representation.displayMessage("You have found " + num + " pots of gold!", 0);
+
+					argv[0] = 1;
+				}
+				else if(state == 1)
+				{
+					representation.displayMessage("",0);
+				}
+
+			]]>
+			</inrepresentation>
+		</action>
+		<action>
+			<name>pot was found</name>
+			<inworld language="javascript">
+			<![CDATA[
+				var state = argv[0];
+				var pot_string = argv[1];
+				if(state == 0)
+				{
+					if(subject.attribute(pot_string) == null)
+					{
+						subject.incrementAttribute("pot count");
+						subject.attribute(pot_string,true);
+						status = Constants.HANDLE_AGAIN;
+						returnVals.add(1000);
+						argv[0] = 1;
+					}
+					else
+					{
+						argv[0] = 4;
+					}
+				}
+			]]>
+			</inworld>
+			<inrepresentation language="javascript">
+			<![CDATA[
+				var state = argv[0];
+				if(state == 1)
+				{
+					var num = subject.attribute("pot count");
+					if(num == 1)
+						representation.displayMessage(subject.attribute("name") + " has found 1 pot of gold!", 0);
+					else
+						representation.displayMessage(subject.attribute("name") + " has found " + num + " pots of gold!", 0);
+
+					argv[0] = 2;
+				}
+				else if(state == 2)
+				{
+					representation.displayMessage("",0);
+				}
+
+			]]>
+			</inrepresentation>
+		</action>
 
 	<!-- Representation-only actions -->
 		<action>
@@ -207,8 +367,6 @@
 			<function language="javascript">
 			<![CDATA[
 				var status = Constants.SUCCESS;
-				//var a = myActions.get("move").get(0);
-				//var parameters = new Array(1);
 
 				var type = argv[0];
 				var dvector = argv[1];
@@ -217,34 +375,7 @@
 					dvector = Quaternions.rotatePoint(dvector,subject.getFacing());
 				}
 			
-				var v = 1;
-				for(var i = 0; i < relevant.length; i++)
-				{
-					myLogger.message("Testing collisions for:" + relevant.get(i).id() + " and " + subject.id() + "\n", false);
-	
-					var vt = subject.findMovableDistance(relevant.get(i),dvector);
-					if(vt < v)
-						v = vt;
-				}
-			//	myLogger.message("final v="+v+"\n",true);
-				
-				var lvector;
-				if(v == 1)
-					lvector = dvector;
-				else
-					lvector = VectorUtils.mul(v,dvector);
-			//	myLogger.message("lvector={"+lvector[0]+","+lvector[1]+","+lvector[2]+"}\n",true);
-
 				var vector = subject.copyPosition();
-				for(i = 0; i < lvector.length; i++)
-				{
-					vector[i] += lvector[i];
-				}
-				
-				argv[1] = lvector;
-				action.parameters(argv);
-
-			/*	var vector = subject.copyPosition();
 				for(i = 0; i < dvector.length; i++)
 				{
 					vector[i] += dvector[i];
@@ -252,24 +383,46 @@
 				for(var i = 0; i < relevant.length; i++)
 				{
 		
-					myLogger.message("Testing collisions for:" + relevant.get(i).id() + " and " + subject.id() + "\n", false);
+					// myLogger.message("Testing collisions for:" + relevant.get(i).id() + " and " + subject.id() + "\n", false);
 
 					if(subject.isColliding(relevant.get(i),vector,null))
 					{
 						myLogger.message("Collision!" + relevant.get(i).id() + " " + subject.id() + "\n", false);
-						//var s_weight = subject.paramaters("weight");
-						//var r_weight = relevant.get(i).parameters("weight");
-						//if(r_weight > s_weight)
-						//{
-							status = Constants.FAILED;
-							break;
-						//}
+						if(relevant.get(i).getType() == "pot of gold")
+						{
+							var pot_string = "found pot " + relevant.get(i).id();
+							var count = subject.attribute("pot count");
+							if(count == 3 && subject.attribute(pot_string) == null)
+							{
+								var won = actionFactory.getAction("win");
+								var parameters = new Array(1);
+								parameters[0] = 0;
+								won.parameters(parameters);
+								won.setNouns(action.getNouns());
+								actionStack.unshift(won);
+							}
+							else
+							{
+								var found_pot = actionFactory.getAction("found pot");
+								var parameters = new Array(2);
+								parameters[0] = 0;
+								parameters[1] = pot_string;
+								found_pot.setNouns(action.getNouns());
+								found_pot.parameters(parameters);
+								found_pot.setNouns(action.getNouns());
+								actionStack.unshift(found_pot);
+
+							}
+						}
+						status = Constants.FAILED;
+						break;
 					}
 				}
-			*/
 				
 				if(status == Constants.SUCCESS)
 				{
+					argv[1] = dvector;
+					action.parameters(argv);
 					var parameters = new Array(1);
 
 					//could speed this up so we're not calculating twice?
@@ -322,7 +475,7 @@
 
 					for(var i = 0; i < relevant.length; i++)
 					{
-						myLogger.message("Testing collisions for:" + relevant.get(i).id() + " and " + subject.id() + "\n", false);
+					//	myLogger.message("Testing collisions for:" + relevant.get(i).id() + " and " + subject.id() + "\n", false);
 						if(subject.isColliding(relevant.get(i),null,facing))
 						{
 							myLogger.message("Collision!" + relevant.get(i).id() + " " + subject.id() + "\n", false);
@@ -376,6 +529,41 @@
 					_action.parameters(argv);
 					action.setToSend(_action);	
 					//actionsToSend.add("add element", argv);
+				}
+			]]>
+			</function>
+		</rule>
+		<rule>
+			<verb>win</verb>
+			<function language="javascript">
+			<![CDATA[
+				if(argv[0] == 0)
+				{
+					var parameters = new Array(2);
+					parameters[0] = 0;
+					parameters[1] = subject.id();
+					var lose = actionFactory.getAction("lose");
+					var nouns = new Array(1);
+					nouns[0] = subject;
+					lose.setNouns(nouns);
+					lose.parameters(parameters);
+					action.setToSend(lose);
+				}
+			]]>
+			</function>
+		</rule>
+		<rule>
+			<verb>found pot</verb>
+			<function language="javascript">
+			<![CDATA[
+				if(argv[0] == 0)
+				{
+					var pot_was_found = actionFactory.getAction("pot was found");
+					var nouns = new Array(1);
+					nouns[0] = subject;
+					pot_was_found.setNouns(nouns);
+					pot_was_found.parameters(argv);
+					action.setToSend(pot_was_found);
 				}
 			]]>
 			</function>

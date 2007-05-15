@@ -730,6 +730,14 @@ public class Resolver extends Thread
 							currentAction.setDelay(((Double) ret_value).intValue());
 						addAction(currentAction);
 					}
+					/* An action might tell the game is over or that the user
+					 * wants to quit for another reason, in which case the
+					 * Resolver exits.
+					 */
+					else if(status == Constants.QUIT)
+					{
+						System.exit(0);
+					}
 
 					/* Now, that this action has succeeded, if it includes a
 					 * "toSend" (an Action that it wants to send on -- to the
