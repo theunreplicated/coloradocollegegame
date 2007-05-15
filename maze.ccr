@@ -176,7 +176,7 @@
 				if(state == 0)
 				{
 					status = Constants.HANDLE_AGAIN;
-					returnVals.add(1000);
+					returnVals.add(5000);
 				}
 				if(state == 1)
 				{
@@ -208,7 +208,7 @@
 				if(state < 3)
 				{
 					status = Constants.HANDLE_AGAIN;
-					returnVals.add(1000);
+					returnVals.add(5000);
 					argv[0]++;
 				}
 				if(state == 3)
@@ -253,7 +253,7 @@
 						subject.incrementAttribute("pot count");
 						subject.attribute(pot_string,true);
 						status = Constants.HANDLE_AGAIN;
-						returnVals.add(1000);
+						returnVals.add(5000);
 					}
 					else
 					{
@@ -296,7 +296,7 @@
 						subject.incrementAttribute("pot count");
 						subject.attribute(pot_string,true);
 						status = Constants.HANDLE_AGAIN;
-						returnVals.add(1000);
+						returnVals.add(5000);
 						argv[0] = 1;
 					}
 					else

@@ -14,8 +14,8 @@ public class MazeWorldGenerator
 
 	public static void main(String[] args)
 	{
-		int rows = 8; //_r;
-		int cols = 8; //_c;
+		int rows = 12; //_r;
+		int cols = 12; //_c;
 		int flrs = 1; //_f;
 		
 		MazeBuilder bld = new MazeBuilder(rows,cols);
@@ -187,9 +187,20 @@ public class MazeWorldGenerator
 		}
 
 		//Print out the elements
-		System.out.println("<world>\n");
+		System.out.println("<world>");
 		for(int i=0; i<walls.size(); i++)
 			System.out.println(walls.get(i));
+
+		//add a floor!
+		System.out.println(	"	<element type=\"maze floor\">\n" +
+					"		<position>"+0+"</position>\n" +
+					"		<position>"+(-3)+"</position>\n" +
+					"		<position>"+0+"</position>\n" +
+					"		<scale>"+(rt*cols)+"</scale>\n" +
+					"		<scale>"+1+"</scale>\n" +
+					"   		<scale>"+rt*rows+"</scale>\n" +
+					"	</element>\n");		
+
 		//add pots of gold in the corners
 		float[] pp1 = new float[] {(rt/2.0f)+sx, 0, (rt/2.0f)+sz};
 		float[] pp2 = new float[] {((rt*cols)+sx-(rt/2.0f)), 0, (rt/2.0f)+sz};

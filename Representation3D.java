@@ -28,11 +28,19 @@ public class Representation3D extends Applet implements Representation
 	Canvas3D canvas3D;
 	ViewElementBranch veb;
 	int viewMode;
+	boolean testing;
 	
 	//constructor
 	public Representation3D(int _viewMode)
 	{
 		viewMode = _viewMode;
+		testing = false;
+	}
+
+	public Representation3D(int _viewMode, boolean _testing)
+	{
+		viewMode = _viewMode;
+		testing = _testing;	
 	}
 
 	//initializor (all code previously in constructor)
@@ -100,7 +108,7 @@ public class Representation3D extends Applet implements Representation
 			geb.detach(); //remove branch from the tree
 		}
 
-		ViewElementBranch _veb = new ViewElementBranch(e,vscene,viewMode); //create the camera (effectively)
+		ViewElementBranch _veb = new ViewElementBranch(e,vscene,viewMode,testing); //create the camera (effectively)
 		elementsToNodes.put(e,_veb); //add the camera to the hashmap
 		return _veb;
 	}
@@ -113,7 +121,7 @@ public class Representation3D extends Applet implements Representation
 		{
 			if(!elementsToNodes.containsKey(e)) //check that we haven't already added the element
 			{			
-				GameElementBranch bg = new GameElementBranch(e); //make a new branch for the element
+				GameElementBranch bg = new GameElementBranch(e, testing); //make a new branch for the element
 				elementsToNodes.put(e,bg); //make a conversion entry so we can find the branch later
 				
 				gscene.addChild(bg.getBranchScene()); //add the branch to the root.
@@ -122,7 +130,8 @@ public class Representation3D extends Applet implements Representation
 		} while(e != first);
 	
 		//Representation-level objects
-		gscene.addChild(createGrid(40)); //could automatically determine the size of the proper grid if we wanted
+		if(testing)
+			gscene.addChild(createGrid(40)); //could automatically determine the size of the proper grid if we wanted
 	}
 	
 	//create and return a background for the world
@@ -223,7 +232,7 @@ public class Representation3D extends Applet implements Representation
 		{
 			if(next != null) //check if it should
 			{
-				GameElementBranch nbg = new GameElementBranch(e); //make a new branch for the element
+				GameElementBranch nbg = new GameElementBranch(e, testing); //make a new branch for the element
 				elementsToNodes.put(e,nbg); //make a conversion entry so we can find the branch later
 				scene.addChild(nbg.getBranchScene()); //add the branch to the scene
 			}
@@ -248,11 +257,20 @@ public class Representation3D extends Applet implements Representation
 			JOptionPane.showMessageDialog(null,msg,"Message",JOptionPane.PLAIN_MESSAGE);
 		else //Option 2: Create and add a Text2D object
 		{
-			bbroot.removeChild(0);
+			bbroot.removeAllChildren();
+			//bbroot.removeChild(0);
+			
 			BranchGroup wrapper = new BranchGroup();
 			wrapper.setCapability(BranchGroup.ALLOW_DETACH);
-			Text2D nbb = new Text2D(msg, new Color3f(1,1,1), "Arial", 9, 0);  
+			Text2D nbb = new Text2D(msg, new Color3f(0,1,0), "Arial", 9, Font.BOLD);  
 			wrapper.addChild(nbb);
+			if(!msg.equals("")) //as long as we weren't a blank message
+			{
+				Appearance bga = new Appearance();
+				bga.setColoringAttributes(new ColoringAttributes(0,0,0,ColoringAttributes.SHADE_FLAT));
+				Shape3D background = new Shape3D(nbb.getGeometry(), bga);
+				wrapper.addChild(background);
+			}
 			bbroot.addChild(wrapper);
 		}	
 	}
@@ -299,7 +317,7 @@ public class Representation3D extends Applet implements Representation
 	//this looks familiar...
 	public static void main(String[] args)
 	{
-		Representation3D me = new Representation3D(ViewElementBranch.OFFSET_VIEW);
+		Representation3D me = new Representation3D(ViewElementBranch.OFFSET_VIEW,false);
 
 		Client.initialize(args, me); //create a Client for the game
 		

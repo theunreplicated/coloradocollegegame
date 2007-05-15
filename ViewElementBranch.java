@@ -36,7 +36,7 @@ public class ViewElementBranch implements ElementBranch
 	private int viewMode; //what kind of view we're using
 
 	//constructor
-	public ViewElementBranch(GameElement e, BranchGroup scene, int v)
+	public ViewElementBranch(GameElement e, BranchGroup scene, int v, boolean testing)
 	{
 		viewMode = v;
 		camera = new ViewingPlatform();
@@ -72,7 +72,7 @@ public class ViewElementBranch implements ElementBranch
 		coord.setTransform(posi); //set our transform group to the default position
 
 		//construct the avatar
-		avatar = new GameElementBranch(e);
+		avatar = new GameElementBranch(e, testing);
 		avatarRoot = scene;
 		if(viewMode != FIRST_PERSON_VIEW)
 			avatarRoot.addChild(avatar.getBranchScene()); //add the avatar to the scene graph.

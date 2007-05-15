@@ -182,12 +182,10 @@
 				<scale>0.95</scale>
 				<radius>1</radius>
 				<color>ffffff00</color>
-				<!--<texture>textures/earth.jpg</texture>-->
 			</sphere>
 		</shapes>
 		<attributes>
 			<color type="hex32">ff646464</color>
-			<!--<texture type="String">textures/smoke01.jpg</texture>-->	
 			<mass type="int">100000000</mass>
 		</attributes>
 	</element>
@@ -210,6 +208,26 @@
 			<color type="hex32">ffffff00</color>
 			<texture type="String">textures/smoke01.jpg</texture>	
 			<transparency type="float">0.3</transparency>
+			<mass type="int">100000000</mass>
+		</attributes>
+	</element>
+
+	<element>
+		<name>maze floor</name>
+		<plural>maze floors</plural>
+		<shapes>
+			<box>
+				<name>floor</name>
+				<position>0</position>
+				<position>0</position>
+				<position>0</position>
+				<dimension>1</dimension>
+				<dimension>1</dimension>
+				<dimension>1</dimension>				
+			</box>
+		</shapes>
+		<attributes>
+			<color type="hex32">ff000000</color>
 			<mass type="int">100000000</mass>
 		</attributes>
 	</element>

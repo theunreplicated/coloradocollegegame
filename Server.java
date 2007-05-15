@@ -61,7 +61,7 @@ public class Server implements IO
 			System.exit(1);
 		}
 
-		myLogger.message("Starting server on port " + _port + "\n", false);
+		myLogger.message("Starting server on port " + _port + "\n", true);
 
 		startMovingObjects(); //moved into its own method for easy portability
 	
