@@ -42,6 +42,7 @@ public class StartUp extends JPanel
 	// CLIENT HELP
 	final static String CLIENTOPTS = "Client Options:";
 	final static String DOMAIN = "Run on server at domain <domain>";
+	final static String NAME = "Set your name (default is 'player <id>')";
 	// SERVER HELP
 	final static String SERVEROPTS = "Server Options:";
 	final static String WEXT = 
@@ -62,21 +63,21 @@ public class StartUp extends JPanel
 	
 	// BUTTONS, CHECK BOXES, and TEXT FILEDS
 	JButton serverBtn, clientBtn;
-	JCheckBox verbChkBoxC, serverChkBoxC, portChkBoxC, 
-		dirChkBoxC, eextChkBoxC, efilesChkBoxC,  
-		verbChkBoxS, textChkBoxS, portChkBoxS, dirChkBoxS, 
-		eextChkBoxS,wextChkBoxS, efilesChkBoxS, wfilesChkBoxS;
-	JTextField inServerC, inPortC, dirInC, eextInC, efilesInC, 
+	JCheckBox verbChkBoxC, serverChkBoxC, nameChkBoxC, portChkBoxC, 
+		dirChkBoxC, eextChkBoxC, efilesChkBoxC, verbChkBoxS, textChkBoxS, 
+		portChkBoxS, dirChkBoxS, eextChkBoxS,wextChkBoxS, efilesChkBoxS, 
+		wfilesChkBoxS;
+	JTextField inServerC, inNameC, inPortC, dirInC, eextInC, efilesInC, 
 		inPortS, dirInS, eextInS, wextInS, efilesInS, wfilesInS;
 
 	// Variables needed
-	boolean verboseC=false, serverC=false, portC=false, dirC=false, 
-		eextC=false, efilesC=false, verboseS=false, textS=false, 
-		portS=false, dirS=false, eextS=false, wextS=false, 
+	boolean verboseC=false, serverC=false, nameC=false, portC=false, 
+		dirC=false, eextC=false, efilesC=false, verboseS=false, 
+		textS=false, portS=false, dirS=false, eextS=false, wextS=false, 
 		efilesS=false, wfilesS=false;
 	int portCNum, portSNum;
 	String serverIP, dir, eext, wext, efiles, wfiles;
-	String[] varsClient = {"-h","-v","-s","-p","-dir",
+	String[] varsClient = {"-h","-v","-s","-n","-p","-dir",
 			"-eext","-efiles"};
 	String[] varsServer = {"-h","-v","-t","-p","-dir",
 			"-eext","-wext","-efiles","-wfiles"};
@@ -85,17 +86,15 @@ public class StartUp extends JPanel
 	public StartUp()
 	{
 		// GUI Variables
-		JLabel verbLabelC, serverLabelC, portLabelC, dirLabelC, 
-			eextLabelC, efilesLabelC, verbLabelS, textLabelS, 
-			portLabelS, dirLabelS, eextLabelS, wextLabelS, 
-			efilesLabelS, wfilesLabelS, cNotes0, cNotes1, 
-			cNotes2, cNotes3, cNotes4, cNotes5, cNotes6, 
-			cNotes7, cNotes01, cNotes02, cNotes03, cNotes04, 
-			cNotes05, cNotes06, cNotes07, sNotes0, sNotes1, 
-			sNotes2, sNotes3, sNotes4, sNotes5, sNotes6, 
-			sNotes7, sNotes8, sNotes9, sNotes01, sNotes02, 
-			sNotes03, sNotes04, sNotes05, sNotes06, sNotes07, 
-			sNotes08, sNotes09;
+		JLabel verbLabelC, serverLabelC, nameLabelC, portLabelC, dirLabelC, 
+			eextLabelC, efilesLabelC, verbLabelS, textLabelS, portLabelS, 
+			dirLabelS, eextLabelS, wextLabelS, efilesLabelS, wfilesLabelS, 
+			cNotes0, cNotes1, cNotes2, cNotes3, cNotes4, cNotes5, cNotes6, 
+			cNotes7, cNotes8, cNotes01, cNotes02, cNotes03, cNotes04, 
+			cNotes05, cNotes06, cNotes07, cNotes08, sNotes0, sNotes1, 
+			sNotes2, sNotes3, sNotes4, sNotes5, sNotes6, sNotes7, sNotes8, 
+			sNotes9, sNotes01, sNotes02, sNotes03, sNotes04, sNotes05, 
+			sNotes06, sNotes07, sNotes08, sNotes09;
 		JTabbedPane tabbedPane = new JTabbedPane();
 		GridBagConstraints c = new GridBagConstraints();
 		// Set the default location of each item to the West
@@ -145,91 +144,110 @@ public class StartUp extends JPanel
 		c.gridx = 2;
 		c.gridy = 0;
 		clientPanel.add(inServerC, c);
+		
+		// Client Name
+		nameChkBoxC = new JCheckBox("");
+		c.gridx = 0;
+		c.gridy = 1;
+		nameChkBoxC.setSelected(false);
+		clientPanel.add(nameChkBoxC, c);
+		nameChkBoxC.addItemListener(this);
+
+		nameLabelC = new JLabel("Set your name: ");
+		c.gridx = 1;
+		c.gridy = 1;
+		clientPanel.add(nameLabelC, c);
+
+		inNameC = new JTextField("", 15);
+		c.gridx = 2;
+		c.gridy = 1;
+		clientPanel.add(inNameC, c);
+		
 
 		// Client Port
 		portChkBoxC= new JCheckBox("");
 		c.gridx = 0;
-		c.gridy = 1;
+		c.gridy = 2;
 		portChkBoxC.setSelected(false);
 		clientPanel.add(portChkBoxC, c);
 		portChkBoxC.addItemListener(this);
 
 		portLabelC = new JLabel("Server Port #:");
 		c.gridx = 1;
-		c.gridy = 1;
+		c.gridy = 2;
 		clientPanel.add(portLabelC, c);
 
 		inPortC = new JTextField("", 5);
 		c.gridx = 2;
-		c.gridy = 1;
+		c.gridy = 2;
 		c.anchor=GridBagConstraints.WEST;
 		clientPanel.add(inPortC, c);
 		
 		// Client Directory
 		dirChkBoxC= new JCheckBox("");
 		c.gridx=0;
-		c.gridy=2;
+		c.gridy=3;
 		dirChkBoxC.setSelected(false);
 		clientPanel.add(dirChkBoxC, c);
 		dirChkBoxC.addItemListener(this);
 
 		dirLabelC = new JLabel("Data Files in Directory:");
 		c.gridx=1;
-		c.gridy=2;
+		c.gridy=3;
 		clientPanel.add(dirLabelC, c);
 
 		dirInC = new JTextField("", 30);
 		c.gridx=2;
-		c.gridy=2;
+		c.gridy=3;
 		clientPanel.add(dirInC, c);
 
 		// Client Element List Files.<EXT>
 		eextChkBoxC= new JCheckBox("");
 		c.gridx=0;
-		c.gridy=3;
+		c.gridy=4;
 		eextChkBoxC.setSelected(false);
 		clientPanel.add(eextChkBoxC, c);
 		eextChkBoxC.addItemListener(this);
 
 		eextLabelC = new JLabel("Element List Files with Extension: ");
 		c.gridx=1;
-		c.gridy=3;
+		c.gridy=4;
 		clientPanel.add(eextLabelC, c);
 
 		eextInC = new JTextField("", 4);
 		c.gridx=2;
-		c.gridy=3;
+		c.gridy=4;
 		clientPanel.add(eextInC, c);
 
 		// Client Element Files
 		efilesChkBoxC= new JCheckBox("");
 		c.gridx=0;
-		c.gridy=4;
+		c.gridy=5;
 		efilesChkBoxC.setSelected(false);
 		clientPanel.add(efilesChkBoxC, c);
 		efilesChkBoxC.addItemListener(this);
 
 		efilesLabelC = new JLabel("Elements in File:");
 		c.gridx=1;
-		c.gridy=4;
+		c.gridy=5;
 		clientPanel.add(efilesLabelC, c);
 
 		efilesInC = new JTextField("", 30);
 		c.gridx=2;
-		c.gridy=4;
+		c.gridy=5;
 		clientPanel.add(efilesInC, c);
 
 		// Client Verbose Mode
 		verbChkBoxC = new JCheckBox("");
 		c.gridx = 0;
-		c.gridy = 5;
+		c.gridy = 6;
 		verbChkBoxC.setSelected(false);
 		clientPanel.add(verbChkBoxC, c);
 		verbChkBoxC.addItemListener(this);
 
 		verbLabelC = new JLabel("Client Verbose Mode");
 		c.gridx = 1;
-		c.gridy = 5;
+		c.gridy = 6;
 		clientPanel.add(verbLabelC, c);
 
 		/**
@@ -378,7 +396,7 @@ public class StartUp extends JPanel
 
 		clientBtn = new JButton("Start Client");
 		c.gridx=2;
-		c.gridy=5;
+		c.gridy=6;
 		clientPanel.add(clientBtn, c);
 		clientBtn.addActionListener(this);
 
@@ -421,38 +439,46 @@ public class StartUp extends JPanel
 		c.gridx = 1;
 		c.gridy = 3;
 		clientHelp.add(cNotes3, c);
-		cNotes04 = new JLabel("-p <port>");
+		cNotes04 = new JLabel("-n <name>    ");
 		c.gridx = 0;
 		c.gridy = 4;
 		clientHelp.add(cNotes04, c);
-		cNotes4 = new JLabel(PORT);
+		cNotes4 = new JLabel(NAME);
 		c.gridx = 1;
 		c.gridy = 4;
 		clientHelp.add(cNotes4, c);
-		cNotes05 = new JLabel("-dir <dir>");
+		cNotes05 = new JLabel("-p <port>");
 		c.gridx = 0;
 		c.gridy = 5;
 		clientHelp.add(cNotes05, c);
-		cNotes5 = new JLabel(DIR);
+		cNotes5 = new JLabel(PORT);
 		c.gridx = 1;
 		c.gridy = 5;
 		clientHelp.add(cNotes5, c);
-		cNotes06 = new JLabel("-eext <ext>");
+		cNotes06 = new JLabel("-dir <dir>");
 		c.gridx = 0;
 		c.gridy = 6;
 		clientHelp.add(cNotes06, c);
-		cNotes6 = new JLabel(EEXT);
+		cNotes6 = new JLabel(DIR);
 		c.gridx = 1;
 		c.gridy = 6;
 		clientHelp.add(cNotes6, c);
-		cNotes07 = new JLabel("-efiles <file> [file [file [...]]]   ");
+		cNotes07 = new JLabel("-eext <ext>");
 		c.gridx = 0;
 		c.gridy = 7;
 		clientHelp.add(cNotes07, c);
-		cNotes7 = new JLabel(EFILES);
+		cNotes7 = new JLabel(EEXT);
 		c.gridx = 1;
 		c.gridy = 7;
 		clientHelp.add(cNotes7, c);
+		cNotes08 = new JLabel("-efiles <file> [file [file [...]]]   ");
+		c.gridx = 0;
+		c.gridy = 8;
+		clientHelp.add(cNotes08, c);
+		cNotes8 = new JLabel(EFILES);
+		c.gridx = 1;
+		c.gridy = 8;
+		clientHelp.add(cNotes8, c);
 
 		// Server Notes
 		sNotes0 = new JLabel(SERVEROPTS);
@@ -570,8 +596,9 @@ public class StartUp extends JPanel
 		 */
 		if (e.getSource()==clientBtn)
 		{
-			String inPortValC = String.valueOf(inPortC.getText());
 			String inServerValC = String.valueOf(inServerC.getText());
+			String inNameValC = String.valueOf(inNameC.getText());
+			String inPortValC = String.valueOf(inPortC.getText());
 			String inDirValC = String.valueOf(dirInC.getText());
 			String inEextValC = String.valueOf(eextInC.getText());
 			String inEfilesValC = String.valueOf(efilesInC.getText());
@@ -584,63 +611,74 @@ public class StartUp extends JPanel
 			else if (verboseC==false)
 				arguments[4]="";
 
-			if (portC==true)
-			{
-				arguments[5]="-p";
-				arguments[6]=inPortValC;
-			}
-			else if (portC==false)
-			{
-				arguments[5]="";
-				arguments[6]="";
-			}
-
 			if (serverC==true)
 			{
-				arguments[7]="-s";
-				arguments[8]=inServerValC;
+				arguments[5]="-s";
+				arguments[6]=inServerValC;
 			}
 			else if (serverC==false)
 			{
-				arguments[7]="-s";
-				arguments[8]="localhost";
+				arguments[5]="-s";
+				arguments[6]="localhost";
 			}
 
-			if (dirC==true)
+			if (nameC==true)
 			{
-				arguments[9]="-dir";
-				arguments[10]=inDirValC;
+				arguments[7]="-n";
+				arguments[8]=inNameValC;
 			}
-			else if (dirC==false)
+			else if (nameC==false)
+			{
+				arguments[7]="";
+				arguments[8]="";
+			}
+
+			if (portC==true)
+			{
+				arguments[9]="-p";
+				arguments[10]=inPortValC;
+			}
+			else if (portC==false)
 			{
 				arguments[9]="";
 				arguments[10]="";
 			}
 
-			if (eextC==true)
+			if (dirC==true)
 			{
-				arguments[11]="-eext";
-				arguments[12]=inEextValC;
+				arguments[11]="-dir";
+				arguments[12]=inDirValC;
 			}
-			else if (eextC==false)
+			else if (dirC==false)
 			{
 				arguments[11]="";
 				arguments[12]="";
 			}
 
-			if (efilesC==true)
+			if (eextC==true)
 			{
-				arguments[13]="-efiles";
-				arguments[14]=inEfilesValC;
+				arguments[13]="-eext";
+				arguments[14]=inEextValC;
 			}
-			else if (efilesC==false)
+			else if (eextC==false)
 			{
 				arguments[13]="";
 				arguments[14]="";
 			}
 
+			if (efilesC==true)
+			{
+				arguments[15]="-efiles";
+				arguments[16]=inEfilesValC;
+			}
+			else if (efilesC==false)
+			{
+				arguments[15]="";
+				arguments[16]="";
+			}
+
 			// empty arguments to prevent crashes with exec
-			for (int temp=15;temp<arguments.length;temp++)
+			for (int temp=17;temp<arguments.length;temp++)
 			{
 				arguments[temp]="";
 			}
@@ -808,6 +846,8 @@ public class StartUp extends JPanel
 				verboseC = true;
 			else if (source==serverChkBoxC)
 				serverC = true;
+			else if (source==nameChkBoxC)
+				nameC = true;
 			else if (source==portChkBoxC)
 				portC = true;
 			else if (source==dirChkBoxC)
@@ -842,6 +882,8 @@ public class StartUp extends JPanel
 				verboseC = false;
 			else if (source==serverChkBoxC)
 				serverC = false;
+			else if (source==nameChkBoxC)
+				nameC = false;
 			else if (source==portChkBoxC)
 				portC = false;
 			else if (source==dirChkBoxC)
