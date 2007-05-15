@@ -26,7 +26,7 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 	private BranchGroup broot; //the root of the branch.
 
 	//constructor
-	public GameElementBranch(GameElement e)
+	public GameElementBranch(GameElement e, boolean testing)
 	{
 		broot = new BranchGroup(); //the root of this branch
 		broot.setCapability(BranchGroup.ALLOW_DETACH); //let us remove the branch at runtime
@@ -118,7 +118,8 @@ public class GameElementBranch implements ElementBranch //it doesn't like if we 
 			sroot.addChild(localg); //add the TransformGroup to the shape root node			
 		}
 		
-		sroot.addChild(createBoundingBox(e)); //draw the bounding box for testing.
+		if(testing)
+			sroot.addChild(createBoundingBox(e)); //draw the bounding box for testing.
 										      		
 		broot.compile(); //let J3D optimize the branch
 	}//constructor
