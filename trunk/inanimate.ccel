@@ -253,6 +253,27 @@
 	</element>
 
 	<element>
+		<name>dragon</name>
+		<plural></plural>
+		<shapes>
+			<kmz>
+				<name>KMZ file2</name>
+				<url>kmz/dragon.kmz</url>
+				<facing>-90</facing>
+				<facing>0</facing>
+				<facing>0</facing>
+				<scale>3</scale>
+				<scale>3</scale>
+				<scale>3</scale>
+			</kmz>
+		</shapes>
+		<attributes>
+			<mass type="int">100000000</mass>
+		</attributes>
+	</element>
+
+
+	<element>
 		<name>grid</name>
 		<plural>grids</plural>
 		<shapes>
