@@ -252,7 +252,7 @@
 		</attributes>
 	</element>
 
-	<element>
+	<!--<element>
 		<name>dragon</name>
 		<plural></plural>
 		<shapes>
@@ -270,7 +270,7 @@
 		<attributes>
 			<mass type="int">100000000</mass>
 		</attributes>
-	</element>
+	</element>-->
 
 
 	<element>
