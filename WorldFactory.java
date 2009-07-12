@@ -1,7 +1,15 @@
 //import java.util.*;//never used
 import java.io.File;
-import javax.xml.parsers.*;
-import org.w3c.dom.*;
+//import javax.xml.parsers.*;
+//import org.w3c.dom.*;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class WorldFactory
 {
@@ -53,19 +61,15 @@ public class WorldFactory
 			float[] facing;
 			float[] scale;
 			int i;
-			
-			for(File file : files)
-			{
 
-				if(!file.exists())
-				{
+			for(File file : files) {
+				if(!file.exists()) {
 					myLogger.message("WorldFactory cannot find file: " + file + "\n", true);
 					continue;
 				}
 				doc = db.parse(file);
 				elements = doc.getElementsByTagName("element");
-				for(i = elements.getLength()-1;i>=0; i--)
-				{
+				for(i = elements.getLength()-1;i>=0; i--) {
 					element = (Element) elements.item(i);
 
 					newElement = ef.getGameElement(element.getAttribute("type"));
@@ -83,7 +87,7 @@ public class WorldFactory
 						position[p] = Float.parseFloat(positionNodes.item(p).getTextContent());
 					}
 					newElement.setPosition(position);
-					
+
 					facingNodes = element.getElementsByTagName("facing");
 					if(facingNodes.getLength() == 3)
 					{
@@ -110,7 +114,7 @@ public class WorldFactory
 						newElement.setScale(scale);
 						newElement.scaleBoundingBox(scale);
 					}	
-					
+
 					attributesElement = (Element) element.getElementsByTagName("attributes").item(0);
 					if(attributesElement != null)
 					{
@@ -125,12 +129,12 @@ public class WorldFactory
 							newElement.attribute(newAttribute.getTagName(), Constants.parseXMLwithType(newAttribute));
 						}
 					}
-					
+
 					// add element to World
 					w.addElement(newElement);
 				}
 			}
-			
+
 		}
 		catch(Exception e) // better error reporting!
 		{

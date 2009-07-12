@@ -45,7 +45,9 @@ public class ElementFactory
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc;
+			@SuppressWarnings("unused")
 			Element element, name, plural, shape, newAttribute, attributesElement;//"plural" is never read
+			@SuppressWarnings("unused")
 			NodeList elements, spheres, cylinders, boxes, cones, kmz, kmzUrls, facingNodes, boundsNodes, attributesNodes;//"facingNodes" is never read
 			Node tmpNode;
 			VirtualShape[] shapes;

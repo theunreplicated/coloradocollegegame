@@ -24,6 +24,7 @@ public class SketchUpUtils
 		return f;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static int countKMLFiles(String filename)
 	{
 		int count = 0;
@@ -48,6 +49,7 @@ public class SketchUpUtils
 		return count;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Document[] decompressKMZ(String filename)
 	{
 		Document[] docArray; 

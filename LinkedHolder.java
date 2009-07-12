@@ -1,3 +1,4 @@
+@SuppressWarnings("unchecked")
 public class LinkedHolder<T> extends LinkedElement<LinkedHolder>
 {
 	private T me;
