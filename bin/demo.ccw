@@ -1,0 +1,46 @@
+<world>
+	<!--<element type="grid">
+		<position>0</position>
+		<position>-3</position>
+		<position>0</position>
+		<scale>40</scale>
+		<scale>1</scale>
+   		<scale>40</scale>
+	</element>-->
+
+	<element type="dragon">
+		<position>-20</position>
+		<position>0</position>
+		<position>0</position>
+	</element>
+
+
+<!--	<element type="big pillar">
+		<position>7.5</position>
+		<position>3</position>
+		<position>7.5</position>
+	</element>
+	<element type="ball">
+		<position>7.5</position>
+		<position>3</position>
+		<position>-7.5</position>
+	</element>
+	<element type="big pillar">
+		<position>-7.5</position>
+		<position>3</position>
+		<position>7.5</position>
+	</element>
+	<element type="big pillar">
+		<position>-7.5</position>
+		<position>3</position>
+		<position>-7.5</position>
+	</element>-->
+
+
+	<!--<element type="millenium falcon">
+		<position>0</position>
+		<position>0</position>
+		<position>0</position>
+	</element>-->
+</world>
+

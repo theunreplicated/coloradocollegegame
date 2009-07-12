@@ -1,0 +1,341 @@
+<!-- 	Rotations are specified in degrees using Euler facings
+	Rotation order is XYZ
+	Note that Rotations are handled in Quaternions within the Game
+-->
+<!-- 	Bounding boxes are by default axis-aligned, specifying the box's
+	half-dimension (half the length) along the x-axis, the y-axis, 
+	and the z-axis
+-->
+
+<element_types>
+
+	<element>
+		<name>ball</name>
+		<plural>balls</plural>
+		<shapes>
+			<sphere>
+				<position>0</position>
+				<position>0</position>
+				<position>0</position>
+				<radius>1</radius>
+			</sphere>
+		</shapes>
+		<attributes>
+			<mass type="int">2</mass>
+		</attributes>
+	</element>
+
+	<element>
+		<name>face</name>
+		<plural>faces</plural>
+		<bounds>1</bounds>
+		<bounds>1</bounds>
+		<bounds>1</bounds>
+		<shapes>
+			<sphere>
+				<name>head</name>
+				<position>0</position>
+				<position>0</position>
+				<position>0</position>
+				<radius>1</radius>
+			</sphere>
+			<cylinder>
+				<name>eye</name>
+				<position>-.425</position>
+				<position>.3</position>
+				<position>-.8</position>
+				<radius>.24</radius>
+				<height>0.37</height>
+				<facing>90</facing>
+				<facing>0</facing>
+				<facing>0</facing>
+			</cylinder>
+			<cylinder>
+				<name>eye</name>
+				<position>.425</position>
+				<position>.3</position>
+				<position>-.8</position>
+				<radius>.24</radius>
+				<height>0.37</height>
+				<facing>90</facing>
+				<facing>0</facing>
+				<facing>0</facing>
+			</cylinder>
+			<cone>
+				<name>nose</name>
+				<position>0</position>
+				<position>0</position>
+				<position>-1.2</position>
+				<radius>.2</radius>
+				<height>0.7</height>
+				<facing>-90</facing>
+				<facing>0</facing>
+				<facing>0</facing>
+			</cone>
+		</shapes>
+		<attributes>
+			<mass type="int">4</mass>
+		</attributes>
+	</element>
+
+	<element>
+		<name>big pillar</name>
+		<plural>big pillars</plural>
+		<shapes>
+			<box>
+				<name>base1</name>
+				<position>0</position>
+				<position>-5.75</position>
+				<position>0</position>
+				<dimension>3</dimension>
+				<dimension>.5</dimension>
+				<dimension>3</dimension>
+			</box>
+			<box>
+				<name>base2</name>
+				<position>0</position>
+				<position>-5.25</position>
+				<position>0</position>
+				<dimension>2.5</dimension>
+				<dimension>.5</dimension>
+				<dimension>2.5</dimension>
+			</box>
+			<box>
+				<name>top2</name>
+				<position>0</position>
+				<position>5.25</position>
+				<position>0</position>
+				<dimension>2.5</dimension>
+				<dimension>.5</dimension>
+				<dimension>2.5</dimension>
+			</box>
+			<box>
+				<name>top1</name>
+				<position>0</position>
+				<position>5.75</position>
+				<position>0</position>
+				<dimension>3</dimension>
+				<dimension>.5</dimension>
+				<dimension>3</dimension>
+			</box>			
+			<cylinder>
+				<name>column</name>
+				<position>0</position>
+				<position>0</position>
+				<position>0</position>
+				<!--<scale>.5</scale>
+				<scale>2</scale>
+				<scale>.5</scale>-->
+				<radius>1</radius>
+				<height>10</height>
+				<color>ffffff00</color>
+				<!--<texture>textures/earth.jpg</texture>-->
+			</cylinder>
+		</shapes>
+		<attributes>
+			<color type="hex32">ff0000ff</color>
+			<texture type="String">textures/smoke01.jpg</texture>	
+			<transparency type="float">0.3</transparency>
+			<mass type="int">100000000</mass>
+		</attributes>
+	</element>
+
+	<element>
+		<name>pot of gold</name>
+		<plural>pots of gold</plural>
+		<shapes>
+			<sphere>
+				<name>base</name>
+				<position>0</position>
+				<position>-0.8</position>
+				<position>0</position>
+				<scale>1</scale>
+				<scale>.35</scale>
+				<scale>1</scale>
+				<radius>1</radius>
+			</sphere>
+			<cylinder>
+				<name>pot</name>
+				<position>0</position>
+				<position>0</position>
+				<position>0</position>
+				<radius>1</radius>
+				<height>1.6</height>
+			</cylinder>
+			<sphere>
+				<name>rim</name>
+				<position>0</position>
+				<position>0.8</position>
+				<position>0</position>
+				<scale>1.2</scale>
+				<scale>0.15</scale>
+				<scale>1.2</scale>
+				<radius>1</radius>
+			</sphere>
+			<sphere>
+				<name>gold</name>
+				<position>0</position>
+				<position>0.85</position>
+				<position>0</position>
+				<scale>0.95</scale>
+				<scale>0.2</scale>
+				<scale>0.95</scale>
+				<radius>1</radius>
+				<color>ffffff00</color>
+			</sphere>
+		</shapes>
+		<attributes>
+			<color type="hex32">ff646464</color>
+			<mass type="int">100000000</mass>
+		</attributes>
+	</element>
+
+	<element>
+		<name>maze wall</name>
+		<plural>maze walls</plural>
+		<shapes>
+			<box>
+				<name>wall</name>
+				<position>0</position>
+				<position>0</position>
+				<position>0</position>
+				<dimension>1</dimension>
+				<dimension>1</dimension>
+				<dimension>1</dimension>				
+			</box>
+		</shapes>
+		<attributes>
+			<color type="hex32">ffffff00</color>
+			<texture type="String">textures/smoke01.jpg</texture>	
+			<transparency type="float">0.3</transparency>
+			<mass type="int">100000000</mass>
+		</attributes>
+	</element>
+
+	<element>
+		<name>maze floor</name>
+		<plural>maze floors</plural>
+		<shapes>
+			<box>
+				<name>floor</name>
+				<position>0</position>
+				<position>0</position>
+				<position>0</position>
+				<dimension>1</dimension>
+				<dimension>1</dimension>
+				<dimension>1</dimension>				
+			</box>
+		</shapes>
+		<attributes>
+			<color type="hex32">ff000000</color>
+			<mass type="int">100000000</mass>
+		</attributes>
+	</element>
+
+	<element>
+		<name>KMZ tester</name>
+		<plural>KMZ testers</plural>
+		<shapes>
+			<kmz>
+				<name>KMZ file2</name>
+				<url>kmz/teapot.kmz</url>
+				<facing>-90</facing>
+				<facing>0</facing>
+				<facing>0</facing>
+				<scale>3</scale>
+				<scale>3</scale>
+				<scale>3</scale>
+			</kmz>
+		</shapes>
+		<attributes>
+			<mass type="int">100000000</mass>
+		</attributes>
+	</element>
+
+	<!--<element>
+		<name>dragon</name>
+		<plural></plural>
+		<shapes>
+			<kmz>
+				<name>KMZ file2</name>
+				<url>kmz/dragon.kmz</url>
+				<facing>-90</facing>
+				<facing>0</facing>
+				<facing>0</facing>
+				<scale>3</scale>
+				<scale>3</scale>
+				<scale>3</scale>
+			</kmz>
+		</shapes>
+		<attributes>
+			<mass type="int">100000000</mass>
+		</attributes>
+	</element>-->
+
+
+	<element>
+		<name>grid</name>
+		<plural>grids</plural>
+		<shapes>
+			<box>
+				<name>wall</name>
+				<position>0</position>
+				<position>0</position>
+				<position>0</position>
+				<dimension>1</dimension>
+				<dimension>.00000001</dimension>
+				<dimension>1</dimension>				
+			</box>
+		</shapes>
+		<attributes>
+			<texture type="String">textures/grid.gif</texture>	
+			<color type="hex32">ff000000</color>
+			<mass type="int">100000000</mass>
+		</attributes>
+	
+	</element>
+
+	<element>
+		<name>glasses</name>
+		<plural>pairs of glasses</plural>
+		<shapes>
+			<cylinder>
+				<name>lens</name>
+				<position>-8</position>
+				<position>0</position>
+				<position>0</position>
+				<radius>5</radius>
+				<height>0.5</height>
+				<facing>90</facing>
+				<facing>0</facing>
+				<facing>0</facing>
+			</cylinder>
+			<cylinder>
+				<name>lens</name>
+				<position>8</position>
+				<position>0</position>
+				<position>0</position>
+				<radius>5</radius>
+				<height>0.5</height>
+				<facing>90</facing>
+				<facing>0</facing>
+				<facing>0</facing>
+			</cylinder>
+			<cylinder>
+				<name>bridge</name>
+				<position>0</position>
+				<position>0</position>
+				<position>0</position>
+				<radius>1</radius>
+				<height>6</height>
+				<facing>0</facing>
+				<facing>0</facing>
+				<facing>90</facing>
+			</cylinder>
+		</shapes>
+		<attributes>
+			<mass type="int">12</mass>
+		</attributes>
+	</element>
+
+</element_types>

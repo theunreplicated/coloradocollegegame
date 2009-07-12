@@ -350,7 +350,7 @@ public class Resolver extends Thread
 	/* Ignore the fallthrough of our switch statement in the following
 	 * function.
 	 */
-	@SuppressWarnings("fallthrough")
+	@SuppressWarnings({ "fallthrough", "unchecked" })
 	/**
 	 * Process a set of Actions that are dependent upon each other, and
 	 * if all of them succeed run them. Dependent actions are actions that

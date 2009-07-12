@@ -91,6 +91,7 @@ public class Representation2D extends JPanel implements Representation
 			}
 		}
 
+		@SuppressWarnings("unused")
 		public void killThread()
 		{
 			running = false;

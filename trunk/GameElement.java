@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+@SuppressWarnings({ "unchecked" })
 public class GameElement extends LinkedElement<GameElement> implements Serializable, Comparable
 { 
 	static final long serialVersionUID = -5470967480584428990L;
